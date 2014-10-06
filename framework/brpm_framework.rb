@@ -65,12 +65,12 @@ class BrpmAutomation
   # * +txt+ - the text to output
   # * +level+ - the log level [info, warn, ERROR]
   # * +output_file+ - an alternate output file to log to (default is step output)
-  def log(txt, level = "info", output_file = nil)
+  def log(txt, level = "INFO", output_file = nil)
     @output_file = output_file unless output_file.nil?
-    puts txt
+    puts log_message(txt, level)
     unless @output_file.nil?
       @fil = File.open(@output_file,"a") if @fil.nil?
-      @fil.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}|#{level}> #{txt}")
+      @fil.puts(log_message(txt, level))
       @fil.flush
       #fil.close
     end
@@ -92,8 +92,8 @@ class BrpmAutomation
     else
       res = "##{"-" * tot}#\n"
       start = "##{" " * (ilen/2).to_i} #{msg} "
-      res += "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}|info> #{start}#{" " * (tot- start.length + 1)}#\n"
-      res += "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}|info> ##{"-" * tot}#\n"   
+      res += "#{start}#{" " * (tot- start.length + 1)}#\n"
+      res += "##{"-" * tot}#\n"   
     end
     log(res)
   end
@@ -171,22 +171,24 @@ class BrpmAutomation
     methods = %w{get post put}
     result = {"status" => "ERROR", "response" => "", "message" => ""}
     method = method.downcase
+    verbose = get_option(options, "verbose") == "yes" or get_option(options, "verbose")
     return result["message"] = "ERROR - #{method} not recognized" unless methods.include?(method)
-    log "Rest URL: #{url}" if get_option(options, "verbose") == "yes"
+    log "Rest URL: #{url}" if verbose
     begin
+      data = get_option(options, "data")
       rest_params = {}
       rest_params[:url] = url
       rest_params[:method] = method.to_sym
       rest_params[:verify_ssl] = OpenSSL::SSL::VERIFY_NONE if url.start_with?("https")
+      rest_params[:payload] = data.to_json unless data == ""
       if options.has_key?("username") && options.has_key?("password")
         rest_params[:user] = options["username"]
         rest_params[:password] = options["password"]
       end
       rest_params[:headers] = {:accept => :json, :content_type => :json}
+      log "RestParams: #{rest_params.inspect}" if verbose
       if %{put post}.include?(method)
-        data = get_option(options, "data")
         return result["message"] = "ERROR - no data param for post" if data == ""
-        rest_params[:payload] = data.to_json
         #response = RestClient.put url, data.to_json, rest_params if method == "put"
         response = RestClient::Request.new(rest_params).execute
         #response = RestClient.post url, data.to_json, rest_params if method == "post"
@@ -199,9 +201,10 @@ class BrpmAutomation
       raise "RestError: #{result["message"]}" unless get_option(options, "suppress_errors") == true
       return result
     end
-    parsed_response = JSON.parse(response)
+    log "Rest Response:\n#{response.inspect}" if verbose
+    parsed_response = JSON.parse(response) rescue nil
+    parsed_response = {"info" => "no data returned"} if parsed_response.nil?
     result["code"] = response.code
-    log "Rest Response:\n#{response.inspect}" if get_option(options, "verbose") == "yes"
     if response.code < 300
       result["status"] = "success"
       result["data"] = parsed_response
@@ -266,6 +269,24 @@ class BrpmAutomation
     end
     attachment_local_path = attachment_local_path.gsub(/\\/, "/")
     "//#{brpm_hostname}#{attachment_local_path}"
+  end
+
+  # Generates a log formatted mesage
+  #
+  # ==== Attributes
+  #
+  # * +message+ - the path to the uploaded attachment (from params)
+  # * +log_type+ - type of entry (DEBUG/WARN, etc)
+  #
+  # ==== Returns
+  #
+  # * message with timestamp and log type
+  # 
+  def log_message(message, log_type = "INFO")
+    stamp = "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}|#{log_type}> "
+    message = "" if message.nil?
+    message = message.inspect unless message.is_a?(String)
+    message.split("\n").map{|l| "#{stamp}#{l}"}.join("\n")
   end
 
 end
@@ -559,18 +580,6 @@ module Framework
     @p.save_local_params
   end
 
-  # Provides a common path in BAA for any object
-  #  Customers should modify the BAA_BASE_PATH constant
-  # ==== Returns
-  #
-  # * group path string
-  # ==== Attributes
-  #
-  # * +additional_path+ - any additional groups to add to the path (e.g. version/timestamp)
-  def baa_group_path(additional_path = "")
-    additional_path = "/#{additional_path}" if additional_path.length > 0 && additional_path[0] != "/"
-    group_path = "/#{BAA_BASE_PATH}/#{@p.SS_application}/#{@p.SS_component}#{additional_path}"
-  end
 end
 # == Initialization on Include
 # Objects are set for most of the classes on requiring the file

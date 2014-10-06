@@ -203,6 +203,82 @@ class BrpmRest < BrpmAutomation
     result
   end
   
+  # Takes a request_id and monitors status until a condition is met
+  #
+  # ==== Attributes
+  #
+  # * +request_id+ - id of the calling request
+  # * +target_state+ - state to watch request or step for (default = complete)
+  # * +options+ - a hash of options, includes:
+  #    +monitor_step_name+ - this monitor whether a specific step has reached the target state
+  #    +max_time+ - maximum time in minutes to wait (default = 15)
+  #    +interval+ - interval in seconds between checks (default = 15)
+  #    +verbose+ - passed to rest call for verbose output (true/false)
+  #
+  # ==== Returns
+  #
+  # * array of the steps that match
+  def monitor_request(request_id, target_state = "complete", options = {})
+    states = ["created","planned","started","problem","hold","complete"]
+    max_time = get_option(options, "max_time", 15)
+    max_time = max_time * 60 # seconds = 15 minutes
+    monitor_step_name = get_option(options, "monitor_step_name", "none")
+    checking_interval = get_option(options, "interval", 15) #seconds
+    verbose = get_option(options, "verbose", false)
+    raise "Command_Failed: bad request_id" if !(request_id.to_i > 0)
+    raise "Command_Failed: state not allowed, choose from [#{states.join(",")}]" if !states.include?(target_state)
+    message_box("Montoring Request: #{request_id}","sep")
+    req_status = "none"
+    start_time = Time.now
+    elapsed = 0
+    until (elapsed > max_time || req_status == target_state)
+      rest_result = get("requests", request_id, {"verbose" => verbose ? "yes" : "no"})
+      log "\tREST Call: #{url}" if verbose
+      raise "Command_Failed: Request not found" if rest_result["status"] == "ERROR"
+      if monitor_step_name == "none"
+        req_status = rest_result["response"]["aasm_state"]
+      else
+        found = false
+        i_pos = rest_result["data"]["steps"].map{|l| l["name"]}.index(monitor_step_name)
+        raise "Command_Failed: Step name [#{monitor_step_name}] not found" if i_pos.nil?
+        req_status = rest_result["data"]["steps"][i_pos]["aasm_state"]
+      end
+      if req_status == target_state
+        break
+      else
+        log "\tWaiting(#{elapsed.floor.to_s}) - Current status: #{req_status}"
+        sleep(checking_interval)
+        elapsed = Time.now - start_time
+      end
+    end
+    if req_status == target_state
+      req_status =  "Success test, looking for #{success}: Success!"
+    else
+      if elapsed > max_time
+        req_status =  "Command_Failed: Max time: #{max_time}(secs) reached.  Status is: #{req_status}, looking for: #{target_state}"
+      else
+        req_status = "REST call generated bad data, Status is: #{req_status}, looking for: #{target_state}"
+      end
+    end
+    req_status
+  end
+  
+  # Sends an email based on step recipients
+  #
+  # ==== Attributes
+  #
+  # * +subject+ - text of email subject
+  # * +body+ - text of email body
+  #
+  # ==== Returns
+  #
+  # * empty string
+  def notify(step_id, body, subject = "Mail from automation")
+    url = "#{@base_url}/v1/steps/#{step_id}/notify?token=#{@token}"
+    data = {"filters"=>{"notify"=>{"body"=> body, "subject"=> subject}}}
+    result = rest_call(url, "get", {"data" => data})
+  end
+
   private
   
   def url_encode(name)
