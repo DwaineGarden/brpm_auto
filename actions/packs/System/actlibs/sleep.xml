@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Sleep" connectivity="OPEN" needs_channel="N"/>
+   <lib_task id="17" module="sleep" module_version="1" name="Sleep">
+      <lib_task_param id="29" name="seconds" description="Wait period (seconds)" modifiable="Yes" explode="None">
+         <lib_task_param_default value="60" lib_task_param_id="29"/>
+      </lib_task_param>
+   </lib_task>
+</vl_activity_library>

@@ -1,0 +1,106 @@
+###################################
+# DISPATCH PRE-PROCESS 
+###################################
+#
+# Executes chef pre-process deploy steps:  Verifies and creates cookbook if needed,
+# creates role file for a RLM deployment process, and checks for availability of 
+# required tools (knife).
+#
+
+# REQUIRES:
+#	RLM_COOKBOOK - Name of RLM cookbook, default is "RLM_COOKBOOK_<HOSTNAME>"
+#	CHEF_REPO_HOME - Home directory of chef-repo, default is "/root/chef-repo"
+#	RLM_TMP - temp working directory for RLM on dispatcher server, default is "/tmp"
+
+echo "#######################################"
+echo "#  Chef Deploy Process Preparation"
+echo "#######################################"
+echo 
+echo
+
+
+###################################
+#  Check Vars
+###################################
+if [ -z "$CHEF_REPO_HOME" ]; then
+	CHEF_REPO_HOME="/root/chef-repo"
+fi
+if [ -z "$RLM_COOKBOOK" ]; then
+	hn=`hostname`
+	RLM_COOKBOOK="RLM_COOKBOOK_"`echo $hn | cut -d"." -f1`
+fi
+
+if [ -z "$RLM_TMP" ]; then
+	RLM_TMP="/tmp"
+fi
+
+if [ ! -d "$CHEF_REPO_HOME" ]; then
+	echo "CHEF_REPO_HOME [ $CHEF_REPO_HOME ] not found on this server, exiting" 1>&2
+	exit 1
+fi
+
+
+###################################
+#  DISPATCHER PREPARE
+###################################
+#
+# Create RLM_COOKBOOK if it doesn't exist
+
+echo "#######################################"
+echo "#  Cookbook prepare:  $RLM_COOKBOOK"
+echo "#######################################"
+
+cookbookDir=${CHEF_REPO_HOME}/cookbooks/${RLM_COOKBOOK}
+cd $CHEF_REPO_HOME
+command -v knife >/dev/null 2>&1 || { echo >&2 "Error running knife command, ensure it is in PATH on server"; exit 1; }
+
+cookbookVersion=`knife cookbook show $RLM_COOKBOOK`
+rc=$?
+
+cookbookVersion=`echo $cookbookVersion | cut -d" " -f2`
+
+# returns 100 if cookbook doesn't exist
+if [[ $rc == 100 ]]; then
+	#-C, --copyright COPYRIGHT        Name of Copyright holder
+	#-m, --email EMAIL                Email address of cookbook maintainer
+	#-I, --license LICENSE            License for cookbook, apachev2, gplv2, gplv3, mit or none
+	echo "Cookbook $RLM_COOKBOOK does not exist, creating cookbook"
+	knife cookbook create $RLM_COOKBOOK
+	rc=$?
+	if [[ $rc != 0 ]]; then
+		echo "Error creating cookbook $RLM_COOKBOOK" 1>&2
+    		exit $rc
+	fi
+	echo "Syncing cookbook $RLM_COOKBOOK with chef server"
+	knife cookbook upload $RLM_COOKBOOK
+	rc=$?
+	if [[ $rc != 0 ]]; then
+    		exit $rc
+	fi
+else
+	echo "Found cookbook $RLM_COOKBOOK on chef server"
+	if [ ! -d "$cookbookDir" ]; then
+		echo "Cookbook $RLM_COOKBOOK exists, but needs to be downloaded locally"
+		knife cookbook download $RLM_COOKBOOK -N -d "${CHEF_REPO_HOME}/cookbooks"
+		rc=$?
+		if [[ $rc != 0 ]]; then
+			echo "Error downloading cookbook $RLM_COOKBOOK" 1>&2
+    			exit $rc
+		fi
+		mv ${cookbookDir}-${cookbookVersion} ${cookbookDir}
+	fi
+fi
+
+echo "#######################################"
+echo "#  Create ROLE file"
+echo "#######################################"
+
+# Create a role file
+roleName="RLM_ROLE_${VL_DEPLOYMENT_ID}_${VL_PROCESS_ID}"
+roleFile="$RLM_TMP/${roleName}.json"
+echo "Creating role file $roleFile"
+echo "{\"name\": \"${roleName}\",\"chef_type\"\
+: \"role\",\"json_class\": \"Chef::Role\",\"description\"\
+: \"RLM Role for deployment ${VL_DEPLOYMENT_ID}, process ${VL_PROCESS_ID} on target ${VL_DISPATCH_TARGET_HOST}\",\"run_list\": [" > $roleFile
+
+exit $?

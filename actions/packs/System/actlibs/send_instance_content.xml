@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Send Instance Content" connectivity="OPEN" needs_channel="Y"/>
+   <lib_task id="4" module="file_put" module_version="6" name="Send Instance Content">
+      <lib_task_param id="6" name="path" description="Remote Directory" modifiable="Yes" explode="None">
+         <lib_task_param_default value="." lib_task_param_id="6"/>
+      </lib_task_param>
+   </lib_task>
+</vl_activity_library>

@@ -1,0 +1,143 @@
+#![.ps1]powershell.exe -ExecutionPolicy Unrestricted -File
+#############################################################################
+# Copyright @ 2012-2014 BMC Software, Inc.                                  #
+# This script is supplied as a template for performing the defined actions  #
+# via the BMC Release Package and Deployment. This script is written        #
+# to perform in most environments but may require changes to work correctly #
+# in your specific environment.                                             #
+#############################################################################
+#
+# Set Apache Configurations
+#
+#
+# Long lines are bad, increase our buffer size!
+$host.UI.RawUI.BufferSize = new-object System.Management.Automation.Host.Size(512,50);
+
+$errorBase = $error[0]
+
+$settingContent = Get-Content $env:VL_INPUT_DATA
+
+if (!($settingContent)) {
+   	"This script should be executed within the context of a BRPD transaction."
+ 	exit 1
+}
+
+$settingContent
+
+# Iterate through our input file...
+foreach($line in $settingContent) {
+    # does this line apply to Apache?
+    # "LINE: $line"
+    if($line -match"^\[Apache_\d+\]\[(.*?)\](.*?)$") {
+        $apachePath = $matches[1]
+	$theRest = $matches[2]
+        $haveConfFile = $true
+    }
+    else {
+        if($line -match"^(\[.*\])(.*?)$") {
+            #$apachePath += $matches[1]
+            $setting = $matches[2]
+        }
+        else {
+            $setting = $line
+        }
+        $haveConfSetting = $true
+    }
+    [string] $triple=$nul
+    $scope=@()
+    if($haveConfFile -and $haveConfSetting) {
+        $haveConfSetting = $false;
+
+	# Define my reserved words
+	$triples="loadmodule addicon addlanguage addcharset alias addiconbytype addiconbyencoding sslrandomseed addtype"
+	$scopes="Directory DirectoryMatch Files FilesMatch Location LocationMatch VirtualHost IfModule"
+
+	# Parse "theRest" for triples and scope keywords
+	if ($theRest)  {
+		$theRest=$theRest.Replace("[","")
+		$split=$theRest.split("]")
+
+		# try to figure out what they are
+		foreach ($object in $split) {
+			if (!($object)) {continue}
+			$first,$rest = $object.split(" ")
+			# is it a scope element or a triple?
+			if ($triples.Contains($first.toLower()))  {
+	                	$triple = $object
+			}
+			if ($scopes.Contains($first))  {
+                		$scope += $object
+			}
+		}
+	}
+
+	#there aren't any = signs in an http.conf
+	$setting = $setting.Replace("="," ")
+
+	$token,$other = $setting.split(" ")
+
+	# if we triggered a triple, add it to settings
+	if ($triple) {
+		$setting = $triple + " " + $setting
+	}
+
+	# Now, go through the file line by line to find the correct element
+
+	$foundCount=$nul
+	$foundScope=$nul
+	$scopeCount=$nul
+
+	if ($scope.count -gt 0) {
+		$foundCount=0
+		$foundScope=$false
+		$scopeCount=$scope.count
+	}
+	else {$foundScope=$true}
+
+	$TEMPFILE="vltmp_"+$RANDOM
+	$fileContent=get-content $apachePath
+	$updateComplete=$false
+
+	foreach ($configLine in $fileContent)  {
+		# find our line that we care about and use it to update the file
+		if (!($foundCount -eq $nul) -and !$foundScope -and !$updateComplete)  {
+			# have scope, must find it.
+			foreach ($type in $scope) {
+				if ($configLine.Contains($type))  {
+					#found one!  increment foundCount
+					$foundCount++
+				}
+				if ($foundCount -eq $scopeCount) {
+					#found them all!
+					$foundScope=$true
+				}
+			}
+		}
+		if (($foundScope) -and (!$updateComplete))  {
+			# its for real now, find line and replace it.
+			if (($configLine -match "^\s*${token}") -or ($configLine -match "^\s*${triple}\s*${token}"))  {
+				Add-Content $TEMPFILE $setting
+				"Updating $apachePath with setting $setting"
+				$foundScope=$false
+				$updateComplete=$true
+				continue
+			}
+		}
+		Add-Content $TEMPFILE $configLine
+
+	}
+	# write the file
+	if ($updateComplete)  {
+		copy-item $TEMPFILE $apachePath
+	}
+	else {
+		Write-Error "No updates applied for setting $setting"
+	}
+	remove-item $TEMPFILE
+
+    }
+}
+
+
+if($error[0] -ne $errorBase) {exit 1}
+

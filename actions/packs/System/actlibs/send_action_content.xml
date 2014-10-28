@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Send Action Content" connectivity="OPEN" needs_channel="Y"/>
+   <lib_task id="11" module="put_action" module_version="1" name="Send Action Content">
+      <lib_task_param id="24" name="script" description="Action Name" modifiable="Yes" explode="None">
+      </lib_task_param>
+      <lib_task_param id="6" name="path" description="Remote Directory" modifiable="Yes" explode="None">
+         <lib_task_param_default value="." lib_task_param_id="6"/>
+      </lib_task_param>
+   </lib_task>
+</vl_activity_library>

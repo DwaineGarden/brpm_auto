@@ -1,0 +1,20 @@
+########################################################################
+#  Execute Chef Recipe
+########################################################################
+
+# This action can be used to add a chef recipe to an RLM deployment 
+# process.  Invoke this action and pass an argument of the form
+#
+#	<CookBook>::<Recipe>
+#
+# During deploy time, this recipe will be added to the role. This action
+# will not have anything to execute as it is only used to deliver the 
+# recipe name to the srun Chef Dispatcher process.
+#
+# Do not change the Label for this action.  The label is used to determine
+# that srun should run a pre-existing chef recipe.
+
+echo "This action can only be run using a Chef Dispatcher" 1>&2
+
+exit 1
+

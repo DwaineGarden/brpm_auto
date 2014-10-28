@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Restart Last Failed Activity" connectivity="OPEN" needs_channel="N"/>
+   <lib_task id="18" module="restart_last_fail" module_version="1" name="Restart Activity">
+      <lib_task_param id="30" name="max_repeat" description="Repeat (0 = Infinite)" modifiable="Yes" explode="None">
+         <lib_task_param_default value="1" lib_task_param_id="30"/>
+      </lib_task_param>
+   </lib_task>
+</vl_activity_library>

@@ -1,0 +1,128 @@
+#![.ps1]powershell.exe -ExecutionPolicy Unrestricted -File
+#############################################################################
+# Copyright @ 2012-2014 BMC Software, Inc.                                  #
+# This script is supplied as a template for performing the defined actions  #
+# via the BMC Release Package and Deployment. This script is written        #
+# to perform in most environments but may require changes to work correctly #
+# in your specific environment.                                             #
+#############################################################################
+
+#
+# Create an Application Pool
+#
+#	IIS_POOL_NAME			the name of the application pool
+#	IIS_POOL_IDENTITY_TYPE	the id value for the pool
+#	IIS_POOL_USER			account for the pool - for identity type 3
+#	IIS_POOL_PASSWORD		password for id:3 pools
+#	IIS_NET_VERSION			.NET framework version desired (default:v2.0, v1.1, v4.0)
+#	IIS_SITE_NAME			Optional:  site name to assign app pool
+#
+# 	set IIS_POOL_USER and IIS_POOL_PASSWORD when identity_type is 3
+#
+
+# Server 2008 R2 has all the IIS management WMI objects
+# installed as defaults.
+# For Server 2008 SP2 the following must be installed:
+#    Powershell 2.0
+#    .Net Framework 3.5
+#    IIS 6.0 management compatibility role service
+#    IIS Management service
+
+$script:ErrorActionPreference = "Continue"
+
+function createAppPool
+{
+    $errorBase = $error[0]
+    $appPoolSettings = [wmiclass] "root\MicrosoftIISv2:IISApplicationPoolSetting";
+    $newPool = $appPoolSettings.CreateInstance();
+    $newPool.Name = "W3SVC/AppPools/" + $env:IIS_POOL_NAME;
+
+    # some basic required properties
+    $newPool.PeriodicRestartTime = 0;
+    $newPool.IdleTimeout = 0;
+    $newPool.MaxProcesses = 2;
+
+    # set .NET Framework version, defaults to v2.0
+    if ($env:IIS_NET_VERSION -ne "")  {
+        $newPool.managedRuntimeVersion = $env:IIS_NET_VERSION
+     }
+    $newPool.AppPoolIdentityType = $env:IIS_POOL_IDENTITY_TYPE;
+    if ($newPool.AppPoolIdentityType -eq 3) {
+            $newPool.WAMUsername = $env:IIS_POOL_USER;
+            $newPool.WAMUserPass = $env:IIS_POOL_PASSWORD;
+    }
+    $newPool.Put();
+
+	# Set app pool to site if defined
+	if ($env:IIS_SITE_NAME)  {
+		if(Test-Path IIS:\SITES\$env:IIS_SITE_NAME)
+		{
+			Write-Host "Setting Application Pool on Site $env:IIS_SITE_NAME"
+			Set-ItemProperty IIS:\Sites\$env:IIS_SITE_NAME -Name ApplicationPool -Value $env:IIS_POOL_NAME
+		}
+	}
+
+
+    if($error[0] -ne $errorBase)
+    {
+	write-error "Error Creating Application Pool $env:IIS_POOL_NAME"
+	exit 1
+    }
+}
+
+# Verify current version of PowerShell and working WMI
+$psVersion = (get-host -errorvariable pserror).version.major
+$wmiVersion = (get-wmiobject Win32_WMISetting -errorvariable wmierror).BuildVersion
+if ($psVersion -lt 2 -or $pserror -ne "") {
+	"Error:  PowerShell Version 2.0 or later is required."
+	exit 1
+}
+if ($wmierror -ne "") {
+	"WMI Error: $wmierror"
+	exit 1
+}
+
+
+# Check variables
+if ($env:IIS_POOL_NAME -eq "") {
+	"IIS_POOL_NAME environment variable not set"
+	exit 1
+}
+if ($env:IIS_POOL_IDENTITY_TYPE -eq "") {
+	"IIS_POOL_IDENTITY_TYPE environment variable not set"
+	exit 1
+}
+
+#
+# Check to see if the pool exists.  If it doesn't create it, otherwise exit out
+#
+
+$errorBase = $error[0]
+
+# Pull in the IIS admin cmdlet
+add-pssnapin WebAdministration -ErrorAction "SilentlyContinue"
+if($error[0] -ne $errorBase) {
+    $errorBase = $error[0]
+    '"add-pssnapin WebAdministration" failed, "Import-Module WebAdministration" instead.'
+    Import-Module WebAdministration
+    $hide = Get-Command WebAdministration\*
+    if($error[0] -ne $errorBase) {
+        "Could not load the IIS Administration commands."
+        exit 1
+    }
+}
+
+if(Test-Path IIS:\AppPools\$env:IIS_POOL_NAME)
+{
+	Write-Host "Application Pool $env:IIS_POOL_NAME already exists"
+	exit 0
+}
+else
+{
+	Write-Host "Creating Application Pool $env:IIS_POOL_NAME"
+	createAppPool;
+}
+
+
+
+

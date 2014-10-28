@@ -1,0 +1,59 @@
+@echo off
+@rem #############################################################################
+@rem # Copyright @ 2012-2014 BMC Software, Inc.                                  #
+@rem # This script is supplied as a template for performing the defined actions  #
+@rem # via the BMC Release Package and Deployment. This script is written        #
+@rem # to perform in most environments but may require changes to work correctly #
+@rem # in your specific environment.                                             #
+@rem #############################################################################
+
+REM Environment variables
+REM MSSQL_USERNAME	username to use for sql server commands
+REM MSSQL_PASSWORD	password to use for sql server commands
+REM MSSQL_HOME		path to sql server install directory (e.g. C:\Program Files\Microsoft SQL Server)
+REM MSSQL_DATABASE	master database
+
+set MSSQL_EXEC=sqlcmd.exe
+if not "%MSSQL_USERNAME%" == "" set MSSQL_USERNAME=-U%MSSQL_USERNAME%
+if not "%MSSQL_PASSWORD%" == "" set MSSQL_PASSWORD=-P%MSSQL_PASSWORD%
+if not "%MSSQL_HOME%" == "" set PATH=%MSSQL_HOME%\100\Tools\Binn;%PATH%
+if "%MSSQL_DATABASE%" == "" set MSSQL_DATABASE=master
+set USE_MSSQL_DATABASE=-d%MSSQL_DATABASE%
+
+REM Make sure that we are showing advanced options.
+FOR /F "tokens=*" %%X IN ('%MSSQL_EXEC% %USE_MSSQL_DATABASE% %MSSQL_USERNAME% %MSSQL_PASSWORD% -Q "sp_configure show_advanced_option"') DO (call :setit "%%X")
+
+echo ^<Server^>
+echo [%MSSQL_DATABASE%]
+REM Now iterate through each setting and echo its value...
+FOR /F "tokens=*" %%X IN ('%MSSQL_EXEC% %USE_MSSQL_DATABASE% %MSSQL_USERNAME% %MSSQL_PASSWORD% -Q "sp_configure"') DO (call :showit "%%X")
+
+GOTO :userdata
+:setit
+	SETLOCAL
+	SET DLINE=%1
+	SET NLINE=%DLINE:~-2,1%
+	if "%NLINE%" == "0" (
+		%MSSQL_EXEC% %USE_MSSQL_DATABASE% %MSSQL_USERNAME% %MSSQL_PASSWORD% -Q "sp_configure show_advanced_option,1" > nul
+		%MSSQL_EXEC% %USE_MSSQL_DATABASE% %MSSQL_USERNAME% %MSSQL_PASSWORD% -Q "RECONFIGURE" > nul
+	)
+	ENDLOCAL
+	GOTO :eof
+
+:showit
+	SETLOCAL
+	SET DLINE=%1
+	SET STARTTEXT=%DLINE:~1,4%
+	IF NOT "%STARTTEXT%" == "----" (
+		IF NOT "%STARTTEXT%" == "name" (
+			FOR /F "tokens=1 delims=#" %%G IN (%DLINE%) DO @echo %%G
+		)
+	)
+	ENDLOCAL
+	GOTO :userdata
+
+:userdata
+rem echo ^<^<UserData^>^>
+rem echo command here
+
+

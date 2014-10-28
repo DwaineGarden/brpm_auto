@@ -1,0 +1,61 @@
+#############################################################################
+# Copyright @ 2012-2014 BMC Software, Inc.                                  #
+# This script is supplied as a template for performing the defined actions  #
+# via the BMC Release Package and Deployment. This script is written        #
+# to perform in most environments but may require changes to work correctly #
+# in your specific environment.                                             #
+#############################################################################
+#
+# Managed channel config_get action to dump the configuration for Apache2
+#
+# set HTTPD_HOME if apache is not located in /etc/httpd
+# This script is a template for the default apache 2 installation on RHEL
+# and may need to be modified to fit your specific installation.
+#
+#
+# set the home dir for apache
+#
+if [ -z "$HTTPD_HOME" ]
+then
+	HTTPD_HOME="/etc/httpd"
+fi
+#
+# function to dump a config file with specific 
+# headers that will be parsed by the console
+#
+dumpfile() {
+	if [ -f "$1" ]
+	then
+		# trim any leading / from the path to keep it relative
+		# the path passed in will have HTTPD_HOME already stripped off
+		name=`echo "$1" | sed -e 's,^/,,'`
+		echo "<$name>"
+		# dump out the contents of this file and output a section end tag
+		grep -v "^Include" $1
+		echo "</$name>"
+		# dump out any included files
+		grep "^Include" $1 | while read line
+		do
+			set - $line
+			shift
+			for subfile
+			do
+				dumpfile `echo $subfile | sed -e "s,$HTTPD_HOME/,,"`
+			done
+		done
+	fi
+}
+#
+# cd to the apache dir and dump the main config file
+#
+cd $HTTPD_HOME
+dumpfile conf/httpd.conf
+#
+# this section allows any other configuration data to be stored 
+# and used to determine drift. uncomment the following echo statement
+# to enable this in the console
+#
+#echo "<<UserData>>"
+#  add commands to report data here
+
+exit 0

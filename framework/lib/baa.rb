@@ -1163,10 +1163,32 @@ class NSH < BrpmAutomation
   # * results of command per host
   def script_exec(target_hosts, script_path, target_path)
     #server_file = create_temp_script(target_hosts.join("\n"), {"script_type" => "servers", "temp_path" => "/tmp"})
-    cmd = "#{@nsh_path}/bin/scriptutil -d \"#{target_path}\" -h #{target_hosts.join(" ")} -s #{script_path}"
+    cmd = "#{@nsh_path}/bin/scriptutil -d \"#{target_path}\" -h #{target_hosts.join(" ")} -s #{script_path} -H \"Results from: %h\""
     res = run_shell(cmd)
     result = display_result(res)
     result
+  end
+
+  # Executes a text variable as a script on remote targets
+  #
+  # ==== Attributes
+  #
+  # * +target_hosts+ - array of target hosts
+  # * +script_body+ - body of script
+  # * +target_path+ - path on targets to store/execute script
+  #
+  # ==== Returns
+  #
+  # * output of script
+  #
+  def script_execute_body(target_hosts, script_body, target_path)
+    script_file = "nsh_script_#{Time.now.strftime("%Y%m%d%H%M%S")}.sh"
+    full_path = "#{File.dirname(SS_output_file)}/#{script_file}"
+    fil = File.open(full_path,"w+")
+    #fil.write script_body.gsub("\r", "")
+    fil.flush
+    fil.close
+    result = script_exec(target_hosts, full_path, target_path)
   end
 
   # Runs a simple ls command in NSH
@@ -1256,7 +1278,7 @@ class NSH < BrpmAutomation
   def create_temp_script(body, options)
     script_type = get_option(options,"script_type", "nsh")
     base_path = get_option(options, "temp_path")
-    tmp_file = "#{script_type}_temp_#{@run_key}.#{script_type}"
+    tmp_file = "#{script_type}_temp_#{precision_timestamp}.#{script_type}"
     full_path = "#{base_path}/#{tmp_file}"
     fil = File.open(full_path,"w+")
     fil.puts body

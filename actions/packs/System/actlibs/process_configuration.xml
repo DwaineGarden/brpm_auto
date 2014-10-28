@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Process Configuration" connectivity="OPEN" needs_channel="Y"/>
+   <lib_task id="14" module="config_set" module_version="1" name="Process Configuration Data"/>
+</vl_activity_library>

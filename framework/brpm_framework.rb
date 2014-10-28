@@ -218,9 +218,7 @@ class BrpmAutomation
     end
     result
   end
-  
-  
-  
+    
   def split_nsh_path(path)
     result = ["",path]
     result[0] = path.split("/")[2] if path.start_with?("//")
@@ -289,6 +287,16 @@ class BrpmAutomation
     message.split("\n").map{|l| "#{stamp}#{l}"}.join("\n")
   end
 
+  # Returns a timestamp to the thousanth of a second
+  # 
+  # ==== Returns
+  #
+  # string timestamp 20140921153010456
+  #
+  def precision_timestamp
+    Time.now.strftime("%Y%m%d%H%M%S%L")
+  end
+
 end
 
 # Abstraction class for the step params
@@ -308,6 +316,7 @@ class Param < BrpmAutomation
     request_data_file_dir = File.dirname(@params["SS_output_dir"])
     super(@params["SS_output_file"])
     @request_data_file = "#{request_data_file_dir}/request_data.json"
+    @server_list = server_list
   end
   
   # Test if a param is present
@@ -322,8 +331,8 @@ class Param < BrpmAutomation
   # * the param hash name if where=true, otherwise true/false
   def present?(key_name, where = false)
     ans = nil
-    ans = "params" if @params.has_key?(key_name) 
-    ans = "json" if @json_params.has_key?(key_name)
+    ans = "params" if present_local?(key_name) 
+    ans = "json" if present_json(key_name)
     where ? ans : !ans.nil?
   end
 
@@ -377,8 +386,9 @@ class Param < BrpmAutomation
   # * value of key - including resolved properties that may be embedded
   # *  Like this: /opt/bmc/${component_version}/appserver
   def get(key_name, default = nil)
-    ans = present_json?(key_name) ? @json_params[key_name] : ""
-    ans = present_local?(key_name) ? @params[key_name] : ans
+    ans = ""
+    ans = @json_params[key_name] if present_json?(key_name)
+    ans = @params[key_name] if present_local?(key_name)
     ans = default if ans == "" && !default.nil?
     complex_property_value(ans)
   end
@@ -459,6 +469,17 @@ class Param < BrpmAutomation
     @json_params
   end
 
+  # Fetches the property value for a server
+  #
+  # ==== Returns
+  #
+  # * property value 
+  def get_server_property(server, property)
+    ans = ""
+    ans = @server_list[server][property] if @server_list.has_key?(server) && @server_list[server].has_key?(property)
+    ans
+  end
+
   # Pulls the json params from a different request
   #
   # ==== Attributes
@@ -529,6 +550,15 @@ class Param < BrpmAutomation
     @json_params
   end
 
+  # returns the current params
+  #
+  # ==== Returns
+  #
+  # * hash of params
+  def params
+    @params
+  end
+
   # Inserts a value in the json_params of another request
   #  note: be careful this has to be coordinated
   # ==== Attributes
@@ -567,6 +597,34 @@ class Param < BrpmAutomation
     end
     result
   end
+  
+  # Returns a server hash with properties from the params
+  # 
+  # ==== Returns
+  #
+  # hash of servers and properties
+  # ex: {server1 => {prop => val1, Prop2 => val2}, server2 => {prop1 => val1}}
+  #
+  def server_list
+    rxp = /server\d+_/
+    slist = {}
+    lastcur = -1
+    curname = ""
+    base_servers = @params["servers"].split(",")
+    base_servers.each{|k| slist[k] = {} }
+    @params.sort.select{ |k| k[0] =~ rxp }.each_with_index do |server, idx|
+      cur = (server[0].scan(rxp)[0].gsub("server","").to_i * 0.001).round * 1000
+      if cur == lastcur
+        prop = server[0].gsub(rxp, "")
+        slist[curname][prop] = server[1]
+      else # new server
+        lastcur = cur
+        curname = server[1].chomp("0")
+        slist[curname] = {}
+      end
+    end    
+    slist
+  end
 
 end
 
@@ -579,8 +637,9 @@ module Framework
   def save_request_params
     @p.save_local_params
   end
-
+  
 end
+
 # == Initialization on Include
 # Objects are set for most of the classes on requiring the file
 # these will be available in the BRPM automation
@@ -597,13 +656,16 @@ require "#{LibDir}/lib/baa"
 require "#{LibDir}/lib/scm"
 require "#{LibDir}/lib/rest"
 require "#{LibDir}/lib/ticket"
+require "#{LibDir}/lib/action"
 customer_include_file = File.join(LibDir,"customer_include.rb")
 if File.exist?(customer_include_file)
   @auto.log "Loading customer include file: #{customer_include_file}"
   require customer_include_file
 end
+ARG_PREFIX = "ARG_" unless defined?(ARG_PREFIX)
 @rest = BrpmRest.new(@p.SS_base_url)
 @request_params = @p.get_local_params
+@params["direct_execute"] = true #Set to exclude capistrano
 global_timestamp
 
 

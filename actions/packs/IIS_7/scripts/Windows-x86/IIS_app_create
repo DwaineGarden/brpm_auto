@@ -1,0 +1,100 @@
+#![.ps1]powershell.exe -ExecutionPolicy Unrestricted -File
+#############################################################################
+# Copyright @ 2012-2014 BMC Software, Inc.                                  #
+# This script is supplied as a template for performing the defined actions  #
+# via the BMC Release Package and Deployment. This script is written        #
+# to perform in most environments but may require changes to work correctly #
+# in your specific environment.                                             #
+#############################################################################
+
+#
+# Creates a virtual directory in the IIS system and then
+# converts it into an application.
+#
+#   IIS_APP_NAME		virtual dir name
+#   IIS_APP_PATH		pathname to associate
+#   IIS_POOL_NAME		app pool to be used
+#   IIS_SITE_NAME		site name hosting app
+#
+#
+
+# Server 2008 R2 has all the IIS management WMI objects
+# installed as defaults.
+# For Server 2008 SP2 the following must be installed:
+#    Powershell 2.0
+#    .Net Framework 3.5
+#    IIS 6.0 management compatibility role service
+#    IIS Management service
+
+$script:ErrorActionPreference = "Continue"
+
+# Verify current version of PowerShell and working WMI
+$psVersion = (get-host -errorvariable pserror).version.major
+$wmiVersion = (get-wmiobject Win32_WMISetting -errorvariable wmierror).BuildVersion
+if ($psVersion -lt 2 -or $pserror -ne "") {
+	"Error:  PowerShell Version 2.0 or later is required."
+	exit 1
+}
+if ($wmierror -ne "") {
+	"WMI Error: $wmierror"
+	exit 1
+}
+
+# Check Variables
+if (!($env:IIS_APP_NAME)) {
+	"IIS_APP_NAME environment variable not set"
+	exit(1)
+}
+if (!($env:IIS_APP_PATH)) {
+	"IIS_APP_PATH environment variable not set"
+	exit(1)
+}
+
+$errorBase = $error[0];
+
+$appName = $env:IIS_APP_NAME;
+$appPath = $env:IIS_APP_PATH;
+
+if ($env:IIS_SITE_NAME -ne $null)  {
+    $website = Get-WmiObject -Namespace 'root\MicrosoftIISv2' -Class IISWebServerSetting -Filter "ServerComment = '$env:IIS_SITE_NAME'";
+    $siteName = $website.Name;
+    }
+  else {
+    $siteName = "W3SVC/1";
+}
+
+
+$newVDirName = $siteName + "/ROOT/" + $appName;
+
+$virtualDirSettings = [wmiclass] "root\MicrosoftIISv2:IIsWebVirtualDirSetting";
+$newVDir = $virtualDirSettings.CreateInstance();
+$newVDir.Name = $newVDirName;
+$newVDir.Path = $appPath;
+$newVDir.EnableDefaultDoc = $False;
+
+write-host "Creating new Virtual Directory $newVDir.Name at path $newVDir.Path"
+
+$newVDir.Put() | out-null;
+
+write-host "Creating application $appName"
+
+# Create the application on the virtual directory
+$vdir = Get-WmiObject -namespace "root\MicrosoftIISv2" -class "IISWebVirtualDir" -filter "Name = '$newVDirName'";
+if (!($env:IIS_POOL_NAME))  {
+    # objIIsWebVirtualDir.AppCreate3(AppMode,AppPoolName,bCreate)
+    $vdir.AppCreate3(1,$env:IIS_POOL_NAME,0);
+    }
+  else {
+    $vdir.AppCreate2(1);
+}
+
+# Updated the Friendly Name of the application
+$newVDir.AppFriendlyName = $appName;
+$newVDir.Put() | out-null;
+
+if($error[0] -ne $errorBase) {
+	write-error "Error occurred creating application $appName"
+	exit 1
+}
+
+

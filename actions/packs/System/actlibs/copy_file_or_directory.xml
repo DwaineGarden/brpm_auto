@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Copy File or Directory" connectivity="OPEN" needs_channel="Y"/>
+   <lib_task id="16" module="file_copy" module_version="1" name="Copy File or Directory">
+      <lib_task_param id="27" name="src_path" description="Source Path" modifiable="Yes" explode="None">
+         <lib_task_param_default value="" lib_task_param_id="27"/>
+      </lib_task_param>
+      <lib_task_param id="28" name="dst_path" description="Destination Path" modifiable="Yes" explode="None">
+         <lib_task_param_default value="" lib_task_param_id="28"/>
+      </lib_task_param>
+   </lib_task>
+</vl_activity_library>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Create Directory" connectivity="OPEN" needs_channel="Y"/>
+   <lib_task id="1" module="mkdir" module_version="1" name="Create Directory Task">
+      <lib_task_param id="1" name="path" description="Path to Create" modifiable="Yes" explode="None"/>
+   </lib_task>
+</vl_activity_library>

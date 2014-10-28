@@ -295,7 +295,7 @@ class BrpmRest < BrpmAutomation
 end
 
 # Class for interacting with requests
-class Request < BrpmRest
+class BrpmRequest < BrpmRest
 
   # Initializes an instance of the class
   #

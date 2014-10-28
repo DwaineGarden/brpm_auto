@@ -1,0 +1,123 @@
+#![.ps1]powershell.exe -ExecutionPolicy Unrestricted -File
+#############################################################################
+# Copyright @ 2012-2014 BMC Software, Inc.                                  #
+# This script is supplied as a template for performing the defined actions  #
+# via the BMC Release Package and Deployment. This script is written        #
+# to perform in most environments but may require changes to work correctly #
+# in your specific environment.                                             #
+#############################################################################
+
+#
+# Creates a new site in IIS
+#
+#   IIS_SITE_NAME		name of iis site
+#   IIS_SITE_PATH		site pysical path
+#   IIS_SITE_BINDINGS		url info - <IP Address>:<Port>:[<HostName>]
+#		example:  *:80:www.varalogix.com
+#	IIS_POOL_NAME		Optional:  app pool name to associate with site
+#
+
+# Server 2008 R2 has all the IIS management WMI objects
+# installed as defaults.
+# For Server 2008 SP2 the following must be installed:
+#    Powershell 2.0
+#    .Net Framework 3.5
+#    IIS 6.0 management compatibility role service
+#    IIS Management service
+
+$script:ErrorActionPreference = "Continue"
+
+# Verify current version of PowerShell and working WMI
+$psVersion = (get-host -errorvariable pserror).version.major
+$wmiVersion = (get-wmiobject Win32_WMISetting -errorvariable wmierror).BuildVersion
+if ($psVersion -lt 2 -or $pserror -ne "") {
+	"Error:  PowerShell Version 2.0 or later is required."
+	exit 1
+}
+if ($wmierror -ne "") {
+	"WMI Error: $wmierror"
+	exit 1
+}
+
+# Check Variables
+if (!($env:IIS_SITE_NAME)) {
+	"IIS_SITE_NAME environment variable not set"
+	exit 1
+}
+if (!($env:IIS_SITE_PATH)) {
+	"IIS_SITE_PATH environment variable not set"
+	exit 1
+}
+if (!($env:IIS_SITE_BINDINGS)) {
+	"IIS_SITE_BINDINGS environment variable not set"
+	exit 1
+}
+
+#
+# Check to see if the site exists.  If it does, bail out
+#
+
+$errorBase = $error[0]
+
+# Pull in the IIS admin cmdlet
+add-pssnapin WebAdministration -ErrorAction "SilentlyContinue"
+if($error[0] -ne $errorBase) {
+    $errorBase = $error[0]
+    '"add-pssnapin WebAdministration" failed, "Import-Module WebAdministration" instead.'
+    Import-Module WebAdministration
+    $hide = Get-Command WebAdministration\*
+    if($error[0] -ne $errorBase) {
+        Write-Error "Could not load the IIS Administration commands."
+        exit 1
+    }
+}
+
+if(Test-Path IIS:\SITES\$env:IIS_SITE_NAME)
+{
+	Write-Host "Site $env:IIS_SITE_NAME already exists"
+	exit 0
+}
+
+#
+#  Start Site creation
+#
+
+Write-Host "Creating IIS Site $env:IIS_SITE_NAME"
+
+if (!(Test-Path $env:IIS_SITE_PATH -pathtype container))  {
+    New-Item $env:IIS_SITE_PATH -type directory
+}
+
+$errorBase = $error[0]
+
+$iisSiteName = $env:IIS_SITE_NAME
+$iisSitePath = $env:IIS_SITE_PATH
+$iisSiteBindings = $env:IIS_SITE_BINDINGS
+
+# set bindings
+$site = [WMIClass]"root\webadministration:Site"
+
+$binding = [WMIClass]"root\webadministration:BindingElement"
+$bInstance = $binding.CreateInstance()
+$bInstance.BindingInformation = "$iisSiteBindings"
+$bInstance.Protocol = "http"
+
+# Create the site
+$site.Create("$iisSiteName", $bInstance, "$iisSitePath", $True)
+
+if ($env:IIS_POOL_NAME)  {
+	if(Test-Path IIS:\appPools\$env:IIS_POOL_NAME)
+		{
+			Write-Host "Setting Application Pool on Site as $env:IIS_POOL_NAME"
+			while (!(Test-Path IIS:\SITES\$env:IIS_SITE_NAME)) {
+				Start-Sleep 1
+			}
+			Set-ItemProperty IIS:\SITES\$env:IIS_SITE_NAME -Name ApplicationPool -Value $env:IIS_POOL_NAME
+		}
+}
+
+if($error[0] -ne $errorBase) {
+	Write-Error "Error Creating Site $env:IIS_SITE_NAME"
+	exit 1
+}
+exit 0

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Manage Semaphore" connectivity="OPEN" needs_channel="N"/>
+   <lib_task id="31" module="semaphore" module_version="1" name="Manage Semaphore">
+      <lib_task_param id="33" name="sem_action" description="Semaphore Action" modifiable="Yes" explode="None">
+         <lib_task_param_default value="Get" lib_task_param_id="33"/>
+      </lib_task_param>
+      <lib_task_param id="34" name="sem_name" description="Semaphore Name" modifiable="Yes" explode="None">
+         <lib_task_param_default value="" lib_task_param_id="34"/>
+      </lib_task_param>
+   </lib_task>
+</vl_activity_library>

@@ -1,0 +1,150 @@
+#![.ps1]powershell.exe -ExecutionPolicy Unrestricted -File
+#############################################################################
+# Copyright @ 2012-2014 BMC Software, Inc.                                  #
+# This script is supplied as a template for performing the defined actions  #
+# via the BMC Release Package and Deployment. This script is written        #
+# to perform in most environments but may require changes to work correctly #
+# in your specific environment.                                             #
+#############################################################################
+#
+# Script For Setting IIS_7, and IIS_6 Configuration settings
+# that is called by "Process Configuration" Library module
+#
+# Config Path:
+#
+#   [IIS_7][MACHINE...
+#
+# ENVIRONMENT REQUIREMENTS: 
+# $env:VL_INPUT_DATA
+#
+
+$script:ErrorActionPreference = "Continue"
+
+$errorBase = $error[0]
+$hasFailures = $false
+
+"Starting Script IIS Set Property" 
+
+# Pull in the IIS admin cmdlet
+add-pssnapin WebAdministration
+if($error[0] -ne $errorBase) {
+    $errorBase = $error[0]
+    Import-Module WebAdministration
+    Get-Command WebAdministration\*
+    if($error[0] -ne $errorBase) {
+        "Could not load the IIS Administration commands."
+        exit 1
+    }
+}
+
+$settingContent = Get-Content $env:VL_INPUT_DATA
+if($error[0] -ne $errorBase) {
+    "This script should be executed within the context of a BRPD transaction."
+    exit 1
+}
+
+# Iterate through our input file...
+foreach($line in $settingContent) {
+    # does this line apply to IIS?
+    # "LINE: $line"
+    if($line -match"^\[IIS_\d+\]\[(.*?)\](.*?)$") {
+        $iisPath = $matches[2]
+        $confURL = $matches[1]
+        $haveConfFile = $true
+    }
+    else {
+        if($line -match"^(\[.*\])(.*?)$") {
+            $iisPath += $matches[1]
+            $setting = $matches[2] 
+        }
+        else {
+            $setting = $line
+        }
+        $haveConfSetting = $true
+    }
+    $proceed = $true
+    if($haveConfFile -and $haveConfSetting) {
+        $haveConfSetting = $false;
+        "---- [URL: " + $confUrl+ "] ----"
+         # Generate our query path. 
+        $xPath = ""
+        $goodPath = $nul
+        while($iisPath.Length -gt 0) {
+            $lenStart = $iisPath.Length
+            if($iisPath -match"^\[(.*?)\](.*?)$") {
+                $pathPart = $matches[1]           
+                $iisPath = $matches[2]
+                if($pathPart -match"^\@(\d+)$") {
+                    $xPath += "[" + $matches[1] + "]"
+                }
+                ElseIf($pathPart -match"^(\@.*?)=(.*?)$") {
+                    $xPath += "[" + $matches[1] +"=" + $matches[2] + "]"
+                }
+                else {
+                    $xPath += "/" + $pathPart
+                }
+            }
+            # see if our config believes in the xpath. :)
+            $value = Get-WebConfiguration -Filter $xPath -PSPath "$confUrl"
+            if(!$value) {
+                # Attempt to create...
+                if($pathPart -match"^\@(.*?)$") {
+                    Add-WebConfiguration $goodPath $confUrl
+                }
+                else {
+                    Add-WebConfiguration $xPath $confUrl
+                }
+                $value = Get-WebConfiguration -Filter $xPath -PSPath $confUrl
+                if(!$value) {
+                    "Configuration path: " + $xPath + ", for URL: " + $confUrl + ", does not exist and could not be created."
+                    "Setting " + $setting + " for Configuration path " + $xPath + $iisPath + " will be ignored."
+                    $proceed = $false
+                    break
+                }
+            }
+             
+            # store the nodelist as the last known good one.
+            $goodPath = $xPath
+            if($iisPath.Length -eq $lenStart) {
+                break
+            }
+        }
+        if(!$proceed) {
+            $hasFailures = $true
+            continue
+        }
+
+        "XPath:" + $xPath
+        "Setting: " + $setting
+        if($setting -match"^(.*?)=(.*?)$") {
+            $lockGot = $false
+            if(Get-WebConfigurationLock -Filter $xPath -PSPath $confUrl) {
+                $lockGot = $true
+                Remove-WebConfigurationLock -Force -Filter $xPath -PSPath $confUrl
+            }
+            Set-WebConfigurationProperty $xPath -PSPath $confUrl -Name $matches[1] -Value $matches[2] -Force;            
+            $value = Get-WebConfigurationProperty $xPath -PSPath $confUrl -Name $matches[1] | select value
+            if($value.Value -ne $matches[2]) {
+                if(($value.Value -eq $false) -and ($matches[2] -ieq "False")) {
+                    # interpreted value as boolean
+                    continue
+                }
+                if(($value.Value -eq $true) -and ($matches[2] -ieq "True")) {
+                    # interpreted value as boolean
+                    continue
+                }
+                "Failed to apply configuration setting: [" + $matches[2] + "], setting remains: [" + $value.Value + "]"
+                $hasFailures = $true
+            }
+            if($lockGot) {
+                Add-WebConfigurationLock -Force -Filter $xPath -PSPath $confUrl
+            }
+        }  
+        else {
+            "Indeterministic change requested: " + $setting
+        }
+    }
+}
+
+if($error[0] -ne $errorBase -or $hasFailures) {exit 1}
+

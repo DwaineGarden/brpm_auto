@@ -1,0 +1,187 @@
+@echo off
+@rem #############################################################################
+@rem # Copyright @ 2012-2014 BMC Software, Inc.                                  #
+@rem # This script is supplied as a template for performing the defined actions  #
+@rem # via the BMC Release Package and Deployment. This script is written        #
+@rem # to perform in most environments but may require changes to work correctly #
+@rem # in your specific environment.                                             #
+@rem #############################################################################
+@rem
+@rem Action to dump sections of a site config for IIS7
+@rem Defaults to the default site name unless the IIS_SITE_NAME property is set
+@rem
+
+@rem
+@rem set the site to retrieve config settings for
+@rem
+if NOT DEFINED IIS_SITE_NAME set IIS_SITE_NAME=Default Web Site
+
+@rem
+@rem set the full appcmd.exe path
+@rem
+set APPCMD="%SystemRoot%\System32\inetsrv\appcmd.exe"
+
+@rem
+@rem uncomment sections below to include in the config snapshot
+@rem
+
+@rem
+@rem site configuration settings
+@rem
+%APPCMD% list config "%IIS_SITE_NAME%" /text:*
+
+@rem
+@rem general configuration settings
+%APPCMD% list config -section:system.applicationHost/applicationPools /text:*
+%APPCMD% list config -section:system.applicationHost/configHistory /text:*
+%APPCMD% list config -section:system.applicationHost/customMetadata /text:*
+%APPCMD% list config -section:system.applicationHost/listenerAdapters /text:*
+%APPCMD% list config -section:system.applicationHost/log /text:*
+%APPCMD% list config -section:system.applicationHost/serviceAutoStartProviders /text:*
+@rem %APPCMD% list config %IIS_SITE_NAME% -section:system.applicationHost/sites /text:*
+%APPCMD% list config -section:system.applicationHost/webLimits /text:*
+%APPCMD% list config -section:system.codedom /text:*
+%APPCMD% list config -section:system.data /text:*
+%APPCMD% list config -section:system.diagnostics /text:*
+
+@rem
+@rem FTP configuration settings
+@rem
+%APPCMD% list config -section:system.ftpServer/caching /text:*
+%APPCMD% list config -section:system.ftpServer/firewallSupport /text:*
+%APPCMD% list config -section:system.ftpServer/log /text:*
+%APPCMD% list config -section:system.ftpServer/providerDefinitions /text:*
+%APPCMD% list config -section:system.ftpServer/security/authorization /text:*
+%APPCMD% list config -section:system.ftpServer/security/ipSecurity /text:*
+%APPCMD% list config -section:system.ftpServer/security/requestFiltering /text:*
+%APPCMD% list config -section:system.ftpServer/serverRuntime /text:*
+
+@rem
+@rem network interfaces configs
+@rem
+%APPCMD% list config -section:system.net/authenticationModules /text:*
+%APPCMD% list config -section:system.net/connectionManagement /text:*
+%APPCMD% list config -section:system.net/defaultProxy /text:*
+%APPCMD% list config -section:system.net/mailSettings/smtp /text:*
+%APPCMD% list config -section:system.net/requestCaching /text:*
+%APPCMD% list config -section:system.net/settings /text:*
+%APPCMD% list config -section:system.net/webRequestModules /text:*
+
+@rem
+@rem transactions
+@rem
+%APPCMD% list config -section:system.transactions/defaultSettings /text:*
+%APPCMD% list config -section:system.transactions/machineSettings /text:*
+
+@rem
+@rem web interface settings
+@rem
+%APPCMD% list config -section:system.web/anonymousIdentification /text:*
+%APPCMD% list config -section:system.web/authentication /text:*
+%APPCMD% list config -section:system.web/authorization /text:*
+%APPCMD% list config -section:system.web/browserCaps /text:*
+%APPCMD% list config -section:system.web/caching/cache /text:*
+%APPCMD% list config -section:system.web/caching/outputCache /text:*
+%APPCMD% list config -section:system.web/caching/outputCacheSettings /text:*
+%APPCMD% list config -section:system.web/caching/sqlCacheDependency /text:*
+%APPCMD% list config -section:system.web/clientTarget /text:*
+%APPCMD% list config -section:system.web/compilation /text:*
+%APPCMD% list config -section:system.web/customErrors /text:*
+%APPCMD% list config -section:system.web/deployment /text:*
+%APPCMD% list config -section:system.web/deviceFilters /text:*
+%APPCMD% list config -section:system.web/globalization /text:*
+%APPCMD% list config -section:system.web/healthMonitoring /text:*
+%APPCMD% list config -section:system.web/hostingEnvironment /text:*
+%APPCMD% list config -section:system.web/httpCookies /text:*
+%APPCMD% list config -section:system.web/httpHandlers /text:*
+%APPCMD% list config -section:system.web/httpModules /text:*
+%APPCMD% list config -section:system.web/httpRuntime /text:*
+%APPCMD% list config -section:system.web/identity /text:*
+%APPCMD% list config -section:system.web/machineKey /text:*
+%APPCMD% list config -section:system.web/membership /text:*
+%APPCMD% list config -section:system.web/mobileControls /text:*
+%APPCMD% list config -section:system.web/pages /text:*
+%APPCMD% list config -section:system.web/processModel /text:*
+%APPCMD% list config -section:system.web/profile /text:*
+%APPCMD% list config -section:system.web/protocols /text:*
+%APPCMD% list config -section:system.web/roleManager /text:*
+%APPCMD% list config -section:system.web/securityPolicy /text:*
+%APPCMD% list config -section:system.web/sessionPageState /text:*
+%APPCMD% list config -section:system.web/sessionState /text:*
+%APPCMD% list config -section:system.web/siteMap /text:*
+%APPCMD% list config -section:system.web/trace /text:*
+%APPCMD% list config -section:system.web/trust /text:*
+%APPCMD% list config -section:system.web/urlMappings /text:*
+%APPCMD% list config -section:system.web/webControls /text:*
+%APPCMD% list config -section:system.web/webParts /text:*
+%APPCMD% list config -section:system.web/webServices /text:*
+%APPCMD% list config -section:system.web/xhtmlConformance /text:*
+
+@rem
+@rem site server config
+@rem
+%APPCMD% list config -section:system.webServer/asp /text:*
+%APPCMD% list config -section:system.webServer/caching /text:*
+%APPCMD% list config -section:system.webServer/cgi /text:*
+%APPCMD% list config -section:system.webServer/defaultDocument /text:*
+%APPCMD% list config -section:system.webServer/directoryBrowse /text:*
+%APPCMD% list config -section:system.webServer/fastCgi /text:*
+%APPCMD% list config -section:system.webServer/globalModules /text:*
+%APPCMD% list config -section:system.webServer/handlers /text:*
+%APPCMD% list config -section:system.webServer/httpCompression /text:*
+%APPCMD% list config -section:system.webServer/httpErrors /text:*
+%APPCMD% list config -section:system.webServer/httpLogging /text:*
+%APPCMD% list config -section:system.webServer/httpProtocol /text:*
+%APPCMD% list config -section:system.webServer/httpRedirect /text:*
+%APPCMD% list config -section:system.webServer/httpTracing /text:*
+%APPCMD% list config -section:system.webServer/isapiFilters /text:*
+%APPCMD% list config -section:system.webServer/modules /text:*
+%APPCMD% list config -section:system.webServer/odbcLogging /text:*
+%APPCMD% list config -section:system.webServer/serverRuntime /text:*
+%APPCMD% list config -section:system.webServer/serverSideInclude /text:*
+%APPCMD% list config -section:system.webServer/staticContent /text:*
+%APPCMD% list config -section:system.webServer/tracing/traceFailedRequests /text:*
+%APPCMD% list config -section:system.webServer/tracing/traceProviderDefinitions /text:*
+%APPCMD% list config -section:system.webServer/urlCompression /text:*
+%APPCMD% list config -section:system.webServer/validation /text:*
+
+@rem
+@rem security settings
+@rem
+%APPCMD% list config -section:system.webServer/security/access /text:*
+%APPCMD% list config -section:system.webServer/security/applicationDependencies /text:*
+%APPCMD% list config -section:system.webServer/security/authentication/anonymousAuthentication /text:*
+%APPCMD% list config -section:system.webServer/security/authentication/basicAuthentication /text:*
+%APPCMD% list config -section:system.webServer/security/authentication/clientCertificateMappingAuthentication /text:*
+%APPCMD% list config -section:system.webServer/security/authentication/digestAuthentication /text:*
+%APPCMD% list config -section:system.webServer/security/authentication/iisClientCertificateMappingAuthentication /text:*
+%APPCMD% list config -section:system.webServer/security/authentication/windowsAuthentication /text:*
+%APPCMD% list config -section:system.webServer/security/authorization /text:*
+%APPCMD% list config -section:system.webServer/security/ipSecurity /text:*
+%APPCMD% list config -section:system.webServer/security/isapiCgiRestriction /text:*
+%APPCMD% list config -section:system.webServer/security/requestFiltering /text:*
+
+@rem
+@rem Dav configuration info
+@rem
+%APPCMD% list config -section:system.webServer/webdav/authoring /text:*
+%APPCMD% list config -section:system.webServer/webdav/authoringRules /text:*
+%APPCMD% list config -section:system.webServer/webdav/globalSettings /text:*
+
+@rem
+@rem other configuration sections
+@rem
+%APPCMD% list config -section:system.windows.forms /text:*
+%APPCMD% list config -section:system.xml.serialization/dateTimeSerialization /text:*
+%APPCMD% list config -section:system.xml.serialization/schemaImporterExtensions /text:*
+%APPCMD% list config -section:system.xml.serialization/xmlSerializer /text:*
+
+@rem =============================================================================
+@rem non-standard cofiguration data can be added here. This can be any type of
+@rem data that you want to track for drift detection. It must include the output
+@rem of the <<UserData>> tag before anything is sent
+@rem
+@rem echo ^<^<UserData^>^>
+@rem echo command here
+
+

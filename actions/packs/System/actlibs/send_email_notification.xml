@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Send Email Notification" connectivity="OPEN" needs_channel="N"/>
+   <lib_task id="5" module="send_notification" module_version="2" name="Send Email">
+      <lib_task_param id="7" name="notification_template_id" description="Notification Template Name" modifiable="Yes" explode="None"/>
+      <lib_task_param id="8" name="email_to" description="Destination Email Address" modifiable="Yes" explode="None"/>
+   </lib_task>
+</vl_activity_library>

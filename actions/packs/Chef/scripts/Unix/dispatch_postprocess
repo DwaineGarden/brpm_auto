@@ -1,0 +1,222 @@
+###################################
+#  DISPATCHER POSTPROCESS
+###################################
+#
+# Finalize a chef process run.  Applies role, verifies that recipes have run
+# and executes cleanup.
+#
+
+# REQUIRES:
+#	RLM_COOKBOOK - Name of RLM cookbook, default is "RLM_COOKBOOK_<HOSTNAME>"
+#	CHEF_REPO_HOME - Home directory of chef-repo, default is "/root/chef-repo"
+#	RLM_TMP - temp working directory for RLM on dispatcher server, default is "/tmp"
+
+echo "#######################################"
+echo "#  Chef Deploy Post Process"
+echo "#######################################"
+echo 
+echo
+
+##################################
+#  CHECK REQUIRED VARS
+##################################
+if [ -z "$CHEF_REPO_HOME" ]; then
+	CHEF_REPO_HOME="/root/chef-repo"
+fi
+if [ -z "$RLM_COOKBOOK" ]; then
+	hn=`hostname`
+	RLM_COOKBOOK="RLM_COOKBOOK_"`echo $hn | cut -d"." -f1`
+fi
+
+if [ -z "$RLM_TMP" ]; then
+	RLM_TMP="/tmp"
+fi
+
+# check knife command working
+command -v knife >/dev/null 2>&1 || { echo >&2 "Error running knife command, ensure it is in PATH on server"; exit 1; }
+
+echo "#######################################"
+echo "# Upload cookbook $RLM_COOKBOOK"
+echo "#######################################"
+cd $CHEF_REPO_HOME
+
+echo "Uploading cookbook"
+knife cookbook upload $RLM_COOKBOOK -V
+rc=$?
+if [[ $rc != 0 ]]; then
+	echo "Error uploading cookbook $RLM_COOKBOOK." 1>&2
+	exit $rc
+fi
+
+echo "#######################################"
+echo "# Create ROLE for ${VL_DISPATCH_TARGET_HOST}"
+echo "#######################################"
+# Create the role
+roleName="RLM_ROLE_${VL_DEPLOYMENT_ID}_${VL_PROCESS_ID}"
+roleFile="$RLM_TMP/${roleName}.json"
+
+# Close out the role definition file
+sed -i '$s/,$//' $roleFile
+roleFileContents=`cat $roleFile`
+if [ ! "${roleFileContents:${#roleFileContents}-2:2}" == "]}" ]; then
+	echo "]}" >> $roleFile
+fi
+
+
+#######################################
+# Add roles to chef server from files
+#######################################
+
+echo "Creating role ${roleName} from file $roleFile"
+knife role from file $roleFile -V
+rc=$?
+if [[ $rc != 0 ]]; then
+	echo "Error creating role from file $RLM_TMP/$file" 1>&2
+	exit $rc
+fi
+
+echo "Adding role ${roleName} to target ${VL_DISPATCH_TARGET_HOST}"
+# Add role to targets based on $roleName
+knife node run_list add ${VL_DISPATCH_TARGET_HOST} role[${roleName}] -V
+rc=$?
+if [[ $rc != 0 ]]; then
+	echo "Error adding role $roleName to target ${VL_DISPATCH_TARGET_HOST}." 1>&2
+	exit $rc
+fi
+	
+
+echo "#######################################"
+echo "# Verify role completion on node" 
+echo "#######################################"
+# verify completion of recipe runs - this could take a long time.  
+recipeList=`knife role show ${roleName} -a 'run_list'`
+rc=$?
+if [[ $rc != 0 ]]; then
+	exit $rc
+fi
+
+recipeList=${recipeList/*run_list:/}
+recipeList=${recipeList//recipe[/}
+recipeList=${recipeList//]/}
+recipeList=${recipeList//,/}
+
+for recipe in $recipeList
+do
+	echo "Waiting for recipe [${recipe}] to complete chef-client run"
+	if [ "$recipe" != "${recipe/${RLM_COOKBOOK}::/}" ]; then
+		recipe=${recipe#${RLM_COOKBOOK}::}
+		nodeTag=${recipe//\./}
+
+		retries="20"
+		maxretries=$retries
+		return=`knife node show "${VL_DISPATCH_TARGET_HOST}" -a "${nodeTag}"`
+		while [ "$return" == "${return%complete}" -a "$retries" -ne "0" ]
+		do
+			echo "-------- Waiting for chef-client run on ${VL_DISPATCH_TARGET_HOST} --------"
+			sleep 10
+			return=`knife node show "${VL_DISPATCH_TARGET_HOST}" -a "${nodeTag}"`
+			rc=$?
+			if [[ $rc != 0 ]]; then
+				exit $rc
+			fi
+			let "retries--"
+		done
+	
+		echo
+	
+		if [ "$retries" -eq "0" ]; then
+			echo "Reached maximum retries [$maxretries] waiting for recipe ${recipe} to complete on ${VL_DISPATCH_TARGET_HOST}" 1>&2
+			exit 1
+		fi
+	
+		echo "Recipe [${recipe}] completed on node [${VL_DISPATCH_TARGET_HOST}]"
+	else
+		echo "-------- Unable to determine successful run of recipe ${recipe}, skipping --------"
+	fi
+done
+echo "All recipes completed.  Role $roleName completed run on ${VL_DISPATCH_TARGET_HOST}"
+
+
+echo "#######################################"
+echo "# Performing Cleanup" 
+echo "#######################################"
+# Remove role and env files
+echo "Removing Role file"
+rm -fv $roleFile
+
+# remove roles from nodes
+echo "Removing role from run_list on Node"
+knife node run_list remove "${VL_DISPATCH_TARGET_HOST}" "role[${roleName}]" -V
+rc=$?
+if [[ $rc != 0 ]]; then
+	exit $rc
+fi
+
+# remove roles from nodes/delete roles from server
+echo "Deleting role $roleName from chef server"
+knife role delete $roleName -y
+rc=$?
+if [[ $rc != 0 ]]; then
+	exit $rc
+fi
+
+# remove tag attributes (recipe names)
+for recipe in $recipeList
+do
+	if [ "$recipe" != "${recipe/${RLM_COOKBOOK}::/}" ]; then
+		recipe=${recipe#${RLM_COOKBOOK}::}
+		echo "Removing tag to signify completion of recipe ${recipe}"
+		recipe=${recipe#$RLM_COOKBOOK::}
+		nodeTag=${recipe//\./}
+		knife exec -E "nodes.find(:name => \"${VL_DISPATCH_TARGET_HOST}\"){ |n| n.delete(\"${nodeTag}\"); n.save() }" -VV
+		rc=$?
+		if [[ $rc != 0 ]]; then
+			exit $rc
+		fi
+	fi
+done
+
+# clean up one-time recipes and files - This should be optional.
+
+if [ ! "$RLM_CLEANUP" == "FALSE" ]; then
+	# clean up recipe files
+	echo "Removing recipes for this deployment"
+	for recipe in $recipeList
+	do
+		if [ "$recipe" != "${recipe/${RLM_COOKBOOK}::/}" ]; then
+			recipe=${recipe#${RLM_COOKBOOK}::}
+			echo "Removing recipe $recipe"
+			rm -fv $CHEF_REPO_HOME/cookbooks/$RLM_COOKBOOK/recipes/${recipe}.rb
+		fi
+	done
+
+	# Clean up files
+	#RLM_FILEPUT files should be cleaned up manually
+	#Cleanup VL_INPUT_DATA files
+	for recipe in $recipeList
+	do
+		if [ "$recipe" != "${recipe/${RLM_COOKBOOK}::/}" ]; then
+			recipe=${recipe#${RLM_COOKBOOK}::}
+			taskID=`echo $recipe | awk -F_ '{print $NF}'`
+			taskFile="$CHEF_REPO_HOME/cookbooks/$RLM_COOKBOOK/files/default/RLM_INPUT_DATA_${VL_DEPLOYMENT_ID}_${VL_PROCESS_ID}_${taskID}"
+			if [ -f "$taskFile" ]; then
+				echo "Removing any VL_INPUT files for taskID $taskID"
+				rm -fv $taskFile
+			fi
+		fi
+	done
+	
+	# Update cookbook with chef server
+	cd $CHEF_REPO_HOME
+
+	echo "Uploading cookbook $RLM_COOKBOOK"
+	knife cookbook upload $RLM_COOKBOOK -V
+	rc=$?
+	if [[ $rc != 0 ]]; then
+		echo "Error uploading cookbook $RLM_COOKBOOK." 1>&2
+   		exit $rc
+	fi
+fi
+	
+
+exit 0

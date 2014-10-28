@@ -1,0 +1,50 @@
+#![.ps1]powershell.exe -ExecutionPolicy Unrestricted -File
+#############################################################################
+# Copyright @ 2012-2014 BMC Software, Inc.                                  #
+# This script is supplied as a template for performing the defined actions  #
+# via the BMC Release Package and Deployment. This script is written        #
+# to perform in most environments but may require changes to work correctly #
+# in your specific environment.                                             #
+#############################################################################
+
+#
+# Queries the state of IIS App Pools
+# IIS_POOL_NAME		name of iis app pool
+#
+
+# Server 2008 R2 has all the IIS management WMI objects
+# installed as defaults.
+# For Server 2008 SP2 the following must be installed:
+#    Powershell 2.0
+#    .Net Framework 3.5
+#    IIS 6.0 management compatibility role service
+#    IIS Management service
+
+$script:ErrorActionPreference = "Continue"
+
+# Pull in the IIS admin cmdlet
+add-pssnapin WebAdministration -ErrorAction "SilentlyContinue"
+if($error[0] -ne $errorBase) {
+    $errorBase = $error[0]
+    '"add-pssnapin WebAdministration" failed, "Import-Module WebAdministration" instead.'
+    Import-Module WebAdministration
+    $hide = Get-Command WebAdministration\*
+    if($error[0] -ne $errorBase) {
+        "Could not load the IIS Administration commands."
+        exit 1
+    }
+}
+
+
+if ($env:IIS_POOL_NAME -eq $null)  {
+    Write-Error "Environment variable IIS_POOL_NAME not specified"
+    exit 1
+}
+
+$errorBase = $error[0];
+
+$pool = "IIS:\Apppools\" + $env:IIS_POOL_NAME
+Get-WebItemState $pool
+
+if($error[0] -ne $errorBase) {exit 1}
+

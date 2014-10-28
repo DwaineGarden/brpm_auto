@@ -1,0 +1,66 @@
+#![.ps1]powershell.exe -ExecutionPolicy Unrestricted -File
+#############################################################################
+# Copyright @ 2012-2014 BMC Software, Inc.                                  #
+# This script is supplied as a template for performing the defined actions  #
+# via the BMC Release Package and Deployment. This script is written        #
+# to perform in most environments but may require changes to work correctly #
+# in your specific environment.                                             #
+#############################################################################
+#
+# Environment Variables
+#         APACHE_HOME      Path to apache directory
+#
+#
+# Long lines are bad, increase our buffer size!
+$host.UI.RawUI.BufferSize = new-object System.Management.Automation.Host.Size(512,50);
+
+# This will dump our config file, whatever it may be.
+function dump_ini($file) {
+    if (Test-Path $file) {
+        Write-Host "<$file>";
+        Get-Content $file;
+		Write-Host "</$file\>";
+    }
+}
+
+$found = 0;
+# Do we have our path to httpd.exe?
+if ((Test-Path variable:\$env:APACHE_HOME) -eq 'false') {
+    # Nope, let's find it!
+    # Search the PATH environment variable
+    foreach ($item in ($list = $env:PATH.split(';'))) {
+        if ($item -match "apache$") {
+            $env:APACHE_HOME = $item;
+            $found = 1;
+        }
+        
+        # Still nothing? Let's try the default install directory.
+        if ($found -eq 0) {
+            if (Test-Path ($try = "$env:SystemDrive\Program Files\Apache Group\Apache")) {
+                $env:APACHE_HOME = $try;
+                $found = 1;
+            }
+        }
+        
+        # Did we find it?
+        if ($found -eq 0) {
+            Write-Error "Unable to locate Apache install directory";
+            exit(1);
+        }
+    }
+}
+# We found it!
+
+$tmp = $env:APACHE_HOME -replace ' ', '` ';
+$HTTPD_EXEC = $tmp + '\bin\httpd -V';
+
+$cmd = Invoke-Expression -command $HTTPD_EXEC;
+
+foreach ($path in $cmd) {
+    # Lets grab our file!
+    if ($path -match '(?<=\s-D\sSERVER_CONFIG_FILE=")(.+)(?=")') {
+        dump_ini($env:APACHE_HOME + '\' + $matches[0]);
+    }
+}
+
+exit(0)

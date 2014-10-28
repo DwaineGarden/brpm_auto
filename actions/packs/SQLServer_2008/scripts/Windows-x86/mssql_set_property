@@ -1,0 +1,45 @@
+@echo off
+@rem #############################################################################
+@rem # Copyright @ 2012-2014 BMC Software, Inc.                                  #
+@rem # This script is supplied as a template for performing the defined actions  #
+@rem # via the BMC Release Package and Deployment. This script is written        #
+@rem # to perform in most environments but may require changes to work correctly #
+@rem # in your specific environment.                                             #
+@rem #############################################################################
+
+REM Environment variables
+REM MSSQL_USERNAME	username to use for sql server commands
+REM MSSQL_PASSWORD	password to use for sql server commands
+REM MSSQL_HOME		path to sql server install directory (e.g. C:\Program Files\Microsoft SQL Server)
+
+set MSSQL_EXEC=sqlcmd.exe
+if not "%MSSQL_USERNAME%" == "" set MSSQL_USERNAME=-U%MSSQL_USERNAME%
+if not "%MSSQL_PASSWORD%" == "" set MSSQL_PASSWORD=-P%MSSQL_PASSWORD%
+if not "%MSSQL_HOME%" == "" set PATH=%MSSQL_HOME%\100\Tools\Binn;%PATH%
+
+REM Iterate through our input file, taking appropriate action on each line.
+FOR /F "tokens=1 delims=#" %%G IN (%VL_INPUT_DATA%) DO (call :process "%%G")
+GOTO :eof
+
+:process
+	SET LINE_IN=%1
+	SET TEST=%LINE_IN:~1,1%
+	
+	REM Identify the database
+	IF "%TEST%" == "[" (
+		FOR /F "tokens=3 delims=[]" %%G IN (%LINE_IN%) DO SET MSSQL_DATABASE=%%G
+		GOTO :eof
+	)
+	
+	REM We should have a setting now...
+	FOR /F "tokens=1-2 delims==" %%G IN (%LINE_IN%) DO (
+		echo Setting property '%%G' to '%%H' using database %MSSQL_DATABASE%
+		SETLOCAL
+		set USE_MSSQL_DATABASE=-d%MSSQL_DATABASE%
+		%MSSQL_EXEC% %USE_MSSQL_DATABASE% %MSSQL_USERNAME% %MSSQL_PASSWORD% -Q "sp_configure '%%G','%%H'"
+		echo Executing RECONFIGURE
+		%MSSQL_EXEC% %USE_MSSQL_DATABASE% %MSSQL_USERNAME% %MSSQL_PASSWORD% -Q "RECONFIGURE"
+		ENDLOCAL
+	)
+	GOTO :eof
+)

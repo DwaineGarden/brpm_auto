@@ -1,0 +1,327 @@
+####################################################################
+#
+# dispatch_srun - proxy a remote script execution
+#
+
+#
+# Environment variables set by the engine for this script:
+#
+# VL_CHANNEL_ROOT                       The base directory for operations on the remote target system.
+# VL_DISPATCH_TARGET_HOST       The hostname of the remote target to get files from.
+# VL_INPUT_DATA                         Pathname of a file that contains the stdin that should be supplied to the script on the remote target.
+#                                                       may be empty or may not exist if there is no stdin.
+# VL_REMOTE_SCRIPT_PATH         The pathname to the script to be sent to the remote and executed
+# VL_REMOTE_SCRIPT_NAME         The basename of $VL_REMOTE_SCRIPT_PATH
+# VL_REMOTE_SCRIPT_SHELL        The command shell line from the script to be remoted, if supplied. if not set, then use the remote default.
+# VL_REMOTE_ENV_VAR_FILE		The path to the file that contains all the env set commands to be set on the remote
+
+#The dispatcher will check to see if the user has specified a shell for the remote and if so will set the SCRIPT_SHELL variable. 
+#This will be essentially the #! line from the script. This line may or may not have %% in it, if it does then the name of the 
+#script on the target system needs to be inserted there.
+#
+
+# REQUIRES:
+#	RLM_COOKBOOK - Name of RLM cookbook, default is "RLM_COOKBOOK_<HOSTNAME>"
+#	CHEF_REPO_HOME - Home directory of chef-repo, default is "/root/chef-repo"
+#	RLM_TMP - temp working directory for RLM on dispatcher server, default is "/tmp"
+
+###################################
+#  Check Vars
+###################################
+if [ -z "$CHEF_REPO_HOME" ]; then
+	CHEF_REPO_HOME="/root/chef-repo"
+fi
+if [ -z "$RLM_COOKBOOK" ]; then
+	hn=`hostname`
+	RLM_COOKBOOK="RLM_COOKBOOK_"`echo $hn | cut -d"." -f1`
+fi
+
+if [ -z "$RLM_TMP" ]; then
+	RLM_TMP="/tmp"
+fi
+
+if [ -z "$VL_ACTION_NAME" ]; then
+	echo "VL_ACTION_NAME not set, exiting" 1>&2
+	exit 1
+fi
+
+###################################
+# Check for config_get special case
+###################################
+
+if [ "$VL_ACTION_NAME" == "config_get" ]; then
+	echo "The only config_get supported by Chef dispatcher is to sync recipes to a Server Level Instance with a Chef Pack" 1>&2
+	if [ "$VL_PACK" != "${VL_PACK/chef/}" ]; then
+		cd $CHEF_REPO_HOME
+		command -v knife >/dev/null 2>&1 || { echo >&2 "Error running knife command, ensure it is in PATH on server"; exit 1; }
+
+		knife recipe list
+		rc=$?
+		if [ "$rc" -ne "0" ]; then  exit $rc;fi
+	
+		exit 0
+	else
+		echo "Pack $VL_PACK does not contain Chef, config_get is not supported" 1>&2
+		exit 1
+	fi
+fi
+
+
+echo "#######################################"
+echo "#  Chef Deploy srun (Action Execute)"
+echo "#######################################"
+echo 
+echo
+
+# Define the role update as a function
+function roleUpdate 
+{
+	echo "#######################################"
+	echo "# UPDATE ROLE FILE FOR THIS PROCESS"
+	echo "#######################################"
+	roleName="RLM_ROLE_${VL_DEPLOYMENT_ID}_${VL_PROCESS_ID}"
+	roleFile="$RLM_TMP/${roleName}.json"
+
+	# Check that role file exists
+	echo "Checking that role file $roleFile exists"
+	if [ ! -f "$roleFile" ]; then
+		echo "Role file $roleFile does not exist, exiting" 1>&2
+		exit 1
+	fi
+
+	echo "Adding recipe to role"
+	# add recipe to role
+	echo "Adding action recipe ${recipeName} to role"
+	if [ "$recipeName" == "${recipeName/::/}" ]; then
+		echo "\"recipe[${RLM_COOKBOOK}::${recipeName%.rb}]\"," >> $roleFile
+	else
+		echo "\"recipe[${recipeName}]\"," >> $roleFile
+	fi
+}
+
+###################################
+# Check for execute_chef_recipe
+###################################
+
+if [ "$VL_ACTION_NAME" == "execute_chef_recipe" ]; then
+	echo "Action 'Execute Chef Recipe' found."
+	if [ -z "$1" ]; then
+		echo "No arguments passed to Action, pass recipe as argument in the following form:" 1>&2
+		echo "<CookBook>::<Recipe>" 1>&2
+	else
+		if [ "$1" == "${1/::/}" ]; then
+			echo "Found argument $1, please pass recipe as argument in the following form:" 1>&2
+			echo "<CookBook>::<Recipe>" 1>&2
+		else
+			echo "Adding recipe [ $1 ] to role"
+			recipeName=$1
+			roleUpdate
+			exit $?
+		fi
+	fi
+fi
+
+
+
+###################################
+# Set some needed variables
+###################################
+remotePlatform="default"
+# Determine if remote platform is Windows or any (default)
+if [ $VL_REMOTE_PLATFORM -eq 110 ]; then
+	remotePlatform="windows"
+fi
+
+recipeName="RLM_ACTION_${VL_PACK}_${VL_ACTION_NAME}_${VL_PROCESS_ID}_${VL_TASK_ID}.rb"
+recipeName=${recipeName//\ /_}
+
+# Figure out extension from the tmp action file
+if [ "$VL_REMOTE_SCRIPT_PATH" != "${VL_REMOTE_SCRIPT_PATH/./}" ]; then
+	if [ -n "${VL_REMOTE_SCRIPT_PATH##*.}" ]; then
+		SCRIPT_EXTENSION=".${VL_REMOTE_SCRIPT_PATH##*.}"
+	fi
+fi
+
+###########################################################
+# Determine if we have VL_REMOTE_SCRIPT_SHELL to set
+###########################################################
+if [ -z "$VL_REMOTE_SCRIPT_SHELL" ]; then
+	# If it isn't defined, then run with defaults
+	if [ "$remotePlatform" == "windows" ]; then
+		VL_REMOTE_SCRIPT_SHELL='cmd /c '
+		SCRIPT_EXTENSION='.bat'
+	else
+		VL_REMOTE_SCRIPT_SHELL='./'
+	fi
+else
+	# otherwise check if there is %% in the shell path and substitute in the remote script name
+	if [ "$VL_REMOTE_SCRIPT_SHELL" != "${VL_REMOTE_SCRIPT_SHELL/\%\%/}" ]; then
+		VL_REMOTE_SCRIPT_SHELL=${VL_REMOTE_SCRIPT_SHELL/\%\%/${VL_ACTION_NAME}}
+	fi
+	VL_REMOTE_SCRIPT_SHELL="${VL_REMOTE_SCRIPT_SHELL} "
+fi
+
+recipeFileName="RLM_ACTION_${VL_PACK}_${VL_ACTION_NAME}${SCRIPT_EXTENSION}"
+recipeFileName=${recipeFileName//\ /_}
+recipeFilePath="${CHEF_REPO_HOME}/cookbooks/${RLM_COOKBOOK}/files/${remotePlatform}/${recipeFileName}"
+
+# Chef attributes don't work well with ".", get rid of them
+nodeTag=${recipeName%.rb}
+nodeTag=${nodeTag//\./}
+
+
+
+echo "Recipe Name:  $recipeName"
+echo "Target Platform:  $remotePlatform"
+echo "Node Tag:	$nodeTag"
+
+echo "#######################################"
+echo "# CREATE RECIPE FOR PACK/ACTION"
+echo "#######################################"
+# Create Recipe file if it doesn't exist to send this file(s)
+recipeFile=$CHEF_REPO_HOME/cookbooks/${RLM_COOKBOOK}/recipes/${recipeName}
+
+
+# Update ENV File for setting env in ruby
+sed -ie '{
+s/^/ENV["/
+s/=/"]="/
+s/$/"/
+}' $VL_REMOTE_ENV_VAR_FILE
+
+# Add any args to env
+echo "ENV[\"RLM_ARGS\"]='$@'" >> $VL_REMOTE_ENV_VAR_FILE
+
+
+##############################
+# Add VL_INPUT_DATA to env
+##############################
+# If it is windows, need to provide a windowsy location
+REMOTE_VL_INPUT_DATA=${VL_INPUT_DATA}
+if [ "$remotePlatform" == "windows" ]; then
+	bn=`basename ${VL_INPUT_DATA}`
+	REMOTE_VL_INPUT_DATA=${VL_CHANNEL_ROOT//\//\\}\\${bn}
+fi
+if [ -s $VL_INPUT_DATA ]; then
+	echo "ENV[\"VL_INPUT_DATA\"]='${REMOTE_VL_INPUT_DATA}'" >> $VL_REMOTE_ENV_VAR_FILE
+	REMOTE_VL_INPUT_DATA=${REMOTE_VL_INPUT_DATA//\\/\/}
+fi
+
+
+
+
+##############################
+# Create recipe
+##############################
+echo "Creating recipe $recipeName"
+
+echo "Adding RLM_ENVIRONMENT to recipe file"
+cat $VL_REMOTE_ENV_VAR_FILE > $recipeFile
+
+# send action file to cookbook, always...  to be sure it is current.
+# update recipe to push down the action file
+
+if [ ! -d "${CHEF_REPO_HOME}/cookbooks/${RLM_COOKBOOK}/files/${remotePlatform}" ]; then
+	mkdir -p "${CHEF_REPO_HOME}/cookbooks/${RLM_COOKBOOK}/files/${remotePlatform}"
+fi
+
+/bin/cp -arvf "$VL_REMOTE_SCRIPT_PATH" "$recipeFilePath"
+rc=$?
+if [ "$rc" -ne "0" ]; then  exit $rc;fi
+
+# Update recipe to send action
+echo "Adding entry in recipe to send action"
+cat >> $recipeFile<< EOF
+cookbook_file "${VL_CHANNEL_ROOT//\\//}/${nodeTag}" do
+  	source "$recipeFileName"
+	mode "700"
+	not_if { node.attribute?("${nodeTag}") }
+end
+
+EOF
+###########################################################
+# Check for VL_INPUT_DATA and add it to recipe if needed
+###########################################################
+echo "Checking for VL_INPUT_DATA"
+echo "If VL_INPUT_DATA exists, create a update recipe to send it"
+# Check VL_INPUT_DATA - send file - per task, needs cleanup later
+if [ -s $VL_INPUT_DATA ]; then
+	# need to create a new recipe to send VL_INPUT_DATA down
+	inputDataFileName="RLM_INPUT_DATA_${VL_DEPLOYMENT_ID}_${VL_PROCESS_ID}_${VL_TASK_ID}"
+	inputDataFilePath="${CHEF_REPO_HOME}/cookbooks/${RLM_COOKBOOK}/files/default/${inputDataFileName}"
+
+	echo "It does, updating recipe $recipeFile"
+	/bin/cp -arvf "$VL_INPUT_DATA" "$inputDataFilePath"
+	rc=$?
+	if [ "$rc" -ne "0" ]; then  exit $rc;fi
+	
+	# recipe create code block...
+
+###################################
+	cat >> $recipeFile<< EOF
+# This is a RLM generated recipe
+
+cookbook_file "${REMOTE_VL_INPUT_DATA}" do
+  	source "$inputDataFileName"
+	mode "700"
+	not_if { node.attribute?("${nodeTag}") }
+end
+
+EOF
+###################################
+
+else
+	echo "It does not, move on"
+fi
+
+###################################
+# Add script execution line
+###################################
+echo "Adding execution line and completion tag information to recipe"
+###################################
+cat >> $recipeFile<< EOF
+
+execute "${VL_REMOTE_SCRIPT_SHELL}${nodeTag} #{ENV['RLM_ARGS']}" do
+	cwd "${VL_CHANNEL_ROOT//\\//}"
+        not_if { node.attribute?("${nodeTag}") }
+end
+
+cookbook_file "${VL_CHANNEL_ROOT//\\//}/${nodeTag}" do
+	action :delete
+	not_if { node.attribute?("${nodeTag}") }
+end
+
+EOF
+###################################
+
+if [ -s $VL_INPUT_DATA ]; then
+	cat >> $recipeFile<< EOF
+cookbook_file "${REMOTE_VL_INPUT_DATA}" do
+	action :delete
+	not_if { node.attribute?("${nodeTag}") }
+end
+
+EOF
+fi
+
+
+cat >> $recipeFile<< EOF
+execute "echo Recipe $recipeName Complete" do
+        notifies :create, "ruby_block[RLM_run_flag_${VL_TASK_ID}]", :immediate
+	not_if { node.attribute?("$nodeTag") }
+end
+
+ruby_block "RLM_run_flag_${VL_TASK_ID}" do
+        block do
+                node.set['${nodeTag}'] = "complete"
+                node.save
+        end
+        action :nothing
+end
+
+EOF
+
+# Update role
+roleUpdate
+
+exit $?

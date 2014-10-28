@@ -1,0 +1,61 @@
+#![.ps1]powershell.exe -ExecutionPolicy Unrestricted -File
+#############################################################################
+# Copyright @ 2012-2014 BMC Software, Inc.                                  #
+# This script is supplied as a template for performing the defined actions  #
+# via the BMC Release Package and Deployment. This script is written        #
+# to perform in most environments but may require changes to work correctly #
+# in your specific environment.                                             #
+#############################################################################
+
+#
+# Deletes an IIS Site
+#
+#	IIS_SITE_NAME			name of the site to delete
+#
+
+# Server 2008 R2 has all the IIS management WMI objects
+# installed as defaults.
+# For Server 2008 SP2 the following must be installed:
+#    Powershell 2.0
+#    .Net Framework 3.5
+#    IIS 6.0 management compatibility role service
+#    IIS Management service
+
+$script:ErrorActionPreference = "Continue"
+
+$errorBase = $error[0]
+
+# Verify current version of PowerShell and working WMI
+$psVersion = (get-host -errorvariable pserror).version.major
+$wmiVersion = (get-wmiobject Win32_WMISetting -errorvariable wmierror).BuildVersion
+if ($psVersion -lt 2 -or $pserror -ne "") {
+	"Error:  PowerShell Version 2.0 or later is required."
+	exit 1
+}
+if ($wmierror -ne "") {
+	"WMI Error: $wmierror"
+	exit 1
+}
+
+
+# Check variables
+if (!($env:IIS_SITE_NAME)) {
+	write-error "IIS_SITE_NAME environment variable not set"
+	exit 1
+}
+
+$delSite = gwmi -namespace "root\MicrosoftIISv2" -class "IISWebServerSetting" -filter "ServerComment like '%$env:IIS_SITE_NAME%'"
+if ($delSite) {
+	write-host "Deleting Site $env:IIS_SITE_NAME"
+	$delSite.delete()
+}
+else {
+	write-host "Site $env:IIS_SITE_NAME does not exist, exiting"
+}
+
+if($error[0] -ne $errorBase) {
+	write-error "Error deleting Site $env:IIS_SITE_NAME"
+	exit 1
+}
+
+

@@ -1,0 +1,119 @@
+#![.ps1]powershell.exe -ExecutionPolicy Unrestricted -File
+#############################################################################
+# Copyright @ 2012-2014 BMC Software, Inc.                                  #
+# This script is supplied as a template for performing the defined actions  #
+# via the BMC Release Package and Deployment. This script is written        #
+# to perform in most environments but may require changes to work correctly #
+# in your specific environment.                                             #
+#############################################################################
+
+#
+# Script to set properties on an Application Pool
+# that is called by "Process Configuration" Library module
+#
+# Config Path:
+#
+#  [IIS_7][AppPool][Property][Set]name=property,value
+#  [IIS_7][AppPool][Property][Set]MyPool=MaxProcesses,3
+#
+
+# Server 2008 R2 has all the IIS management WMI objects
+# installed as defaults.
+# For Server 2008 SP2 the following must be installed:
+#    Powershell 2.0
+#    .Net Framework 3.5
+#    IIS 6.0 management compatibility role service
+#    IIS Management service
+
+$script:ErrorActionPreference = "Continue"
+
+$errorBase = $error[0]
+
+$settingContent = Get-Content $env:VL_INPUT_DATA
+if($error[0] -ne $errorBase) {
+    "This script should be executed within the context of a BRPD transaction."
+    exit 1
+}
+
+foreach($line in $settings) {
+	# check for a site/section line
+	if ($line -match"\[IIS_7\]*") {
+		# skip this line, it's the path identifier: [IIS_7][AppPool][Property][Set]
+	}
+	else {
+		# split the pool name from the settings
+		$poolInfo = $line.split("=");
+		$poolName = $poolInfo[0];
+
+		# split out the prop and value
+		$args = $poolInfo[1];
+		$params = $args.split(",");
+		$propertyName = $params[0];
+		$propertyValue = $params[1];
+
+		$pool = [wmiclass] "root\MicrosoftIISv2:IISApplicationPoolSetting.Get($poolName)";
+		$pool.$propertyName = $propertyValue;
+		$newPool.Put();
+	}
+}
+
+if($error[0] -ne $errorBase) {exit 1}
+
+
+#
+# standard object properties and their default values. not all are settable.
+#
+#AdminACLBin                    :
+#AppPoolAutoStart               : True
+#AppPoolCommand                 : 1
+#AppPoolQueueLength             : 1000
+#AppPoolRecycleConfigChange     : False
+#AppPoolRecycleIsapiUnhealthy   : False
+#AppPoolRecycleMemory           : True
+#AppPoolRecycleOnDemand         : False
+#AppPoolRecyclePrivateMemory    : False
+#AppPoolRecycleRequests         : False
+#AppPoolRecycleSchedule         : False
+#AppPoolRecycleTime             : False
+#AppPoolState                   : 2
+#AutoShutdownAppPoolExe         :
+#AutoShutdownAppPoolParams      :
+#Caption                        :
+#CPUAction                      : 0
+#CPULimit                       : 0
+#CPUResetInterval               : 0
+#Description                    :
+#DisallowOverlappingRotation    : False
+#DisallowRotationOnConfigChange : False
+#Enable32BitAppOnWin64          : False
+#IdleTimeout                    : 0
+#LoadBalancerCapabilities       : 2
+#LogEventOnRecycle              : 8
+#LogonMethod                    : 3
+#ManagedPipelineMode            : 0
+#ManagedRuntimeVersion          :
+#MaxProcesses                   : 2
+#OrphanActionExe                :
+#OrphanActionParams             :
+#OrphanWorkerProcess            : False
+#PeriodicRestartMemory          : 512000
+#PeriodicRestartPrivateMemory   : 0
+#PeriodicRestartRequests        : 10000
+#PeriodicRestartSchedule        : {}
+#PeriodicRestartTime            : 0
+#PingingEnabled                 : True
+#PingInterval                   : 30
+#PingResponseTime               : 60
+#RapidFailProtection            : True
+#RapidFailProtectionInterval    : 5
+#RapidFailProtectionMaxCrashes  : 5
+#SettingID                      :
+#ShutdownTimeLimit              : 90
+#SMPAffinitized                 : False
+#SMPProcessorAffinityMask       : -1
+#StartupTimeLimit               : 90
+#WAMUserName                    :
+#WAMUserPass                    :
+#Win32Error                     : 0
+
+

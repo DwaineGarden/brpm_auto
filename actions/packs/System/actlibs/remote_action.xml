@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Invoke Remote Action" connectivity="OPEN" needs_channel="N"/>
+   <lib_task id="21" module="remote_action" module_version="1" name="Invoke Remote Action">
+      <lib_task_param id="41" name="success" description="Use Exit Status or Command Output" modifiable="Yes" explode="None">
+               <lib_task_param_default value="Exit Code" lib_task_param_id="22"/>
+      </lib_task_param>
+      <lib_task_param id="42" name="success_filter" description="Success Output Text" modifiable="Yes" explode="None"/>
+      <lib_task_param id="43" name="channel" description="Select Execution Channel" modifiable="Yes" explode="None"/>
+      <lib_task_param id="44" name="script" description="Action Name" modifiable="Yes" explode="None"/>
+      <lib_task_param id="45" name="args" description="Action Arguments" modifiable="Yes" explode="None">
+         <lib_task_param_default value="" lib_task_param_id="25"/>
+      </lib_task_param>
+   </lib_task>
+</vl_activity_library>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Delete File or Directory" connectivity="OPEN" needs_channel="Y"/>
+   <lib_task id="11" module="delete_file" module_version="2" name="Delete File">
+      <lib_task_param id="22" name="path" description="File/Directory to Delete" modifiable="Yes" explode="None">
+         <lib_task_param_default value="." lib_task_param_id="22"/>
+      </lib_task_param>
+   </lib_task>
+</vl_activity_library>

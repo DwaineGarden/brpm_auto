@@ -1,0 +1,14 @@
+@echo off
+@rem #############################################################################
+@rem # Copyright @ 2012-2014 BMC Software, Inc.                                  #
+@rem # This script is supplied as a template for performing the defined actions  #
+@rem # via the BMC Release Package and Deployment. This script is written        #
+@rem # to perform in most environments but may require changes to work correctly #
+@rem # in your specific environment.                                             #
+@rem #############################################################################
+@rem
+
+REM Start IIS services using iisreset command
+
+iisreset /start
+

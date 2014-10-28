@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Get Instance Content" connectivity="OPEN" needs_channel="Y"/>
+   <lib_task id="3" module="file_get" module_version="6" name="Get Instance Content">
+      <lib_task_param id="5" name="path" description="File/Directory Path" modifiable="Yes" explode="None"/>
+   </lib_task>
+</vl_activity_library>

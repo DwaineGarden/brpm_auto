@@ -1,0 +1,22 @@
+########################################################################
+#  Chef Config Get
+########################################################################
+
+# This action can be used to pull a list of recipes on the Chef Server
+# from a dispatcher.  To set it up:
+#
+# - Configure a "Chef Dispatcher" Server Level with the "Chef" pack
+# - Create a Server Level Instance using a chef dispatcher 
+# - On the Config tab, switch the "Chef Dispatcher" Server Level to "Managed"
+# - On the Config tab, sync the Server Level Instance for your dispatcher
+# - A list of recipes will be pulled from the server
+#
+# This action will not have anything to execute as it is only used to 
+# trigger the configuration get process defined as part of the dispatch
+# srun action in the Chef Pack.
+#
+
+echo "This action can only be run using a Chef Dispatcher" 1>&2
+
+exit 1
+

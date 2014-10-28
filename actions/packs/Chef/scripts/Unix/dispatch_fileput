@@ -1,0 +1,174 @@
+####################################################################
+#
+# dispatch_fileput - proxy a fileput operation
+#
+
+#
+# Environment variables set by the engine for this script:
+#
+# VL_ARTIFACT_NAME                      The reference name of the content being sent. Informational.
+# VL_CONTENT_NAME                       The name of the content being sent. Informational.
+# VL_CONTENT_PATH                       The original pathname of the content being sent. Informational.
+# VL_CHANNEL_ROOT                       The base directory for operations on the remote target system.
+# VL_DISPATCH_TARGET_HOST       The hostname of the remote target to get files from.
+# VL_REMOTE_TARGET_DIR			The remote basename to put files in
+
+#
+# send the contents of the current working directory to $VL_DISPATCH_TARGET_HOST:$VL_CHANNEL_ROOT
+#
+
+# REQUIRES:
+#	RLM_COOKBOOK - Name of RLM cookbook, default is "RLM_COOKBOOK_<HOSTNAME>"
+#	CHEF_REPO_HOME - Home directory of chef-repo, default is "/root/chef-repo"
+#	RLM_TMP - temp working directory for RLM on dispatcher server, default is "/tmp"
+
+echo "#######################################"
+echo "#  Chef Deploy FilePut"
+echo "#######################################"
+echo 
+echo
+
+###################################
+#  Check Vars
+###################################
+if [ -z "$CHEF_REPO_HOME" ]; then
+	CHEF_REPO_HOME="/root/chef-repo"
+fi
+if [ -z "$RLM_COOKBOOK" ]; then
+	hn=`hostname`
+	RLM_COOKBOOK="RLM_COOKBOOK_"`echo $hn | cut -d"." -f1`
+fi
+
+if [ -z "$RLM_TMP" ]; then
+	RLM_TMP="/tmp"
+fi
+
+# Set some needed variables
+recipeName="RLM_FILEPUT_${VL_ARTIFACT_NAME}_${VL_INSTANCE}_${VL_PROCESS_ID}_${VL_TASK_ID}.rb"
+recipeName=${recipeName//\ /_}
+
+echo "Recipe Name:  $recipeName"
+
+# Chef attributes don't work well with ".", get rid of them
+nodeTag=${recipeName%.rb}
+nodeTag=${nodeTag//\./}
+
+echo "Node Tag:	$nodeTag"
+
+echo "#######################################"
+echo "# CREATE RECIPE FOR FILEPUT "
+echo "#######################################"
+#
+# Send content file(s) from current working directory to cookbook
+
+# check for files, error if no files there
+TEST=`find . -type d -empty`
+if [ ! -z "$TEST" ]; then
+    echo "No files are available to send." 1>&2
+    exit 1
+fi
+
+
+# Update ENV File for setting node attributes
+sed -ie '{
+s/^/ENV["/
+s/=/"]="/
+s/$/"/
+}' $VL_REMOTE_ENV_VAR_FILE
+
+
+# Create Recipe file if it doesn't exist to send this file(s)
+recipeFile=$CHEF_REPO_HOME/cookbooks/${RLM_COOKBOOK}/recipes/${recipeName}
+
+echo "Creating recipe $recipeName"
+
+echo "Adding RLM_ENVIRONMENT to recipe file"
+cat $VL_REMOTE_ENV_VAR_FILE > $recipeFile
+
+# send files to cookbook, if they aren't there already
+fileList=`ls -1`
+while read -r listing
+do
+	# test to see if files are already there
+	recipeFileName="RLM_${VL_REPOSITORY}_${VL_ARTIFACT_NAME}_${VL_INSTANCE}_${listing}"
+	recipeFileName=${recipeFileName//\ /_}
+	recipeFilePath="${CHEF_REPO_HOME}/cookbooks/${RLM_COOKBOOK}/files/default/$recipeFileName"
+
+	# If files already exist, don't copy
+	if [ ! -d "$recipeFilePath" ]; then
+		if [ ! -f "$recipeFilePath" ]; then
+			echo "Copying files to cookbook $RLM_COOKBOOK"
+			/bin/cp -arv "$listing" "$recipeFilePath"
+			rc=$?
+			if [ "$rc" -ne "0" ]; then  exit $rc;fi
+		fi
+	fi
+		
+	recipeContents=`cat $recipeFile | grep "${recipeFileName}"`
+	if [ -z "$recipeContents" ]; then 
+		# No recipe entry for this listing, copy files and create entry in recipe	
+		echo "Adding entry in recipe to send file(s)"
+		if [ -f "$listing" ]; then
+			cat >> $recipeFile<< EOF
+cookbook_file "${VL_CHANNEL_ROOT//\\//}/${VL_REMOTE_TARGET_DIR//\\//}/$listing" do
+  	source "$recipeFileName"
+	mode "700"
+        not_if { node.attribute?("${nodeTag}") }
+end
+
+EOF
+		fi
+		if [ -d "$listing" ]; then
+			cat >> $recipeFile<< EOF
+remote_directory "${VL_CHANNEL_ROOT//\\//}/${VL_REMOTE_TARGET_DIR//\\//}/$listing" do
+	source "$recipeFileName"
+	mode "700"
+        not_if { node.attribute?("${nodeTag}") }
+end
+
+EOF
+		fi
+	fi
+
+done <<< "$fileList"
+
+echo "Adding completion tag information to recipe"
+
+cat >> $recipeFile<< EOF
+
+execute "echo Recipe $recipeName Complete" do
+        notifies :create, "ruby_block[RLM_run_flag_${VL_TASK_ID}]", :immediate
+        not_if { node.attribute?("${nodeTag}") }
+end
+
+ruby_block "RLM_run_flag_${VL_TASK_ID}" do
+        block do
+                node.set["${nodeTag}"] = "complete"
+                node.save
+        end
+        action :nothing
+end
+
+EOF
+
+echo "#######################################"
+echo "# UPDATE ROLE FILE FOR THIS TASK"
+echo "#######################################"
+
+# Check that role file exists
+roleName="RLM_ROLE_${VL_DEPLOYMENT_ID}_${VL_PROCESS_ID}"
+roleFile="$RLM_TMP/${roleName}.json"
+
+echo "Checking that role file $roleFile exists"
+if [ ! -f "$roleFile" ]; then
+	echo "Role file $roleFile does not exist, exiting" 1>&2
+	exit 1
+fi
+
+echo "Adding recipe to role"
+# add recipe to role
+echo "\"recipe[${RLM_COOKBOOK}::${recipeName%.rb}]\"," >> $roleFile
+
+
+exit $?
+

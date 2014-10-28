@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Execute Command Line" connectivity="OPEN" needs_channel="Y"/>
+   <lib_task id="2" module="command" module_version="1" name="Execute Command">
+      <lib_task_param id="2" name="success" description="Use Exit Status or Command Output" modifiable="Yes" explode="None">
+         <lib_task_param_default value="Exit Code" lib_task_param_id="2"/>
+      </lib_task_param>
+      <lib_task_param id="3" name="success_filter" description="Success Output Text" modifiable="Yes" explode="None"/>
+      <lib_task_param id="4" name="command" description="Command Line" modifiable="Yes" explode="None">
+         <lib_task_param_default value="echo ${VL_CONTENT_NAME} ${VL_CONTENT_PATH}" lib_task_param_id="4"/>
+      </lib_task_param>
+   </lib_task>
+</vl_activity_library>

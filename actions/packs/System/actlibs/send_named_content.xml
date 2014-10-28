@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Send Named Content" connectivity="OPEN" needs_channel="Y"/>
+   <lib_task id="4" module="file_put_named" module_version="1" name="Send Named Content">
+      <lib_task_param id="6" name="path" description="Remote Directory" modifiable="Yes" explode="None">
+         <lib_task_param_default value="." lib_task_param_id="6"/>
+      </lib_task_param>
+      <lib_task_param id="7" name="content_name" description="Content name to send" modifiable="Yes" explode="None">
+         <lib_task_param_default value="" lib_task_param_id="7"/>
+      </lib_task_param>
+   </lib_task>
+</vl_activity_library>

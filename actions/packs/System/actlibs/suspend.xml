@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vl_activity_library>
+   <lib_activity name="Suspend" connectivity="OPEN" needs_channel="N"/>
+   <lib_task id="13" module="send_notification" module_version="3" name="Send Suspend Notice">
+      <lib_task_param id="24" name="notification_template_id" description="Notification Template Name" modifiable="Yes" explode="None"/>
+      <lib_task_param id="25" name="email_to" description="Destination Email Address" modifiable="Yes" explode="None"/>
+   </lib_task>
+   <lib_task id="14" module="suspend" module_version="4" name="Suspend">
+      <lib_task_depend lib_depend_id="13"/>
+   </lib_task>
+</vl_activity_library>
