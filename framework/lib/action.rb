@@ -99,19 +99,21 @@ class Action < BrpmAutomation
     servers = get_option(options,"servers", @p.server_list.keys)
     target_path = get_option(options,"target_path", windows? ? "/C/Windows/temp" : "/tmp")
     max_time = get_option(options,"max_time", 3600)
+    payload = get_option(options,"payload", nil)
     log "Targets:       #{servers.join(",")}"
     log "Target Path:   #{target_path}"
     log "Max time(sec): #{max_time}"
     log "Script Details:"
     log "\t Platform:  #{@platform}"
     log "\t Transport: #{@platform_info["transport"]}"
-    
+    log "\t Payload:  #{payload}" if payload
     if action.include?("\n")
-      content = pre_process_action(action)
-      action_path = create_temp_action(content)
+      action_path = create_temp_action(action)
     else
       action_path = action
     end
+    payload_path = payload? ? transport_payload(payload, target_path, servers) : nil
+    pre_process_action(action_path, payload_path)
     intermediate_path = transport_script(action_path, target_path, servers)
     script_path = intermediate_path.nil? ? action_path : intermediate_path
     log "\t Source:    #{action_path}"
@@ -208,6 +210,31 @@ class Action < BrpmAutomation
     log "\t Copy Results:    #{result}"
     new_path
   end
+
+  # Copies payload to targets and then returns path on target
+  #
+  # ==== Attributes
+  #
+  # * +payload_path+ - path to script to transport
+  # * +target_path+ - path on target to copy to
+  # * +servers+ - array of servers to copy to
+  # ==== Returns
+  #
+  # * path to payload on target
+  def transport_payload(payload_path, target_path, servers)
+    file_name = File.basename(payload_path)
+    if @platform_info["platform"] == "windows"
+      win_path = @nsh.dos_path(target_path)
+      file_path = "#{win_path}\\#{script_name}"
+    else
+      file_path = "#{target_path}/#{script_name}"
+    end
+    log "Transporting payload:"
+    log "\t Target:    #{file_path}"
+    result = @nsh.ncp(servers, payload_path, target_path)
+    log "\t Copy Results:    #{result}"
+    file_path
+  end
   
   # Pretty display of cmd_result object
   #
@@ -226,37 +253,58 @@ class Action < BrpmAutomation
     result
   end
 
-  # Add header env variables and processes ERB for an action
+  # Add header and environment variables and processes ERB in an action_file
   # 
+  # ==== Attributes
+  #
+  # * +action_path+ - path to action on the file system
   # ==== Returns
   #
   # modified action text
   #
-  def pre_process_action(action)
+  def pre_process_action(action_path, payload_path = nil)
     lb = @platform_info["lb"]
     env = @platform_info["env_char"]
     cmt = @platform_info["comment_char"]
     language = @platform_info["language"]
     shebang = ""
     content = ERB.new(action).result(binding)
+    content = File.open(action_path).read
     lines = content.split("\n")
     if lines[0][0..10] =~ /^\s*\#\!/
       shebang = lines[0]
       action = lines[1..-1].join("\n")
     end
+    @transfer_properties["VL_CONTENT_PATH"] = payload_path if payload_path
+    @transfer_properties["RPM_PAYLOAD"] = payload_path if payload_path
     env_header = "#{cmt} Environment vars to define#{lb}"
     @standard_properties.each{|prop| @transfer_properties[prop] = @p.get(prop) }
     @transfer_properties.each do |key,val|
       env_header += "#{env}#{key}=#{val}#{lb}" if language == "batch"
       env_header += "#{env}#{key}=\"#{val}\"#{lb}" unless language == "batch"
     end
-    "#{shebang}#{lb}#{env_header}#{lb}#{content}"
+    file_content = "#{shebang}#{lb}#{env_header}#{lb}#{content}"
+    fil = File.open(action_path,"w+")
+    fil.puts file_content
+    fil.flush
+    fil.close
+    file_content
+  end
+  
+  # Returns a temp name for the action on the target
+  # 
+  # ==== Returns
+  #
+  # action name
+  #
+  def temp_action_name
+    file_name = "action_#{@platform_info["language"]}_#{precision_timestamp}.#{@platform_info["ext"]}"
   end
   
   private
   
   def create_temp_action(action, file_name = nil)
-    file_name = "action_#{@platform_info["language"]}_#{precision_timestamp}.#{@platform_info["ext"]}" if file_name.nil?
+    file_name = temp_action_name if file_name.nil?
     file_path = File.join(@output_dir, file_name)
     fil = File.open(file_path,"w+")
     fil.puts(action)

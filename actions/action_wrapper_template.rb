@@ -30,6 +30,8 @@ ARG_PREFIX = "ENV_"
 #---------------------- Variables --------------------------#
 # Assign local variables to properties and script arguments
 platform = @p.get("platform", "linux")
+success = "Environment Variables"
+automation_category = "Brady test_#{platform == "linux" ? "bash" : "batch"}"
 
 # Note action script will be processed as ERB!
 #----------------- HERE IS THE ACTION SCRIPT -----------------------#
@@ -50,12 +52,15 @@ set
 <%=@p.command_to_execute %>
 END
 
+#---------------------- Main Script --------------------------#
 # This will execute the action
 #  execution targets the selected servers on the step, but can be overridden in options
 #  execution defaults to nsh transport, you can override with server properties (not implemented yet)
 options = {} # Options can take several keys for overrides
+@action = Action.new(@p,{"automation_category" => automation_category, "property_filter" => arg_prefix, "timeout" => 30, "debug" => false})
 script = platform == "linux" ? script_linux : script_windows
-@action = Action.new(@p,{"automation_category" => "Brady test_#{platform == "linux" ? "bash" : "batch"}", "property_filter" => ARG_PREFIX, "timeout" => 30})
 result = @action.run!(script, options)
+
+@auto.log "Command_Failed: cannot find: #{success}" unless result["stdout"].include?(success)
 
 params["direct_execute"] = "yes"
