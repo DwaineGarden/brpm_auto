@@ -49,9 +49,12 @@ git_options = {
 git_options["repository"] = origin unless origin == ""
 git_options["branch"] = branch unless branch == ""
 
+@auto.message_box "Updating files from Git", "title"
+@auto.log "\tRepository: #{repo_path}"
 @git = Git.new(path_to_git, git_options)
 result = @git.checkout if tag == ""
 result = @git.checkout(false, {"tag" => tag }) if tag != ""
+@auto.log "Results: #{result}"
 
 # Apply success or failure criteria
 if result.index(success).nil?
