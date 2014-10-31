@@ -261,14 +261,15 @@ class Git < BrpmAutomation
   #
   # * +tag_name+ - name for tag
   # * +message+ - message to add to tag
-  # * +options+ - hash of options, keys [repository, branch, push_to_repository]
+  # * +options+ - hash of options, keys [repository, branch, push_to_repository, tag_path]
   #
   # ==== Returns
   #
   # * command output
   def tag(tag_name, message, options = {})
     update_repo_info(options)
-    push_to_repo = get_option(options,"push_to_repository", true)
+    tag_path = get_option(options,"push_to_repository", true)
+    push_to_repo = get_option(options,"tag_path")
     cmd = "#{@git} tag -a #{tag_path} -m \"#{message}\""
     result = process_cmd(cmd)
     cmd = "#{@git} push #{repo} #{branch}" if push_to_repo

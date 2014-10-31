@@ -94,7 +94,7 @@ end
 #  execution defaults to nsh transport, you can override with server properties (not implemented yet)
 options = {} # Options can take several keys for overrides
 results = []
-@action = Action.new(@p,{"automation_category" => automation_category, "property_filter" => arg_prefix, "timeout" => 30, "debug" => false})
+@action = Action.new(@p,{"automation_category" => automation_category, "property_filter" => ARG_PREFIX, "timeout" => 30, "debug" => false})
 sql_files.each do |sql_file|
   options["payload" => sql_file]
   results << @action.run!(script, options)
