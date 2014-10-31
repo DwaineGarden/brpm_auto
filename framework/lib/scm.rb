@@ -58,7 +58,6 @@ class Svn < BrpmAutomation
   #
   # * command output
   def get
-    goto_base
     cmd = "#{@svn} checkout --non-interactive"
     process_cmd(cmd)
   end
@@ -73,7 +72,6 @@ class Svn < BrpmAutomation
   # * command output
   def commit(message = "Automation pushed changes")
     # /usr/bin/svn commit . -m "PSENG-0000 Adding PSENG files"
-    goto_base
     cmd = "#{@svn} commit . -m \"#{message}\""
     process_cmd(cmd)
   end
@@ -103,8 +101,7 @@ class Svn < BrpmAutomation
   #
   # * command output
   def status
-    goto_base
-    `#{@svn} status`
+    process_cmd("#{@svn} status")
   end
   
   # Adds any new files in the local repo to the svn commit list
@@ -138,9 +135,10 @@ class Svn < BrpmAutomation
   private        
   
   def process_cmd(cmd)
-    res = `#{cmd}`
-    log cmd if @verbose
-    res
+    goto_base
+    res = run_shell(cmd) unless @simulate
+    log cmd if @verbose || @simulate
+    @simulate ? "ok" : display_result(res)
   end
   
   def goto_base
@@ -152,7 +150,7 @@ class Svn < BrpmAutomation
 
   def svn_errors?(output)
     svn_terms = ["403 Forbidden", "SSL error code", "moorrreee"]
-    found = result.scan(/#{svn_terms.join("|")}/)
+    found = output.scan(/#{svn_terms.join("|")}/)
     found.size > 0
   end
 
@@ -192,7 +190,7 @@ class Git < BrpmAutomation
     else
       @credential = ""
     end
-    super(get_option(options,"output_file", nil))
+    super(get_option(options,"output_file", SS_output_file))
     @git = git
   end
 
@@ -268,7 +266,7 @@ class Git < BrpmAutomation
   # ==== Returns
   #
   # * command output
-  def tag(tag_name, message, options)
+  def tag(tag_name, message, options = {})
     update_repo_info(options)
     push_to_repo = get_option(options,"push_to_repository", true)
     cmd = "#{@git} tag -a #{tag_path} -m \"#{message}\""
@@ -297,8 +295,7 @@ class Git < BrpmAutomation
   # ==== Returns
   #
   # * command output
-  def add_files
-    exclude = get_option(options,"exclude_regex")
+  def add_files(exclude_regex = "")
     result = status
     lines = result.split("\n")
     ipos = lines.index("Untracked files:")
@@ -308,14 +305,14 @@ class Git < BrpmAutomation
         unless File.basename.start_with?(".")
           cmd = "#{@git} add #{item}"
           if exclude == ""
-            process_cmd(cmd)
+            result += process_cmd(cmd)
           else
-            process_cmd(cmd)  unless file =~ /#{exclude}/
+            result += process_cmd(cmd)  unless file =~ /#{exclude}/
           end      
         end
       end
     end
-    result += status
+    result += status   
     result
   end
   
@@ -323,9 +320,9 @@ class Git < BrpmAutomation
   
   def process_cmd(cmd)
     goto_base
-    res = `#{cmd}`
-    log cmd if @verbose
-    res
+    res = run_shell(cmd) unless @simulate
+    log cmd if @verbose || @simulate
+    @simulate ? "ok" : display_result(res)
   end
   
   def goto_base
@@ -337,7 +334,7 @@ class Git < BrpmAutomation
 
   def git_errors?(output)
     svn_terms = ["403 Forbidden", "SSL error code", "moorrreee"]
-    found = result.scan(/#{svn_terms.join("|")}/)
+    found = output.scan(/#{svn_terms.join("|")}/)
     found.size > 0
   end
 
