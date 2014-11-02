@@ -24,14 +24,6 @@
 #=> ------------- IMPORTANT ------------------- <=#
 #- This loads the BRPM Framework and sets: @p = Params, @auto = BrpmAutomation and @rest = BrpmRest
 require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
-# Properties will automatically be pushed to env variables if prefixed with the ARG_PREFIX
-ARG_PREFIX = "ENV_"
-
-#---------------------- Variables --------------------------#
-# Assign local variables to properties and script arguments
-platform = @p.get("platform", "linux")
-success = "Environment Variables"
-automation_category = "Brady test_#{platform == "linux" ? "bash" : "batch"}"
 
 # Note action script will be processed as ERB!
 #----------------- HERE IS THE ACTION SCRIPT -----------------------#
@@ -52,7 +44,20 @@ set
 <%=@p.command_to_execute %>
 END
 
+#---------------------- Variables --------------------------#
+# Assign local variables to properties and script arguments
+# Properties will automatically be pushed to env variables if prefixed with the ARG_PREFIX
+arg_prefix = "ENV_"
+platform = @p.get("platform", "linux")
+success = "Environment Variables"
+automation_category = "Brady test_#{platform == "linux" ? "bash" : "batch"}"
+
 #---------------------- Main Script --------------------------#
+@auto.message_box "Executing Action", "title"
+@auto.log "\tDirName: #{@p.required("RequiredParam1")}"
+@auto.log "\tDirPath: #{@p.required("RequiredParam1")}"
+@auto.log "\tSiteName: #{@p.required("RequiredParam1")}"
+
 # This will execute the action
 #  execution targets the selected servers on the step, but can be overridden in options
 #  execution defaults to nsh transport, you can override with server properties (not implemented yet)
@@ -60,7 +65,9 @@ options = {} # Options can take several keys for overrides
 @action = Action.new(@p,{"automation_category" => automation_category, "property_filter" => arg_prefix, "timeout" => 30, "debug" => false})
 script = platform == "linux" ? script_linux : script_windows
 result = @action.run!(script, options)
+@auto.message_box "Results"
+@auto.log @action.display_result(result)
 
-@auto.log "Command_Failed: cannot find: #{success}" unless result["stdout"].include?(success)
+@auto.log "Command_Failed: cannot find term: [#{success}]" unless result["stdout"].include?(success)
 
 params["direct_execute"] = "yes"

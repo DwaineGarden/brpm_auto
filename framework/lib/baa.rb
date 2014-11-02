@@ -1019,6 +1019,7 @@ class NSH < BrpmAutomation
   def initialize(nsh_path, options = {}, test_mode = false)
     @nsh_path = nsh_path
     @test_mode = test_mode
+    @verbose = get_option(options, "verbose", false)
     @opts = options
     @run_key = get_option(options,"timestamp",Time.now.strftime("%Y%m%d%H%M%S"))
     super(get_option(options,"output_file", nil))
@@ -1122,6 +1123,7 @@ class NSH < BrpmAutomation
     #ncp -vr /c/dev/SmartRelease_2/lib -h bradford-96204e -d "/c/dev/BMC Software/file_store"
     cmd = "#{@nsh_path}/bin/ncp -vrA #{src_path} -h #{target_hosts.join(" ")} -d \"#{target_path}\""
     cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
+    log cmd if @verbose
     result = run_shell(cmd)
     display_result(result)
   end

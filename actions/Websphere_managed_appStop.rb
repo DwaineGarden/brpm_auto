@@ -5,8 +5,8 @@
 # to perform in most environments but may require changes to work correctly #
 # in your specific environment.                                             #
 #############################################################################
-#---------------------- Websphere Managed AppStart -----------------------#
-# Description: Installs an App in a WAS8 cluster or server
+#---------------------- Websphere Managed AppStop -----------------------#
+# Description: Stops an App in a WAS6-8 cluster or server
 #---------------------- Arguments --------------------------#
 ###
 # WAS_APPLICATION:
@@ -25,7 +25,6 @@ require @params["SS_automation_results_dir"].gsub("automation_results","persist/
 script =<<-END
 #![.py]/bin/sh -c "<%=@p.get("WAS_ADMIN_HOME") %>/bin/wsadmin.sh -user <%=@p.get("WAS_ADMIN_USER") %> -password <%=@p.get("WAS_ADMIN_PASSWORD") %> -lang jython -f %%"
 # WIN_WRAPPER: <%=@p.get("WAS_ADMIN_HOME") %>\\bin\\wsadmin.bat -user <%=@p.get("WAS_ADMIN_USER") %> -password <%=@p.get("WAS_ADMIN_PASSWORD") %> -lang jython -f %%
-
 # Start application on server or cluster, used when connecting to a Deployment Manager or NodeAgent
 
 # Jython script below is passed to the wsadmin command from line 1

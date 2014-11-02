@@ -15,13 +15,10 @@ ACTION_PLATFORMS = {
     "powershell" => {"transport" => "nsh", "platform" => "windows", "language" => "powershell", "comment_char" => "#", "env_char" => "$env:", "lb" => "\r\n", "ext" => "ps1"},
     "bash|shell" => {"transport" => "nsh", "platform" => "linux", "language" => "bash", "comment_char" => "#", "env_char" => "", "lb" => "\n", "ext" => "sh"},
     "ssh|capistrano" => {"transport" => "ssh", "platform" => "linux", "language" => "ruby", "comment_char" => "#", "env_char" => "", "lb" => "\n", "ext" => "rb"},
-    "nsh" => {"transport" => "none", "platform" => "linux", "language" => "nsh", "comment_char" => "#", "env_char" => "", "lb" => "\n", "ext" => "nsh"}
+    "nsh" => {"transport" => "none", "platform" => "linux", "language" => "nsh", "comment_char" => "#", "env_char" => "", "lb" => "\n", "ext" => "nsh"},
+    "perl_linux" => {"transport" => "nsh", "platform" => "linux", "language" => "perl", "comment_char" => "#", "env_char" => "", "lb" => "\n", "ext" => "pl"},
 }
 
-#Execution Wrappers are for script types that require a command shell intermediate script to execute
-EXECUTION_WRAPPERS = {
-  "powershell" => "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy Unrestricted -File <script_file>\r\n"
-}
 # Place your own global constants
 DATA_CENTER_NAMES = ["HOU", "LEX", "PUNE"]
 

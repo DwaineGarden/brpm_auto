@@ -38,7 +38,7 @@ branch = @p.branch
 tag = @p.tag
 origin = @p.origin
 path_to_git = "/usr/bin/git"
-success = ""
+success = "FETCH_HEAD"
 
 #---------------------- Main Body --------------------------#
 # Check if we have been passed a package id from a promotion
@@ -58,9 +58,9 @@ result = @git.checkout(false, {"tag" => tag }) if tag != ""
 
 # Apply success or failure criteria
 if result.index(success).nil?
-  write_to "Command_Failed - term not found: [#{@p.get("success")}]\n"
+  write_to "Command_Failed - term not found: [#{success}]\n"
 else
-  write_to "Success - found term: #{@p.get("success")}\n"
+  write_to "Success - found term: #{success}\n"
 end
 
 

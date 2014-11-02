@@ -610,8 +610,6 @@ class Param < BrpmAutomation
     slist = {}
     lastcur = -1
     curname = ""
-    base_servers = @params["servers"].split(",")
-    base_servers.each{|k| slist[k] = {} }
     @params.sort.select{ |k| k[0] =~ rxp }.each_with_index do |server, idx|
       cur = (server[0].scan(rxp)[0].gsub("server","").to_i * 0.001).round * 1000
       if cur == lastcur
@@ -622,7 +620,11 @@ class Param < BrpmAutomation
         curname = server[1].chomp("0")
         slist[curname] = {}
       end
-    end    
+    end 
+    if slist.size == 0
+      base_servers = @params["servers"].split(",")
+      base_servers.each{|k| slist[k] = {} }
+    end
     slist
   end
 

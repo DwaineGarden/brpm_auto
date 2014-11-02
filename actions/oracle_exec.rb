@@ -29,14 +29,6 @@
 #- This loads the BRPM Framework and sets: @p = Params, @auto = BrpmAutomation and @rest = BrpmRest
 require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
 # Properties will automatically be pushed to env variables if prefixed with the ARG_PREFIX
-ARG_PREFIX = "ENV_"
-
-#---------------------- Variables --------------------------#
-# Assign local variables to properties and script arguments
-success = "Environment Variables"
-automation_category = "Oracle_bash"
-sql_uploaded_file = @p.script_file_to_execute
-sql_script_path = @p.scripts_to_execute
 
 # Note action script will be processed as ERB!
 #----------------- HERE IS THE ACTION SCRIPT -----------------------#
@@ -58,7 +50,7 @@ script =<<-END
 #   begin
 #     SELECT COLUMN_DOES_NOT_EXIST FROM DUAL;
 #   END;
-
+export ORACLE_HOME
 
 SQLPLUS="sqlplus"
 if [ ! -z "$ORACLE_HOME" ]
@@ -76,6 +68,16 @@ echo quit | (($SQLPLUS -L -s $ORACLE_USERNAME/$ORACLE_PASSWORD@$ORACLE_SID @$TMP
 exit $?
 END
 
+
+#---------------------- Variables --------------------------#
+# Assign local variables to properties and script arguments
+arg_prefix = "ENV_"
+failure = "ERROR at line"
+automation_category = "Oracle_bash"
+sql_uploaded_file = @p.script_file_to_execute
+sql_script_path = @p.scripts_to_execute
+timeout = @p.get("step_estimate", "300").to_i
+
 #---------------------- Main Script --------------------------#
 # The source for sql files may be either an uploaded file or a passed path to a file or directory
 #  The files will be assembled and executed in alphabetical order
@@ -84,22 +86,32 @@ sql_files = []
 sql_files << sql_uploaded_file if sql_uploaded_file != ""
 if sql_script_path != ""
   if File.directory?(sql_script_path)
-    Dir.entries.reject{|l| l.start_with?(".") }.sort.each{|l| slq_files << File.join(sql_script_path, l) }
+    Dir.entries(sql_script_path).reject{|l| l.start_with?(".") }.sort.each{|l| sql_files << File.join(sql_script_path, l) }
   else
     sql_files << sql_script_path
   end
 end
 # This will execute the action
 #  execution targets the selected servers on the step, but can be overridden in options
-#  execution defaults to nsh transport, you can override with server properties (not implemented yet)
 options = {} # Options can take several keys for overrides
 results = []
-@action = Action.new(@p,{"automation_category" => automation_category, "property_filter" => ARG_PREFIX, "timeout" => 30, "debug" => false})
+@action = Action.new(@p,{"automation_category" => automation_category, "property_filter" => arg_prefix, "timeout" => timeout, "debug" => false})
 sql_files.each do |sql_file|
-  options["payload" => sql_file]
+  options["payload"] = sql_file
   results << @action.run!(script, options)
 end
 results.each do |result|
-  @auto.log "Command_Failed: cannot find: #{success}" unless result["stdout"].include?(success)
+  @auto.log @action.display_result(result)
 end
+@auto.message_box "Analyzing Results"
+results.each_with_index do |result, idx|
+  msg = "#{sql_files[idx]} "
+  if result["stdout"].include?(failure)
+    @auto.log "\t#{msg} - Command_Failed: found error term: [#{failure}]" if result["stdout"].include?(failure)
+  else
+    @auto.log "\t#{msg} - SUCCESS"
+  end
+end
+
+
 params["direct_execute"] = "yes"

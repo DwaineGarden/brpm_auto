@@ -16,8 +16,6 @@ class Action < BrpmAutomation
     @p = params_obj
     super @p.SS_output_file
     lib_path = @p.get("SS_script_support_path")
-    @execution_wrappers = {}
-    @execution_wrappers = EXECUTION_WRAPPERS if defined?(EXECUTION_WRAPPERS)
     @action_platforms = {"default" => {"transport" => "nsh", "platform" => "linux", "language" => "bash", "comment_char" => "#", "env_char" => "", "lb" => "\n", "ext" => "sh"}}
     @action_platforms.merge!(ACTION_PLATFORMS) if defined?(ACTION_PLATFORMS)
     @automation_category = get_option(options, "automation_category", @p.get("SS_automation_category", "shell"))
@@ -74,15 +72,16 @@ class Action < BrpmAutomation
   #
   # ==== Attributes
   #
-  # * +options+ - hash of options - looking for transfer_properties or property_filter (prefix in params)
+  # * +options+ - hash of options - looking for transfer_properties or property_filter (prefix in params), retain_property_prefix leaves the prefix on
   # ==== Returns
   #
   # * Sets the @transfer_properties instance var
   def set_transfer_properties(options)
     @transfer_properties = get_option(options, "transfer_properties", {})
     prop_filter = get_option(options, "property_filter", "ARG_")
-    @p.local_params.each{|k,v| @transfer_properties[k.gsub(prop_filter,"")] = v if k.start_with?(prop_filter) }
-    @p.params.each{|k,v| @transfer_properties[k.gsub(prop_filter,"")] = v if k.start_with?(prop_filter) }
+    retain_prefix = get_option(options, "retain_property_prefix", false)
+    @p.local_params.each{|k,v| @transfer_properties[(retain_prefix ? k : k.gsub(prop_filter,""))] = v if k.start_with?(prop_filter) }
+    @p.params.each{|k,v| @transfer_properties[(retain_prefix ? k : k.gsub(prop_filter,""))] = v if k.start_with?(prop_filter) }
     @transfer_properties
   end
     
@@ -95,7 +94,7 @@ class Action < BrpmAutomation
   #
   # * command_run hash {stdout => <results>, stderr => any errors, pid => process id, status => exit_code}
   def run!(action, options = {})
-    message_box "Executing Remote Script", "title"
+    message_box "Executing Remote Script"
     servers = get_option(options,"servers", @p.server_list.keys)
     target_path = get_option(options,"target_path", windows? ? "/C/Windows/temp" : "/tmp")
     max_time = get_option(options,"max_time", 3600)
@@ -112,16 +111,17 @@ class Action < BrpmAutomation
     else
       action_path = action
     end
-    payload_path = payload? ? transport_payload(payload, target_path, servers) : nil
+    payload_path = payload ? transport_payload(payload, target_path, servers) : nil
+    brpd_compatibility(payload_path, target_path) if payload
     pre_process_action(action_path, payload_path)
-    intermediate_path = transport_script(action_path, target_path, servers)
-    script_path = intermediate_path.nil? ? action_path : intermediate_path
+    wrapper_path = wrapper_script(action_path, target_path, servers)
+    script_path = wrapper_path.nil? ? action_path : wrapper_path
     log "\t Source:    #{action_path}"
     cmd = "#{@nsh_path}/bin/scriptutil -d \"#{target_path}\" -h #{servers.join(" ")} -s #{script_path} -H \"Results from: %h\""
     result = execute_shell(cmd, max_time)
-    message_box "Script Results", "header"
+    message_box "Script Results"
     log display_result(result)
-    res = remove_temp_files(action_path, target_path, servers) unless intermediate_path.nil?
+    res = remove_temp_files(action_path, target_path, servers) unless wrapper_path.nil?
     result
   end
 
@@ -179,8 +179,13 @@ class Action < BrpmAutomation
     result
   end
 
-  # Copies script to targets and then creates a shell wapper to call it
-  #
+  # Detects need for a wrapper script - creates it and copies to targets
+  # looks for "WRAPPER: " in the first 10 lines, use it like a shebang ex:
+  # # WIN_WRAPPER: C:\\apps\perl %%
+  # this line will be plucked out of the script and a new batch script created with it
+  # upin execution, both the batch script and the main script will be copied to the targets
+  # then the batch script will be run which will call the main script from the %% keyword
+  # filename will be automatically substituted in.
   # ==== Attributes
   #
   # * +action_path+ - path to script to transport
@@ -189,10 +194,11 @@ class Action < BrpmAutomation
   # ==== Returns
   #
   # * path to wrapper script
-  def transport_script(action_path, target_path, servers)
-    return nil  unless @execution_wrappers.has_key?(@platform)
+  def wrapper_script(action_path, target_path, servers)
+    wrapper = needs_wrapper(action_path)
+    return wrapper if wrapper.nil?
     script_name = File.basename(action_path)
-    if @platform_info["platform"] == "windows"
+    if true # only for windows! @platform_info["platform"] == "windows"
       win_path = @nsh.dos_path(target_path)
       ext = "bat"
       script_path = "#{win_path}\\#{script_name}"
@@ -201,8 +207,10 @@ class Action < BrpmAutomation
       script_path = "#{target_path}/#{script_name}"
     end
     log "Building Intermediate script:"
-    wrapper = @execution_wrappers[@platform]
-    wrapper.gsub!("<script_file>", script_path)
+    wrapper.gsub!("%%", script_path) if wrapper.include?("%%")
+    wrapper.chomp!("\r") 
+    wrapper += " #{script_path}" unless wrapper.include?("%%")
+    wrapper += "\r\n"
     new_path = create_temp_action(wrapper, "wrapper_#{precision_timestamp}.#{ext}")
     log "\t Target:    #{new_path}"
     log "\t Wrapper:   #{wrapper}"
@@ -225,9 +233,9 @@ class Action < BrpmAutomation
     file_name = File.basename(payload_path)
     if @platform_info["platform"] == "windows"
       win_path = @nsh.dos_path(target_path)
-      file_path = "#{win_path}\\#{script_name}"
+      file_path = "#{win_path}\\#{file_name}"
     else
-      file_path = "#{target_path}/#{script_name}"
+      file_path = "#{target_path}/#{file_name}"
     end
     log "Transporting payload:"
     log "\t Target:    #{file_path}"
@@ -268,15 +276,16 @@ class Action < BrpmAutomation
     cmt = @platform_info["comment_char"]
     language = @platform_info["language"]
     shebang = ""
-    content = ERB.new(action).result(binding)
     content = File.open(action_path).read
+    content = ERB.new(content).result(binding)
     lines = content.split("\n")
     if lines[0][0..10] =~ /^\s*\#\!/
       shebang = lines[0]
-      action = lines[1..-1].join("\n")
+      content = lines[1..-1].join("\n")
     end
-    @transfer_properties["VL_CONTENT_PATH"] = payload_path if payload_path
-    @transfer_properties["RPM_PAYLOAD"] = payload_path if payload_path
+    if payload_path
+      @transfer_properties["RPM_PAYLOAD"] = payload_path
+    end
     env_header = "#{cmt} Environment vars to define#{lb}"
     @standard_properties.each{|prop| @transfer_properties[prop] = @p.get(prop) }
     @transfer_properties.each do |key,val|
@@ -291,6 +300,19 @@ class Action < BrpmAutomation
     file_content
   end
   
+  # Sets BRPD Compatibility properties
+  # 
+  # ==== Returns
+  #
+  # hash
+  #
+  def brpd_compatibility(payload_path, target_dir)
+     @transfer_properties["VL_CONTENT_PATH"] = payload_path 
+     @transfer_properties["VL_CONTENT_NAME"] = File.basename(payload_path) 
+     @transfer_properties["VL_CHANNEL_ROOT"] = target_dir
+
+  end
+
   # Returns a temp name for the action on the target
   # 
   # ==== Returns
@@ -333,4 +355,21 @@ class Action < BrpmAutomation
     result.join("\n")
   end
   
+  def needs_wrapper(action_path)
+    key_term = "WRAPPER: "
+    result = nil
+    action = File.open(action_path).read
+    lines = action.split("\n")
+    lines[0..10].each do |line|
+      ipos = line.index(key_term)
+      if ipos
+        result = line[(key_term.length + ipos)..-1]
+        break
+      end
+    end
+    result
+  end
+      
+  
 end
+

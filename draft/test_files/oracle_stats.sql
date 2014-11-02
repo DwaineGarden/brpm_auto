@@ -1,3 +1,5 @@
 -- la di da
-status
-more status to give
+column name format a30
+select * from config_deployments;
+exit
+

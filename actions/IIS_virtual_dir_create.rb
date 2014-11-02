@@ -1,5 +1,20 @@
 #---------------------- Action Name -----------------------#
 # Description: Creates a virtual directory in the IIS system
+#---------------------- Arguments --------------------------#
+###
+# ENV_IIS_VIRDIR_NAME:
+#   name: Virtual directory name
+#   position: A1:C1
+#   type: in-text
+# ENV_IIS_VIRDIR_PATH:
+#   name: virtual directory path
+#   position: A2:F2
+#   type: in-text
+# ENV_IIS_SITE_NAME:
+#   name: site name
+#   position: A3:F3
+#   type: in-text
+###
 
 # Note action script will be processed as ERB!
 #----------------- HERE IS THE ACTION SCRIPT -----------------------#
@@ -89,42 +104,33 @@ END
 
 # === The code below will process the action for execution
 
-#---------------------- Arguments --------------------------#
-###
-# ARG_IIS_VIRDIR_NAME:
-#   name: Virtual directory name
-#   position: A1:C1
-#   type: in-text
-# ARG_IIS_VIRDIR_PATH:
-#   name: virtual directory path
-#   position: A2:F2
-#   type: in-text
-# ARG_IIS_SITE_NAME:
-#   name: site name
-#   position: A3:F3
-#   type: in-text
-###
-
 #---------------------- Declarations -------------------------#
 #=> IMPORTANT  <=#
 #- This loads the BRPM Framework and sets: @p = Params, @auto = BrpmAutomation and @rest = BrpmRest
 require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
 # Properties will automatically be pushed to env variables if prefixed with the ARG_PREFIX
-arg_prefix = "ARG_"
+arg_prefix = "ENV_"
 
 #---------------------- Variables ----------------------------#
 # Assign local variables to properties and script arguments
 automation_category = "powershell"
 success = "Virtual Directory"
+timeout = @p.get("step_estimate", "300").to_i
 
 #---------------------- Main Script --------------------------#
+
+@auto.message_box "Creating IIS Virtual Dir", "title"
+@auto.log "\tDirName: #{@p.required("IIS_VIRDIR_NAME")}"
+@auto.log "\tDirPath: #{@p.required("IIS_VIRDIR_PATH")}"
+@auto.log "\tSiteName: #{@p.required("IIS_SITE_NAME")}"
 # This will execute the action
 #  execution targets the selected servers on the step, but can be overridden in options
 #  execution defaults to nsh transport, you can override with server properties (not implemented yet)
 options = {} # Options can take several keys for overrides
-@action = Action.new(@p,{"automation_category" => automation_category, "property_filter" => arg_prefix, "timeout" => 30, "debug" => false})
+@action = Action.new(@p,{"automation_category" => automation_category, "property_filter" => arg_prefix, "timeout" => timeout, "debug" => false})
 result = @action.run!(script, options)
-
-@auto.log "Command_Failed: cannot find: #{success}" unless result["stdout"].include?(success)
+@auto.message_box "Results"
+@auto.log @action.display_result(result)
+@auto.log "Command_Failed: cannot find term: [#{success}]" unless result["stdout"].include?(success)
 
 params["direct_execute"] = "yes"
