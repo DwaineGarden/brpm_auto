@@ -19,12 +19,13 @@
 #- This loads the BRPM Framework and sets: @p = Params, @auto = BrpmAutomation and @rest = BrpmRest
 require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
 
+# Note: automation category suffix must be in the ACTION_PLATFORMS definition in the customer_include.rb file
+automation_category = "Websphere_bash"
+#automation_category = "Websphere_windows"
 
 # Note action script will be processed as ERB!
 #----------------- HERE IS THE ACTION SCRIPT -----------------------#
 script =<<-END
-#![.py]/bin/sh -c "<%=@p.get("WAS_ADMIN_HOME") %>/bin/wsadmin.sh -user <%=@p.get("WAS_ADMIN_USER") %> -password <%=@p.get("WAS_ADMIN_PASSWORD") %> -lang jython -f %%"
-# WIN_WRAPPER: <%=@p.get("WAS_ADMIN_HOME") %>\\bin\\wsadmin.bat -user <%=@p.get("WAS_ADMIN_USER") %> -password <%=@p.get("WAS_ADMIN_PASSWORD") %> -lang jython -f %%
 
 # Start application on server or cluster, used when connecting to a Deployment Manager or NodeAgent
 
@@ -85,12 +86,15 @@ sys.exit()
 
 END
 
+bash_wrapper = "#{@p.get("WAS_ADMIN_HOME")} %>/bin/wsadmin.sh -user #{@p.get("WAS_ADMIN_USER")} -password #{@p.get("WAS_ADMIN_PASSWORD")} -lang jython -f %%"
+win_wrapper = "#{@p.get("WAS_ADMIN_HOME")}\\bin\\wsadmin.bat -user #{@p.get("WAS_ADMIN_USER")} -password #{@p.get("WAS_ADMIN_PASSWORD")} -lang jython -f %%"
+
 #---------------------- Variables ----------------------------#
 # Assign local variables to properties and script arguments
 # Properties will automatically be pushed to env variables if prefixed with the ARG_PREFIX
 arg_prefix = "WAS_"
-automation_category = "Websphere_bash"
-delimiter = automation_category.include?("_win") ? "\\" : "/"
+delimiter = automation_category.downcase.include?("_win") ? "\\" : "/"
+wrapper = automation_category.downcase.include?("_win") ? win_wrapper : bash_wrapper
 @p.add("path_delimiter", delimiter)
 success = " is started"
 timeout = @p.get("step_estimate", "300").to_i
@@ -108,12 +112,24 @@ raise "Command_Failed: No WAS Server or Cluster specified" if @p.get("WAS_SERVER
 
 # This will execute the action
 #  execution targets the selected servers on the step, but can be overridden in options
-#  execution defaults to nsh transport, you can override with server properties (not implemented yet)
-options = {} # Options can take several keys for overrides
-@action = Action.new(@p,{"automation_category" => automation_category, "property_filter" => arg_prefix, "timeout" => timeout, "debug" => false, "retain_property_prefix" => true})
-result = @action.run!(script, options)
-#@auto.message_box "Results"
-#@auto.log @action.display_result(result)
-@auto.log "Command_Failed: cannot find term: [#{success}]" unless result["stdout"].include?(success)
+action_options = {
+  "automation_category" => automation_category, 
+  "property_filter" => arg_prefix, 
+  "timeout" => timeout, 
+  "debug" => false, 
+  "retain_property_prefix" => true
+  }
+@action = Action.new(@p,action_options)
+
+# Execution defaults to nsh transport, you can override with server properties (not implemented yet)
+# Options can take several keys for overrides
+run_options = {
+  "wrapper_script" => wrapper
+  #"payload" => path_to_payload file to reference e.g. ear/war file
+  } 
+result = @action.run!(script, run_options)
+display_result = @action.display_result(result)
+
+@auto.log "Command_Failed: cannot find term: [#{success}]" unless display_result.include?(success)
 
 params["direct_execute"] = "yes"

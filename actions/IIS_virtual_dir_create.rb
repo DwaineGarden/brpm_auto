@@ -19,7 +19,7 @@
 # Note action script will be processed as ERB!
 #----------------- HERE IS THE ACTION SCRIPT -----------------------#
 script =<<-END
-#![.ps1]powershell.exe -ExecutionPolicy Unrestricted -File
+# ![.ps1]powershell.exe -ExecutionPolicy Unrestricted -File
 #############################################################################
 # Copyright @ 2012-2014 BMC Software, Inc.                                  #
 # This script is supplied as a template for performing the defined actions  #
@@ -102,6 +102,8 @@ if($error[0] -ne $errorBase) {
 
 END
 
+wrapper_script = "C:\\windows\\system32\\powershell.exe  -ExecutionPolicy Unrestricted -File %%"
+
 # === The code below will process the action for execution
 
 #---------------------- Declarations -------------------------#
@@ -123,12 +125,24 @@ timeout = @p.get("step_estimate", "300").to_i
 @auto.log "\tDirName: #{@p.required("IIS_VIRDIR_NAME")}"
 @auto.log "\tDirPath: #{@p.required("IIS_VIRDIR_PATH")}"
 @auto.log "\tSiteName: #{@p.required("IIS_SITE_NAME")}"
+
 # This will execute the action
 #  execution targets the selected servers on the step, but can be overridden in options
-#  execution defaults to nsh transport, you can override with server properties (not implemented yet)
-options = {} # Options can take several keys for overrides
-@action = Action.new(@p,{"automation_category" => automation_category, "property_filter" => arg_prefix, "timeout" => timeout, "debug" => false})
-result = @action.run!(script, options)
+action_options = {
+  "automation_category" => automation_category, 
+  "property_filter" => arg_prefix, 
+  "timeout" => timeout, 
+  "debug" => false
+  }
+@action = Action.new(@p,action_options)
+
+# Execution defaults to nsh transport, you can override with server properties (not implemented yet)
+# Options can take several keys for overrides
+run_options = {
+  "wrapper_script" => wrapper_script
+  #"payload" => path_to_payload file to reference e.g. ear/war file
+  }
+  
 @auto.message_box "Results"
 @auto.log @action.display_result(result)
 @auto.log "Command_Failed: cannot find term: [#{success}]" unless result["stdout"].include?(success)

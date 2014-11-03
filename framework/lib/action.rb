@@ -14,7 +14,7 @@ class Action < BrpmAutomation
   def initialize(params_obj, options = {})
     @standard_properties = ["SS_application", "SS_component", "SS_environment", "SS_component_version", "request_number"]
     @p = params_obj
-    super @p.SS_output_file
+    super @p
     lib_path = @p.get("SS_script_support_path")
     @action_platforms = {"default" => {"transport" => "nsh", "platform" => "linux", "language" => "bash", "comment_char" => "#", "env_char" => "", "lb" => "\n", "ext" => "sh"}}
     @action_platforms.merge!(ACTION_PLATFORMS) if defined?(ACTION_PLATFORMS)
@@ -97,7 +97,8 @@ class Action < BrpmAutomation
     message_box "Executing Remote Script"
     servers = get_option(options,"servers", @p.server_list.keys)
     target_path = get_option(options,"target_path", windows? ? "/C/Windows/temp" : "/tmp")
-    max_time = get_option(options,"max_time", 3600)
+    wrapper_script = get_option(options,"wrapper_script", nil)
+    max_time = get_option(options,"max_time", @timeout)
     payload = get_option(options,"payload", nil)
     log "Targets:       #{servers.join(",")}"
     log "Target Path:   #{target_path}"
@@ -107,21 +108,23 @@ class Action < BrpmAutomation
     log "\t Transport: #{@platform_info["transport"]}"
     log "\t Payload:  #{payload}" if payload
     if action.include?("\n")
-      action_path = create_temp_action(action)
+      action_name = temp_action_name
+      action_path = create_temp_action(action, action_name)
     else
+      action_name = File.basename(action)
       action_path = action
     end
+    log "\t Source:    #{action_path}"
     payload_path = payload ? transport_payload(payload, target_path, servers) : nil
     brpd_compatibility(payload_path, target_path) if payload
+    wrapper_path = wrapper_script(wrapper_script, action_path, target_path, servers) if wrapper_script
     pre_process_action(action_path, payload_path)
-    wrapper_path = wrapper_script(action_path, target_path, servers)
-    script_path = wrapper_path.nil? ? action_path : wrapper_path
-    log "\t Source:    #{action_path}"
+    script_path = wrapper_script.nil? ? action_path : wrapper_path
     cmd = "#{@nsh_path}/bin/scriptutil -d \"#{target_path}\" -h #{servers.join(" ")} -s #{script_path} -H \"Results from: %h\""
     result = execute_shell(cmd, max_time)
     message_box "Script Results"
     log display_result(result)
-    res = remove_temp_files(action_path, target_path, servers) unless wrapper_path.nil?
+    res = remove_temp_files(action_path, target_path, servers) if wrapper_script && !@debug
     result
   end
 
@@ -194,11 +197,13 @@ class Action < BrpmAutomation
   # ==== Returns
   #
   # * path to wrapper script
-  def wrapper_script(action_path, target_path, servers)
-    wrapper = needs_wrapper(action_path)
-    return wrapper if wrapper.nil?
+  
+  def wrapper_script(wrapper_script, action_path, target_path, servers)
+    lb = line_break
+    env = @platform_info["environment_set"]
+    cmt = @platform_info["comment_char"]
     script_name = File.basename(action_path)
-    if true # only for windows! @platform_info["platform"] == "windows"
+    if windows?
       win_path = @nsh.dos_path(target_path)
       ext = "bat"
       script_path = "#{win_path}\\#{script_name}"
@@ -206,14 +211,14 @@ class Action < BrpmAutomation
       ext = "sh"
       script_path = "#{target_path}/#{script_name}"
     end
-    log "Building Intermediate script:"
-    wrapper.gsub!("%%", script_path) if wrapper.include?("%%")
-    wrapper.chomp!("\r") 
-    wrapper += " #{script_path}" unless wrapper.include?("%%")
-    wrapper += "\r\n"
-    new_path = create_temp_action(wrapper, "wrapper_#{precision_timestamp}.#{ext}")
+    log "Executing via wrapper script:"
+    wrapper_script.chomp!("\r") 
+    wrapper_script.gsub!("%%", script_path) if wrapper_script.include?("%%")
+    wrapper_script += " #{script_path}" unless wrapper_script.include?("%%")
+    wrapper += lb
+    new_path = create_temp_action(wrapper_script, "wrapper_#{precision_timestamp}.#{ext}")
     log "\t Target:    #{new_path}"
-    log "\t Wrapper:   #{wrapper}"
+    log "\t Wrapper:   #{wrapper_script}"
     result = @nsh.ncp(servers, action_path, target_path)
     log "\t Copy Results:    #{result}"
     new_path
@@ -271,18 +276,15 @@ class Action < BrpmAutomation
   # modified action text
   #
   def pre_process_action(action_path, payload_path = nil)
-    lb = @platform_info["lb"]
-    env = @platform_info["env_char"]
+    lb = line_break
+    env = @platform_info["environment_set"]
     cmt = @platform_info["comment_char"]
     language = @platform_info["language"]
     shebang = ""
     content = File.open(action_path).read
     content = ERB.new(content).result(binding)
-    lines = content.split("\n")
-    if lines[0][0..10] =~ /^\s*\#\!/
-      shebang = lines[0]
-      content = lines[1..-1].join("\n")
-    end
+    items = content.scan(/^\s*\#\!.*/)
+    shebang = items[0] if items.size > 0
     if payload_path
       @transfer_properties["RPM_PAYLOAD"] = payload_path
     end
@@ -325,8 +327,7 @@ class Action < BrpmAutomation
   
   private
   
-  def create_temp_action(action, file_name = nil)
-    file_name = temp_action_name if file_name.nil?
+  def create_temp_action(action, file_name)
     file_path = File.join(@output_dir, file_name)
     fil = File.open(file_path,"w+")
     fil.puts(action)
@@ -337,11 +338,15 @@ class Action < BrpmAutomation
   end
   
   def windows?
-    @platform_info["language"] =~ /batch|powershell/
+    @platform_info["platform"].downcase =~ /windows/
   end
   
   def linux?
     !windows?
+  end
+  
+  def line_break
+    windows? ? "\r\n" : "\n"
   end
   
   def remove_temp_files(file_path, target_path, servers)
@@ -354,22 +359,6 @@ class Action < BrpmAutomation
     end
     result.join("\n")
   end
-  
-  def needs_wrapper(action_path)
-    key_term = "WRAPPER: "
-    result = nil
-    action = File.open(action_path).read
-    lines = action.split("\n")
-    lines[0..10].each do |line|
-      ipos = line.index(key_term)
-      if ipos
-        result = line[(key_term.length + ipos)..-1]
-        break
-      end
-    end
-    result
-  end
-      
-  
+
 end
 

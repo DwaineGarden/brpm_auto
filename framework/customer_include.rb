@@ -11,12 +11,12 @@ BAA_BASE_PATH = "/opt/bmc/bladelogic"
 
 # This sets the behavior of the framework foreach of the action languages
 ACTION_PLATFORMS = {
-    "batch" => {"transport" => "nsh", "platform" => "windows", "language" => "batch", "comment_char" => "REM", "env_char" => "set ", "lb" => "\r\n", "ext" => "bat"},
-    "powershell" => {"transport" => "nsh", "platform" => "windows", "language" => "powershell", "comment_char" => "#", "env_char" => "$env:", "lb" => "\r\n", "ext" => "ps1"},
-    "bash|shell" => {"transport" => "nsh", "platform" => "linux", "language" => "bash", "comment_char" => "#", "env_char" => "", "lb" => "\n", "ext" => "sh"},
-    "ssh|capistrano" => {"transport" => "ssh", "platform" => "linux", "language" => "ruby", "comment_char" => "#", "env_char" => "", "lb" => "\n", "ext" => "rb"},
-    "nsh" => {"transport" => "none", "platform" => "linux", "language" => "nsh", "comment_char" => "#", "env_char" => "", "lb" => "\n", "ext" => "nsh"},
-    "perl_linux" => {"transport" => "nsh", "platform" => "linux", "language" => "perl", "comment_char" => "#", "env_char" => "", "lb" => "\n", "ext" => "pl"},
+    "batch" => {"transport" => "nsh", "platform" => "windows", "language" => "batch", "comment_char" => "REM", "environment_set" => "set ", "ext" => "bat"},
+    "powershell" => {"transport" => "nsh", "platform" => "windows", "language" => "powershell", "comment_char" => "#", "environment_set" => "$env:", "ext" => "ps1"},
+    "bash|shell" => {"transport" => "nsh", "platform" => "linux", "language" => "bash", "comment_char" => "#", "environment_set" => "", "ext" => "sh"},
+    "ssh|capistrano" => {"transport" => "ssh", "platform" => "linux", "language" => "ruby", "comment_char" => "#", "environment_set" => "", "ext" => "rb"},
+    "nsh" => {"transport" => "none", "platform" => "linux", "language" => "nsh", "comment_char" => "#", "environment_set" => "", "ext" => "nsh"},
+    "perl_linux" => {"transport" => "nsh", "platform" => "linux", "language" => "perl", "comment_char" => "#", "environment_set" => "", "ext" => "pl"},
 }
 
 # Place your own global constants

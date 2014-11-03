@@ -26,10 +26,18 @@ class BrpmAutomation
   #
   # ==== Attributes
   #
-  # * +output_file+ - the output file for logging
-  def initialize(output_file = nil)
+  # * +output_object+ - the output file for logging or a reference to a Param object
+  def initialize(output_object = nil)
     @fil = nil
-    @output_file = output_file.nil? ? SS_output_file : output_file
+    @p_obj = nil
+    if output_object.nil?
+      @output_file = SS_output_file
+    elsif output_object.is_a?(String)
+      @output_file = output_object
+    else
+      @p_obj = output_object
+      @output_file = @p_obj.SS_output_file
+    end
   end
   
   # Provides a simple failsafe for working with hash options
@@ -66,11 +74,12 @@ class BrpmAutomation
   # * +level+ - the log level [info, warn, ERROR]
   # * +output_file+ - an alternate output file to log to (default is step output)
   def log(txt, level = "INFO", output_file = nil)
+    safe_txt = privatize(txt)
     @output_file = output_file unless output_file.nil?
-    puts log_message(txt, level)
+    puts log_message(safe_txt, level)
     unless @output_file.nil?
       @fil = File.open(@output_file,"a") if @fil.nil?
-      @fil.puts(log_message(txt, level))
+      @fil.puts(log_message(safe_txt, level))
       @fil.flush
       #fil.close
     end
@@ -297,11 +306,26 @@ class BrpmAutomation
     Time.now.strftime("%Y%m%d%H%M%S%L")
   end
 
+  # Returns text with private values substituted
+  # 
+  # ==== Attributes
+  #
+  # * +txt+ - text to sanitize
+  # ==== Returns
+  #
+  # string
+  #
+  def privatize(txt)
+    return txt if @p_obj.nil?
+    @p_obj.private_properties.each{|k,v| txt.gsub!(v,"-private-") }
+    txt
+  end
+
 end
 
 # Abstraction class for the step params
 # provides convenience routines for working with params
-class Param < BrpmAutomation
+class Param
 
   # Initialize an instance of the class
   #
@@ -312,9 +336,8 @@ class Param < BrpmAutomation
   def initialize(params, json_params = {})
     @params = params
     @json_params = json_params
-    @hand = File.open(@params["SS_output_file"],"a")
+    @output_file = @params["SS_output_file"]
     request_data_file_dir = File.dirname(@params["SS_output_dir"])
-    super(@params["SS_output_file"])
     @request_data_file = "#{request_data_file_dir}/request_data.json"
     @server_list = server_list
   end
@@ -628,6 +651,43 @@ class Param < BrpmAutomation
     slist
   end
 
+  # Returns a hash with properties that are marked private
+  # 
+  # ==== Returns
+  #
+  # hash of properties
+  #
+  def private_properties
+    return @private_props if defined?(@private_props)
+    @private_props = {}
+    @params.each{|k,v| @private_props[k.gsub("_encrypt","")] = @params[k.gsub("_encrypt","")] if k.end_with?("_encrypt") }
+    @private_props
+  end
+
+  # Provides a logging style output
+  #
+  # ==== Attributes
+  #
+  # * +txt+ - the text to output
+  # * +level+ - the log level [info, warn, ERROR]
+  # * +output_file+ - an alternate output file to log to (default is step output)
+  def log(txt, level = "INFO")
+    puts log_message(txt, level)
+    unless @output_file.nil?
+      @fil = File.open(@output_file,"a") if @fil.nil?
+      @fil.puts(log_message(txt, level))
+      @fil.flush
+      #fil.close
+    end
+  end
+
+  def log_message(message, log_type = "INFO")
+    stamp = "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}|#{log_type}> "
+    message = "" if message.nil?
+    message = message.inspect unless message.is_a?(String)
+    message.split("\n").map{|l| "#{stamp}#{l}"}.join("\n")
+  end
+
 end
 
 module Framework
@@ -651,7 +711,7 @@ extend Framework
 @request_params = {} if not defined?(@request_params)
 @p = Param.new(@params, @request_params)
 SS_output_file = @p.SS_output_file
-@auto = BrpmAutomation.new
+@auto = BrpmAutomation.new(@p)
 LibDir = File.expand_path(File.dirname(__FILE__))
 require "#{LibDir}/lib/legacy_framework"
 require "#{LibDir}/lib/baa"
