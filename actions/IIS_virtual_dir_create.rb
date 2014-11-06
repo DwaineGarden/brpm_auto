@@ -75,7 +75,7 @@ $appName = $env:IIS_VIRDIR_NAME;
 $appPath = $env:IIS_VIRDIR_PATH;
 
 if ($env:IIS_SITE_NAME -ne $null)  {
-    #$website = Get-WmiObject -Namespace 'root\\MicrosoftIISv2' -Class IISWebServerSetting -Filter "ServerComment = '$env:IIS_SITE_NAME'";
+#   $website = Get-WmiObject -Namespace 'root\\MicrosoftIISv2' -Class IISWebServerSetting -Filter "ServerComment = '$env:IIS_SITE_NAME'";
     $siteName = "W3SVC/1";
     }
   else {
@@ -102,7 +102,7 @@ if($error[0] -ne $errorBase) {
 
 END
 
-wrapper_script = "C:\\windows\\system32\\powershell.exe  -ExecutionPolicy Unrestricted -File %%"
+wrapper_script = "C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe  -ExecutionPolicy Unrestricted -File %%"
 
 # === The code below will process the action for execution
 
@@ -117,21 +117,21 @@ arg_prefix = "ENV_"
 # Assign local variables to properties and script arguments
 automation_category = "powershell"
 success = "Virtual Directory"
-timeout = @p.get("step_estimate", "300").to_i
+max_time = (@p.get("step_estimate", "5").to_i) * 60
 
 #---------------------- Main Script --------------------------#
 
 @auto.message_box "Creating IIS Virtual Dir", "title"
-@auto.log "\tDirName: #{@p.required("IIS_VIRDIR_NAME")}"
-@auto.log "\tDirPath: #{@p.required("IIS_VIRDIR_PATH")}"
-@auto.log "\tSiteName: #{@p.required("IIS_SITE_NAME")}"
+@auto.log "\tDirName: #{@p.required("ENV_IIS_VIRDIR_NAME")}"
+@auto.log "\tDirPath: #{@p.required("ENV_IIS_VIRDIR_PATH")}"
+@auto.log "\tSiteName: #{@p.required("ENV_IIS_SITE_NAME")}"
 
 # This will execute the action
 #  execution targets the selected servers on the step, but can be overridden in options
 action_options = {
   "automation_category" => automation_category, 
   "property_filter" => arg_prefix, 
-  "timeout" => timeout, 
+  "timeout" => max_time, 
   "debug" => false
   }
 @action = Action.new(@p,action_options)
@@ -142,9 +142,9 @@ run_options = {
   "wrapper_script" => wrapper_script
   #"payload" => path_to_payload file to reference e.g. ear/war file
   }
-  
-@auto.message_box "Results"
-@auto.log @action.display_result(result)
+result = @action.run!(script, run_options) 
+#@auto.message_box "Results"
+#@auto.log @action.display_result(result)
 @auto.log "Command_Failed: cannot find term: [#{success}]" unless result["stdout"].include?(success)
 
 params["direct_execute"] = "yes"

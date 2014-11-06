@@ -86,7 +86,7 @@ sys.exit()
 
 END
 
-bash_wrapper = "#{@p.get("WAS_ADMIN_HOME")} %>/bin/wsadmin.sh -user #{@p.get("WAS_ADMIN_USER")} -password #{@p.get("WAS_ADMIN_PASSWORD")} -lang jython -f %%"
+bash_wrapper = "#{@p.get("WAS_ADMIN_HOME")}/bin/wsadmin.sh -user #{@p.get("WAS_ADMIN_USER")} -password #{@p.get("WAS_ADMIN_PASSWORD")} -lang jython -f %%"
 win_wrapper = "#{@p.get("WAS_ADMIN_HOME")}\\bin\\wsadmin.bat -user #{@p.get("WAS_ADMIN_USER")} -password #{@p.get("WAS_ADMIN_PASSWORD")} -lang jython -f %%"
 
 #---------------------- Variables ----------------------------#

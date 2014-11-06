@@ -117,50 +117,14 @@ class Action < BrpmAutomation
     log "\t Source:    #{action_path}"
     payload_path = payload ? transport_payload(payload, target_path, servers) : nil
     brpd_compatibility(payload_path, target_path) if payload
-    wrapper_path = wrapper_script(wrapper_script, action_path, target_path, servers) if wrapper_script
     pre_process_action(action_path, payload_path)
+    wrapper_path = wrapper_script(wrapper_script, action_path, target_path, servers) if wrapper_script
     script_path = wrapper_script.nil? ? action_path : wrapper_path
-    cmd = "#{@nsh_path}/bin/scriptutil -d \"#{target_path}\" -h #{servers.join(" ")} -s #{script_path} -H \"Results from: %h\""
-    result = execute_shell(cmd, max_time)
+    result = @nsh.script_exec(servers, script_path, target_path, {"raw_result" => true, "timeout" => max_time})
     message_box "Script Results"
     log display_result(result)
     res = remove_temp_files(action_path, target_path, servers) if wrapper_script && !@debug
     result
-  end
-
-  # Executes a command via shell in a timeout loop
-  #
-  # ==== Attributes
-  #
-  # * +platform_info+ - hash of plaform info e.g. {"transport" => "nsh", "platform" => "windows", "language" => "batch"}
-  # ==== Returns
-  #
-  # * command_run hash {stdout => <results>, stderr => any errors, pid => process id, status => exit_code}
-  def execute_shell(command, max_time = 3600)
-    cmd_result = {"stdout" => "","stderr" => "", "pid" => "", "status" => "1"}
-    cmd_result["stdout"] = "Running #{command}\n"
-    output_dir = File.join(@output_dir,"#{precision_timestamp}")
-    errfile = "#{output_dir}_stderr.txt"
-    cmd_result["stdout"] += "Script Output:\n"
-    begin
-      orig_stderr = $stderr.clone
-      $stderr.reopen File.open(errfile, 'a' )
-      timer_status = Timeout.timeout(max_time) {
-        cmd_result["stdout"] += `#{command}`
-        status = $?
-        cmd_result["pid"] = status.pid
-        cmd_result["status"] = status.to_i
-      }
-      stderr = File.open(errfile).read
-      cmd_result["stderr"] = stderr if stderr.length > 2
-    rescue Exception => e
-      $stderr.reopen orig_stderr
-      cmd_result["stderr"] = "ERROR\n#{e.message}\n#{e.backtrace}"
-    ensure
-      $stderr.reopen orig_stderr
-    end
-    File.delete(errfile)
-    cmd_result
   end
 
   # Executes a script directly via NSH
@@ -213,9 +177,12 @@ class Action < BrpmAutomation
     end
     log "Executing via wrapper script:"
     wrapper_script.chomp!("\r") 
-    wrapper_script.gsub!("%%", script_path) if wrapper_script.include?("%%")
-    wrapper_script += " #{script_path}" unless wrapper_script.include?("%%")
-    wrapper += lb
+    if wrapper_script.include?("%%")
+      wrapper_script.gsub!("%%", script_path)
+    else
+      wrapper_script += " #{script_path}"
+      wrapper_script += lb
+    end
     new_path = create_temp_action(wrapper_script, "wrapper_#{precision_timestamp}.#{ext}")
     log "\t Target:    #{new_path}"
     log "\t Wrapper:   #{wrapper_script}"
@@ -325,6 +292,26 @@ class Action < BrpmAutomation
     file_name = "action_#{@platform_info["language"]}_#{precision_timestamp}.#{@platform_info["ext"]}"
   end
   
+  # Returns a base path for a remote server using a cascade of options
+  # if the server properties has a channel_root item, that will be used, otherwise
+  # if the (params) properties has a channel_root, that will be used, otherwise
+  # use the default /tmp, /C/Windows/temp values
+  # ==== Attributes
+  #
+  # * +property_list+ - hash of properties for the sever
+  # 
+  # ==== Returns
+  #
+  # nsh path on target
+  #
+  def get_channel_root(property_list = {}, os = "generic")
+    default_path = os == "windows" ? "/C/Windows/temp" : "/tmp"
+    path = @p.get("channel_root", nil)
+    path = @p.get("CHANNEL_ROOT", nil)
+    property_list.each{|k,v| path = v if k == "channel_root" }
+    path || default_path
+  end
+
   private
   
   def create_temp_action(action, file_name)

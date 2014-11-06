@@ -355,7 +355,7 @@ class Param
   def present?(key_name, where = false)
     ans = nil
     ans = "params" if present_local?(key_name) 
-    ans = "json" if present_json(key_name)
+    ans = "json" if present_json?(key_name)
     where ? ans : !ans.nil?
   end
 

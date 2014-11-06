@@ -30,6 +30,9 @@
 require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
 # Properties will automatically be pushed to env variables if prefixed with the ARG_PREFIX
 
+# Note: automation category suffix must be in the ACTION_PLATFORMS definition in the customer_include.rb file
+automation_category = "Oracle_bash"
+
 # Note action script will be processed as ERB!
 #----------------- HERE IS THE ACTION SCRIPT -----------------------#
 script =<<-END
@@ -73,10 +76,9 @@ END
 # Assign local variables to properties and script arguments
 arg_prefix = "ENV_"
 failure = "ERROR at line"
-automation_category = "Oracle_bash"
 sql_uploaded_file = @p.script_file_to_execute
 sql_script_path = @p.scripts_to_execute
-timeout = @p.get("step_estimate", "300").to_i
+max_time = @p.get("step_estimate", "300").to_i
 
 #---------------------- Main Script --------------------------#
 # The source for sql files may be either an uploaded file or a passed path to a file or directory
@@ -95,7 +97,7 @@ end
 #  execution targets the selected servers on the step, but can be overridden in options
 options = {} # Options can take several keys for overrides
 results = []
-@action = Action.new(@p,{"automation_category" => automation_category, "property_filter" => arg_prefix, "timeout" => timeout, "debug" => false})
+@action = Action.new(@p,{"automation_category" => automation_category, "property_filter" => arg_prefix, "timeout" => max_time, "debug" => false})
 sql_files.each do |sql_file|
   options["payload"] = sql_file
   results << @action.run!(script, options)

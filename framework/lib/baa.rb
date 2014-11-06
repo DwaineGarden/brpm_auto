@@ -1020,9 +1020,12 @@ class NSH < BrpmAutomation
     @nsh_path = nsh_path
     @test_mode = test_mode
     @verbose = get_option(options, "verbose", false)
+    @max_time = get_option(options, "max_time", 3600)
     @opts = options
     @run_key = get_option(options,"timestamp",Time.now.strftime("%Y%m%d%H%M%S"))
     super(get_option(options,"output_file", nil))
+    outf = get_option(options,"output_file", SS_output_file)
+    @output_dir = File.dirname(outf)
     insure_proxy
   end
 
@@ -1066,7 +1069,7 @@ class NSH < BrpmAutomation
     if (cred_errors?(cred_status))
       # get cred
       cmd = "#{bl_cred_path} cred -acquire -profile #{get_option(@opts,"bl_profile")} -username #{get_option(@opts,"bl_username")} -password #{get_option(@opts,"bl_password")}"
-      res = run_shell(cmd)
+      res = execute_shell(cmd)
       puts display_result(res) if @test_mode
       result = "Acquiring new credential"
     else
@@ -1087,7 +1090,7 @@ class NSH < BrpmAutomation
   def nsh(script_path, raw_result = false)
     cmd = "#{@nsh_path}/bin/nsh #{script_path}"
     cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
-    result = run_shell(cmd)
+    result = execute_shell(cmd)
     return result if raw_result
     display_result(result)
   end
@@ -1124,7 +1127,7 @@ class NSH < BrpmAutomation
     cmd = "#{@nsh_path}/bin/ncp -vrA #{src_path} -h #{target_hosts.join(" ")} -d \"#{target_path}\""
     cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
     log cmd if @verbose
-    result = run_shell(cmd)
+    result = execute_shell(cmd)
     display_result(result)
   end
 
@@ -1139,14 +1142,15 @@ class NSH < BrpmAutomation
   # ==== Returns
   #
   # * results of command per host
-  def nexec_win(target_hosts, target_path, command)
+  def nexec_win(target_hosts, target_path, command, options = {})
     # if source_script exists, transport it to the hosts
+    max_time = get_option(options,"max_time", @max_time)
     result = "Running: #{command}\n"
     target_hosts.each do |host|
       cmd = "#{@nsh_path}/bin/nexec #{host} cmd /c \"cd #{target_path}; #{command}\""
       cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
       result += "Host: #{host}\n"
-      res = run_shell(cmd)
+      res = execute_shell(cmd, max_time)
       result += display_result(res)
     end
     result
@@ -1159,15 +1163,22 @@ class NSH < BrpmAutomation
   # * +target_hosts+ - blade hostnames to copy to
   # * +script_path+ - nsh path to the script
   # * +target_path+ - path from which to execute the script on the remote host
+  # * +options+ - hash of options (raw_result = true, max_time in seconds to execute)
   #
   # ==== Returns
   #
   # * results of command per host
-  def script_exec(target_hosts, script_path, target_path)
-    #server_file = create_temp_script(target_hosts.join("\n"), {"script_type" => "servers", "temp_path" => "/tmp"})
-    cmd = "#{@nsh_path}/bin/scriptutil -d \"#{target_path}\" -h #{target_hosts.join(" ")} -s #{script_path} -H \"Results from: %h\""
-    res = run_shell(cmd)
-    result = display_result(res)
+  def script_exec(target_hosts, script_path, target_path, options = {})
+    max_time = get_option(options,"max_time", @max_time)
+    raw_result = get_option(options,"raw_result", false)
+    script_dir = File.dirname(script_path)
+    err_file = touch_file("#{script_dir}/nsh_errors_#{Time.now.strftime("%Y%m%d%H%M%S%L")}.txt")
+    out_file = touch_file("#{script_dir}/nsh_out_#{Time.now.strftime("%Y%m%d%H%M%S%L")}.txt")
+    cmd = "#{@nsh_path}/bin/scriptutil -d \"#{target_path}\" -h #{target_hosts.join(" ")} -H \"Results from: %h\" -s #{script_path} 2>#{err_file} | tee #{out_file}"
+    result = execute_shell(cmd)
+    result["stdout"] = "#{result["stdout"]}\n#{File.open(out_file).read}"
+    result["stderr"] = "#{result["stderr"]}\n#{File.open(err_file).read}"
+    result = display_result(result) unless raw_result
     result
   end
 
@@ -1183,14 +1194,14 @@ class NSH < BrpmAutomation
   #
   # * output of script
   #
-  def script_execute_body(target_hosts, script_body, target_path)
+  def script_execute_body(target_hosts, script_body, target_path, options = {})
     script_file = "nsh_script_#{Time.now.strftime("%Y%m%d%H%M%S")}.sh"
     full_path = "#{File.dirname(SS_output_file)}/#{script_file}"
     fil = File.open(full_path,"w+")
     #fil.write script_body.gsub("\r", "")
     fil.flush
     fil.close
-    result = script_exec(target_hosts, full_path, target_path)
+    result = script_exec(target_hosts, full_path, target_path, options)
   end
 
   # Runs a simple ls command in NSH
@@ -1274,6 +1285,41 @@ class NSH < BrpmAutomation
     end
     path
   end
+  
+  # Executes a command via shell in a timeout loop
+  #
+  # ==== Attributes
+  #
+  # * +platform_info+ - hash of plaform info e.g. {"transport" => "nsh", "platform" => "windows", "language" => "batch"}
+  # ==== Returns
+  #
+  # * command_run hash {stdout => <results>, stderr => any errors, pid => process id, status => exit_code}
+  def execute_shell(command, max_time = @max_time)
+    cmd_result = {"stdout" => "","stderr" => "", "pid" => "", "status" => "1"}
+    cmd_result["stdout"] = "Running #{command}\n"
+    output_dir = File.join(@output_dir,"#{precision_timestamp}")
+    errfile = "#{output_dir}_stderr.txt"
+    cmd_result["stdout"] += "Script Output:\n"
+    begin
+      orig_stderr = $stderr.clone
+      $stderr.reopen File.open(errfile, 'a' )
+      timer_status = Timeout.timeout(max_time) {
+        cmd_result["stdout"] += `#{command}`
+        status = $?
+        cmd_result["pid"] = status.pid
+        cmd_result["status"] = status.to_i
+      }
+      stderr = File.open(errfile).read
+      cmd_result["stderr"] = stderr if stderr.length > 2
+    rescue Exception => e
+      $stderr.reopen orig_stderr
+      cmd_result["stderr"] = "ERROR\n#{e.message}\n#{e.backtrace}"
+    ensure
+      $stderr.reopen orig_stderr
+    end
+    File.delete(errfile)
+    cmd_result
+  end
 
   private
 
@@ -1287,6 +1333,12 @@ class NSH < BrpmAutomation
     fil.flush
     fil.close
     full_path
+  end
+  
+  def touch_file(file_path)
+    fil = File.open(file_path,"w+")
+    fil.close
+    file_path
   end
 
 end
