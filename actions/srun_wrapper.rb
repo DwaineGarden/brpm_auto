@@ -72,19 +72,6 @@ def get_platform_temp_dir(os_plaform)
   os = "windows" if os_platform.downcase =~ /win/
   DEFAULT_TEMP_DIR[os]
 end
-  
-def get_keyword_items
-  keywords = ["RPM_PARAMS_FILTER","RPM_SRUN_WRAPPER","RPM_INCLUDE"]
-  result = {}
-  keywords.each do |keyword|
-    reg = /\$\$\{#{keyword}\=.*\}\$\$/
-    items = @action_txt.scan(reg)
-    items.each do |item|
-      result[keyword] = item.gsub("$${#{keyword}=","").gsub("}$$","").chomp("\"").gsub(/^\"/,"")
-    end
-  end
-  result
-end  
 
 def get_transfer_properties(keyword_filter = DEFAULT_PARAMS_FILTER, strip_filter = false)
   result = {}
