@@ -320,7 +320,45 @@ class BrpmAutomation
     @p_obj.private_properties.each{|k,v| txt.gsub!(v,"-private-") }
     txt
   end
-
+  
+  # Creates a pid-file semaphore to govern global execution
+  # 
+  # ==== Attributes
+  #
+  # * +semaphore_key+ - string to name semaphore
+  # ==== Returns
+  #
+  # true if semaphore created, false if already exists
+  #
+  def semaphore(semaphore_key)
+    return false if @p_obj.nil?
+    semaphore_dir = "#{p_obj.SS_automation_results_dir}/semaphores"
+    semaphore_name = "#{semaphore_key}.pid"
+    File.mkdir(semaphore_dir) unless File.exist?(semaphore_dir)
+    return false if File.exist?(File.join(semaphore_dir, semaphore_name))
+    fil = File.open(File.join(semaphore_dir, semaphore_name), "w+")
+    fil.puts precision_timestamp
+    fil.flush
+    fil.close
+    return true
+  end
+  
+  # Clears a pid-file semaphore to govern global execution
+  # 
+  # ==== Attributes
+  #
+  # * +semaphore_key+ - string to name semaphore
+  # ==== Returns
+  #
+  # true if semaphore deleted, false if it doesn't exist
+  #
+  def clear_semaphore(semaphore_key)
+    semaphore_dir = "#{p_obj.SS_automation_results_dir}/semaphores"
+    semaphore_name = "#{semaphore_key}.pid"
+    return false unless File.exist?(File.join(semaphore_dir, semaphore_name))
+    File.delete(File.join(semaphore_dir, semaphore_name))
+    return true
+  end
 end
 
 # Abstraction class for the step params
@@ -602,7 +640,7 @@ class Param
     fil.close
   end
 
-  # Resolved embedded properties in a string
+  # Resolves embedded properties in a string
   #  
   # ==== Attributes
   #

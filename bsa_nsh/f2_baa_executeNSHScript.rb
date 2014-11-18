@@ -1,27 +1,18 @@
-#---------------------- f2_baa_deployArtifacts -----------------------#
+#---------------------- f2_baa_executeNSHScript -----------------------#
 # Description: Deploys a bl_package created in packaging step
 #  Consumes properties:
 #    @p.util_brpm_host_name 
 
 #---------------------- Arguments --------------------------#
 ###
-# job_name:
-#   name: Job (manual name as override)
-#   type: in-text
-#   position: A1:C1
-#   required: no
 # execute_now:
-#   name: Execute immediately
+#   name: Execute the script now or wait
 #   type: in-list-single
 #   list_pairs: yes,yes|no,no
-#   position: A2:C2
-# job_status:
-#   name: Job Status
-#   type: out-text
 #   position: A1:C1
-# target_status:
-#   name: Target Status
-#   type: out-table
+# job_status:
+#   name: Job status
+#   type: out-file
 #   position: A2:F2
 # job_log:
 #   name: Job Log
@@ -58,6 +49,10 @@ require "#{@p.SS_script_support_path}/baa_utilities"
 
 #---------------------- Variables --------------------------#
 # Assign local variables to properties and script arguments
+#=> Abstract all the BAA integration variables
+baa_config = YAML.load(SS_integration_details)
+baa_password = decrypt_string_with_prefix(SS_integration_password_enc)
+baa_role = baa_config["role"]
 
 #=> ------------- IMPORTANT ------------------- <=#
 #- the package_id comes from the JSON params set in packaging step
@@ -68,60 +63,38 @@ servers = @p.servers.split(",").collect{|s| s.strip}
 group_path = "/BRPM/#{@p.SS_application}/#{@p.SS_component}/#{@p.SS_environment}"
 #- Item_name is the same for template, package and job and based on component version
 component_version = @p.get("SS_component_version")
-artifact_paths = @auto.split_nsh_path(@p.step_version_artifact_url)
-item_name = component_version == "" ? "#{@p.SS_component}_#{@p.request_id}_#{@timestamp}" : "#{@p.SS_component}_#{@p.request_id}_#{component_version}"
-# override item name if specified
-item_name = @p.get("job_name", item_name)
-
-#=> Abstract all the BAA integration variables
-baa_config = YAML.load(SS_integration_details)
-baa_password = decrypt_string_with_prefix(SS_integration_password_enc)
-baa_role = baa_config["role"]
-
+item_name = component_version == "" ? "#{@p.SS_component}_#{@p.request_id}_#{@timestamp}" : "#{@p.SS_component}_NSH_#{@p.request_id}_#{component_version}"
+nsh_script_path = @p.get("NSH_DEPLOY_SCRIPT")
+nsh_script_name = File.basename(nsh_script_path)
 #=> Choose to execute or save job for later
 execute_now = @p.get("execute_now", "yes") == "yes"
 #=> Build the properties
-properties = {}
-@params.select{|l,v| l.start_with?("BAA_") }.each{|k,v| properties[k] = @p.get(k) }
-#=> Remap the abstraction property for the deployment path
-property_name = "BAA_BASE_PATH" # this will be the property name in the package references ??BAA_BASE_PATH??
-properties[property_name] = @p.get("BAA_DEPLOY_PATH", "/mnt/baa/Sales-Billin/DEV")
-  
-#---------------------- Main Body --------------------------#
-@auto.message_box "Creating/Executing Package Job", "title"
+job_params = []
 
+#---------------------- Main Body --------------------------#
+@auto.message_box "Executing NSHScript Job - #{nsh_script_name}", "title"
+@auto.log "JobParams to transfer:"
+# add standard RPM properties
+["SS_application", "SS_component", "SS_environment", "SS_component_version", "SS_request_number"].each do |prop|
+  job_params << @p.get(prop)
+  @auto.log "#{prop} => #{@p.get(prop)}"
+end
+version_dir = "#{@p.get("BAA_DEPLOY_PATH")}/#{@p.SS_application}/#{@p.SS_component_version}"
+@auto.log "VERSION_DIR => #{version_dir}"
+job_params << version_dir
 # Deploy the package created to the targets
 @baa = BAA.new(SS_integration_dns, SS_integration_username, baa_password, baa_role, {"output_file" => @p.SS_output_file})
 session_id = @baa.session_id
 
-options = {"properties" => properties, "execute_now" => true }
-job_result = @baa.deploy_package(item_name, baa_package_id, group_path, servers, options)
+options = {"execute_now" => true }
+job_result = @baa.create_nsh_script_job(item_name, group_path, nsh_script_name, File.dirname(nsh_script_path), job_params, servers, options)
 @auto.log job_result.inspect
 pack_response "job_status", job_result["status"]
-if job_result.has_key?("target_status")
-  table_data = [['', 'Target Type', 'Name', 'Had Errors?', 'Had Warnings?', 'Need Reboot?', 'Exit Code']]
-  target_count = 0
-  job_result["target_status"].each_pair do |k3, v3|
-    v3.each_pair do |k1, v1|
-      table_data << ['', k3, k1, v1['HAD_ERRORS'], v1['HAD_WARNINGS'], v1['REQUIRES_REBOOT'], v1['EXIT_CODE*']]
-      target_count = target_count + 1
-    end
-  end
-  pack_response "target_status", {:totalItems => target_count, :perPage => '10', :data => table_data }
-end
 log_file_path = File.join(@p.SS_output_dir, "baa_#{job_result["job_run_id"]}.log")
-results_csv = @baa.export_deploy_job_results(group_path, item_name, job_result["job_run_id"], log_file_path)
-if results_csv
-  pack_response "job_log", log_file_path
-else
-  @auto.log("Could not fetch job results...")
-end
 
 
 #=> IMPORTANT - here is where we store the job_id for the other steps
-@p.assign_local_param("job_id_#{@p.SS_component}", job_result["job_db_key"])
-@p.assign_local_param("job_run_url_#{@p.SS_component}", job_result["job_run_url"])
-@p.save_local_params
+# @p.save_local_params
 
 
 

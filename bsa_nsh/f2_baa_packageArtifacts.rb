@@ -13,11 +13,6 @@
 #   name: server to pull artifacts from
 #   position: A2:C2
 #   type: in-text
-# BAA_BASE_PATH:
-#   name: Base path for source files (all paths relative to this)
-#   type: in-text
-#   position: A3:E3
-#   required: yes
 # uploadfile_1:
 #   name: File 1
 #   type: in-file
@@ -72,7 +67,6 @@ servers = @p.servers.split(",").collect{|s| s.strip}
 group_path = "/BRPM/#{@p.SS_application}/#{@p.SS_component}"
 #- Item_name is the same for template, package and job and based on component version
 component_version = @p.get("SS_component_version")
-artifact_paths = @auto.split_nsh_path(@p.step_version_artifact_url)
 item_name = component_version == "" ? "#{@p.SS_component}_#{@p.request_id}_#{@timestamp}" : "#{@p.SS_component}_#{@p.request_id}_#{component_version}"
 # override item name if specified
 item_name = @p.get("job_name", item_name)
@@ -81,9 +75,10 @@ item_name = @p.get("job_name", item_name)
 baa_config = YAML.load(SS_integration_details)
 artifact_paths = @auto.split_nsh_path(@p.step_version_artifact_url)
 staging_server = @p.get("staging_server", artifact_paths[0])
-base_path = @p.get("BAA_BASE_PATH", "/mnt/deploy") #base path for pulling artifacts
 property_name = "BAA_BASE_PATH"
-properties =  @params.select{|l,v| l.start_with?("BAA_") }
+base_path = @p.get(property_name, "/mnt/deploy") #base path for pulling artifacts
+properties = {}
+@params.select{|l,v| l.start_with?("BAA_") }.each{|k,v| properties[k] = @p.get(k) }
 
 #---------------------- Main Body --------------------------#
 # Check if we have been passed a package id from a promotion
@@ -93,6 +88,9 @@ if baa_package_id != ""
 else
   @auto.message_box "Creating BlPackage", "title"
 end
+
+# During packaging, the source path is abstracted in path_from_nsh_path where the property_name value is substituted for the path
+#  like this ??BAA_BASE_PATH??/build/item
 # Build the list of files for the template
 @baa = BAA.new(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc),baa_config["role"],{"output_file" => @p.SS_output_file})
 files_to_deploy = []
