@@ -56,19 +56,21 @@ files_to_deploy << @srun.get_attachment_nsh_path(brpm_hostname, @rpm["uploadfile
 files_to_deploy << @srun.get_attachment_nsh_path(brpm_hostname, @rpm["uploadfile_2"]) if (@rpm["uploadfile_2"] && !@rpm["uploadfile_2"].empty?)
 
 if @rpm["nsh_paths"] != ""
+  staging_server = "none"
   @rpm["nsh_paths"].split(',').each do |path|
     ans = @srun.split_nsh_path(path)
     staging_server = ans[0] if ans[0].length > 2
-    files_to_deploy << "//#{staging_server}#{ans[1]}"
+    files_to_deploy << "//#{staging_server}#{ans[1].strip}" if ans[1].length > 2
   end
 end
 
 # This gets paths from the VersionTag
 unless artifact_path.nil?
+  staging_server = "none"
   artifact_paths[1].split(',').each do |path|
     ans = @srun.split_nsh_path(path)
     staging_server = ans[0] if ans[0].length > 2
-    files_to_deploy << "//#{staging_server}#{ans[1]}"
+    files_to_deploy << "//#{staging_server}#{ans[1].strip}" if ans[1].length > 2
   end
 end
 
