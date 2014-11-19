@@ -4,13 +4,22 @@
 # Copyright (c) BMC Software, Inc. 2001-2014
 # All Rights Reserved.
 ################################################################################
-#---------------------- f2_artifactDeploy -----------------------#
-# Description: Deploy Artifacts from Staging to target_servers
-# consumes "instance_#{component_name}" from staging step 
-# and deploys it to the targets (ALL Servers selected for step)
+#---------------------- f2_scriptExecute -----------------------#
+# Description: Executes a shell script on target_servers
+# Uses shebang info from script for execution like this:
+#  #![.py]/usr/bin/python %% 
+# Executes on ALL Servers selected for step
 #
 #---------------------- Arguments --------------------------#
 ###
+# upload_script:
+#   name: script_file 1
+#   type: in-file
+#   position: A1:F1
+# script_path:
+#   name: NSH Paths to script_file (fully qualified NSH paths)
+#   type: in-text
+#   position: A2:F2
 # output_status:
 #   name: status
 #   type: out-text
@@ -31,15 +40,13 @@ nsh_path = defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5/NSH"
 #---------------------- Methods ----------------------------#
 
 #---------------------- Variables --------------------------#
-brpm_hostname = @rpm["SS_base_url"].gsub(/^.*\:\/\//, "").gsub(/\:\d.*/, "")
-# Check if we have been passed a package instance 
-staging_info = @p.required("instance_#{@p.SS_component}")
-staging_path = staging_info["instance_path"]
+brpm_hostname = @p.SS_base_url.gsub(/^.*\:\/\//, "").gsub(/\:\d.*/, "")
+script_file = @srun.get_attachment_nsh_path(brpm_hostname, @p.upload_script) unless @p.upload_script == ""
+script_file = @p.get(script_path, script_file)
 
 #---------------------- Main Body --------------------------#
 # Deploy and unzip the package on all targets
-raise "Command_Failed: no artifacts staged in #{File.dirname(staging_path)}" if Dir.entries(File.dirname(staging_path)).size < 3
+raise "Command_Failed: no script to execute" if script_file.size < 3
 
-options = {"allow_md5_mismatch" => true}
-result = @srun.deploy_instance(staging_info, options)
-pack_response("output_status", "Successfully deployed - #{File.basename(staging_path)}")
+options = {"verbose" => true}
+result = @srun.execute_script(script_file, options)

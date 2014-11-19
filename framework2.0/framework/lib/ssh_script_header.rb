@@ -18,11 +18,284 @@ require 'rest-client'
 
 KEYWORD_SWITCHES = ["RPM_PARAMS_FILTER","RPM_SRUN_WRAPPER","RPM_INCLUDE"] unless defined?(KEYWORD_SWITCHES)
 
+module AutomationHeader
+  def load_helper(lib_path)
+    require "#{lib_path}/script_helper.rb"
+    require "#{lib_path}/file_in_utf.rb"
+  end
+
+  # BJB 7/6/2010 Append a user script to the bottom of this one for cap execution
+  def load_input_params(in_file)
+    params = YAML::load(File.open(in_file))
+    load_helper(params["SS_script_support_path"])
+    @params = strip_private_flag(params)
+    #BJB 11-10-14 Intercept to load framework
+    initialize_framework
+    @params
+  end
+
+  def get_param(key_name)
+    @params.has_key?(key_name) ? @params["key_name"] : ""
+  end
+
+  def output_separator(phrase)
+    divider = "==========================================================="
+    "\n#{divider.slice(0..20)} #{phrase} #{divider.slice(0..(divider.length-phrase.length))}\n"
+  end
+
+  def write_to(message, newline = true)
+    return if message.nil?
+    sep = newline ? "\n" : ""
+    @hand.print(message + sep)
+    @hand.flush
+    print(message + sep)
+  end
+
+  def create_output_file(params)
+    init_log_file(params)
+  end
+  
+  def init_log_file(params)
+    @output_file = params["SS_output_file"]
+    @hand = FileInUTF.open(@output_file, "a")
+  end
+
+  def run_command(params, command, arguments = nil, b_quiet = false)
+    command = command.is_a?(Array) ? command.flatten.first : command
+    command = "#{command} #{arguments}" unless arguments.nil?
+    #command += exit_code_failure(params)
+    @rpm.message_box "Run command: #{command}" unless b_quiet
+    if params.has_key?("SS_capistrano") #["direct_execute"].nil?
+      cmd_result = @rpm.execute_capistrano(command)  
+    else # Direct Execute the command
+      cmd_result = @rpm.execute_shell(command)
+    end
+    data_returned = @rpm.display_result(cmd_result)
+    data_returned = CGI::escapeHTML(data_returned)
+    @rpm.log data_returned  unless b_quiet
+    @rpm.message_box("Results End")  unless b_quiet
+    return data_returned
+  end
+
+  def get_server_list(params)
+    rxp = /server\d+_/
+    slist = {}
+    lastcur = -1
+    curname = ""
+    params.sort.reject{ |k| k[0].scan(rxp).empty? }.each_with_index do |server, idx|
+      cur = (server[0].scan(rxp)[0].gsub("server","").to_i * 0.001).round * 1000
+      if cur == lastcur
+      prop = server[0].gsub(rxp, "")
+      slist[curname][prop] = server[1]
+      else # new server
+        lastcur = cur
+        curname = server[1].chomp("0")
+        slist[curname] = {}
+      end
+    end
+    return slist
+  end
+
+  def get_servers_by_property_value(prop_name, value, servers = nil)
+    servers = get_server_list(@params) if servers.nil?
+    hosts = []
+    servers.each_with_index do |server, idx|
+      server[1].each do |prop, val|
+        hosts << server if (prop.downcase == prop_name.downcase && val.downcase.include?(value.downcase))
+      end
+    end
+    hosts
+  end
+
+  def get_selected_hosts(server_list = nil)
+    serverlist = get_server_list(@params) if serverlist.nil?
+    hosts = server_list.map{ |srv| srv[0] }
+  end
+
+  def get_integration_details(details_yml)
+    # SS_integration_details = "Project: TST\nDefault item: lots of stuff\n"
+    ans = {}
+    lines = details_yml.split("\n")
+    itemcnt = 1
+    lines.each do |item|
+      it = item.split(": ")
+      ans[it[0]] = it[1] if it.size == 2
+      ans["item_#{itemcnt.to_s}"] = it[0] unless it.size == 2
+      itemcnt += 1
+    end
+    ans
+  end
+
+  def set_property_flag(prop, value = nil)
+    acceptable_fields = ["name", "value", "environment", "component", "global", "private"]
+    flag = "#------ Block to Set Property ---------------#\n"
+    if value.nil?
+      flag += set_build_flag_data("properties", prop, acceptable_fields)
+    else
+      flag += "$$SS_Set_property{#{prop}=>#{value}}$$"
+    end
+    flag += "\n#------- End Set Property ---------------#\n"
+    write_to flag
+    flag
+  end
+
+  def set_server_flag(servers)
+    # servers = "server_name, env\ncserver2_name, env2"
+    acceptable_fields = ["name", "environment", "group"]
+    flag = "#------ Block to Set Servers ---------------#\n"
+    flag += set_build_flag_data("servers", servers, acceptable_fields)
+    flag += "\n#------ End Set Servers ---------------#\n"
+    write_to flag
+    flag
+  end
+
+  def set_component_flag(components)
+    # comps = "comp_name, version\ncomp2_name, version2"
+    flag = "#------ Block to Set Components ---------------#\n"
+    acceptable_fields = ["name", "version", "environment", "application"]
+    flag += set_build_flag_data("components", components, acceptable_fields)
+    flag += "\n#------ End Set Components ---------------#\n"
+    write_to flag
+    flag
+  end
+
+  def set_titles_acceptable?(cur_titles, acceptable_titles)
+    cur_titles.each.reject{ |cur| acceptable_titles.include?(cur)}.count == 0
+  end
+
+  def set_build_flag_data(set_item, set_data, acceptable_titles)
+    flag = ""; msg = ""
+    lines = set_data.split("\n")
+    titles = lines[0].split(",").map{ |it| it.strip }
+    if set_titles_acceptable?(titles, acceptable_titles)
+      flag += "$$SS_Set_#{set_item}{\n"
+      flag += "#{titles.join(", ")}\n"
+      lines[1..-1].each do |line|
+        if line.split(",").count == titles.count
+          flag += "#{line}\n" 
+        else
+          msg += "Skipped: #{line}"
+        end
+      end
+      flag += "}$$\n"
+    else
+      flag += "ERROR - Unable to set #{set_item} - improper format\n"
+    end
+    flag += msg
+  end
+
+  def set_application_version(prop, value)
+    # set_application_flag(app_name, version)
+    flag = "#------ Block to Set Application Version ---------------#\n"
+    flag += "$$SS_Set_application{#{prop}=>#{value}}$$"
+    flag += "\n#------ End Set Application ---------------#\n"
+    write_to(flag)
+    flag
+  end
+
+  def pack_response(argument_name, response)
+    flag = "#------ Block to Set Pack Response ---------------#\n"
+    unless argument_name.nil?    
+      if response.is_a?(Hash)
+        # Used for out-table output parameter
+        flag += "$$SS_Pack_Response{#{argument_name}@@#{response.to_json}}$$"
+      else
+        flag += "$$SS_Pack_Response{#{argument_name}=>#{response}}$$"
+      end        
+    end
+    flag += "\n#------- End Set Pack Response Block ---------------#\n"
+    write_to flag
+    flag
+  end
+
+
+  def hostname_from_url(url)
+    url_frag = url.split(":")
+    url = url_frag.size > 1 ? url_frag[1] : url_frag[0]
+    url.gsub("//","")
+  end
+
+
+  def fetch_url(path, testing=false)
+    ss_url = @params["SS_base_url"] #  Leave this alone  
+    tmp = (path.include?("://") ? path : "#{ss_url}/#{path}").gsub(" ", "%20").gsub("&", "&amp;")
+    jobUri = URI.parse(tmp)
+    puts "Fetching: #{jobUri}"
+    request = Net::HTTP.get(jobUri) unless testing
+  end
+
+  def read_shebang(os_platform, action_txt)
+    if os_platform.downcase =~ /win/
+      result = {"ext" => ".bat", "cmd" => "cmd /c", "shebang" => ""}
+    else
+      result = {"ext" => ".sh", "cmd" => "/bin/bash ", "shebang" => ""}
+    end
+    if action_txt.include?("#![") # Custom shebang
+      shebang = action_txt.scan(/\#\!.*/).first
+      result["shebang"] = shebang
+      items = shebang.scan(/\#\!\[.*\]/)
+      if items.size > 0
+        ext = items[0].gsub("#![","").gsub("]","")
+        result["ext"] = ext if ext.start_with?(".")
+        result["cmd"] = shebang.gsub(items[0],"").strip
+      else
+        result["cmd"] = shebang
+      end      
+    elsif action_txt.include?("#!/") # Basic shebang
+      result["shebang"] = "standard"
+    else # no shebang
+      result["shebang"] = "none"
+    end
+    result
+  end
+  
+  # Pretty display of cmd_result object
+  #
+  # ==== Attributes
+  #
+  # * +cmd_result+ - hash of results e.g. {"stdout" => "results", "stderr" => "", "pid" => "10245"}
+  # ==== Returns
+  #
+  # * text output of result
+  def display_result(cmd_result)
+    return "No results" if cmd_result.nil?
+    result = ""
+    result = "ExitCode: #{cmd_result["status"]} - " if cmd_result.has_key?("status")
+    result += "Process: #{cmd_result["pid"]}\nSTDOUT:\n#{cmd_result["stdout"]}\n"
+    result = "STDERR:\n #{cmd_result["stderr"]}\n#{result}" if cmd_result["stderr"].length > 2
+    result
+  end
+
+    
+  def get_keyword_items(script_content = nil)
+    result = {}
+    content = script_content unless script_content.nil?
+    content = File.open(@params["SS_script_file"]).read if script_content.nil?
+    KEYWORD_SWITCHES.each do |keyword|
+      reg = /\$\$\{#{keyword}\=.*\}\$\$/
+      items = content.scan(reg)
+      items.each do |item|
+        result[keyword] = item.gsub("$${#{keyword}=","").gsub("}$$","").chomp("\"").gsub(/^\"/,"")
+      end
+    end
+    result
+  end
+  
+  def initialize_framework
+    # Create a new output file and note it in the return message: sets @hand
+    init_log_file(@params)
+    @rpm = BrpmFramework.new(@params)
+  end
+
+end
+
 # The base class for automation
 # Provides convenience routines for working in BRPM
 class BrpmFramework
   EXIT_CODE_FAILURE = 'Exit_Code_Failure' unless defined?(EXIT_CODE_FAILURE)
 
+  extend AutomationHeader
+  
   # Initialize an instance of the class
   #
   # ==== Attributes
@@ -582,6 +855,42 @@ class BrpmFramework
     txt.gsub(" ", "_").gsub(/\,|\[|\]/,"")
   end
 
+  # Servers in params need to be filtered by OS
+  def get_platform_servers(os_platform)
+    servers = get_server_list(@params)
+    result = servers.select{|k,v| v["os_platform"].downcase =~ /#{os_platform}/ }
+  end
+
+  # Builds a hash of servers and properties from params
+  # 
+  # ==== Attributes
+  #
+  # * +params+ - optional, defaults to the @params from step
+  # ==== Returns
+  #
+  # Hash of servers and properties, like this:
+  # servers = {"ip-172-31-36-115.ec2.internal"=>{"dns"=>"ip-172-31-36-115.ec2.internal", "ip_address"=>"", "os_platform"=>"Linux", "CHANNEL_ROOT"=>"/mnt/deploy"}, 
+  # "ip-172-31-45-229.ec2.internal"=>{"dns"=>"ip-172-31-45-229.ec2.internal", "ip_address"=>"", "os_platform"=>"Linux", "CHANNEL_ROOT"=>"/mnt/deploy"}}
+  #  
+  def get_server_list(params = @params)
+    rxp = /server\d+_/
+    slist = {}
+    lastcur = -1
+    curname = ""
+    params.sort.reject{ |k| k[0].scan(rxp).empty? }.each_with_index do |server, idx|
+      cur = (server[0].scan(rxp)[0].gsub("server","").to_i * 0.001).round * 1000
+      if cur == lastcur
+        prop = server[0].gsub(rxp, "")
+        slist[curname][prop] = server[1]
+      else # new server
+        lastcur = cur
+        curname = server[1].chomp("0")
+        slist[curname] = {}
+      end
+    end
+    return slist
+  end
+
   private
   
   def exit_code_failure
@@ -867,282 +1176,6 @@ class NSHTransport < BrpmFramework
     fil.flush
     fil.close
     full_path
-  end
-
-end
-
-module AutomationHeader
-  def load_helper(lib_path)
-    require "#{lib_path}/script_helper.rb"
-    require "#{lib_path}/file_in_utf.rb"
-  end
-
-  # BJB 7/6/2010 Append a user script to the bottom of this one for cap execution
-  def load_input_params(in_file)
-    params = YAML::load(File.open(in_file))
-    load_helper(params["SS_script_support_path"])
-    @params = strip_private_flag(params)
-    #BJB 11-10-14 Intercept to load framework
-    initialize_framework
-    @params
-  end
-
-  def get_param(key_name)
-    @params.has_key?(key_name) ? @params["key_name"] : ""
-  end
-
-  def output_separator(phrase)
-    divider = "==========================================================="
-    "\n#{divider.slice(0..20)} #{phrase} #{divider.slice(0..(divider.length-phrase.length))}\n"
-  end
-
-  def write_to(message, newline = true)
-    return if message.nil?
-    sep = newline ? "\n" : ""
-    @hand.print(message + sep)
-    @hand.flush
-    print(message + sep)
-  end
-
-  def create_output_file(params)
-    init_log_file(params)
-  end
-  
-  def init_log_file(params)
-    @output_file = params["SS_output_file"]
-    @hand = FileInUTF.open(@output_file, "a")
-  end
-
-  def run_command(params, command, arguments = nil, b_quiet = false)
-    command = command.is_a?(Array) ? command.flatten.first : command
-    command = "#{command} #{arguments}" unless arguments.nil?
-    #command += exit_code_failure(params)
-    @rpm.message_box "Run command: #{command}" unless b_quiet
-    if params.has_key?("SS_capistrano") #["direct_execute"].nil?
-      cmd_result = @rpm.execute_capistrano(command)  
-    else # Direct Execute the command
-      cmd_result = @rpm.execute_shell(command)
-    end
-    data_returned = @rpm.display_result(cmd_result)
-    data_returned = CGI::escapeHTML(data_returned)
-    @rpm.log data_returned  unless b_quiet
-    @rpm.message_box("Results End")  unless b_quiet
-    return data_returned
-  end
-
-  def get_server_list(params)
-    rxp = /server\d+_/
-    slist = {}
-    lastcur = -1
-    curname = ""
-    params.sort.reject{ |k| k[0].scan(rxp).empty? }.each_with_index do |server, idx|
-      cur = (server[0].scan(rxp)[0].gsub("server","").to_i * 0.001).round * 1000
-      if cur == lastcur
-      prop = server[0].gsub(rxp, "")
-      slist[curname][prop] = server[1]
-      else # new server
-        lastcur = cur
-        curname = server[1].chomp("0")
-        slist[curname] = {}
-      end
-    end
-    return slist
-  end
-
-  def get_servers_by_property_value(prop_name, value, servers = nil)
-    servers = get_server_list(@params) if servers.nil?
-    hosts = []
-    servers.each_with_index do |server, idx|
-      server[1].each do |prop, val|
-        hosts << server if (prop.downcase == prop_name.downcase && val.downcase.include?(value.downcase))
-      end
-    end
-    hosts
-  end
-
-  def get_selected_hosts(server_list = nil)
-    serverlist = get_server_list(@params) if serverlist.nil?
-    hosts = server_list.map{ |srv| srv[0] }
-  end
-
-  def get_integration_details(details_yml)
-    # SS_integration_details = "Project: TST\nDefault item: lots of stuff\n"
-    ans = {}
-    lines = details_yml.split("\n")
-    itemcnt = 1
-    lines.each do |item|
-      it = item.split(": ")
-      ans[it[0]] = it[1] if it.size == 2
-      ans["item_#{itemcnt.to_s}"] = it[0] unless it.size == 2
-      itemcnt += 1
-    end
-    ans
-  end
-
-  def set_property_flag(prop, value = nil)
-    acceptable_fields = ["name", "value", "environment", "component", "global", "private"]
-    flag = "#------ Block to Set Property ---------------#\n"
-    if value.nil?
-      flag += set_build_flag_data("properties", prop, acceptable_fields)
-    else
-      flag += "$$SS_Set_property{#{prop}=>#{value}}$$"
-    end
-    flag += "\n#------- End Set Property ---------------#\n"
-    write_to flag
-    flag
-  end
-
-  def set_server_flag(servers)
-    # servers = "server_name, env\ncserver2_name, env2"
-    acceptable_fields = ["name", "environment", "group"]
-    flag = "#------ Block to Set Servers ---------------#\n"
-    flag += set_build_flag_data("servers", servers, acceptable_fields)
-    flag += "\n#------ End Set Servers ---------------#\n"
-    write_to flag
-    flag
-  end
-
-  def set_component_flag(components)
-    # comps = "comp_name, version\ncomp2_name, version2"
-    flag = "#------ Block to Set Components ---------------#\n"
-    acceptable_fields = ["name", "version", "environment", "application"]
-    flag += set_build_flag_data("components", components, acceptable_fields)
-    flag += "\n#------ End Set Components ---------------#\n"
-    write_to flag
-    flag
-  end
-
-  def set_titles_acceptable?(cur_titles, acceptable_titles)
-    cur_titles.each.reject{ |cur| acceptable_titles.include?(cur)}.count == 0
-  end
-
-  def set_build_flag_data(set_item, set_data, acceptable_titles)
-    flag = ""; msg = ""
-    lines = set_data.split("\n")
-    titles = lines[0].split(",").map{ |it| it.strip }
-    if set_titles_acceptable?(titles, acceptable_titles)
-      flag += "$$SS_Set_#{set_item}{\n"
-      flag += "#{titles.join(", ")}\n"
-      lines[1..-1].each do |line|
-        if line.split(",").count == titles.count
-          flag += "#{line}\n" 
-        else
-          msg += "Skipped: #{line}"
-        end
-      end
-      flag += "}$$\n"
-    else
-      flag += "ERROR - Unable to set #{set_item} - improper format\n"
-    end
-    flag += msg
-  end
-
-  def set_application_version(prop, value)
-    # set_application_flag(app_name, version)
-    flag = "#------ Block to Set Application Version ---------------#\n"
-    flag += "$$SS_Set_application{#{prop}=>#{value}}$$"
-    flag += "\n#------ End Set Application ---------------#\n"
-    write_to(flag)
-    flag
-  end
-
-  def pack_response(argument_name, response)
-    flag = "#------ Block to Set Pack Response ---------------#\n"
-    unless argument_name.nil?    
-      if response.is_a?(Hash)
-        # Used for out-table output parameter
-        flag += "$$SS_Pack_Response{#{argument_name}@@#{response.to_json}}$$"
-      else
-        flag += "$$SS_Pack_Response{#{argument_name}=>#{response}}$$"
-      end        
-    end
-    flag += "\n#------- End Set Pack Response Block ---------------#\n"
-    write_to flag
-    flag
-  end
-
-
-  def hostname_from_url(url)
-    url_frag = url.split(":")
-    url = url_frag.size > 1 ? url_frag[1] : url_frag[0]
-    url.gsub("//","")
-  end
-
-
-  def fetch_url(path, testing=false)
-    ss_url = @params["SS_base_url"] #  Leave this alone  
-    tmp = (path.include?("://") ? path : "#{ss_url}/#{path}").gsub(" ", "%20").gsub("&", "&amp;")
-    jobUri = URI.parse(tmp)
-    puts "Fetching: #{jobUri}"
-    request = Net::HTTP.get(jobUri) unless testing
-  end
-
-  def read_shebang(os_platform, action_txt)
-    if os_platform.downcase =~ /win/
-      result = {"ext" => ".bat", "cmd" => "cmd /c", "shebang" => ""}
-    else
-      result = {"ext" => ".sh", "cmd" => "/bin/bash ", "shebang" => ""}
-    end
-    if action_txt.include?("#![") # Custom shebang
-      shebang = action_txt.scan(/\#\!.*/).first
-      result["shebang"] = shebang
-      items = shebang.scan(/\#\!\[.*\]/)
-      if items.size > 0
-        ext = items[0].gsub("#![","").gsub("]","")
-        result["ext"] = ext if ext.start_with?(".")
-        result["cmd"] = shebang.gsub(items[0],"").strip
-      else
-        result["cmd"] = shebang
-      end      
-    elsif action_txt.include?("#!/") # Basic shebang
-      result["shebang"] = "standard"
-    else # no shebang
-      result["shebang"] = "none"
-    end
-    result
-  end
-  
-  # Pretty display of cmd_result object
-  #
-  # ==== Attributes
-  #
-  # * +cmd_result+ - hash of results e.g. {"stdout" => "results", "stderr" => "", "pid" => "10245"}
-  # ==== Returns
-  #
-  # * text output of result
-  def display_result(cmd_result)
-    return "No results" if cmd_result.nil?
-    result = ""
-    result = "ExitCode: #{cmd_result["status"]} - " if cmd_result.has_key?("status")
-    result += "Process: #{cmd_result["pid"]}\nSTDOUT:\n#{cmd_result["stdout"]}\n"
-    result = "STDERR:\n #{cmd_result["stderr"]}\n#{result}" if cmd_result["stderr"].length > 2
-    result
-  end
-
-  # Servers in params need to be filtered by OS
-  def get_platform_servers(os_platform)
-    servers = get_server_list(@params)
-    result = servers.select{|k,v| v["os_platform"].downcase =~ /#{os_platform}/ }
-  end
-    
-  def get_keyword_items(script_content = nil)
-    result = {}
-    content = script_content unless script_content.nil?
-    content = File.open(@params["SS_script_file"]).read if script_content.nil?
-    KEYWORD_SWITCHES.each do |keyword|
-      reg = /\$\$\{#{keyword}\=.*\}\$\$/
-      items = content.scan(reg)
-      items.each do |item|
-        result[keyword] = item.gsub("$${#{keyword}=","").gsub("}$$","").chomp("\"").gsub(/^\"/,"")
-      end
-    end
-    result
-  end
-  
-  def initialize_framework
-    # Create a new output file and note it in the return message: sets @hand
-    init_log_file(@params)
-    @rpm = BrpmFramework.new(@params)
   end
 
 end

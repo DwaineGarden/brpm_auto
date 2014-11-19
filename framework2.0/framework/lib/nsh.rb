@@ -126,8 +126,8 @@ class NSH < BrpmFramework
     display_result(result)
   end
 
-  # Runs a command via nsh on a windows target
-  #
+  # Runs a command via nsh on an array of targets
+  # targets should all be of same os platform
   # ==== Attributes
   #
   # * +target_hosts+ - blade hostnames to copy to
@@ -137,12 +137,14 @@ class NSH < BrpmFramework
   # ==== Returns
   #
   # * results of command per host
-  def nexec_win(target_hosts, target_path, command, options = {})
+  def nexec(target_hosts, target_path, command, options = {})
     # if source_script exists, transport it to the hosts
+    platform = get_option(options, "plaform", "linux")
     max_time = get_option(options,"max_time", @max_time)
     result = "Running: #{command}\n"
+    cmd = platform == "linux" ? "/bin/bash" : "cmd /c"
     target_hosts.each do |host|
-      cmd = "#{@nsh_path}/bin/nexec #{host} cmd /c \"cd #{target_path}; #{command}\""
+      cmd = "#{@nsh_path}/bin/nexec #{host} #{cmd} \"cd #{target_path}; #{command}\""
       cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
       result += "Host: #{host}\n"
       res = execute_shell(cmd, max_time)
