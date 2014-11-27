@@ -1,3 +1,5 @@
+require 'uri'
+
 # Base class for working with Subversion
 class Svn < BrpmFramework
   
@@ -6,15 +8,17 @@ class Svn < BrpmFramework
   # ==== Attributes
   #
   # * +svn+ - path to the svn executable
-  # * +options+ - hash of options includes:
-  #   url - url for svn repository
-  #   base_path - path for the local repository
-  #   username - repository user username
-  #   password - repository user password
-  #   verbose - true for verbose output (default = false)
-  #   rebase - starting path for checkouts
-  #   simulate - simulate command - echo it (default = false)
-  #   output_file - file for logging results
+  # * +params+ - params hash
+  # * +options+ - hash of options includes:...
+  #   url - url for svn repository...
+  #   base_path - path for the local repository...
+  #   username - repository user username...
+  #   password - repository user password...
+  #   verbose - true for verbose output (default = false)...
+  #   rebase - starting path for checkouts...
+  #   simulate - simulate command - echo it (default = false)...
+  #   prerun_lines - pass any text to run before svn (such as env variables)...
+  #   command_options - options to pass on command line e.g. --non-interactive
   #
   def initialize(svn, params, options)
     @url = required_option(options,"url")
@@ -22,16 +26,42 @@ class Svn < BrpmFramework
     user = get_option(options,"username")
     password = get_option(options,"password")
     @verbose = get_option(options,"verbose", false)
+    @prerun = get_option(options, "prerun_lines")
+    @command_options = get_option(options, "command_options")
+    @command_options += " --non-interactive" unless @command_options.include?("non-interactive")
     @rebase = get_option(options, "rebase")
     @rebase =  @url.split("/")[-1] if @rebase == ""
     @simulate = get_option(options,"simulate", false)
-    if user != "" && password != ""
-      @credential = " --username #{user} --password #{password}"
-    else
-      @credential = ""
-    end
+    make_credential(user, password)
     super(params)
     @svn = svn
+  end
+ 
+  # Parses a complex svn uri into parts
+  #
+  # ==== Attributes
+  #
+  # * +svn_url+ - svn url, like this:...
+  # https://user:password@host:port/path/path[#revision]...
+  # https://user:password@svn.nam.nsroot.net:9050/svn/16667/appreldep/RLM/artifacts/CATE[7777777]
+  # * +reset_values+ - resets the svn object parameters host, password etc from url (default=false)
+  #
+  # ==== Returns
+  #
+  # * parse result, like this:...
+  # {"uri_result" => URIGemResult, "revision" => ""}
+  def parse_uri(svn_uri, reset_values = false)
+    result = {"uri_result" => nil, "revision" => ""}
+    k = svn_uri.scan(/\[.*\]/)
+    result["revision"] = k[0].gsub("[","").gsub("]","") if k.size > 0
+    rev = k.size > 0 ? "[#{result["revision"]}]" : "__ZZZ__"
+    parts = URI.parse(svn_uri.gsub(rev,""))
+    result["uri_result"] = parts
+    if reset_values
+      @url = "#{parts.scheme}://#{parts.host}:#{parts.port}#{parts.path}"
+      make_credential(parts.user, parts.password) unless parts.password.nil?
+    end
+    result
   end
 
   # Performs an svn checkout
@@ -45,9 +75,32 @@ class Svn < BrpmFramework
   def checkout(init = false)
     FileUtils.cd(@base_path, :verbose => true)
     if init
-      cmd = "#{@svn} checkout #{@url} #{@rebase}  #{@credential} --non-interactive"
+      cmd = "#{@svn} checkout #{@url} #{@rebase}  #{@credential} #{@command_options}"
     else
-      cmd = "#{@svn} checkout --non-interactive"
+      cmd = "#{@svn} checkout  #{@command_options}"
+    end
+    process_cmd(cmd)
+  end
+
+  # Performs an svn export
+  #
+  # ==== Attributes
+  #
+  # * +revision+ - revision to export (options - defaults to latest)
+  # ==== Returns
+  #
+  # * command output
+  def export(target = "", revision = "")
+    url_items = URI.parse(@url)
+    target = url_items.path if target == ""    
+    cmd_options = @command_options
+    cmd_options += " --no-auth-cache --trust-server-cert --force" if cmd_options == " --non-interactive"
+    base_cmd = "#{@svn} export #{@url} #{@credential} #{@command_options}"
+    FileUtils.cd(@base_path, :verbose => true)
+    if revision == ""
+      cmd = "#{base_cmd} #{target} ."
+    else
+      cmd = "#{base_cmd} -r #{revision} #{target} ."
     end
     process_cmd(cmd)
   end
@@ -131,7 +184,7 @@ class Svn < BrpmFramework
     end
     "#{result}\n#{msg}"
   end
-  
+
   private        
   
   def process_cmd(cmd)
@@ -152,6 +205,14 @@ class Svn < BrpmFramework
     svn_terms = ["403 Forbidden", "SSL error code", "moorrreee"]
     found = output.scan(/#{svn_terms.join("|")}/)
     found.size > 0
+  end
+  
+  def make_credential(user, password)
+    if user.to_s != "" && password.to_s != ""
+      @credential = " --username #{user} --password #{password}"
+    else
+      @credential = ""
+    end
   end
 
 end

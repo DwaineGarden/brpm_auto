@@ -42,4 +42,10 @@ raise "Command_Failed: no artifacts staged in #{File.dirname(staging_path)}" if 
 
 options = {"allow_md5_mismatch" => true}
 result = @srun.deploy_instance(staging_info, options)
+@rpm.log "SRUN Result: #{result.inspect}"
+result.each do |key, val|
+  @p.assign_local_param(key, val)
+end
+@p.save_local_params
+
 pack_response("output_status", "Successfully deployed - #{File.basename(staging_path)}")

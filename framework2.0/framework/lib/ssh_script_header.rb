@@ -294,7 +294,7 @@ end
 class BrpmFramework
   EXIT_CODE_FAILURE = 'Exit_Code_Failure' unless defined?(EXIT_CODE_FAILURE)
 
-  extend AutomationHeader
+  include AutomationHeader
   
   # Initialize an instance of the class
   #
@@ -307,6 +307,7 @@ class BrpmFramework
     @base_rpm_url = @params["SS_base_url"]
     @token = defined?(AUTOMATION_API_TOKEN) ? AUTOMATION_API_TOKEN : @params["SS_api_token"]
     @output_file = @params["SS_output_file"]
+    load_helper(@params["SS_script_support_path"])
   end
   
   # Provides a simple failsafe for working with hash options
@@ -667,6 +668,7 @@ class BrpmFramework
     stamp = "#{Time.now.strftime("%H:%M:%S")}|#{log_type}> "
     message = "" if message.nil?
     message = message.inspect unless message.is_a?(String)
+    message = privatize(message)
     message.split("\n").map{|l| "#{l.length == 0 ? "" : stamp}#{l}"}.join("\n")
   end
 
@@ -680,22 +682,28 @@ class BrpmFramework
   # string
   #
   def privatize(txt)
-    return txt if @p_obj.nil?
-    @p_obj.private_properties.each{|k,v| txt.gsub!(v,"-private-") }
+    private_properties unless defined?(@private_props)
+    @private_props.each{|v| txt.gsub!(v,"-private-") }
+    txt.gsub!(decrypt_string_with_prefix(SS_integration_password_enc), "-private-") if defined?(SS_integration_password)
     txt
   end
 
-  # Returns a hash with properties that are marked private
-  # 
+  # Returns an array with property values that are marked private
+  #  initializes array if it doesn't exist
   # ==== Returns
   #
-  # hash of properties
+  # array of values
   #
-  def private_properties
-    return @private_props if defined?(@private_props)
-    @private_props = {}
-    @params.each{|k,v| @private_props[k.gsub("_encrypt","")] = @params[k.gsub("_encrypt","")] if k.end_with?("_encrypt") }
-    @private_props
+  def private_properties(private_value = nil)
+    if private_value.nil?
+      return @private_props if defined?(@private_props)
+    end
+    unless defined?(@private_props)  
+      @private_props = []
+      @params.each{|k,v| @private_props << @params[k.gsub("_encrypt","")] if k.end_with?("_encrypt") }
+    end
+    @private_props << private_value unless private_value.nil?
+    private_value.nil? ? @private_props : true
   end
 
   # Performs a get on the passed model
@@ -839,7 +847,7 @@ class BrpmFramework
   #
   # staging path or ERROR_ if force is false and path does not exist
   #  
-  def staging_dir(version, force = false)
+  def get_staging_dir(version, force = false)
     pattern = File.join(RPM_STAGING_PATH, "#{Time.now.year.to_s}", path_safe(get_param("SS_application")), path_safe(get_param("SS_component")), path_safe(version))
     if force
       FileUtils.mkdir_p(pattern)

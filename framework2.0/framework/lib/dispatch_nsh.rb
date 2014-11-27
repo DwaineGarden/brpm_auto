@@ -91,15 +91,17 @@ class NSHDispatcher < NSHTransport
   # * +os_platform+ - os platform
   # * +shebang+ - hash of processed shebang
   # * +properties+ - hash of properties to become environment variables
+  # * +options+ - hash of optionss, includes script_target - what the wrapper will call 
   # ==== Returns
   #
   # path to wrapper script
   #
-  def build_wrapper_script(os_platform, shebang, properties)
+  def build_wrapper_script(os_platform, shebang, properties, options = {})
     msg = "Environment variables from BRPM"
     wrapper = "srun_wrapper_#{precision_timestamp}"
+    alt_target = get_option(options,"script_target")
     cmd = shebang["cmd"]
-    target = File.basename(get_param("SS_script_file"))
+    target = alt_target == "" ? File.basename(get_param("SS_script_file")) : alt_target
     cmd = cmd.gsub("%%", target) if shebang["cmd"].end_with?("%%")
     cmd = "#{cmd} #{target}" unless shebang["cmd"].end_with?("%%")
     if os_platform =~ /win/
@@ -204,17 +206,15 @@ class NSHDispatcher < NSHTransport
   # ==== Attributes
   #
   # * +script_file+ - the path to the script or the text of the script
-  # * +options+ - hash of options, includes: 
+  # * +options+ - hash of options, includes: servers to override step servers
   # ==== Returns
   #
   # action output
   #
   def execute_script(script_file, options = {})
     # get the body of the action
-    content = script_file if script_file.include?("\n")
-    content = File.open(script_file).read unless script_file.include?("\n")
-    action_txt = ERB.new(content).result(binding)
-    script_file = "inline-text" if script_file.include?("\n")
+    content = File.open(script_file).read
+    seed_servers = get_option(options, "servers")
     keyword_items = get_keyword_items(content)
     params_filter = keyword_items.has_key?("RPM_PARAMS_FILTER") ? keyword_items["RPM_PARAMS_FILTER"] : DEFAULT_PARAMS_FILTER
     transfer_properties = get_transfer_properties(params_filter, strip_prefix = true)
@@ -222,7 +222,8 @@ class NSHDispatcher < NSHTransport
     log "# Script: #{script_file}"
     # Loop through the platforms
     OS_PLATFORMS.each do |os, os_details|
-      servers = get_platform_servers(os)
+      servers = get_platform_servers(os) if seed_servers == ""
+      servers = get_platform_servers(os, seed_servers) if seed_servers != ""
       message_box "OS Platform: #{os_details["name"]}"
       log "No servers selected for: #{os_details["name"]}" if servers.size == 0
       next if servers.size == 0
@@ -230,14 +231,14 @@ class NSHDispatcher < NSHTransport
       log "# Setting Properties:"
       add_channel_properties(transfer_properties, servers, os)
       brpd_compatibility(transfer_properties)
-      transfer_properties.each{|k,v| @rpm.log "\t#{k} => #{v}" }
-      shebang = read_shebang(os, action_txt)
+      transfer_properties.each{|k,v| log "\t#{k} => #{v}" }
+      shebang = read_shebang(os, content)
       log "Shebang: #{shebang.inspect}"
-      wrapper_path = build_wrapper_script(os, shebang, transfer_properties)
+      wrapper_path = build_wrapper_script(os, shebang, transfer_properties, {"script_target" => File.basename(script_file)})
       log "# Wrapper: #{wrapper_path}"
       target_path = nsh_path(transfer_properties["RPM_CHANNEL_ROOT"])
       log "# Copying script to target: "
-      clean_line_breaks(os, @params["SS_script_file"], action_txt)
+      clean_line_breaks(os, script_file, content)
       result = ncp(servers.keys, script_file, target_path)
       log result
       log "# Executing script on target via wrapper:"
@@ -254,11 +255,11 @@ class NSHDispatcher < NSHTransport
   # * +version+ - path to nsh
   # ==== Returns
   #
-  # action output
+  # hash of instance_path and md5 - {"instance_path" => "", "md5" => ""}
   #
   def stage_files(file_list, version = "")
     version = "#{get_param("SS_request_number")}_#{precision_timestamp}" if version == ""
-    staging_path = staging_dir(version, true)
+    staging_path = get_staging_dir(version, true)
     message_box "Copying Files to Staging via NSH"
     log "\t StagingPath: #{staging_path}"
     file_list.each do |file_path|
@@ -266,13 +267,28 @@ class NSHDispatcher < NSHTransport
       result = ncp(nil, nsh_path(file_path), staging_path)
       log "\tCopy Result: #{result}"
     end
-    cmd = "cd #{staging_path} && zip -r package_#{version}.zip *"
+    package_staged_files(staging_path, version)
+  end
+
+  # Packages files from local staging directory
+  # 
+  # ==== Attributes
+  #
+  # * +staging_path+ - path to files
+  # * +version+ - version to assign
+  # ==== Returns
+  #
+  # hash of instance_path and md5 - {"instance_path" => "", "md5" => ""}
+  def package_staged_files(staging_path, version)
+    package_file = "package_#{version}.zip"
+    instance_path = File.join(staging_path, package_file)
+    return {"instance_path" => "ERROR - no files in staging area", "md5" => ""} if Dir.entries(staging_path).size < 3
+    cmd = "cd #{staging_path} && zip -r #{package_file} *"
     result = execute_shell(cmd)
-    instance_path = File.join(staging_path, "package_#{version}.zip")
     md5 = Digest::MD5.file(instance_path).hexdigest
     {"instance_path" => instance_path, "md5" => md5}
   end
-
+  
   # Deploys a packaged instance based on staging info
   # staging info is generated by the stage_files routine
   # ==== Attributes
@@ -284,6 +300,7 @@ class NSHDispatcher < NSHTransport
   # action output
   #
   def deploy_instance(staging_info, options = {})
+    return_result = {}
     mismatch_ok = get_option(options, "allow_md5_mismatch", false)
     target_path = get_option(options, "target_path")
     instance_path = staging_info["instance_path"]
@@ -306,10 +323,12 @@ class NSHDispatcher < NSHTransport
       result = ncp(servers.keys, instance_path, target_path)
       log result
       log "# Unzipping package on target:"
-      wrapper_path = create_command_wrapper("unzip", os, instance_path, target_path)
+      wrapper_path = create_command_wrapper("unzip -o", os, instance_path, target_path)
       result = script_exec(servers.keys, wrapper_path, target_path)
       log result
+      result["#{os_details["name"]}_rpm_content_path"] = target_path
     end
+    result
   end
     
   # Builds an NSH compatible path for an uploaded file to BRPM
@@ -345,6 +364,24 @@ class NSHDispatcher < NSHTransport
     result[0] = path.split("/")[2] if path.start_with?("//")
     result[1] = "/#{path.split("/")[3..-1].join("/")}" if path.start_with?("//")  
     result
+  end
+    
+  # Creates a temp file in output dir
+  # returns path to temp file
+  # ==== Attributes
+  #
+  # * +content+ - content for file
+  # ==== Returns
+  #
+  # path to file
+  #
+  def make_temp_file(content)
+    file_path = File.join(@params["SS_output_dir"],"shell_#{precision_timestamp}.sh")
+    fil = File.open(file_path, "w+")
+    fil.puts content
+    fil.flush
+    fil.close
+    file_path
   end
       
 end

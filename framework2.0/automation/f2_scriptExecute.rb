@@ -50,3 +50,4 @@ raise "Command_Failed: no script to execute" if script_file.size < 3
 
 options = {"verbose" => true}
 result = @srun.execute_script(script_file, options)
+pack_response("output_status", "Successfully executed - #{script_file}")

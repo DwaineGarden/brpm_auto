@@ -27,7 +27,7 @@
 #   name: Promotion environment and stage
 #   type: in-external-single-select
 #   position: A5:F5
-#   external_resource: rsc_f2_promotionEnvironments
+#   external_resource: f2_rsc_promotionEnvironments
 #   required: no
 ###
 
@@ -43,7 +43,7 @@ require @params["SS_automation_results_dir"].gsub("automation_results","persist/
 #---------------------- Variables --------------------------#
 # Assign local variables to properties and script arguments
 ARG_PREFIX = "ARG_"
-@req = BrpmRequest.new((@p.request_id.to_i - 1000).to_s, @p.SS_base_url)
+@req = BrpmRequest.new((@p.request_id.to_i - 1000).to_s, @params["SS_base_url"], @params)
 #@auto.log @req.request.inspect
 component = @p.SS_component
 environment_type = @p.request_environment_type

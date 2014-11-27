@@ -65,7 +65,6 @@ def default_table(other_rows = nil)
 end  
 
 def log_it(it)
-  #log_path = "/Users/brady/Documents/dev_rpm/logs"
   log_path = File.join(@params["SS_automation_results_dir"], "resource_logs")
   txt = it.is_a?(String) ? it : it.inspect
   write_to txt

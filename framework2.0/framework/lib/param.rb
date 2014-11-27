@@ -83,14 +83,13 @@ class Param < BrpmFramework
   #
   # * value of key - including resolved properties that may be embedded
   # *  Like this: /opt/bmc/${component_version}/appserver
-  def get(key_name, default = nil)
-    ans = ""
+  def get(key_name, default = "")
+    ans = nil
     ans = @json_params[key_name] if present_json?(key_name)
     ans = @params[key_name] if present_local?(key_name)
-    ans = default if ans == "" && !default.nil?
+    ans = default if ans.nil? 
     complex_property_value(ans)
-  end
-  
+  end  
   # Allows you to specify a key like a method call
   #
   # ==== Attributes
@@ -325,17 +324,5 @@ class Param < BrpmFramework
     end
     slist
   end
-
-  # Returns a hash with properties that are marked private
-  # 
-  # ==== Returns
-  #
-  # hash of properties
-  #
-  def private_properties
-    return @private_props if defined?(@private_props)
-    @private_props = {}
-    @params.each{|k,v| @private_props[k.gsub("_encrypt","")] = @params[k.gsub("_encrypt","")] if k.end_with?("_encrypt") }
-    @private_props
-  end
+  
 end

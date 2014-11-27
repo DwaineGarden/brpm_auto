@@ -305,9 +305,9 @@ class BrpmRequest < BrpmRest
   # * +base_url+ - url of brpm server
   # * +options+ - hash of options (see rest_call for description)
   #
-  def initialize(id, base_url, options = {})
+  def initialize(id, base_url, params, options = {})
     @id = id
-    super(base_url, options)
+    super(base_url, params,  options)
     response = get("requests", @id)
     @request = response["data"]
   end
