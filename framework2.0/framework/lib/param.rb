@@ -162,6 +162,7 @@ class Param < BrpmFramework
     cur = init_local_params
     @json_params = JSON.parse(File.open(cur).read)
     @json_params.each{ |k,v| log("#{k} => #{v.is_a?(String) ? v : v.inspect}") }
+    log "##------ End of Local Params --------##"
     @orig_request_params = @json_params.dup
     @json_params
   end

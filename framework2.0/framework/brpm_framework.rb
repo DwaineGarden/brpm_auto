@@ -55,6 +55,9 @@ customer_include_file = File.join(LibDir,"customer_include.rb")
 if File.exist?(customer_include_file)
   @rpm.log "Loading customer include file: #{customer_include_file}"
   require customer_include_file
+elsif File.exist customer_include_file = File.join(LibDir,"customer_include_default.rb")
+  @rpm.log "Loading default customer include file: #{customer_include_file}"
+  require customer_include_file
 end
 ARG_PREFIX = "ARG_" unless defined?(ARG_PREFIX)
 @rest = BrpmRest.new(@p.SS_base_url, @params)

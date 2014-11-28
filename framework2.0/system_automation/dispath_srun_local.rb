@@ -106,7 +106,7 @@ max_time = (@rpm.get_option(@params, "step_estimate", "60").to_i) * 60
 @nsh = NSHTransport.new(@nsh_path)
 
 #---------------------- Main Script ------------------------#
-keyword_items = get_keyword_items
+keyword_items = @rpm.get_keyword_items
 params_filter = keyword_items.has_key?("RPM_PARAMS_FILTER") ? keyword_items["RPM_PARAMS_FILTER"] : DEFAULT_PARAMS_FILTER
 transfer_properties = get_transfer_properties(params_filter, strip_prefix = true)
 

@@ -36,8 +36,8 @@ write_to "#-------------- Updating Framework ------------------#"
 write_to "\t Using: #{framework_zip}"
 result = run_command(params,"cd #{persist_dir} && rm -rf brpm_framework.rb lib", "") if Dir.entries(persist_dir).include?("brpm_framework.rb")
 if Dir.entries(persist_dir).include?("customer_include.rb")
-  result = run_command(params,"cd #{persist_dir} && mv -f customer_include.rb orig_customer_include.rb", "") 
-  write_to "Backing up existing CustomerInclude - check for important changes from new version"
+  #result = run_command(params,"cd #{persist_dir} && mv -f customer_include.rb orig_customer_include.rb", "") 
+  write_to "A new customer_include_default file exists - check for important changes from new version"
 end
 result = run_command(params,"cd #{persist_dir} && unzip #{framework_zip}", "")
 cur_content = File.open(File.join(params["SS_script_support_path"], "ssh_script_header.rb")).read

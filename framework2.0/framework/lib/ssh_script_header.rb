@@ -265,21 +265,6 @@ module AutomationHeader
     result = "STDERR:\n #{cmd_result["stderr"]}\n#{result}" if cmd_result["stderr"].length > 2
     result
   end
-
-    
-  def get_keyword_items(script_content = nil)
-    result = {}
-    content = script_content unless script_content.nil?
-    content = File.open(@params["SS_script_file"]).read if script_content.nil?
-    KEYWORD_SWITCHES.each do |keyword|
-      reg = /\$\$\{#{keyword}\=.*\}\$\$/
-      items = content.scan(reg)
-      items.each do |item|
-        result[keyword] = item.gsub("$${#{keyword}=","").gsub("}$$","").chomp("\"").gsub(/^\"/,"")
-      end
-    end
-    result
-  end
   
   def initialize_framework
     # Create a new output file and note it in the return message: sets @hand
@@ -897,6 +882,20 @@ class BrpmFramework
       end
     end
     return slist
+  end
+    
+  def get_keyword_items(script_content = nil)
+    result = {}
+    content = script_content unless script_content.nil?
+    content = File.open(@params["SS_script_file"]).read if script_content.nil?
+    KEYWORD_SWITCHES.each do |keyword|
+      reg = /\$\$\{#{keyword}\=.*\}\$\$/
+      items = content.scan(reg)
+      items.each do |item|
+        result[keyword] = item.gsub("$${#{keyword}=","").gsub("}$$","").chomp("\"").gsub(/^\"/,"")
+      end
+    end
+    result
   end
 
   private

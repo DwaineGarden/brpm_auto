@@ -159,7 +159,7 @@ action_txt = ERB.new(content).result(binding)
 @nsh = NSHTransport.new(@nsh_path, {"params" => @params})
 
 #---------------------- Main Script ------------------------#
-keyword_items = get_keyword_items
+keyword_items = @rpm.get_keyword_items
 params_filter = keyword_items.has_key?("RPM_PARAMS_FILTER") ? keyword_items["RPM_PARAMS_FILTER"] : DEFAULT_PARAMS_FILTER
 transfer_properties = get_transfer_properties(params_filter, strip_prefix = true)
 
