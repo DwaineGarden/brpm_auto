@@ -178,7 +178,7 @@ class BAA < BrpmFramework
     result = rest_call(URI.escape(url), "get")
     log "RAW RESULT\n#{url}\n#{result.inspect}" if get_option(options,"verbose", false)
     return "ERROR: #{result["data"]["ErrorResponse"]["Error"]}" if result["data"].has_key?("ErrorResponse")
-  return [] if return_contents && result["data"]["GroupChildrenResponse"]["GroupChildren"]["PropertySetInstances"].nil? 
+    return [] if return_contents && result["data"]["GroupChildrenResponse"]["GroupChildren"]["PropertySetInstances"].nil? 
     return result["data"]["GroupChildrenResponse"]["GroupChildren"]["PropertySetInstances"]["Elements"] if return_contents
     return result["data"]
   end

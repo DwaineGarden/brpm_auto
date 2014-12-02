@@ -55,7 +55,7 @@ component_list = components.reject{|l| ["general","[default]"].include?(l["name"
 @p.assign_local_param("Packaging_Environment_Types", ["Development", "Integration"])
 # Figure out promotion environment
 promotion_environment = @p.get("promotion_environment") # sent in rest
-promotion_environment = @p.get("Pormotion Environment") if promotion_environment == "" # from script arguments
+promotion_environment = @p.get("Promotion Environment") if promotion_environment == "" # from script arguments
 # Figure out promotion request template
 @p.assign_local_param("promotion_request_template",@p.get("origin_request_template")) if @p.get("promotion_request_template") == ""
 # Figure out which components to deploy - always deploy General

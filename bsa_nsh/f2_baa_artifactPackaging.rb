@@ -1,4 +1,4 @@
-#---------------------- brpm_packageArtifacts -----------------------#
+#---------------------- f2_baa_artifactPackaging -----------------------#
 # Description: Creates a blPackage from listed artifacts
 #  Consumes properties:
 #    @p.util_brpm_host_name 
@@ -43,13 +43,11 @@ SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
 #=== End ===#
 
 #---------------------- Declarations -----------------------#
-params["direct_execute"] = true #Set for local execution
-
 #=> ------------- IMPORTANT ------------------- <=#
 #- This loads the BRPM Framework and sets: @p = Params, @auto = BrpmAutomation and @rest = BrpmRest
-require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
-
 require "#{@p.SS_script_support_path}/baa_utilities"
+require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
+rpm_load_module("nsh", "baa")
 
 #---------------------- Methods ----------------------------#
 # Assign local variables to properties and script arguments
@@ -61,20 +59,8 @@ require "#{@p.SS_script_support_path}/baa_utilities"
 #- the package_id comes from the JSON params set in packaging step
 #-  if this is defined in a previous request and passed in JSON, we don't need to package
 baa_package_id = @p.get("package_id_#{@p.SS_component}")
-#- collect the servers assigned to the step
-servers = @p.servers.split(",").collect{|s| s.strip}
-#- construction of master path in BladeLogic
-group_path = "/BRPM/#{@p.SS_application}/#{@p.SS_component}"
-#- Item_name is the same for template, package and job and based on component version
-component_version = @p.get("SS_component_version")
-item_name = component_version == "" ? "#{@p.SS_component}_#{@p.request_id}_#{@timestamp}" : "#{@p.SS_component}_#{@p.request_id}_#{component_version}"
-# override item name if specified
-item_name = @p.get("job_name", item_name)
-#=> ------------------------------------------- <=#
 
 baa_config = YAML.load(SS_integration_details)
-artifact_paths = @auto.split_nsh_path(@p.step_version_artifact_url)
-staging_server = @p.get("staging_server", artifact_paths[0])
 property_name = "BAA_BASE_PATH"
 base_path = @p.get(property_name, "/mnt/deploy") #base path for pulling artifacts
 properties = {}
@@ -83,38 +69,24 @@ properties = {}
 #---------------------- Main Body --------------------------#
 # Check if we have been passed a package id from a promotion
 if baa_package_id != ""
-  @auto.message_box "Using existing BlPackage: #{baa_package_id}", "title"
+  @rpm.message_box "Using existing BlPackage: #{baa_package_id}", "title"
   exit(0)
 else
-  @auto.message_box "Creating BlPackage", "title"
+  @rpm.message_box "Creating BlPackage", "title"
 end
 
 # During packaging, the source path is abstracted in path_from_nsh_path where the property_name value is substituted for the path
 #  like this ??BAA_BASE_PATH??/build/item
-# Build the list of files for the template
-@baa = BAA.new(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc),baa_config["role"],{"output_file" => @p.SS_output_file})
-files_to_deploy = []
-files_to_deploy << @auto.get_attachment_nsh_path(@p.util_brpm_host_name, @p.uploadfile_1) if (@p.uploadfile_1 && !@p.uploadfile_1.empty?)
-files_to_deploy << @auto.get_attachment_nsh_path(@p.util_brpm_host_name, @p.uploadfile_2) if (@p.uploadfile_2 && !@p.uploadfile_2.empty?)
-
-if @p.nsh_paths != ""
-  @p.nsh_paths.split(',').each do |path|
-    files_to_deploy << @auto.path_from_nsh_path(path, base_path, property_name)
-  end
-end
-
-# This gets paths from the VersionTag
-if @p.step_version_artifact_url != ""
-  artifact_paths[1].split(',').each do |path|
-    files_to_deploy << @auto.path_from_nsh_path(path, base_path, property_name)
-  end
-end
- 
-@auto.log "#=> Building Package from:\n#{files_to_deploy.join(",")}\n#=> on server: #{staging_server}"
-result = @baa.package_artifacts(item_name, group_path, files_to_deploy, {"staging_server" => staging_server, "properties" => properties})
+#=> Initialize framework objects
+@baa = BAA.new(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc),baa_config["role"],@params)
+@srun = BaaDispatcher.new(@baa, @params)
+#=> Build the artifact List
+files_to_deploy = @srun.get_artifact_paths(@p, {})
+#=> Stage, then package artifacts
+result = @srun.package_artifacts(item_name, group_path, files_to_deploy, {"staging_server" => staging_server, "properties" => properties})
 raise "Command_Failed: #{result[package_id]}" if result["status"].start_with?("ERROR")
 package_id = result["package_id"]
-@auto.log "Package created successfully: #{result.inspect}"
+@rpm.log "Package created successfully: #{result.inspect}"
 
 #=> IMPORTANT - here is where we store the package_id for the other steps
 @p.assign_local_param("package_id_#{@p.SS_component}", package_id)
@@ -124,4 +96,5 @@ package_id = result["package_id"]
 pack_response "creation_confirm", "Success: created package: #{item_name} in #{group_path}"
 
 
+params["direct_execute"] = true #Set for local execution
 

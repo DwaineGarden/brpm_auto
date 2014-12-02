@@ -303,8 +303,8 @@ class BrpmFramework
   # * +key+ - key to find in options
   # * +default_value+ - if entered will be returned if the option doesn't exist or is blank
   def get_option(options, key, default_value = "")
-    result = options.has_key?(key) ? options[key] : default_value
-    result = default_value if result.is_a?(String) && result == ""
+    result = options.has_key?(key) ? options[key] : nil
+    result = default_value if result.nil?
     result 
   end
 
@@ -438,6 +438,7 @@ class BrpmFramework
     result = {"status" => "ERROR", "response" => "", "message" => ""}
     method = method.downcase
     verbose = get_option(options, "verbose") == "yes" or get_option(options, "verbose")
+    headers = get_option(options, "headers", {:accept => :json, :content_type => :json})
     return result["message"] = "ERROR - #{method} not recognized" unless methods.include?(method)
     log "Rest URL: #{url}" if verbose
     begin
@@ -451,7 +452,7 @@ class BrpmFramework
         rest_params[:user] = options["username"]
         rest_params[:password] = options["password"]
       end
-      rest_params[:headers] = {:accept => :json, :content_type => :json}
+      rest_params[:headers] = headers
       log "RestParams: #{rest_params.inspect}" if verbose
       if %{put post}.include?(method)
         return result["message"] = "ERROR - no data param for post" if data == ""
@@ -465,7 +466,11 @@ class BrpmFramework
       return result
     end
     log "Rest Response:\n#{response.inspect}" if verbose
-    parsed_response = JSON.parse(response) rescue nil
+    if headers[:accept] == :json
+      parsed_response = JSON.parse(response) rescue nil
+    else
+      parsed_response = response
+    end
     parsed_response = {"info" => "no data returned"} if parsed_response.nil?
     result["code"] = response.code
     if response.code < 300
@@ -528,7 +533,42 @@ class BrpmFramework
     path = "//server#{path}" unless server.nil?
     path.chomp("/")
   end
-  
+   
+  # Splits the server and path from an nsh path
+  # returns same path if no server prepended
+  # ==== Attributes
+  #
+  # * +path+ - nsh path
+  # ==== Returns
+  #
+  # array [server, path] server is blank if not present
+  #
+  def split_nsh_path(path)
+    result = ["",path]
+    result[0] = path.split("/")[2] if path.start_with?("//")
+    result[1] = "/#{path.split("/")[3..-1].join("/")}" if path.start_with?("//")  
+    result
+  end
+    
+  # Builds an NSH compatible path for an uploaded file to BRPM
+  # 
+  # ==== Attributes
+  #
+  # * +attachment_local_path+ - path to attachment from params 
+  # * +brpm_hostname+ - name of brpm host (as accessible from NSH)
+  # ==== Returns
+  #
+  # nsh path
+  #
+  def get_attachment_nsh_path(attachment_local_path, brpm_hostname)
+    if attachment_local_path[1] == ":"
+      attachment_local_path[1] = attachment_local_path[0]
+      attachment_local_path[0] = '/'
+    end
+    attachment_local_path = attachment_local_path.gsub(/\\/, "/")
+    "//#{brpm_hostname}#{attachment_local_path}"
+  end
+
   # Executes a command via shell
   #
   # ==== Attributes

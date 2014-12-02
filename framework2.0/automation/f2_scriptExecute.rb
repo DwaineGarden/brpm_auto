@@ -9,6 +9,7 @@
 # Uses shebang info from script for execution like this:
 #  #![.py]/usr/bin/python %% 
 # Executes on ALL Servers selected for step
+#  copies all the standard properties and prefixed properties(ENV_) to environment variables
 #
 #---------------------- Arguments --------------------------#
 ###
@@ -27,7 +28,6 @@
 ###
 
 #---------------------- Declarations -----------------------#
-params["direct_execute"] = true #Set for local execution
 require 'fileutils'
 
 #=> ------------- IMPORTANT ------------------- <=#
@@ -35,7 +35,8 @@ require 'fileutils'
 require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
 rpm_load_module("nsh", "dispatch_nsh")
 nsh_path = defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5/NSH"
-@srun = NSHDispatcher.new(nsh_path, @params)
+@nsh = NSHTransport.new(nsh_path, @params)
+@srun = NSHDispatcher.new(@nsh, @params)
 
 #---------------------- Methods ----------------------------#
 
@@ -49,5 +50,9 @@ script_file = @p.get(script_path, script_file)
 raise "Command_Failed: no script to execute" if script_file.size < 3
 
 options = {"verbose" => true}
+#=> Call the framework routine to execute the script file
 result = @srun.execute_script(script_file, options)
 pack_response("output_status", "Successfully executed - #{script_file}")
+
+params["direct_execute"] = true #Set for local execution
+

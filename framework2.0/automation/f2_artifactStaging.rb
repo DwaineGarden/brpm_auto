@@ -29,7 +29,6 @@
 ###
 
 #---------------------- Declarations -----------------------#
-params["direct_execute"] = true #Set for local execution
 require 'fileutils'
 
 #=> ------------- IMPORTANT ------------------- <=#
@@ -38,48 +37,24 @@ require @params["SS_automation_results_dir"].gsub("automation_results","persist/
 rpm_load_module("nsh", "dispatch_nsh")
 
 nsh_path = defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5/NSH"
-@srun = NSHDispatcher.new(nsh_path, @params)
+nsh = NSH.new(nsh_path, @params)
+@srun = NSHDispatcher.new(nsh, @params)
+
 #---------------------- Methods ----------------------------#
 
-
 #---------------------- Variables --------------------------#
-artifact_path = @p.get("step_version_artifact_url", nil)
-artifact_paths = @srun.split_nsh_path(artifact_path) unless artifact_path.nil?
-path_server = artifact_path.nil? ? "" : artifact_paths[0]
-version = @p.get("step_version")    
-staging_server = @p.get("staging_server", path_server)
-brpm_hostname = @p.SS_base_url.gsub(/^.*\:\/\//, "").gsub(/\:\d.*/, "")
 
 #---------------------- Main Body --------------------------#
 # Check if we have been passed a package id from a promotion
 # Build the list of files for the template
-
-files_to_deploy = []
-files_to_deploy << @srun.get_attachment_nsh_path(brpm_hostname, @p.uploadfile_1) unless @p.uploadfile_1 == ""
-files_to_deploy << @srun.get_attachment_nsh_path(brpm_hostname, @p.uploadfile_2) unless @p.uploadfile_2 == ""
-
-if @p.nsh_paths != ""
-  staging_server = "none"
-  @p.nsh_paths.split(',').each do |path|
-    ans = @srun.split_nsh_path(path)
-    staging_server = ans[0] if ans[0].length > 2
-    files_to_deploy << "//#{staging_server}#{ans[1].strip}" if ans[1].length > 2
-  end
-end
-
-# This gets paths from the VersionTag
-unless artifact_path.nil?
-  staging_server = "none"
-  artifact_paths[1].split(',').each do |path|
-    ans = @srun.split_nsh_path(path)
-    staging_server = ans[0] if ans[0].length > 2
-    files_to_deploy << "//#{staging_server}#{ans[1].strip}" if ans[1].length > 2
-  end
-end
-
-result = @srun.stage_files(files_to_deploy, version)
-@rpm.log "SRUN Result: #{result.inspect}"
+files_to_deploy = @srun.get_artifact_paths(@p, options = {})
+result = @srun.package_artifacts(files_to_deploy, @p.step_version)
+#@rpm.log "SRUN Result: #{result.inspect}"
+@p.assign_local_param("instance_#{@p.SS_component}_content", files_to_deploy)
 @p.assign_local_param("instance_#{@p.SS_component}", result)
 @rpm.log "Saved in JSON Params: #{"instance_#{@p.SS_component}"}"
 @p.save_local_params
 pack_response("output_status", "Successfully packaged - #{File.basename(result["instance_path"])}")
+
+params["direct_execute"] = true #Set for local execution
+

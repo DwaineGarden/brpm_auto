@@ -18,7 +18,6 @@
 ###
 
 #---------------------- Declarations -----------------------#
-params["direct_execute"] = true #Set for local execution
 require 'fileutils'
 
 #=> ------------- IMPORTANT ------------------- <=#
@@ -26,7 +25,8 @@ require 'fileutils'
 require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
 rpm_load_module("nsh", "dispatch_nsh")
 nsh_path = defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5/NSH"
-@srun = NSHDispatcher.new(nsh_path, @params)
+nsh = NSHTransport.new(nsh_path, @params)
+@srun = NSHDispatcher.new(nsh, @params)
 
 #---------------------- Methods ----------------------------#
 
@@ -41,7 +41,8 @@ staging_path = staging_info["instance_path"]
 raise "Command_Failed: no artifacts staged in #{File.dirname(staging_path)}" if Dir.entries(File.dirname(staging_path)).size < 3
 
 options = {"allow_md5_mismatch" => true}
-result = @srun.deploy_instance(staging_info, options)
+#=> Call the framework routine to deploy the package instance
+result = @srun.deploy_package_instance(staging_info, options)
 @rpm.log "SRUN Result: #{result.inspect}"
 result.each do |key, val|
   @p.assign_local_param(key, val)
@@ -49,3 +50,5 @@ end
 @p.save_local_params
 
 pack_response("output_status", "Successfully deployed - #{File.basename(staging_path)}")
+
+params["direct_execute"] = true #Set for local execution

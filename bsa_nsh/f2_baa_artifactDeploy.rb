@@ -1,4 +1,4 @@
-#---------------------- f2_baa_deployArtifacts -----------------------#
+#---------------------- f2_baa_artifactDeploy -----------------------#
 # Description: Deploys a bl_package created in packaging step
 #  Consumes properties:
 #    @p.util_brpm_host_name 
@@ -44,13 +44,12 @@ SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
 #=== End ===#
 
 #---------------------- Declarations -----------------------#
-params["direct_execute"] = true #Set for local execution
 
 #=> ------------- IMPORTANT ------------------- <=#
 #- This loads the BRPM Framework and sets: @p = Params, @auto = BrpmAutomation and @rest = BrpmRest
-require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
-
 require "#{@p.SS_script_support_path}/baa_utilities"
+require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
+rpm_load_module("nsh", "baa")
 
 #---------------------- Methods ----------------------------#
 # Assign local variables to properties and script arguments
@@ -58,26 +57,15 @@ require "#{@p.SS_script_support_path}/baa_utilities"
 
 #---------------------- Variables --------------------------#
 # Assign local variables to properties and script arguments
-
-#=> ------------- IMPORTANT ------------------- <=#
-#- the package_id comes from the JSON params set in packaging step
-baa_package_id = @p.get("package_id_#{@p.SS_component}")
-#- using the servers assigned to the step
-servers = @p.servers.split(",").collect{|s| s.strip}
-#- construction of master path in BladeLogic
-group_path = "/BRPM/#{@p.SS_application}/#{@p.SS_component}/#{@p.SS_environment}"
-#- Item_name is the same for template, package and job and based on component version
-component_version = @p.get("SS_component_version")
-artifact_paths = @auto.split_nsh_path(@p.step_version_artifact_url)
-item_name = component_version == "" ? "#{@p.SS_component}_#{@p.request_id}_#{@timestamp}" : "#{@p.SS_component}_#{@p.request_id}_#{component_version}"
-# override item name if specified
-item_name = @p.get("job_name", item_name)
-
 #=> Abstract all the BAA integration variables
 baa_config = YAML.load(SS_integration_details)
 baa_password = decrypt_string_with_prefix(SS_integration_password_enc)
 baa_role = baa_config["role"]
-
+#=> ------------- IMPORTANT ------------------- <=#
+#- the package_id comes from the JSON params set in packaging step
+baa_package_id = @p.required("package_id_#{@p.SS_component}")
+# override item name if specified
+item_name = @p.get("job_name")
 #=> Choose to execute or save job for later
 execute_now = @p.get("execute_now", "yes") == "yes"
 #=> Build the properties
@@ -85,18 +73,20 @@ properties = {}
 @params.select{|l,v| l.start_with?("BAA_") }.each{|k,v| properties[k] = @p.get(k) }
 #=> Remap the abstraction property for the deployment path
 property_name = "BAA_BASE_PATH" # this will be the property name in the package references ??BAA_BASE_PATH??
-properties[property_name] = @p.get("BAA_DEPLOY_PATH", "/mnt/baa/Sales-Billin/DEV")
-  
+properties[property_name] = @p.get("BAA_DEPLOY_PATH", "/mnt/baa/Sales-Billing/DEV")
+
 #---------------------- Main Body --------------------------#
-@auto.message_box "Creating/Executing Package Job", "title"
+@rpm.message_box "Creating/Executing Package Job", "title"
 
-# Deploy the package created to the targets
-@baa = BAA.new(SS_integration_dns, SS_integration_username, baa_password, baa_role, {"output_file" => @p.SS_output_file})
+#=> Initialize framework objects
+@baa = BAA.new(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc), baa_config["role"], @params)
+@srun = BaaDispatcher.new(@baa, @params)
 session_id = @baa.session_id
-
-options = {"properties" => properties, "execute_now" => true }
-job_result = @baa.deploy_package(item_name, baa_package_id, group_path, servers, options)
-@auto.log job_result.inspect
+options = {"properties" => properties, "execute_now" => execute_now }
+options["job_name"] = item_name if item_name != ""
+#=> Framework call to deploy
+job_result = @srun.deploy_package_instance(baa_package_id, options)
+@rpm.log job_result.inspect
 pack_response "job_status", job_result["status"]
 if job_result.has_key?("target_status")
   table_data = [['', 'Target Type', 'Name', 'Had Errors?', 'Had Warnings?', 'Need Reboot?', 'Exit Code']]
@@ -114,7 +104,7 @@ results_csv = @baa.export_deploy_job_results(group_path, item_name, job_result["
 if results_csv
   pack_response "job_log", log_file_path
 else
-  @auto.log("Could not fetch job results...")
+  @rpm.log("Could not fetch job results...")
 end
 
 
@@ -123,5 +113,6 @@ end
 @p.assign_local_param("job_run_url_#{@p.SS_component}", job_result["job_run_url"])
 @p.save_local_params
 
+params["direct_execute"] = true #Set for local execution
 
 

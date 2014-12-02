@@ -375,7 +375,7 @@ class BrpmRequest < BrpmRest
   # * hash of installed_components
   def installed_components
     return @installed_components if defined?(@installed_components)
-    res = get("installed_components", nil, {"filters" => "filters[app_name]=#{app["name"]}"})
+    res = get("installed_components", nil, {"filters" => "filters[app_name]=#{url_encode(app["name"])}"})
     @installed_components = res["data"]
   end
 
