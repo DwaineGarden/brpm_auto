@@ -119,7 +119,9 @@ class NSH < BrpmFramework
   # * results of command
   def ncp(target_hosts, src_path, target_path)
     #ncp -vr /c/dev/SmartRelease_2/lib -h bradford-96204e -d "/c/dev/BMC Software/file_store"
-    cmd = "#{@nsh_path}/bin/ncp -vrA #{src_path} -h #{target_hosts.join(" ")} -d \"#{target_path}\""
+    src_path = src_path.join(" ") if src_path.is_a?(Array)
+    cmd = "#{@nsh_path}/bin/ncp -vrA #{src_path} -h #{target_hosts.join(" ")} -d \"#{target_path}\"" unless target_hosts.nil?
+    cmd = "#{@nsh_path}/bin/cp -vr #{src_path} #{target_path}" if target_hosts.nil?
     cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
     log cmd if @verbose
     result = execute_shell(cmd)

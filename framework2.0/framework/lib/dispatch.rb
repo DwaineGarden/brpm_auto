@@ -226,6 +226,7 @@ class AbstractDispatcher < BrpmFramework
   # array of nsh paths
   #
   def get_artifact_paths(p_obj, options = {})
+    files_to_deploy = []
     artifact_path = p_obj.get("step_version_artifact_url", nil)
     artifact_paths = p_obj.split_nsh_path(artifact_path) unless artifact_path.nil?
     path_server = artifact_path.nil? ? "" : artifact_paths[0]

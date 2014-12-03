@@ -14,7 +14,7 @@ class NSHDispatcher < AbstractDispatcher
   # * +test_mode+ - true/false to simulate commands instead of running them
   #
   def initialize(nsh_object, params, options = {})
-    @nsh = nsh
+    @nsh = nsh_object
     @verbose = get_option(options, "verbose", false)
     @params = params
     super(params)

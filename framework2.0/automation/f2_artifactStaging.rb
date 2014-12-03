@@ -37,7 +37,7 @@ require @params["SS_automation_results_dir"].gsub("automation_results","persist/
 rpm_load_module("nsh", "dispatch_nsh")
 
 nsh_path = defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5/NSH"
-nsh = NSH.new(nsh_path, @params)
+nsh = NSHTransport.new(nsh_path, @params)
 @srun = NSHDispatcher.new(nsh, @params)
 
 #---------------------- Methods ----------------------------#
