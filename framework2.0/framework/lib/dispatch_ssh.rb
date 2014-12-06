@@ -4,7 +4,7 @@ libDir = File.expand_path(File.dirname(__FILE__))
 require "#{libDir}/dispatch"
 
 
-class NSHDispatcher < AbstractDispatcher
+class SSHDispatcher < AbstractDispatcher
   # Initialize the class
   #
   # ==== Attributes
@@ -13,8 +13,8 @@ class NSHDispatcher < AbstractDispatcher
   # * +options+ - hash of options to use, send "output_file" to point to the logging file
   # * +test_mode+ - true/false to simulate commands instead of running them
   #
-  def initialize(nsh_path, params, options = {})
-    @nsh = NSHTransport.new(nsh_path, @params)
+  def initialize(ssh_object, params, options = {})
+    @ssh = SSHTransport.new([], @params, options)
     @verbose = get_option(options, "verbose", false)
     @params = params
     super(params)
@@ -60,14 +60,15 @@ class NSHDispatcher < AbstractDispatcher
       log "Shebang: #{shebang.inspect}"
       wrapper_path = build_wrapper_script(os, shebang, transfer_properties, {"script_target" => File.basename(script_file)})
       log "# Wrapper: #{wrapper_path}"
-      target_path = @nsh.nsh_path(transfer_properties["RPM_CHANNEL_ROOT"])
+      target_path = transfer_properties["RPM_CHANNEL_ROOT"]
       log "# Copying script to target: "
       clean_line_breaks(os, script_file, content)
-      result = @nsh.ncp(servers.keys, script_file, target_path)
-      log result
+      @ssh.set_servers(servers.keys)
+      result = @ssh.copy_files([script_file], target_path)
+      log @ssh.display_result(result)
       log "# Executing script on target via wrapper:"
-      result = @nsh.script_exec(servers.keys, wrapper_path, target_path)
-      log result
+      result = @ssh.script_exec(wrapper_path, target_path)
+      log @ssh.display_result(result)
     end
     result
   end
@@ -76,8 +77,8 @@ class NSHDispatcher < AbstractDispatcher
   # 
   # ==== Attributes
   #
-  # * +file_list+ - array of nsh_paths
-  # * +options+ - hash of options, includes: version
+  # * +file_list+ - array of nsh-style paths (//server/path)
+  # * +options+ - hash of options includes: source_server
   # ==== Returns
   #
   # hash of instance_path and md5 - {"instance_path" => "", "md5" => ""}
@@ -86,12 +87,15 @@ class NSHDispatcher < AbstractDispatcher
     version = get_option(options, "version", "")
     version = "#{get_param("SS_request_number")}_#{precision_timestamp}" if version == ""
     staging_path = get_staging_dir(version, true)
-    message_box "Copying Files to Staging via NSH"
+    message_box "Copying Files to Staging via SSH"
+    ans = @ssh.split_nsh_path(file_list.first)
+    raise "Command_Failed: staging/build server not found, use nsh-style paths" if ans[0].length < 2
+    @ssh.set_servers(ans[0])
     log "\t StagingPath: #{staging_path}"
     file_list.each do |file_path|
       log "\t #{file_path}"
-      result = @nsh.ncp(nil, @nsh.nsh_path(file_path), staging_path)
-      log "\tCopy Result: #{result}"
+      result = @ssh.download_files(file_path, staging_path)
+      log "\tCopy Result: #{@ssh.display_result(result)}"
     end
     package_staged_artifacts(staging_path, version)
   end
@@ -110,7 +114,7 @@ class NSHDispatcher < AbstractDispatcher
     mismatch_ok = get_option(options, "allow_md5_mismatch", false)
     target_path = get_option(options, "target_path")
     instance_path = staging_info["instance_path"]
-    message_box "Deploying Files to Targets via NSH"
+    message_box "Deploying Files to Targets via SSH"
     raise "Command_Failed: no artifacts staged in #{File.dirname(instance_path)}" if Dir.entries(File.dirname(instance_path)).size < 3
     log "\t StagingArchive: #{instance_path}"
     md5 = Digest::MD5.file(instance_path).hexdigest
@@ -125,23 +129,22 @@ class NSHDispatcher < AbstractDispatcher
       log "No servers selected for: #{os_details["name"]}" if servers.size == 0
       next if servers.size == 0
       log "# #{os_details["name"]} - Targets: #{servers.inspect}"
-      target_path = @nsh.nsh_path(target_path) if target_path != ""
-      target_path = @nsh.nsh_path(servers.first[1].has_key?("CHANNEL_ROOT") ? servers.first[1]["CHANNEL_ROOT"] : os_details["tmp_dir"]) if target_path == ""
+      target_path = servers.first[1].has_key?("CHANNEL_ROOT") ? servers.first[1]["CHANNEL_ROOT"] : os_details["tmp_dir"] if target_path == ""
       log "# Deploying package on target:"
-      result = @nsh.ncp(servers.keys, instance_path, target_path)
-      log result
+      @ssh.set_servers(servers.keys)
+      result = @ssh.copy_files(instance_path, target_path)
+      log @ssh.display_result(result)
       log "# Unzipping package on target:"
       wrapper_path = create_command_wrapper("unzip -o", os, instance_path, target_path)
-      result = @nsh.script_exec(servers.keys, wrapper_path, target_path)
-      log result
+      result = @ssh.script_exec(wrapper_path, target_path)
+      log @ssh.display_result(result)
     end
-    result
+    @ssh.display_result(result)
   end
       
 end
 
-@rpm.log "Initializing nsh transport"
-baa_path = defined?(BAA_BASE_PATH) ? BAA_BASE_PATH : "/opt/bmc/blade8.5"
-nsh_path = "#{BAA_BASE_PATH}/NSH"
-@rpm.log "Path to nsh: #{nsh_path}"
-@transport = NSHDispatcher.new(nsh_path, @params)
+@rpm.log "Initializing ssh transport"
+debug = defined?(@debug) ? @debug : false
+options = {"debug" => debug}
+@transport = SSHDispatcher.new(cap_ssh, @params, options)

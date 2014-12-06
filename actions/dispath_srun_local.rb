@@ -99,7 +99,7 @@ OS_PLATFORMS = {
   "nix" => {"name" => "Unix", "tmp_dir" => "/tmp"},
   "nux" => {"name" => "Linux", "tmp_dir" => "/tmp"}}
 SS_output_file = @params["SS_output_file"]
-@nsh_path = defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5/NSH"
+@nsh_path = "#{defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5"}/NSH"
 @action_txt = File.open(@params["SS_script_file"]).read
 @output_dir = @params["SS_output_dir"]
 max_time = (@rpm.get_option(@params, "step_estimate", "60").to_i) * 60

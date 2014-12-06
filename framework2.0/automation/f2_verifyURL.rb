@@ -21,10 +21,6 @@
 
 #---------------------- Declarations -----------------------#
 
-#=> ------------- IMPORTANT ------------------- <=#
-#- This loads the BRPM Framework and sets: @p = Params, @auto = BrpmAutomation and @rest = BrpmRest
-require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
-
 #---------------------- Methods ----------------------------#
 
 #---------------------- Variables --------------------------#

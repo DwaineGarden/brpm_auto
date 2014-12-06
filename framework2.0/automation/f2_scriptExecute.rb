@@ -34,7 +34,7 @@ require 'fileutils'
 #- This loads the BRPM Framework and sets: @p = Params and @rest = BrpmRest
 require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
 rpm_load_module("nsh", "dispatch_nsh")
-nsh_path = defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5/NSH"
+nsh_path = "#{defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5"}/NSH"
 @nsh = NSHTransport.new(nsh_path, @params)
 @srun = NSHDispatcher.new(@nsh, @params)
 

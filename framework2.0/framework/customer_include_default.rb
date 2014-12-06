@@ -7,7 +7,6 @@
 Token = "a56d64cbcffcce91d306670489fa4cf51b53316c" #decrypt_string_with_prefix(@params["SS_api_token"])
 # Change this to set BAA base path 
 BAA_BASE_PATH = "/opt/bmc/bladelogic"
-NSH_PATH = "#{BAA_BASE_PATH}/NSH"
 # This is the root path for use in BAA/BSA
 BAA_BASE_GROUP = "BRPM"
 # This path will get any files staged by the framework

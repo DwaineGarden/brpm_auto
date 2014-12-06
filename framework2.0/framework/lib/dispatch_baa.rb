@@ -14,7 +14,7 @@ class BaaDispatcher < AbstractDispatcher
   # * +test_mode+ - true/false to simulate commands instead of running them
   #
   def initialize(baa_object, params, options = {})
-    @baa = nsh
+    @baa = baa_object
     @verbose = get_option(options, "verbose", false)
     @params = params
     super(params)
@@ -40,10 +40,13 @@ class BaaDispatcher < AbstractDispatcher
   #
   # * hash - {package_id, status, template_db_key, stagin_server}
   def package_artifacts(artifact_list, options = {})
-    version = get_option(options,"version", get_param("SS_component_version"))
+    version = get_option(options,"version", get_param("step_version"))
     version = "#{get_param("SS_request_number")}_#{precision_timestamp}" if version == ""
     package_name = get_option(options, "package_name", "#{get_param("SS_component")}_#{get_param("request_id")}_#{version}")
     group_path = get_option(options, "group_path", default_group_path(version))
+    path_property_name = get_option(options, "BAA_PATH_PROPERTY", "BAA_BASE_PATH")
+    path_property_value = get_param(path_property_name, nil)
+    path_property = "#{path_property_name}=#{path_property_value}"
     transfer_properties = get_option(options, "transfer_properties", nil)
     message_box "Packaging Files via BAA"
     log "\t StagingPath: #{group_path}"
@@ -67,7 +70,9 @@ class BaaDispatcher < AbstractDispatcher
       template_id = @baa.set_template_properties(package_name, group_path, transfer_properties) if transfer_properties
     end
     log "\tAdd content to template #{template_id}\n"
-    template_id = @baa.add_template_content(template_id, artifact_hash)
+    template_options = {}
+    template_options["path_property"] = path_property unless path_property_value.nil?
+    template_id = @baa.add_template_content(template_id, artifact_hash, template_options)
     result["template_db_key"] = template_id
     raise "Command_Failed: #{template_id}" if template_id.start_with?("ERROR")
     log "#=> Create component package: #{staging_server}\n"
@@ -75,7 +80,10 @@ class BaaDispatcher < AbstractDispatcher
     package_id = @baa.create_component_package(package_name, depot_group_id, template_id, staging_server)
     raise "Command_Failed: #{package_id}" if package_id.start_with?("ERROR")
     result["status"] = "SUCCESS"
+    result["path_property"] = path_property unless path_property_value.nil?
     result["package_id"] = package_id
+    result["instance_path"] = "#{group_path}/#{package_name}"
+    result["md5"] = "000"
     result
   end
   
@@ -94,19 +102,27 @@ class BaaDispatcher < AbstractDispatcher
   # ==== Returns
   #
   # * hash of job results, includes - job_run_id, job_status
-  def deploy_package_instance(package_id, options = {})
+  def deploy_package_instance(package_info, options = {})
+    package_id = package_info["package_id"]
+    path_property = get_option(package_info,"path_property", nil)
     version = get_option(options,"version", get_param("SS_component_version"))
     version = "#{get_param("SS_request_number")}_#{precision_timestamp}" if version == ""
-    execute_now = get_option(options,"execute_now",true)
+    execute_now = get_option(options,"execute_now", true)
     job_base_name = get_option(options, "job_name", "#{get_param("SS_component")}_nsh_#{get_param("request_id")}_#{version}")
     group_path = get_option(options, "group_path", default_group_path(version, true))
-    transfer_properties = get_option(options, "transfer_properties", nil)
+    transfer_properties = get_option(options, "transfer_properties", {})
+    unless path_property.nil?
+      package_property = path_property.split("=")[0]
+      deploy_property = "#{package_property}_DEPLOY"
+      log "\t No corresponding deploy property for #{package_property} (should be #{deploy_property})", "WARN" if !transfer_properties.has_key?(deploy_property)
+      transfer_properties[package_property] = transfer_properties[deploy_property] if transfer_properties.has_key?(deploy_property)
+    end
     message_box "Packaging Files via BAA"
     log "\t StagingPath: #{group_path}"
     result = {"status" => "ERROR", "results" => "", "group_path" => group_path, "job_names" => []}
-    raise "ERROR: No servers found" if target_servers.empty?
+    raise "ERROR: No servers found" if get_server_list.empty?
     log "\tBuilding group path..."
-    job_group_id = ensure_group_path(group_path, "Jobs")
+    job_group_id = @baa.ensure_group_path(group_path, "Jobs")
     # Loop through the platforms
     OS_PLATFORMS.each do |os, os_details|
       servers = get_platform_servers(os)
@@ -117,14 +133,14 @@ class BaaDispatcher < AbstractDispatcher
       result["job_names"] << job_name
       log "#=> Building Job from Package:\n\tGroup: #{group_path}\n\tPackage: #{package_id}"
       log "# #{os_details["name"]} - Targets: #{servers.inspect}"
-      targets = @baa.baa_soap_map_server_names_to_rest_uri(servers)
+      targets = @baa.baa_soap_map_server_names_to_rest_uri(servers.keys)
       log "\tCreating package job..."
       cur_jobs = @baa.execute_cli_command("Job","listAllByGroup",[group_path])
-      if cur_jobs.split("\n").include?(job_name_plsygotm)
+      if cur_jobs.split("\n").include?(job_name)
         log "\tJob Exists: deleting..."
         ans = @baa.execute_cli_command("DeployJob","deleteJobByGroupAndName",[group_path, job_name])
       end
-      job_db_key = @baa.create_package_job(job_name, job_group_id, package_id, servers)
+      job_db_key = @baa.create_package_job(job_name, job_group_id, package_id, servers.keys)
       if job_db_key.start_with?("ERROR")
         log job_db_key
         raise "Command_Failed: job creation failed"
@@ -284,3 +300,10 @@ class BaaDispatcher < AbstractDispatcher
   end
 
 end
+
+require "#{@params["SS_script_support_path"]}/baa_utilities"
+@rpm.log "Initializing BAA transport"
+baa_path = defined?(BAA_BASE_PATH) ? BAA_BASE_PATH : "/opt/bmc/blade8.5"
+@baa = BAATransport.new(baa_path, @params)
+@rpm.log "Path to BAA: #{BAA_BASE_PATH}"
+@transport = BaaDispatcher.new(@baa, @params)

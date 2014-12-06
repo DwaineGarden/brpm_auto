@@ -1,6 +1,8 @@
 # BAA rest automation class
 #  this also wraps the BAAUtilities that ships with BRPM
-class BAA < BrpmFramework
+require 'savon'
+
+class BAATransport < BrpmAutomation
 
   # Initializes the instance of the baa class
   #  this will authenticate to the Bladelogic server and
@@ -8,19 +10,43 @@ class BAA < BrpmFramework
   # ==== Attributes
   #
   # * +url+ - url of the Bladelogic server
-  # * +baa_username+ - user for Bladelogic account
-  # * +baa_password+ - password for Bladelogic account
-  # * +baa_role+ - role for Bladelogic account
-  # * +options+ - hash of options, includes output_file and nsh_path
+  # * +params+ - the params hash
+  # * +options+ - hash of options, includes:
+  #    +baa_username+ - user for Bladelogic account
+  #    +baa_password+ - password for Bladelogic account
+  #    +baa_role+ - role for Bladelogic account
   #
-  def initialize(baa_url, baa_username, baa_password, baa_role, params, options = {})
+  def initialize(baa_url, params, options = {})
+    @url = baa_url
+    @username = get_option(options, "baa_username")
+    @password = get_option(options, "baa_password")
+    @role = get_option(options, "baa_role")
+    super(params)
+    if @password != ""
+      @session_time = nil
+      get_session_id      
+      assume_role
+    end
+  end
+
+  # Resets session and credentials
+  #
+  # ==== Attributes
+  #
+  # * +baa_username+ - username for baa
+  # * +baa_password+ - password for baa
+  # * +baa_role+ - role to assume (uses default role from class if ommitted)
+  # ==== Returns
+  #
+  # * command output
+  #
+  def set_credential(baa_url, baa_username, baa_password, baa_role)
     @url = baa_url
     @username = baa_username
     @password = baa_password
     @role = baa_role
     @session_time = nil
-    get_session_id
-    super(params)
+    get_session_id      
     assume_role
   end
 
@@ -325,15 +351,23 @@ class BAA < BrpmFramework
   # ==== Attributes
   # * +template_dbkey+ - dbkey for component template
   # * +part_array+ - array of paths to add to the template
-  # * +options+ - hash of options includes: (see BLCLI documentation for Template|addDirectoryPart)
+  # * +options+ - hash of options includes: 
+  #   +path_property+ to abstract baa path ex.  path_property => BAA_BASE_PATH=/mnt/deploy/stage
+  # this will substitute ??BAA_BASE_PATH?? for /mnt/deploy/stage in the added template part
+  # ===== (see BLCLI documentation for Template|addDirectoryPart)
   #
   # ==== Returns
   #
   # * returnResult from CLI command
   #
   def add_template_content(template_dbkey, parts_hash, options = {})
-  summary = nil
+    path_property = get_option(options, "path_property", nil)
+    summary = nil
+    if !path_property.nil? && path_property.include?("=")
+      result = result.gsub(path_property.split("=")[1], "??#{path_property.split("=")[0]}??")
+    end
     parts_hash.each do |part, part_type|
+      part = split_nsh_path(part)[1]
       if part_type == "file"
         summary = add_file_to_template(template_dbkey, part, options)
       else
@@ -517,6 +551,7 @@ class BAA < BrpmFramework
   def set_job_properties(job_name, group_path, props)
     begin
       result = []
+      return "" if props.size == 0
       log "Setting package properties on job:"
       props.each_pair do |prop,val|
         log "\t#{prop} => #{val}"
@@ -943,6 +978,29 @@ class BAA < BrpmFramework
     copy_job_key = execute_cli_command("Job","copyJob",args)
     raise "Command_Failed: cannot create job: #{copy_job_key}" if copy_job_key.include?("ERROR")
     copy_job_key
+  end
+
+  # Separates the server and path from an NSH path
+  #  offers the option of embedding a property (blade-style) in lieu of the base_path
+  #
+  # ==== Attributes
+  #
+  # * +path+ - the nsh path
+  # * +base_path+ - a path fragment to substitute with a property
+  # * +path_property+ - a property name
+  #
+  # ==== Returns
+  #
+  # * the path portion of the nsh path
+  # * if a property_name is passed, the return is like this:
+  #    /opt/bmc/RLM/??DEPLOY_VERSION??/appserver
+  def path_from_nsh_path(path, base_path = nil, path_property = nil)
+    result = path
+    result = "/#{result.split("/")[3..-1].join("/")}" if result.start_with?("//")
+    unless path_property.nil?
+      result = result.gsub(base_path, "??#{path_property}??")
+    end
+    result
   end
 
   private

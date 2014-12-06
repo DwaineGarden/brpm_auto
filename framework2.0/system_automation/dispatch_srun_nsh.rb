@@ -152,7 +152,7 @@ OS_PLATFORMS = {
   "nix" => {"name" => "Unix", "tmp_dir" => "/tmp"},
   "nux" => {"name" => "Linux", "tmp_dir" => "/tmp"}}
 SS_output_file = @params["SS_output_file"]
-@nsh_path = defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5/NSH"
+@nsh_path = "#{defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5"}/NSH"
 content = File.open(@params["SS_script_file"]).read
 action_txt = ERB.new(content).result(binding)
 @output_dir = @params["SS_output_dir"]

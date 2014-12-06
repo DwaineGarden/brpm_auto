@@ -1,6 +1,6 @@
 # Abstraction class for the step params
 # provides convenience routines for working with params
-class Param < BrpmFramework
+class Param < BrpmAutomation
 
   # Initialize an instance of the class
   #
@@ -306,6 +306,7 @@ class Param < BrpmFramework
   def server_list
     rxp = /server\d+_/
     slist = {}
+    return slist unless @params.has_key?("servers")
     lastcur = -1
     curname = ""
     @params.sort.select{ |k| k[0] =~ rxp }.each_with_index do |server, idx|

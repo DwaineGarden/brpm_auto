@@ -18,31 +18,31 @@
 ###
 
 #---------------------- Declarations -----------------------#
-require 'fileutils'
-
-#=> ------------- IMPORTANT ------------------- <=#
-#- This loads the BRPM Framework and sets: @p = Params and @rest = BrpmRest
-require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
-rpm_load_module("nsh", "dispatch_nsh")
-nsh_path = defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5/NSH"
-nsh = NSHTransport.new(nsh_path, @params)
-@srun = NSHDispatcher.new(nsh, @params)
+#=== BMC Application Automation Integration Server: EC2 BSA Appserver ===#
+# [integration_id=5]
+SS_integration_dns = "https://ip-172-31-36-115.ec2.internal:9843"
+SS_integration_username = "BLAdmin"
+SS_integration_password = "-private-"
+SS_integration_details = "role : BLAdmins
+authentication_mode : SRP"
+SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
+#=== End ===#
+@baa.set_credential(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc), get_integration_details("role")) if @p.SS_transport == "baa"
 
 #---------------------- Methods ----------------------------#
 
 #---------------------- Variables --------------------------#
-brpm_hostname = @rpm["SS_base_url"].gsub(/^.*\:\/\//, "").gsub(/\:\d.*/, "")
+brpm_hostname = @p.SS_base_url.gsub(/^.*\:\/\//, "").gsub(/\:\d.*/, "")
 # Check if we have been passed a package instance 
 staging_info = @p.required("instance_#{@p.SS_component}")
 staging_path = staging_info["instance_path"]
 
 #---------------------- Main Body --------------------------#
 # Deploy and unzip the package on all targets
-raise "Command_Failed: no artifacts staged in #{File.dirname(staging_path)}" if Dir.entries(File.dirname(staging_path)).size < 3
-
-options = {"allow_md5_mismatch" => true}
+transfer_properties = @transport.get_transfer_properties
+options = {"allow_md5_mismatch" => true, "transfer_properties" => transfer_properties}
 #=> Call the framework routine to deploy the package instance
-result = @srun.deploy_package_instance(staging_info, options)
+result = @transport.deploy_package_instance(staging_info, options)
 #@rpm.log "SRUN Result: #{result.inspect}"
 #@p.save_local_params
 

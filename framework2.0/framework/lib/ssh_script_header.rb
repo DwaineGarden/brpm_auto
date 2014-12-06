@@ -11,6 +11,7 @@ require 'net/http'
 require 'uri'
 require 'yaml'
 require 'fileutils'
+require 'popen4'
 require 'cgi'
 require 'json'
 require 'timeout'
@@ -65,11 +66,7 @@ module AutomationHeader
     command = "#{command} #{arguments}" unless arguments.nil?
     #command += exit_code_failure(params)
     @rpm.message_box "Run command: #{command}" unless b_quiet
-    if params.has_key?("SS_capistrano") #["direct_execute"].nil?
-      cmd_result = @rpm.execute_capistrano(command)  
-    else # Direct Execute the command
-      cmd_result = @rpm.execute_shell(command)
-    end
+    cmd_result = @rpm.execute_shell(command)
     data_returned = @rpm.display_result(cmd_result)
     data_returned = CGI::escapeHTML(data_returned)
     @rpm.log data_returned  unless b_quiet
@@ -112,18 +109,11 @@ module AutomationHeader
     hosts = server_list.map{ |srv| srv[0] }
   end
 
-  def get_integration_details(details_yml)
+  def get_integration_details(key, details_yml = nil)
+    details_yml = SS_integration_details if details_yml.nil?
     # SS_integration_details = "Project: TST\nDefault item: lots of stuff\n"
-    ans = {}
-    lines = details_yml.split("\n")
-    itemcnt = 1
-    lines.each do |item|
-      it = item.split(": ")
-      ans[it[0]] = it[1] if it.size == 2
-      ans["item_#{itemcnt.to_s}"] = it[0] unless it.size == 2
-      itemcnt += 1
-    end
-    ans
+    details = YAML.load(details_yml)
+    details[key]
   end
 
   def set_property_flag(prop, value = nil)
@@ -269,14 +259,20 @@ module AutomationHeader
   def initialize_framework
     # Create a new output file and note it in the return message: sets @hand
     init_log_file(@params)
-    @rpm = BrpmFramework.new(@params)
+    @rpm = BrpmAutomation.new(@params)
+    if @params["SS_script_type"] != 'test' && @params["SS_script_target"] != "resource_automation" && !@params.has_key?("SS_no_framework") 
+      automation_settings = @params["SS_script_support_path"].gsub("lib/script_support","config/automation_settings.rb")
+      require "#{automation_settings}" if File.exist?(automation_settings)    
+      f_dir = defined?(FRAMEWORK_DIR) ? FRAMEWORK_DIR : @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib")
+      require "#{f_dir}/brpm_framework"
+    end
   end
 
 end
 
 # The base class for automation
 # Provides convenience routines for working in BRPM
-class BrpmFramework
+class BrpmAutomation
   EXIT_CODE_FAILURE = 'Exit_Code_Failure' unless defined?(EXIT_CODE_FAILURE)
 
   include AutomationHeader
@@ -321,80 +317,13 @@ class BrpmFramework
     result
   end
 
-  # Provides a simple failsafe for working with params
-  # returns "" if the option doesn't exist or is blank
-  # ==== Attributes
-  #
-  # * +options+ - the hash
-  # * +key+ - key to find in options
-  # * +default_value+ - if entered will be returned if the option doesn't exist or is blank
-  def get_param(key, default_value = "")
-    val = get_option(@params, key, default_value)
-    complex_property_value(val)
-  end
-
-  # Throws an error if an param is missing
-  #  great for checking if properties exist
+  # Gets a params
   #
   # ==== Attributes
   #
-  # * +options+ - the options hash
   # * +key+ - key to find
-  def required_param(key)
-    val = required_option(@params, key)
-    complex_property_value(val)
-  end
-
-  # Shorthand for getting a param
-  #  get a property by @rpm["prop_name"]
-  #
-  # ==== Attributes
-  #
-  # * +key+ - the key to find
-  def [](key)
-    get_param(key)
-  end
-
-  # Returns all params
-  def params
-    @params
-  end
-
-  # Adds a param
-  #
-  # ==== Attributes
-  #
-  # * +key+ - key to add
-  # * +val+ - value to associate with key
-  def add_param(key, val)
-    @params[key] = val
-  end
-  
-  # Removes a param
-  #
-  # ==== Attributes
-  #
-  # * +key+ - key to remove
-  def remove_param(key)
-    @params.delete(key)
-  end
-  
-  # Resolves embedded properties in a string
-  #  
-  # ==== Attributes
-  #
-  # * +full_val+ - string to convert
-  def complex_property_value(full_val)
-    return full_val unless full_val.is_a?(String)
-    reg = /\$\{.*?\}/
-    found = full_val.scan(reg)
-    return full_val if found.empty?
-    result = full_val.dup
-    found.each do |item|
-      prop_name = item.gsub("\${","").gsub("}","")
-      value = get_param(prop_name)
-      result.gsub!("\${#{prop_name}}",value) unless value == ""
-    end
+  def get_param(key, default_value = "")
+    result = get_option(@params, key, default_value)
     result
   end
 
@@ -487,17 +416,18 @@ class BrpmFramework
     result
   end
 
-  # Returns the dos path from an nsh path
+  # Returns the dos path from a standard path
   #
   # ==== Attributes
   #
-  # * +source_path+ - path in nsh
+  # * +source_path+ - path in standard "/" format
+  # * +drive_letter+ - base drive letter if not included in path (defaults to C)
   #
   # ==== Returns
   #
   # * dos compatible path
   #
-  def dos_path(source_path)
+  def dos_path(source_path, drive_letter = "C")
     path = ""
     return source_path if source_path.include?(":\\")
     path_array = source_path.split("/")
@@ -505,68 +435,10 @@ class BrpmFramework
       path = "#{path_array[1]}:\\"
       path += path_array[2..-1].join("\\")
     else
+      path = "#{drive_letter}:\\"
       path += path_array[1..-1].join("\\")
     end
     path
-  end
-
-  # Returns the nsh path from a dos path
-  #
-  # ==== Attributes
-  #
-  # * +source_path+ - path in nsh
-  # * +server+ - optional, adds a server in nsh format
-  #
-  # ==== Returns
-  #
-  # * nsh compatible path
-  #
-  def nsh_path(source_path, server = nil)
-    path = ""
-    if source_path.include?(":\\")
-      path_array = source_path.split("\\")
-      path = "/#{path_array[0].gsub(":","/")}"
-      path += path_array[1..-1].join("/")
-    else
-      path = source_path
-    end
-    path = "//server#{path}" unless server.nil?
-    path.chomp("/")
-  end
-   
-  # Splits the server and path from an nsh path
-  # returns same path if no server prepended
-  # ==== Attributes
-  #
-  # * +path+ - nsh path
-  # ==== Returns
-  #
-  # array [server, path] server is blank if not present
-  #
-  def split_nsh_path(path)
-    result = ["",path]
-    result[0] = path.split("/")[2] if path.start_with?("//")
-    result[1] = "/#{path.split("/")[3..-1].join("/")}" if path.start_with?("//")  
-    result
-  end
-    
-  # Builds an NSH compatible path for an uploaded file to BRPM
-  # 
-  # ==== Attributes
-  #
-  # * +attachment_local_path+ - path to attachment from params 
-  # * +brpm_hostname+ - name of brpm host (as accessible from NSH)
-  # ==== Returns
-  #
-  # nsh path
-  #
-  def get_attachment_nsh_path(attachment_local_path, brpm_hostname)
-    if attachment_local_path[1] == ":"
-      attachment_local_path[1] = attachment_local_path[0]
-      attachment_local_path[0] = '/'
-    end
-    attachment_local_path = attachment_local_path.gsub(/\\/, "/")
-    "//#{brpm_hostname}#{attachment_local_path}"
   end
 
   # Executes a command via shell
@@ -598,43 +470,6 @@ class BrpmFramework
       cmd_result["stderr"] = "ERROR\n#{e.message}\n#{e.backtrace}"
     end
     File.delete(errfile)
-    cmd_result
-  end
-  
-  # Executes the current script in Capistrano
-  # gathers all inputs needed from params
-  # ==== Returns
-  #
-  # command output and errors
-  def execute_capistrano(command)
-    cmd_result = {"stdout" => "","stderr" => "", "pid" => "", "status" => 1}
-    show_errors = @params.has_key?("ignore_exit_codes") ? !(@params["ignore_exit_codes"] == 'yes') : false
-    use_sudo = @params["sudo"].nil? ? "no" : @params["sudo"]
-    set :user, @params["user"] unless @params["user"].nil?
-    set :password, @params["password"] unless @params["password"].nil?
-    cmd_result["stdout"] = "Execute via Capistrano\n"
-    first_time = true
-    rescue_cap_errors(show_errors) do
-      run "#{use_sudo == 'yes' ? sudo : '' } #{command}", :pty => (use_sudo == 'yes') do |ch, str, data|
-      # santize data returned so it can't affect the html
-        data = CGI::escapeHTML(data)
-        if str == :out
-          if first_time
-            cmd_result["stdout"] += data
-            first_time = false
-          else
-            if cmd_result["stdout"].length > 30000
-              cmd_result["stdout"].slice!(data.length..cmd_result["stdout"].length)
-              cmd_result["stdout"] += output_separator("Data Truncated")
-            end
-            cmd_result["stdout"] += data
-          end
-        elsif str == :err
-          cmd_result["stderr"] = data if data.length > 4
-        end
-      end
-    end
-    cmd_result["status"] = 0
     cmd_result
   end
 
@@ -731,64 +566,6 @@ class BrpmFramework
     private_value.nil? ? @private_props : true
   end
 
-  # Performs a get on the passed model
-  #
-  # ==== Attributes
-  #
-  # * +model_name+ - rpm model [requests, plans, steps, version_tags, etc]
-  # * +model_id+ - id of a specific item in the model (optional)
-  # * +options+ - hash of options includes
-  #    +filters+ - string of the filter text: filters[login]=bbyrd
-  #    includes all the rest_call options
-  #
-  # ==== Returns
-  #
-  # * hash of http response
-  def rpm_get(model_name, model_id = nil, options = {})
-    url = rest_url(model_name, model_id) if get_option(options, "filters") == ""
-    url = rest_url(model_name, nil, options["filters"]) if get_option(options, "filters") != ""
-    result = rest_call(url, "get", options)
-  end
-  
-  # Performs a put on the passed model
-  #  use this to update a single record
-  # ==== Attributes
-  #
-  # * +model_name+ - rpm model [requests, plans, steps, version_tags, etc]
-  # * +model_id+ - id of a specific item in the model (optional)
-  # * +data+ - hash of the put data
-  # * +options+ - hash of options includes
-  #    includes all the rest_call options
-  #
-  # ==== Returns
-  #
-  # * hash of http response
-  def rpm_update(model_name, model_id, data, options = {})
-    url = rest_url(model_name, model_id)
-    options["data"] = data
-    result = rest_call(url, "put", options)
-    result
-  end
-  
-  # Performs a post on the passed model
-  #  use this to create a new record
-  # ==== Attributes
-  #
-  # * +model_name+ - rpm model [requests, plans, steps, version_tags, etc]
-  # * +data+ - hash of the put data
-  # * +options+ - hash of options includes
-  #    includes all the rest_call options
-  #
-  # ==== Returns
-  #
-  # * hash of http response
-  def rpm_create(model_name, data, options = {})
-    options["data"] = data
-    url = rest_url(model_name)
-    result = rest_call(url, "post", options)
-    result
-  end
-
   # Sends an email based on step recipients
   #
   # ==== Attributes
@@ -813,16 +590,6 @@ class BrpmFramework
   #
   def precision_timestamp
     Time.now.strftime("%Y%m%d%H%M%S%L")
-  end
-
-  # Sets the token for rest interactions
-  # 
-  # ==== Attributes
-  #
-  # * +token+ - token for RPM rest
-  #
-  def set_token(token)
-    @token = token
   end
   
   # Creates a pid-file semaphore to govern global execution
@@ -937,6 +704,22 @@ class BrpmFramework
     end
     result
   end
+   
+  # Splits the server and path from an nsh path
+  # returns same path if no server prepended
+  # ==== Attributes
+  #
+  # * +path+ - nsh path
+  # ==== Returns
+  #
+  # array [server, path] server is blank if not present
+  #
+  def split_nsh_path(path)
+    result = ["",path]
+    result[0] = path.split("/")[2] if path.start_with?("//")
+    result[1] = "/#{path.split("/")[3..-1].join("/")}" if path.start_with?("//")  
+    result
+  end
 
   private
   
@@ -948,17 +731,9 @@ class BrpmFramework
       '' :
       "; if [ $? -ne 0 ]; then first_part=#{exit_code_failure_first_part}; echo \"${first_part}#{exit_code_failure_second_part}\"; fi;"
   end
-
   
   def url_encode(name)
     name.gsub(" ","%20").gsub("/","%2F").gsub("?","%3F")
-  end
-    
-  def rest_url(model_name, id = nil, filters = nil)
-    url = "#{@base_rpm_url}/v1/#{model_name}#{id == nil ? "" : "/#{id}" }"
-    url += "?#{filters}&token=#{@token}" if filters
-    url += "?token=#{@token}" unless filters
-    url
   end
    
   def touch_file(file_path)
@@ -967,265 +742,8 @@ class BrpmFramework
     file_path
   end
   
-  def rescue_cap_errors(show_errors, &block)
-    begin
-      yield
-    rescue RuntimeError => failure
-      if show_errors
-        write_to "SSH-Capistrano_Error: #{failure.message}\n#{failure.backtrace}"
-        write_to(EXIT_CODE_FAILURE) 
-      end
-    end
-  end
-  
 end
 
-# Wrapper class for NSH interactions
-class NSHTransport < BrpmFramework
-
-  attr_writer :test_mode
-
-  # Initialize the class
-  #
-  # ==== Attributes
-  #
-  # * +nsh_path+ - path to NSH dir on files system (must contain br directory too)
-  # * +options+ - hash of options to use, send "output_file" to point to the logging file
-  # * +test_mode+ - true/false to simulate commands instead of running them
-  #
-  def initialize(nsh_path, params, options = {}, test_mode = false)
-    @nsh_path = nsh_path
-    @test_mode = test_mode
-    @verbose = get_option(options, "verbose", false)
-    super(params) unless params.nil?
-    @opts = options
-    @run_key = get_option(options,"timestamp",Time.now.strftime("%Y%m%d%H%M%S"))
-    outf = get_option(options,"output_file", SS_output_file)
-    @output_dir = File.dirname(outf)
-    insure_proxy
-  end
-
-  # Verifies that proxy cred is set
-  #
-  # ==== Returns
-  #
-  # * blcred cred -acquire output
-  def insure_proxy
-    return true if get_option(@opts, "bl_profile") == ""
-    res = get_cred
-    puts res
-  end
-
-  # Displays any errors from a cred status
-  #
-  # ==== Attributes
-  #
-  # * +status+ - output from cred command
-  #
-  # ==== Returns
-  #
-  # * true/false
-  def cred_errors?(status)
-    errors = ["EXPIRED","cache is empty"]
-    errors.each do |err|
-        return true if status.include?(err)
-    end
-    return false
-  end
-
-  # Performs a cred -acquire
-  #
-  # ==== Returns
-  #
-  # * cred result message
-  def get_cred
-    bl_cred_path = File.join(@nsh_path,"bin","blcred")
-    cred_status = `#{bl_cred_path} cred -list`
-    puts "Current Status:\n#{cred_status}" if @test_mode
-    if (cred_errors?(cred_status))
-      # get cred
-      cmd = "#{bl_cred_path} cred -acquire -profile #{get_option(@opts,"bl_profile")} -username #{get_option(@opts,"bl_username")} -password #{get_option(@opts,"bl_password")}"
-      res = execute_shell(cmd)
-      puts display_result(res) if @test_mode
-      result = "Acquiring new credential"
-    else
-      result = "Current credential is valid"
-    end
-    result
-  end
-
-  # Runs an nsh script
-  #
-  # ==== Attributes
-  #
-  # * +script_path+ - path (local to rpm server) to script file
-  #
-  # ==== Returns
-  #
-  # * results of script
-  def nsh(script_path, raw_result = false)
-    cmd = "#{@nsh_path}/bin/nsh #{script_path}"
-    cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
-    result = execute_shell(cmd)
-    return result if raw_result
-    display_result(result)
-  end
-
-  # Runs a simple one-line command in NSH
-  #
-  # ==== Attributes
-  #
-  # * +command+ - command to run
-  #
-  # ==== Returns
-  #
-  # * results of command
-  def nsh_command(command, raw_result = false)
-    path = create_temp_script("echo Running #{command}\n#{command}\n",{"temp_path" => "/tmp"})
-    result = nsh(path, raw_result)
-    File.delete path unless @test_mode
-    result
-  end
-
-  # Copies all files (recursively) from source to destination on target hosts
-  #
-  # ==== Attributes
-  #
-  # * +target_hosts+ - blade hostnames to copy to
-  # * +src_path+ - NSH path to source files (may be an array)
-  # * +target_path+ - path to copy to (same for all target_hosts)
-  #
-  # ==== Returns
-  #
-  # * results of command
-  def ncp(target_hosts, src_path, target_path)
-    #ncp -vr /c/dev/SmartRelease_2/lib -h bradford-96204e -d "/c/dev/BMC Software/file_store"
-    src_path = src_path.join(" ") if src_path.is_a?(Array)
-    cmd = "#{@nsh_path}/bin/ncp -vrA #{src_path} -h #{target_hosts.join(" ")} -d \"#{target_path}\"" unless target_hosts.nil?
-    cmd = "#{@nsh_path}/bin/cp -vr #{src_path} #{target_path}" if target_hosts.nil?
-    cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
-    log cmd if @verbose
-    result = execute_shell(cmd)
-    display_result(result)
-  end
-
-  # Runs a command via nsh on a windows target
-  #
-  # ==== Attributes
-  #
-  # * +target_hosts+ - blade hostnames to copy to
-  # * +target_path+ - path to copy to (same for all target_hosts)
-  # * +command+ - command to run
-  #
-  # ==== Returns
-  #
-  # * results of command per host
-  def nexec_win(target_hosts, target_path, command)
-    # if source_script exists, transport it to the hosts
-    result = "Running: #{command}\n"
-    target_hosts.each do |host|
-      cmd = "#{@nsh_path}/bin/nexec #{host} cmd /c \"cd #{target_path}; #{command}\""
-      cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
-      result += "Host: #{host}\n"
-      res = execute_shell(cmd)
-      result += display_result(res)
-    end
-    result
-  end
-
-  # Runs a script on a remote server via NSH
-  #
-  # ==== Attributes
-  #
-  # * +target_hosts+ - blade hostnames to copy to
-  # * +script_path+ - nsh path to the script
-  # * +target_path+ - path from which to execute the script on the remote host
-  # * +options+ - hash of options (raw_result = true)
-  #
-  # ==== Returns
-  #
-  # * results of command per host
-  def script_exec(target_hosts, script_path, target_path, options = {})
-    raw_result = get_option(options,"raw_result", false)
-    script_dir = File.dirname(script_path)
-    err_file = touch_file("#{script_dir}/nsh_errors_#{Time.now.strftime("%Y%m%d%H%M%S%L")}.txt")
-    cmd = "#{@nsh_path}/bin/scriptutil -d \"#{target_path}\" -h #{target_hosts.join(" ")} -H \"Results from: %h\" -s #{script_path} 2>#{err_file}"
-    result = execute_shell(cmd)
-    result["stderr"] = "#{result["stderr"]}\n#{File.open(err_file).read}"
-    result = display_result(result) unless raw_result
-    result
-  end
-
-  # Executes a text variable as a script on remote targets
-  #
-  # ==== Attributes
-  #
-  # * +target_hosts+ - array of target hosts
-  # * +script_body+ - body of script
-  # * +target_path+ - path on targets to store/execute script
-  #
-  # ==== Returns
-  #
-  # * output of script
-  #
-  def script_execute_body(target_hosts, script_body, target_path, options = {})
-    script_file = "nsh_script_#{Time.now.strftime("%Y%m%d%H%M%S")}.sh"
-    full_path = "#{File.dirname(SS_output_file)}/#{script_file}"
-    fil = File.open(full_path,"w+")
-    #fil.write script_body.gsub("\r", "")
-    fil.flush
-    fil.close
-    result = script_exec(target_hosts, full_path, target_path, options)
-  end
-
-  # Runs a simple ls command in NSH
-  #
-  # ==== Attributes
-  #
-  # * +nsh_path+ - path to list files
-  #
-  # ==== Returns
-  #
-  # * array of path contents
-  def ls(nsh_path)
-    res = nsh_command("ls #{nsh_path}")
-    res.split("\n").reject{|l| l.start_with?("Running ")}
-  end
-
-  # Provides a host status for the passed targets
-  #
-  # ==== Attributes
-  #
-  # * +target_hosts+ - array of hosts
-  #
-  # ==== Returns
-  #
-  # * hash of agentinfo on remote hosts
-  def status(target_hosts)
-    result = {}
-    target_hosts.each do |host|
-      res = nsh_command("agentinfo #{host}")
-      result[host] = res
-    end
-    result
-  end
-
-
-  private
-
-  def create_temp_script(body, options)
-    script_type = get_option(options,"script_type", "nsh")
-    base_path = get_option(options, "temp_path")
-    tmp_file = "#{script_type}_temp_#{precision_timestamp}.#{script_type}"
-    full_path = "#{base_path}/#{tmp_file}"
-    fil = File.open(full_path,"w+")
-    fil.puts body
-    fil.flush
-    fil.close
-    full_path
-  end
-
-end
 
 extend AutomationHeader
 results = "Error in command"

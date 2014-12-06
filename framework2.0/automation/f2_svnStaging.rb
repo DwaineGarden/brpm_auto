@@ -45,7 +45,7 @@ require 'fileutils'
 require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
 rpm_load_module("nsh", "dispatch_nsh", "scm")
 
-nsh_path = defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5/NSH"
+nsh_path = "#{defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5"}/NSH"
 @srun = NSHDispatcher.new(nsh_path, @params)
 #---------------------- Methods ----------------------------#
 

@@ -12,7 +12,7 @@ OS_PLATFORMS = {
   "nux" => {"name" => "Linux", "tmp_dir" => "/tmp"}}
 
 
-class AbstractDispatcher < BrpmFramework
+class AbstractDispatcher < BrpmAutomation
   # Initialize the class
   #
   # ==== Attributes
@@ -37,10 +37,10 @@ class AbstractDispatcher < BrpmFramework
   #
   # hash of properties to transfer
   #
-  def get_transfer_properties(keyword_filter = DEFAULT_PARAMS_FILTER, strip_filter = false)
+  def get_transfer_properties(keyword_filter = DEFAULT_PARAMS_FILTER, strip_filter = true)
     result = {}
-    STANDARD_PROPERTIES.each{|prop| result[prop.gsub("SS_","RPM_")] = params[prop] }
-    params.each{|k,v| result[strip_filter ? k.gsub(keyword_filter,"") : k] = get_param(k) if k.include?(keyword_filter) }
+    STANDARD_PROPERTIES.each{|prop| result[prop.gsub("SS_","RPM_")] = @params[prop] }
+    @params.each{|k,v| result[strip_filter ? k.gsub(keyword_filter,"") : k] = get_param(k) if k.include?(keyword_filter) }
     result
   end
 
@@ -254,6 +254,25 @@ class AbstractDispatcher < BrpmFramework
       end
     end
     files_to_deploy
+  end  
+  
+  # Packages files from local staging directory
+  # 
+  # ==== Attributes
+  #
+  # * +staging_path+ - path to files
+  # * +version+ - version to assign
+  # ==== Returns
+  #
+  # hash of instance_path and md5 - {"instance_path" => "", "md5" => ""}
+  def package_staged_artifacts(staging_path, version)
+    package_file = "package_#{version}.zip"
+    instance_path = File.join(staging_path, package_file)
+    return {"instance_path" => "ERROR - no files in staging area", "md5" => ""} if Dir.entries(staging_path).size < 3
+    cmd = "cd #{staging_path} && zip -r #{package_file} *"
+    result = execute_shell(cmd)
+    md5 = Digest::MD5.file(instance_path).hexdigest
+    {"instance_path" => instance_path, "md5" => md5}
   end
-      
+   
 end

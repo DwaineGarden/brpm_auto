@@ -1,7 +1,7 @@
 
 # Base class for rest interactions
 #  optimized for rest calls to BRPM
-class BrpmRest < BrpmFramework
+class BrpmRest < BrpmAutomation
 
   # Initialize an instance of the brpmrest class
   #

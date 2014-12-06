@@ -1,7 +1,7 @@
 require 'uri'
 
 # Base class for working with Subversion
-class Svn < BrpmFramework
+class Svn < BrpmAutomation
   
   # Initializes an instance of the class
   #
@@ -218,7 +218,7 @@ class Svn < BrpmFramework
 end
 
 # Base class for working with Git
-class Git < BrpmFramework
+class Git < BrpmAutomation
   
   # Initializes an instance of the class
   #
