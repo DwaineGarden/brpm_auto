@@ -363,11 +363,12 @@ class BAATransport < BrpmAutomation
   def add_template_content(template_dbkey, parts_hash, options = {})
     path_property = get_option(options, "path_property", nil)
     summary = nil
-    if !path_property.nil? && path_property.include?("=")
-      result = result.gsub(path_property.split("=")[1], "??#{path_property.split("=")[0]}??")
-    end
     parts_hash.each do |part, part_type|
       part = split_nsh_path(part)[1]
+      if !path_property.nil? && path_property.include?("=")
+        part = part.gsub(path_property.split("=")[1], "??#{path_property.split("=")[0]}??")
+        log "\tAdding part: #{part}"
+      end
       if part_type == "file"
         summary = add_file_to_template(template_dbkey, part, options)
       else

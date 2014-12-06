@@ -44,10 +44,10 @@ class BaaDispatcher < AbstractDispatcher
     version = "#{get_param("SS_request_number")}_#{precision_timestamp}" if version == ""
     package_name = get_option(options, "package_name", "#{get_param("SS_component")}_#{get_param("request_id")}_#{version}")
     group_path = get_option(options, "group_path", default_group_path(version))
+    transfer_properties = get_option(options, "transfer_properties", {})
     path_property_name = get_option(options, "BAA_PATH_PROPERTY", "BAA_BASE_PATH")
-    path_property_value = get_param(path_property_name, nil)
+    path_property_value = get_option(transfer_properties, path_property_name, nil)
     path_property = "#{path_property_name}=#{path_property_value}"
-    transfer_properties = get_option(options, "transfer_properties", nil)
     message_box "Packaging Files via BAA"
     log "\t StagingPath: #{group_path}"
     result = {"status" => "ERROR", "group_path" => group_path, "package_name" => package_name}
@@ -66,10 +66,10 @@ class BaaDispatcher < AbstractDispatcher
     else # Create a new one
       log "#=> Create Component Template: #{package_name}"
       template_id = @baa.create_empty_template(package_name, group_id)
-      log "\tApplying properties...to template with id #{template_id}" if transfer_properties
-      template_id = @baa.set_template_properties(package_name, group_path, transfer_properties) if transfer_properties
+      log "\tApplying properties...to template with id #{template_id}" if transfer_properties.size > 0
+      template_id = @baa.set_template_properties(package_name, group_path, transfer_properties) if transfer_properties.size > 0
     end
-    log "\tAdd content to template #{template_id}\n"
+    log "\tAdd content to template #{template_id}\nPath property: #{path_property}"
     template_options = {}
     template_options["path_property"] = path_property unless path_property_value.nil?
     template_id = @baa.add_template_content(template_id, artifact_hash, template_options)
