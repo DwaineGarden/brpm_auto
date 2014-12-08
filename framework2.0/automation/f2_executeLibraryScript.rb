@@ -33,11 +33,11 @@
 # Upload Script File:
 #   name: Script file
 #   type: in-file
-#   position: A3:C3
+#   position: A3:F3
 # Transfer Property Prefix:
 #   name: property prefix to filter properties into script
 #   type: in-text
-#   position: A4:C4
+#   position: A4:B4
 # script_file_to_execute:
 #   name: file picker
 #   position: A2:F2
