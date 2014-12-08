@@ -15,19 +15,29 @@
 #
 #---------------------- Arguments --------------------------#
 ###
-# Select Libary Script:
+# Update Script Library:
+#   name: yes/no update the script library
+#   type: in-list-single
+#   list_pairs: no,no|yes,yes
+#   position: A1:B1
+# Update Status:
+#   name: updated status
+#   type: in-external-single-select
+#   external_resource: f2_rsc_UpdateScriptLib
+#   position: D1:F1
+# Select Library Script:
 #   name: script file picker
-#   position: A1:F1
+#   position: A2:F2
 #   type: in-external-single-select
 #   external_resource: f2_rsc_libraryScriptTree
 # Upload Script File:
 #   name: Script file
 #   type: in-file
-#   position: A2:C2
+#   position: A3:C3
 # Transfer Property Prefix:
 #   name: property prefix to filter properties into script
 #   type: in-text
-#   position: A3:C3
+#   position: A4:C4
 # script_file_to_execute:
 #   name: file picker
 #   position: A2:F2
@@ -55,7 +65,7 @@ SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
 
 #---------------------- Variables --------------------------#
 script_path = @p.get("Upload Script File")
-script_path = @p.get("Select Libary Script") if script_path == ""
+script_path = @p.get("Select Library Script") if script_path == ""
 transfer_prefix = @p.get("Transfer Property Prefix", ARG_PREFIX)
 
 #---------------------- Main Body --------------------------#
