@@ -4,13 +4,24 @@
 # Copyright (c) BMC Software, Inc. 2001-2014
 # All Rights Reserved.
 ################################################################################
-#---------------------- f2_artifactDeploy -----------------------#
-# Description: Deploy Artifacts from Staging to target_servers
-# consumes "instance_#{component_name}" from staging step 
-# and deploys it to the targets (ALL Servers selected for step)
+#---------------------- f2_artifactPackaging -----------------------#
+# Description: Stage Artifacts on RPM Server and Package for Deployment
+#  End any path with a / to get the entire directory
 #
 #---------------------- Arguments --------------------------#
 ###
+# uploadfile_1:
+#   name: File 1
+#   type: in-file
+#   position: A1:F1
+# uploadfile_2:
+#   name: File 2
+#   type: in-file
+#   position: A2:F2
+# artifact_paths:
+#   name: Paths to files(comma delimited fully qualified paths)
+#   type: in-text
+#   position: A3:F3
 # output_status:
 #   name: status
 #   type: out-text
@@ -32,20 +43,19 @@ SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
 #---------------------- Methods ----------------------------#
 
 #---------------------- Variables --------------------------#
-brpm_hostname = @p.SS_base_url.gsub(/^.*\:\/\//, "").gsub(/\:\d.*/, "")
-# Check if we have been passed a package instance 
-staging_info = @p.required("instance_#{@p.SS_component}")
-staging_path = staging_info["instance_path"]
 
 #---------------------- Main Body --------------------------#
-# Deploy and unzip the package on all targets
+# Check if we have been passed a package id from a promotion
+# Build the list of files for the template
+files_to_deploy = @transport.get_artifact_paths(@p, options = {})
 transfer_properties = @transport.get_transfer_properties
-options = {"allow_md5_mismatch" => true, "transfer_properties" => transfer_properties}
-#=> Call the framework routine to deploy the package instance
-result = @transport.deploy_package_instance(staging_info, options)
-#@rpm.log "Dispatch Result: #{result.inspect}"
-#@p.save_local_params
-
-pack_response("output_status", "Successfully deployed - #{File.basename(staging_path)}")
+result = @transport.package_artifacts(files_to_deploy, {"version" => @p.step_version, "transfer_properties" => transfer_properties})
+#@rpm.log "SRUN Result: #{result.inspect}"
+@p.assign_local_param("instance_#{@p.SS_component}_content", files_to_deploy)
+@p.assign_local_param("instance_#{@p.SS_component}", result)
+@rpm.log "Saved in JSON Params: #{"instance_#{@p.SS_component}"}"
+@p.save_local_params
+pack_response("output_status", "Successfully packaged - #{File.basename(result["instance_path"])}")
 
 params["direct_execute"] = true #Set for local execution
+

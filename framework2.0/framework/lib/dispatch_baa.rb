@@ -41,8 +41,7 @@ class BaaDispatcher < AbstractDispatcher
   # * hash - {package_id, status, template_db_key, stagin_server}
   def package_artifacts(artifact_list, options = {})
     version = get_option(options,"version", get_param("step_version"))
-    version = "#{get_param("SS_request_number")}_#{precision_timestamp}" if version == ""
-    package_name = get_option(options, "package_name", "#{get_param("SS_component")}_#{get_param("request_id")}_#{version}")
+    package_name = get_option(options, "package_name", default_item_name(version))
     group_path = get_option(options, "group_path", default_group_path(version))
     transfer_properties = get_option(options, "transfer_properties", {})
     path_property_name = get_option(options, "BAA_PATH_PROPERTY", "BAA_BASE_PATH")
@@ -106,9 +105,8 @@ class BaaDispatcher < AbstractDispatcher
     package_id = package_info["package_id"]
     path_property = get_option(package_info,"path_property", nil)
     version = get_option(options,"version", get_param("SS_component_version"))
-    version = "#{get_param("SS_request_number")}_#{precision_timestamp}" if version == ""
     execute_now = get_option(options,"execute_now", true)
-    job_base_name = get_option(options, "job_name", "#{get_param("SS_component")}_nsh_#{get_param("request_id")}_#{version}")
+    job_base_name = get_option(options, "job_name", default_item_name(version))
     group_path = get_option(options, "group_path", default_group_path(version, true))
     transfer_properties = get_option(options, "transfer_properties", {})
     unless path_property.nil?
@@ -154,6 +152,7 @@ class BaaDispatcher < AbstractDispatcher
         log "#=> Executing Job"
         execute_results = @baa.execute_job_with_results(job_db_key, result)
         result["results"] += "#{os} - #{execute_results}"
+        execute_results.each{|k,v| log("#{k}: #{v}")}
       end
     end
     result
@@ -180,13 +179,12 @@ class BaaDispatcher < AbstractDispatcher
     result = {"status" => "ERROR"}
     job_type = "NSHScriptJob"
     version = get_option(options,"version", get_param("SS_component_version"))
-    version = "#{get_param("SS_request_number")}_#{precision_timestamp}" if version == ""
     targets = get_option(options, "servers")
     targets = get_server_list.keys if targets == ""
     num_par_procs = get_option(options,"num_par_procs", 50)
     execute_now = get_option(options,"execute_now", false)
     target_type = get_option(options,"target_type", "servers")
-    job_name = get_option(options, "job_name", "#{get_param("SS_component")}_nsh_#{get_param("request_id")}_#{version}")
+    job_name = get_option(options, "job_name", default_item_name)
     group_path = get_option(options, "group_path", default_group_path(version, true))
     args = [
       group_path, #jobGroup
@@ -229,12 +227,15 @@ class BaaDispatcher < AbstractDispatcher
   # opens passed script path, or executes passed text
   # processes the script in erb first to allow param substitution
   # note script may have keyword directives (see additional docs) 
+  # uses BAA_FRAMEWORK_NSH_SCRIPT to locate the nsh_script
   # ==== Attributes
   #
   # * +script_file+ - the path to the script or the text of the script
   # * +options+ - hash of options, includes: 
   #    servers - to override step servers
   #    version - to override use of component version
+  #    nsh_script_name - name of nsh_script to call
+  #    nsh_script_group - group path of nsh script
   # ==== Returns
   #
   # action output
@@ -244,9 +245,21 @@ class BaaDispatcher < AbstractDispatcher
     content = File.open(script_file).read
     seed_servers = get_option(options, "servers")
     transfer_properties = get_option(options, "transfer_properties",{})
-    script_group = get_option(options, "script_group", "BRPM/NSH_SCRIPTS")
-    script_name = get_option(options, "script_name", "SHELL_EXECUTE")
+    nsh_script_group = get_option(options, "nsh_script_group")
+    nsh_script_name = get_option(options, "nsh_script_name")
+    version = get_option(options,"version", get_param("SS_component_version"))
+    group_path = get_option(options, "group_path", default_group_path(version, true))
+    job_name = get_option(options, "job_name", default_item_name(version))
+    if nsh_script_name == "" && defined?(BAA_FRAMEWORK_NSH_SCRIPT)
+      log "Using BAA_FRAMEWORK_NSH_SCRIPT defined in customer_include"
+      nsh_script_group = File.dirname(BAA_FRAMEWORK_NSH_SCRIPT)
+      nsh_script_name = File.basename(BAA_FRAMEWORK_NSH_SCRIPT)
+    else
+      raise "Command_Failed: BAA_FRAMEWORK_NSH_SCRIPT must be defined in customer_include.rb"
+    end    
     keyword_items = get_keyword_items(content)
+    log "\tBuilding group path..."
+    job_group_id = @baa.ensure_group_path(group_path, "Jobs")
     params_filter = keyword_items.has_key?("RPM_PARAMS_FILTER") ? keyword_items["RPM_PARAMS_FILTER"] : DEFAULT_PARAMS_FILTER
     transfer_properties.merge!(get_transfer_properties(params_filter, strip_prefix = true))
     log "#----------- Executing Script on Remote Hosts -----------------#"
@@ -268,15 +281,23 @@ class BaaDispatcher < AbstractDispatcher
       log "Shebang: #{shebang.inspect}"
       wrapper_path = build_wrapper_script(os, shebang, transfer_properties, {"script_target" => File.basename(script_file)})
       log "# Wrapper: #{wrapper_path}"
-      target_path = nsh_path(transfer_properties["RPM_CHANNEL_ROOT"])
+      target_path = @baa.nsh_path(transfer_properties["RPM_CHANNEL_ROOT"])
       log "# Copying script to target: "
       clean_line_breaks(os, script_file, content)
-      result = @baa.create_file_deploy_job(job_name, group_path, [script_file, wrapper_path], target_path, servers.keys, options = {})
-      log result
+      files_to_deploy = ["//#{BAA_RPM_HOSTNAME}#{script_file}", "//#{BAA_RPM_HOSTNAME}#{wrapper_path}"]
+      result = @baa.create_file_deploy_job(job_name, group_path, files_to_deploy, target_path, servers.keys, {"execute_now" => true})
+      result.each{|k,v| log("#{k}: #{v}") }
       log "# Executing script on target via wrapper:"
-      job_params = [os, File.basename(wrapper_path), target_path]
-      result = create_nsh_script_job(script_name, script_group, job_params, servers.keys, options = {})
-      log result
+      job_params = [@params["SS_application"], 
+        @params["SS_component"], 
+        @params["SS_environment"], 
+        @params["SS_component_version"],
+        @params["request_id"],
+        target_path,
+        File.basename(wrapper_path)
+        ]
+      result = create_nsh_script_job(nsh_script_name, nsh_script_group, job_params, {"servers" => servers.keys, "execute_now" => true})
+      result.each{|k,v| log("#{k}: #{v}") }
     end
     result
   end
@@ -292,11 +313,26 @@ class BaaDispatcher < AbstractDispatcher
   # ==== Returns
   #
   # * group_path string
-  def default_group_path(version, deploy = false)
+  def default_group_path(version = nil, deploy = false)
     base_grp = defined?(BAA_BASE_GROUP) ? BAA_BASE_GROUP : "BRPM"
+    version = precision_timestamp if version.nil? || version == ""
     result = "/#{base_grp}/#{get_param("SS_application")}/#{version}/#{get_param("SS_component")}"
     result.gsub!(version,"#{version}/#{get_param("SS_environment")}") if deploy
     result
+  end
+  
+  # Creates a unique item name for BAA storage
+  #
+  # ==== Attributes
+  #
+  # * +version+ - version name
+  #
+  # ==== Returns
+  #
+  # * item name string
+  def default_item_name(version = nil)
+    version = precision_timestamp if version.nil? || version == ""
+    "#{get_param("SS_component")}_nsh_#{get_param("request_id")}_#{version}"
   end
 
 end

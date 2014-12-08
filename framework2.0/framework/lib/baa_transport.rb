@@ -938,7 +938,7 @@ class BAATransport < BrpmAutomation
     args = [
       job_name, #job_name
       group_path, #job_group
-      source_files, #source_files
+      source_files.join(","), #source_files
       target_path, #destination
       preserve_file_paths, #isPreserveSourceFilePaths
       num_par_procs, #numTargetsInParallel
@@ -1002,6 +1002,30 @@ class BAATransport < BrpmAutomation
       result = result.gsub(base_path, "??#{path_property}??")
     end
     result
+  end
+
+  # Returns the nsh path from a dos path
+  #
+  # ==== Attributes
+  #
+  # * +source_path+ - path in nsh
+  # * +server+ - optional, adds a server in nsh format
+  #
+  # ==== Returns
+  #
+  # * nsh compatible path
+  #
+  def nsh_path(source_path, server = nil)
+    path = ""
+    if source_path.include?(":\\")
+      path_array = source_path.split("\\")
+      path = "/#{path_array[0].gsub(":","/")}"
+      path += path_array[1..-1].join("/")
+    else
+      path = source_path
+    end
+    path = "//server#{path}" unless server.nil?
+    path.chomp("/")
   end
 
   private
