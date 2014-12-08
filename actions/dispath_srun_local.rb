@@ -103,7 +103,7 @@ SS_output_file = @params["SS_output_file"]
 @action_txt = File.open(@params["SS_script_file"]).read
 @output_dir = @params["SS_output_dir"]
 max_time = (@rpm.get_option(@params, "step_estimate", "60").to_i) * 60
-@nsh = NSHTransport.new(@nsh_path)
+@nsh = TransportNSH.new(@nsh_path)
 
 #---------------------- Main Script ------------------------#
 keyword_items = get_keyword_items

@@ -1,10 +1,10 @@
 # dispatch_srun.rb
 #  Module for action dispatch with nsh protocol
 libDir = File.expand_path(File.dirname(__FILE__))
-require "#{libDir}/dispatch"
+require "#{libDir}/dispatch_base"
 
 
-class NSHDispatcher < AbstractDispatcher
+class DispatchNSH < DispatchBase
   # Initialize the class
   #
   # ==== Attributes
@@ -13,8 +13,8 @@ class NSHDispatcher < AbstractDispatcher
   # * +options+ - hash of options to use, send "output_file" to point to the logging file
   # * +test_mode+ - true/false to simulate commands instead of running them
   #
-  def initialize(nsh_path, params, options = {})
-    @nsh = NSHTransport.new(nsh_path, @params)
+  def initialize(nsh_object, params, options = {})
+    @nsh = nsh_object
     @verbose = get_option(options, "verbose", false)
     @params = params
     super(params)
@@ -143,5 +143,6 @@ end
 @rpm.log "Initializing nsh transport"
 baa_path = defined?(BAA_BASE_PATH) ? BAA_BASE_PATH : "/opt/bmc/blade8.5"
 nsh_path = "#{BAA_BASE_PATH}/NSH"
+@nsh = TransportNSH.new(nsh_path, @params)
 @rpm.log "Path to nsh: #{nsh_path}"
-@transport = NSHDispatcher.new(nsh_path, @params)
+@transport = DispatchNSH.new(@nsh, @params)

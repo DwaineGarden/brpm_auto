@@ -1,10 +1,10 @@
 # dispatch_srun.rb
 #  Module for action dispatch with nsh protocol
 libDir = File.expand_path(File.dirname(__FILE__))
-require "#{libDir}/dispatch"
+require "#{libDir}/dispatch_base"
 
 
-class SSHDispatcher < AbstractDispatcher
+class DispatchSSH < DispatchBase
   # Initialize the class
   #
   # ==== Attributes
@@ -14,7 +14,7 @@ class SSHDispatcher < AbstractDispatcher
   # * +test_mode+ - true/false to simulate commands instead of running them
   #
   def initialize(ssh_object, params, options = {})
-    @ssh = SSHTransport.new([], @params, options)
+    @ssh = ssh_object
     @verbose = get_option(options, "verbose", false)
     @params = params
     super(params)
@@ -147,4 +147,5 @@ end
 @rpm.log "Initializing ssh transport"
 debug = defined?(@debug) ? @debug : false
 options = {"debug" => debug}
-@transport = SSHDispatcher.new(cap_ssh, @params, options)
+@ssh = TransportSSH.new([], @params, options)
+@transport = DispatchSSH.new(@ssh, @params, options)

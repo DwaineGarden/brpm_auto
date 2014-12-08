@@ -1,10 +1,10 @@
 # dispatch_srun.rb
 #  Module for action dispatch with nsh protocol
 libDir = File.expand_path(File.dirname(__FILE__))
-require "#{libDir}/dispatch"
+require "#{libDir}/dispatch_base"
 
 
-class BaaDispatcher < AbstractDispatcher
+class DispatchBAA < DispatchBase
   # Initialize the class
   #
   # ==== Attributes
@@ -249,7 +249,7 @@ class BaaDispatcher < AbstractDispatcher
     nsh_script_name = get_option(options, "nsh_script_name")
     version = get_option(options,"version", get_param("SS_component_version"))
     group_path = get_option(options, "group_path", default_group_path(version, true))
-    job_name = get_option(options, "job_name", default_item_name(version))
+    job_name = get_option(options, "job_name", default_item_name)
     if nsh_script_name == "" && defined?(BAA_FRAMEWORK_NSH_SCRIPT)
       log "Using BAA_FRAMEWORK_NSH_SCRIPT defined in customer_include"
       nsh_script_group = File.dirname(BAA_FRAMEWORK_NSH_SCRIPT)
@@ -340,6 +340,6 @@ end
 require "#{@params["SS_script_support_path"]}/baa_utilities"
 @rpm.log "Initializing BAA transport"
 baa_path = defined?(BAA_BASE_PATH) ? BAA_BASE_PATH : "/opt/bmc/blade8.5"
-@baa = BAATransport.new(baa_path, @params)
+@baa = TransportBAA.new(baa_path, @params)
 @rpm.log "Path to BAA: #{BAA_BASE_PATH}"
-@transport = BaaDispatcher.new(@baa, @params)
+@transport = DispatchBAA.new(@baa, @params)

@@ -57,8 +57,8 @@ if [[ ! -d ${RLM_ROOT_DIR} ]]; then
 fi
 
 RLM_PERSIST_DIR=$RLM_ROOT_DIR/persist
-RELEASE_DIR=$RLM_ROOT_DIR/releases
-VER_PATH=${RELEASE_DIR}/${RPM_component_version}/RPD
+RELEASE_DIR=$RLM_ROOT_DIR/releases/RPD
+VER_PATH=${RELEASE_DIR}/${RPM_component_version}
 
 if [[ ! -d ${RELEASE_DIR} ]]; then
   fatal "The directory $RELEASE_DIR not found"

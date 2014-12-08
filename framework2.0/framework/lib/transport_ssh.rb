@@ -3,7 +3,7 @@ require 'capistrano'
 require 'capistrano/cli'
 require 'timeout'
 
-class SSHTransport < BrpmAutomation
+class TransportSSH < BrpmAutomation
   
   # Initialize the class
   #

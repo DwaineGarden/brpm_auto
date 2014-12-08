@@ -1,5 +1,5 @@
 # Wrapper class for NSH interactions
-class NSH < BrpmAutomation
+class TransportNSH < BrpmAutomation
 
   attr_writer :test_mode
 
@@ -15,11 +15,10 @@ class NSH < BrpmAutomation
     @nsh_path = nsh_path
     @test_mode = test_mode
     @verbose = get_option(options, "verbose", false)
-    @max_time = get_option(options, "max_time", 3600)
+    super(params) unless params.nil?
     @opts = options
     @run_key = get_option(options,"timestamp",Time.now.strftime("%Y%m%d%H%M%S"))
-    super(params)
-    outf = params["SS_output_file"]
+    outf = get_option(options,"output_file", SS_output_file)
     @output_dir = File.dirname(outf)
     insure_proxy
   end
@@ -111,7 +110,7 @@ class NSH < BrpmAutomation
   # ==== Attributes
   #
   # * +target_hosts+ - blade hostnames to copy to
-  # * +src_path+ - NSH path to source files
+  # * +src_path+ - NSH path to source files (may be an array)
   # * +target_path+ - path to copy to (same for all target_hosts)
   #
   # ==== Returns
@@ -128,8 +127,8 @@ class NSH < BrpmAutomation
     display_result(result)
   end
 
-  # Runs a command via nsh on an array of targets
-  # targets should all be of same os platform
+  # Runs a command via nsh on a windows target
+  #
   # ==== Attributes
   #
   # * +target_hosts+ - blade hostnames to copy to
@@ -139,17 +138,14 @@ class NSH < BrpmAutomation
   # ==== Returns
   #
   # * results of command per host
-  def nexec(target_hosts, target_path, command, options = {})
+  def nexec_win(target_hosts, target_path, command)
     # if source_script exists, transport it to the hosts
-    platform = get_option(options, "plaform", "linux")
-    max_time = get_option(options,"max_time", @max_time)
     result = "Running: #{command}\n"
-    cmd = platform == "linux" ? "/bin/bash" : "cmd /c"
     target_hosts.each do |host|
-      cmd = "#{@nsh_path}/bin/nexec #{host} #{cmd} \"cd #{target_path}; #{command}\""
+      cmd = "#{@nsh_path}/bin/nexec #{host} cmd /c \"cd #{target_path}; #{command}\""
       cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
       result += "Host: #{host}\n"
-      res = execute_shell(cmd, max_time)
+      res = execute_shell(cmd)
       result += display_result(res)
     end
     result
@@ -162,20 +158,17 @@ class NSH < BrpmAutomation
   # * +target_hosts+ - blade hostnames to copy to
   # * +script_path+ - nsh path to the script
   # * +target_path+ - path from which to execute the script on the remote host
-  # * +options+ - hash of options (raw_result = true, max_time in seconds to execute)
+  # * +options+ - hash of options (raw_result = true)
   #
   # ==== Returns
   #
   # * results of command per host
   def script_exec(target_hosts, script_path, target_path, options = {})
-    max_time = get_option(options,"max_time", @max_time)
     raw_result = get_option(options,"raw_result", false)
     script_dir = File.dirname(script_path)
     err_file = touch_file("#{script_dir}/nsh_errors_#{Time.now.strftime("%Y%m%d%H%M%S%L")}.txt")
-    out_file = touch_file("#{script_dir}/nsh_out_#{Time.now.strftime("%Y%m%d%H%M%S%L")}.txt")
-    cmd = "#{@nsh_path}/bin/scriptutil -d \"#{target_path}\" -h #{target_hosts.join(" ")} -H \"Results from: %h\" -s #{script_path} 2>#{err_file} | tee #{out_file}"
+    cmd = "#{@nsh_path}/bin/scriptutil -d \"#{target_path}\" -h #{target_hosts.join(" ")} -H \"Results from: %h\" -s #{script_path} 2>#{err_file}"
     result = execute_shell(cmd)
-    result["stdout"] = "#{result["stdout"]}\n#{File.open(out_file).read}"
     result["stderr"] = "#{result["stderr"]}\n#{File.open(err_file).read}"
     result = display_result(result) unless raw_result
     result
@@ -212,7 +205,7 @@ class NSH < BrpmAutomation
   # ==== Returns
   #
   # * array of path contents
-  def nsh_dir(nsh_path)
+  def ls(nsh_path)
     res = nsh_command("ls #{nsh_path}")
     res.split("\n").reject{|l| l.start_with?("Running ")}
   end
@@ -235,89 +228,47 @@ class NSH < BrpmAutomation
     result
   end
 
-  # Verifies file/directory for an array of items
-  #  +this will preprocess any list of files/directories to pass to BAA::package_artifacts+
+  # Returns the nsh path from a dos path
   #
   # ==== Attributes
   #
-  # * +artifacts+ - array of file/nsh paths
+  # * +source_path+ - path in nsh
+  # * +server+ - optional, adds a server in nsh format
   #
   # ==== Returns
   #
-  # * hash of artifacts with a artifact_type {"/opt/bmc/file1.txt" => "file", "/opt/bmc" => "dir"}
+  # * nsh compatible path
   #
-  def map_deploy_artifacts(artifacts)
-    return_result = {}
-    artifacts.each do |item|
-      result = nsh_command("ls #{item.chomp("/") + "/"} > /dev/null",true)
-      if result["stderr"] == ""
-        ftype = "dir"
-      elsif result["stderr"].include?("Not a directory")
-        ftype = "file"
-      else
-        ftype = "error"
-        raise "Command_Failed: path does not exist - #{item}"
-      end
-      return_result[item] = ftype
-    end
-    return_result
-  end
-
-  # Returns the dos path from an nsh path
-  #
-  # ==== Attributes
-  #
-  # * +nix_path+ - path in nsh
-  #
-  # ==== Returns
-  #
-  # * dos compatible path
-  #
-  def dos_path(nix_path)
+  def nsh_path(source_path, server = nil)
     path = ""
-    path_array = nix_path.split("/")
-    if path_array[1].length == 1 # drive letter
-      path = "#{path_array[1]}:\\"
-      path += path_array[2..-1].join("\\")
+    if source_path.include?(":\\")
+      path_array = source_path.split("\\")
+      path = "/#{path_array[0].gsub(":","/")}"
+      path += path_array[1..-1].join("/")
     else
-      path += path_array[1..-1].join("\\")
+      path = source_path
     end
-    path
+    path = "//server#{path}" unless server.nil?
+    path.chomp("/")
   end
-  
-  # Executes a command via shell in a timeout loop
-  #
+    
+  # Builds an NSH compatible path for an uploaded file to BRPM
+  # 
   # ==== Attributes
   #
-  # * +platform_info+ - hash of plaform info e.g. {"transport" => "nsh", "platform" => "windows", "language" => "batch"}
+  # * +attachment_local_path+ - path to attachment from params 
+  # * +brpm_hostname+ - name of brpm host (as accessible from NSH)
   # ==== Returns
   #
-  # * command_run hash {stdout => <results>, stderr => any errors, pid => process id, status => exit_code}
-  def execute_shell(command, max_time = @max_time)
-    cmd_result = {"stdout" => "","stderr" => "", "pid" => "", "status" => "1"}
-    cmd_result["stdout"] = "Running #{command}\n"
-    output_dir = File.join(@output_dir,"#{precision_timestamp}")
-    errfile = "#{output_dir}_stderr.txt"
-    cmd_result["stdout"] += "Script Output:\n"
-    begin
-      orig_stderr = $stderr.clone
-      $stderr.reopen File.open(errfile, 'a' )
-      timer_status = Timeout.timeout(max_time) {
-        cmd_result["stdout"] += `#{command}`
-        status = $?
-        cmd_result["pid"] = status.pid
-        cmd_result["status"] = status.to_i
-      }
-      stderr = File.open(errfile).read
-      cmd_result["stderr"] = stderr if stderr.length > 2
-    rescue Exception => e
-      $stderr.reopen orig_stderr
-      cmd_result["stderr"] = "ERROR\n#{e.message}\n#{e.backtrace}"
-    ensure
-      $stderr.reopen orig_stderr
+  # nsh path
+  #
+  def get_attachment_nsh_path(attachment_local_path, brpm_hostname)
+    if attachment_local_path[1] == ":"
+      attachment_local_path[1] = attachment_local_path[0]
+      attachment_local_path[0] = '/'
     end
-    File.delete(errfile)
-    cmd_result
+    attachment_local_path = attachment_local_path.gsub(/\\/, "/")
+    "//#{brpm_hostname}#{attachment_local_path}"
   end
 
   private
@@ -333,13 +284,5 @@ class NSH < BrpmAutomation
     fil.close
     full_path
   end
-  
-  def touch_file(file_path)
-    fil = File.open(file_path,"w+")
-    fil.close
-    file_path
-  end
 
 end
-
-

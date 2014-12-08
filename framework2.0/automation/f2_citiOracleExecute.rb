@@ -118,7 +118,7 @@ END
 # Properties needed
 #  CITI_ORACLE_HOME, CITI_ORACLE_USERNAME, CITI_ORACLE_PASSWORD, CITI_ORACLE_SID, RPM_CHANNEL_ROOT, RPM_CONTENT_PATH
 nsh_path = "#{defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5"}/NSH"
-@srun = NSHDispatcher.new(nsh_path, @params)
+@srun = DispatchNSH.new(nsh_path, @params)
 
 #---------------------- Methods ----------------------------#
 

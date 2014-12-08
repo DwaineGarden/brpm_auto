@@ -62,6 +62,6 @@ else
   @p.find_or_add("SS_transport", transport)
   @p.save_local_params
   @rpm.log "Loading transport modules for: #{transport}"
-  rpm_load_module("#{transport}_transport", "dispatch_#{transport}")
+  rpm_load_module("transport_#{transport}", "dispatch_#{transport}")
 end
 

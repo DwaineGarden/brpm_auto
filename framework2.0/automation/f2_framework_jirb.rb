@@ -1,7 +1,7 @@
 require 'fileutils'
 rlm_base_path = "/opt/bmc/RLM4.4"
 #rlm_base_path = "/opt/bmc/rlm4"
-script_support = "#{rlm_base_path}/releases/current/RPM/lib/script_support"
+script_support = "#{rlm_base_path}/releases/RPM/current/lib/script_support"
 persist = "#{rlm_base_path}/persist/automation_lib"
 FileUtils.cd script_support, :verbose => true
 require "#{script_support}/ssh_script_header"

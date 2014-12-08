@@ -2,7 +2,7 @@
 #  this also wraps the BAAUtilities that ships with BRPM
 require 'savon'
 
-class BAATransport < BrpmAutomation
+class TransportBAA < BrpmAutomation
 
   # Initializes the instance of the baa class
   #  this will authenticate to the Bladelogic server and

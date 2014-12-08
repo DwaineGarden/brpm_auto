@@ -79,7 +79,7 @@ end
 #  like this ??BAA_BASE_PATH??/build/item
 #=> Initialize framework objects
 @baa = BAA.new(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc),baa_config["role"],@params)
-@srun = BaaDispatcher.new(@baa, @params)
+@srun = DispatchBAA.new(@baa, @params)
 #=> Build the artifact List
 files_to_deploy = @srun.get_artifact_paths(@p, {})
 #=> Stage, then package artifacts

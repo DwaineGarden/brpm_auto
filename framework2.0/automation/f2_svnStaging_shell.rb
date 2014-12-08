@@ -106,7 +106,7 @@ END
 # Properties needed
 # CITI_SVN_PATH, RPM_POST_PATH, SVN_REV, SVN_TARGET, SVN_OPTIONS, SVN_LOGIN, SVN_URL
 nsh_path = "#{defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5"}/NSH"
-@srun = NSHDispatcher.new(nsh_path, @params)
+@srun = DispatchNSH.new(nsh_path, @params)
 
 #---------------------- Methods ----------------------------#
 def make_credential(user, password)

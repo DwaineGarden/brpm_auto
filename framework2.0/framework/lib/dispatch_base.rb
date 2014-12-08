@@ -12,7 +12,7 @@ OS_PLATFORMS = {
   "nux" => {"name" => "Linux", "tmp_dir" => "/tmp"}}
 
 
-class AbstractDispatcher < BrpmAutomation
+class DispatchBase < BrpmAutomation
   # Initialize the class
   #
   # ==== Attributes

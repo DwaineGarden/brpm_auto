@@ -156,7 +156,7 @@ SS_output_file = @params["SS_output_file"]
 content = File.open(@params["SS_script_file"]).read
 action_txt = ERB.new(content).result(binding)
 @output_dir = @params["SS_output_dir"]
-@nsh = NSHTransport.new(@nsh_path, {"params" => @params})
+@nsh = TransportNSH.new(@nsh_path, {"params" => @params})
 
 #---------------------- Main Script ------------------------#
 keyword_items = get_keyword_items

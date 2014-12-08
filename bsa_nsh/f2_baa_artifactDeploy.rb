@@ -80,7 +80,7 @@ properties[property_name] = @p.get("BAA_DEPLOY_PATH", "/mnt/baa/Sales-Billing/DE
 
 #=> Initialize framework objects
 @baa = BAA.new(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc), baa_config["role"], @params)
-@srun = BaaDispatcher.new(@baa, @params)
+@srun = DispatchBAA.new(@baa, @params)
 session_id = @baa.session_id
 options = {"properties" => properties, "execute_now" => execute_now }
 options["job_name"] = item_name if item_name != ""

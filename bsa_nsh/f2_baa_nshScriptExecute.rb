@@ -65,7 +65,7 @@ job_params = []
 @rpm.message_box "Executing NSHScript Job - #{nsh_script_name}", "title"
 #=> Initialize framework objects
 @baa = BAA.new(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc),baa_config["role"],@params)
-@srun = BaaDispatcher.new(@baa, @params)
+@srun = DispatchBAA.new(@baa, @params)
 session_id = @baa.session_id
 @rpm.log "JobParams to transfer:"
 # add standard RPM properties
