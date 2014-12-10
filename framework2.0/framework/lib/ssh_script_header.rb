@@ -300,7 +300,7 @@ class BrpmAutomation
   # * +default_value+ - if entered will be returned if the option doesn't exist or is blank
   def get_option(options, key, default_value = "")
     result = options.has_key?(key) ? options[key] : nil
-    result = default_value if result.nil?
+    result = default_value if result.nil? || result == ""
     result 
   end
 

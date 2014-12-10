@@ -39,7 +39,8 @@ class DispatchNSH < DispatchBase
     seed_servers = get_option(options, "servers")
     transfer_properties = get_option(options, "transfer_properties",{})
     keyword_items = get_keyword_items(content)
-    params_filter = keyword_items.has_key?("RPM_PARAMS_FILTER") ? keyword_items["RPM_PARAMS_FILTER"] : DEFAULT_PARAMS_FILTER
+    params_filter = get_option(keyword_items, "RPM_PARAMS_FILTER")
+    params_filter = get_option(options, "transfer_prefix", DEFAULT_PARAMS_FILTER)
     transfer_properties.merge!(get_transfer_properties(params_filter, strip_prefix = true))
     log "#----------- Executing Script on Remote Hosts -----------------#"
     log "# Script: #{script_file}"

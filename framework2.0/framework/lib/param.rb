@@ -87,7 +87,7 @@ class Param < BrpmAutomation
     ans = nil
     ans = @json_params[key_name] if present_json?(key_name)
     ans = @params[key_name] if present_local?(key_name)
-    ans = default if ans.nil? 
+    ans = default if ans.nil? || ans == ""
     complex_property_value(ans)
   end  
   # Allows you to specify a key like a method call

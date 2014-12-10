@@ -16,8 +16,8 @@ def execute(script_params, parent_id, offset, max_records)
   #pout = []
   #script_params.each{|k,v| pout << "#{k} => #{v}" }
   #log_it "Current Params:\n#{pout.sort.join("\n") }"
-  raise "Command_Failed: no library path defined, set property: SCRIPT_LIBRARY_ROOT" if !defined?(SCRIPT_LIBRARY_ROOT)
-  library_root = SCRIPT_LIBRARY_ROOT
+  raise "Command_Failed: no library path defined, set property: ACTION_LIBRARY_PATH" if !defined?(ACTION_LIBRARY_PATH)
+  library_root = ACTION_LIBRARY_PATH
   begin
     if parent_id.blank?
       # root folder

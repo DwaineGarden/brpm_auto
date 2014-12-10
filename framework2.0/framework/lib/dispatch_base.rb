@@ -40,7 +40,7 @@ class DispatchBase < BrpmAutomation
   def get_transfer_properties(keyword_filter = DEFAULT_PARAMS_FILTER, strip_filter = true)
     result = {}
     STANDARD_PROPERTIES.each{|prop| result[prop.gsub("SS_","RPM_")] = @params[prop] }
-    @params.each{|k,v| result[strip_filter ? k.gsub(keyword_filter,"") : k] = get_param(k) if k.include?(keyword_filter) }
+    @params.each{|k,v| result[strip_filter ? k.gsub(keyword_filter,"") : k] = @p.get(k) if k.include?(keyword_filter) }
     result
   end
 
@@ -149,18 +149,20 @@ class DispatchBase < BrpmAutomation
       script += "echo ============== HOSTNAME: %HOST% ==============\r\n"
       script += "echo #{msg} \r\n"
       properties.each{|k,v| script += "set #{k}=#{v}\r\n" }
-      script +=  "echo Execute the file\r\n"
-      script +=  "cd %RPM_CHANNEL_ROOT%\r\n"
-      script +=  "#{cmd}\r\n"
+      script += "echo Execute the file\r\n"
+      script += "cd %RPM_CHANNEL_ROOT%\r\n"
+      script += "#{cmd}\r\n"
+      script += "echo EXIT_CODE: %errorlevel%\r\n"
       script +=  "timeout /T 500\r\necho y | del #{target}\r\n"
     else
       wrapper = "#{wrapper}.sh"
       script = "echo \"============== HOSTNAME: `hostname` ==============\"\n"
       script += "echo #{msg} \n"
       properties.each{|k,v| script += "export #{k}=\"#{v}\"\n" }
-      script +=  "echo Execute the file\n"
-      script +=  "cd $RPM_CHANNEL_ROOT\n"
-      script +=  "#{cmd}\n"    
+      script += "echo Execute the file\n"
+      script += "cd $RPM_CHANNEL_ROOT\n"
+      script += "#{cmd}\n"
+      script += "echo EXIT_CODE: $?\n"
       script +=  "sleep 2\nrm -f #{target}"    
     end
     fil = File.open(File.join(@output_dir, wrapper),"w+")
@@ -193,19 +195,21 @@ class DispatchBase < BrpmAutomation
       script += "echo ============== HOSTNAME: %HOST% ==============\r\n"
       script += "echo #{msg} \r\n"
       script += "set RPM_CHANNEL_ROOT=#{target_path}\r\n"
-      script +=  "echo Execute the file\r\n"
-      script +=  "cd %RPM_CHANNEL_ROOT%\r\n"
-      script +=  "#{command} #{target}\r\n"
-      script +=  "timeout /T 500\r\necho y | del #{target}\r\n"
+      script += "echo Execute the file\r\n"
+      script += "cd %RPM_CHANNEL_ROOT%\r\n"
+      script += "#{command} #{target}\r\n"
+      script += "echo EXIT_CODE: %errorlevel%\r\n"
+      script += "timeout /T 500\r\necho y | del #{target}\r\n"
     else
       wrapper = "#{wrapper}.sh"
       script = "echo \"============== HOSTNAME: `hostname` ==============\"\n"
       script += "echo #{msg} \n"
       script += "export RPM_CHANNEL_ROOT=\"#{target_path}\"\n"
-      script +=  "echo Execute the file\n"
-      script +=  "cd $RPM_CHANNEL_ROOT\n"
-      script +=  "#{command} #{target}\n"    
-      script +=  "sleep 2\nrm -f #{target}"    
+      script += "echo Execute the file\n"
+      script += "cd $RPM_CHANNEL_ROOT\n"
+      script += "#{command} #{target}\n"    
+      script += "echo EXIT_CODE: $?\n"
+      script += "sleep 2\nrm -f #{target}"    
     end
     fil = File.open(File.join(@output_dir, wrapper),"w+")
     fil.puts script
