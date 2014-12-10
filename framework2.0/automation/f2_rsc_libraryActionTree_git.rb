@@ -1,21 +1,26 @@
-#  f2_rsc_LibraryScriptTree
+#  f2_rsc_LibraryActionTree_git
 #  Resource automation to present a tree control for file browsing via nsh
-#  Called by f2_executeLibraryAction
+#  Called by f2_executeLibraryAction_git
+###
+# Update Action Library:
+#   name: yes/no update the script library
+#   type: in-text
+#   position: A2:B2
+###
 
 #---------------------- Declarations ------------------------------#
 FRAMEWORK_DIR = @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib") unless defined?(FRAMEWORK_DIR)
 
-#---------------------- Methods ------------------------------#
 body = File.open(File.join(FRAMEWORK_DIR,"lib","resource_framework.rb")).read
 result = eval(body)
-@script_name_handle = "librarytree"
+@script_name_handle = "update_git"
 
 #---------------------- Main Script ------------------------------#
 def execute(script_params, parent_id, offset, max_records)
   log_it "Starting Automation"
-  #pout = []
-  #script_params.each{|k,v| pout << "#{k} => #{v}" }
-  #log_it "Current Params:\n#{pout.sort.join("\n") }"
+  pout = []
+  script_params.each{|k,v| pout << "#{k} => #{v}" }
+  log_it "Current Params:\n#{pout.sort.join("\n") }"
   raise "Command_Failed: no library path defined, set property: ACTION_LIBRARY_PATH" if !defined?(ACTION_LIBRARY_PATH)
   library_root = ACTION_LIBRARY_PATH
   begin
