@@ -6,6 +6,9 @@
 ################################################################################
 #---------------------- f2_verifyURL -----------------------#
 # Description: Tests a url and greps for success text
+#=> About the f2 framework: upon loading the automation, several utility classes will be available
+#   @rpm: the BrpmAutomation class, @p: the Param class, @rest: the BrpmRest class and 
+#   @transport: the Transport class - the transport class will be loaded dependent on the SS_transport property value (ssh, nsh or baa) 
 
 #---------------------- Arguments --------------------------#
 ###

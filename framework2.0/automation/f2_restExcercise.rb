@@ -18,9 +18,7 @@
 #---------------------- Declarations -----------------------#
 params["direct_execute"] = true #Set for local execution
 
-#=> ------------- IMPORTANT ------------------- <=#
-#- This loads the BRPM Framework and sets: @p = Params, @auto = BrpmAutomation and @rest = BrpmRest
-require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
+#---------------------- Variables -----------------------#
 url = "http://ec2-54-208-221-146.compute-1.amazonaws.com:4005/brpm"
 
 #---------------------- Main Body --------------------------#

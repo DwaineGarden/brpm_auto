@@ -233,10 +233,9 @@ class BrpmRest < BrpmAutomation
     elapsed = 0
     until (elapsed > max_time || req_status == target_state)
       rest_result = get("requests", request_id, {"verbose" => verbose ? "yes" : "no"})
-      log "\tREST Call: #{url}" if verbose
       raise "Command_Failed: Request not found" if rest_result["status"] == "ERROR"
       if monitor_step_name == "none"
-        req_status = rest_result["response"]["aasm_state"]
+        req_status = rest_result["data"]["aasm_state"]
       else
         found = false
         i_pos = rest_result["data"]["steps"].map{|l| l["name"]}.index(monitor_step_name)
@@ -252,7 +251,7 @@ class BrpmRest < BrpmAutomation
       end
     end
     if req_status == target_state
-      req_status =  "Success test, looking for #{success}: Success!"
+      req_status =  "Success test, looking for #{target_state}: Success!"
     else
       if elapsed > max_time
         req_status =  "Command_Failed: Max time: #{max_time}(secs) reached.  Status is: #{req_status}, looking for: #{target_state}"

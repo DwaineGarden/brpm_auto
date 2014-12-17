@@ -8,6 +8,9 @@
 # Description: Deploy Artifacts from Staging to target_servers
 # consumes "instance_#{component_name}" from staging step 
 # and deploys it to the targets (ALL Servers selected for step)
+#=> About the f2 framework: upon loading the automation, several utility classes will be available
+#   @rpm: the BrpmAutomation class, @p: the Param class, @rest: the BrpmRest class and 
+#   @transport: the Transport class - the transport class will be loaded dependent on the SS_transport property value (ssh, nsh or baa) 
 #
 #---------------------- Arguments --------------------------#
 ###

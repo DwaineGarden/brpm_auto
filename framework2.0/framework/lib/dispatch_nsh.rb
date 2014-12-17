@@ -64,10 +64,10 @@ class DispatchNSH < DispatchBase
       target_path = @nsh.nsh_path(transfer_properties["RPM_CHANNEL_ROOT"])
       log "# Copying script to target: "
       clean_line_breaks(os, script_file, content)
-      result = @nsh.ncp(servers.keys, script_file, target_path)
+      result = @nsh.ncp(server_dns_names(servers), script_file, target_path)
       log result
       log "# Executing script on target via wrapper:"
-      result = @nsh.script_exec(servers.keys, wrapper_path, target_path)
+      result = @nsh.script_exec(server_dns_names(servers), wrapper_path, target_path)
       log result
     end
     result
@@ -129,11 +129,11 @@ class DispatchNSH < DispatchBase
       target_path = @nsh.nsh_path(target_path) if target_path != ""
       target_path = @nsh.nsh_path(servers.first[1].has_key?("CHANNEL_ROOT") ? servers.first[1]["CHANNEL_ROOT"] : os_details["tmp_dir"]) if target_path == ""
       log "# Deploying package on target:"
-      result = @nsh.ncp(servers.keys, instance_path, target_path)
+      result = @nsh.ncp(server_dns_names(servers), instance_path, target_path)
       log result
       log "# Unzipping package on target:"
       wrapper_path = create_command_wrapper("unzip -o", os, instance_path, target_path)
-      result = @nsh.script_exec(servers.keys, wrapper_path, target_path)
+      result = @nsh.script_exec(server_dns_names(servers), wrapper_path, target_path)
       log result
     end
     result

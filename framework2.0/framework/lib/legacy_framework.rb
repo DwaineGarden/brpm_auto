@@ -42,7 +42,7 @@ def message_box(msg, mtype = "sep")
     res += "#{start}#{" " * (tot- start.length + 1)}#\n"
     res += "##{"-" * tot}#\n"   
   end
-  @auto.log(res)
+  @rpm.log(res)
 
 end
 
@@ -110,30 +110,27 @@ end
 
 def monitor_request(request_id, options = {})
   target_status = "complete"
-  token = @params["SS_api_token"] 
-  token = options["token"] if options.has_key?("token")
   max_time = 15*60 # seconds = 15 minutes
   max_time = 60 * options["max_time"].to_i if options.has_key?("max_time")
   monitor_step_name = options.has_key?("monitor_step_name") ? options["monitor_step_name"] : "none"
   checking_interval = 15 #seconds
   if request_id.to_i > 0 && ["created","planned","started","problem","hold","complete"].include?(target_status)
-      message_box("Montoring Request: #{request_id}","sep")
+    @rpm.message_box("Montoring Request: #{request_id}","sep")
     req_status = "none"
     start_time = Time.now
     elapsed = 0
     until (elapsed > max_time || req_status == target_status)
-      url = "#{@params["SS_base_url"]}/v1/requests/#{request_id}?token=#{token}"
-      rest_result = rest_call(url, "get", {"quiet" => "yes"})
-      @auto.log "\tREST Call: #{url}"
+      rest_result = @rest.get("requests", req_id)
+      @rpm.log "\tREST Call: #{url}"
       unless rest_result["status"] == "success"
         req_status = "Command_Failed: Request not found"
         break
       end
       if monitor_step_name == "none"
-        req_status = rest_result["response"]["aasm_state"]
+        req_status = rest_result["data"]["aasm_state"]
       else
         found = false
-        rest_result["response"]["steps"].each do |step|
+        rest_result["data"]["steps"].each do |step|
           if step["name"] == monitor_step_name
             req_status = step["aasm_state"]
             found = true
@@ -148,7 +145,7 @@ def monitor_request(request_id, options = {})
       if req_status == target_status
         break
       else
-        @auto.log "\tWaiting(#{elapsed.floor.to_s}) - Current status: #{req_status}"
+        @rpm.log "\tWaiting(#{elapsed.floor.to_s}) - Current status: #{req_status}"
         sleep(checking_interval)
         elapsed = Time.now - start_time
       end
@@ -221,7 +218,7 @@ def version_tag_exists(name)
   url = "#{@params["SS_base_url"]}/v1/version_tags?filters[name]=#{url_encode(name)}&token=#{Token}"
   rest_result = rest_call(url, "get")
   if rest_result["status"] == "success"
-    @auto.log "Tag Exists?: #{url}\nResult: #{rest_result["response"]}"
+    @rpm.log "Tag Exists?: #{url}\nResult: #{rest_result["response"]}"
     result = rest_result["response"].first["id"]
   end
   result
@@ -235,7 +232,7 @@ def assign_version_tag_to_steps(version_tag, steps = [])
     url = "#{@params["SS_base_url"]}/v1/steps/#{step["id"]}?token=#{Token}"
     rest_result = rest_call(url, "PUT", {"data" => step_data})
     if rest_result["status"] == "success"
-      @auto.log "Updating step: #{step["id"]}\nResult: #{rest_result["response"]}"
+      @rpm.log "Updating step: #{step["id"]}\nResult: #{rest_result["response"]}"
       result = "success"
     end
   end
@@ -247,7 +244,7 @@ def version_tag_query(name, show_all = false)
   url = "#{@params["SS_base_url"]}/v1/version_tags?filters[name]=#{url_encode(name)}&token=#{Token}"
   rest_result = rest_call(url, "get")
   if rest_result["status"] == "success"
-    @auto.log "Tag Exists?: #{url}\nResult: #{rest_result["response"]}"
+    @rpm.log "Tag Exists?: #{url}\nResult: #{rest_result["response"]}"
     result = rest_result["response"].first["id"]
   end
   show_all ? rest_result["response"] : result
@@ -286,7 +283,7 @@ end
 def jenkins_build_status(build_no = nil)
   response = jenkins_job_build_data(build_no)
   # Now parse for the status and build id
-  #@auto.log "Raw Result: #{response.inspect}"
+  #@rpm.log "Raw Result: #{response.inspect}"
   ans = {}
   ans["still_building"] = response["building"]
   ans["success"] = response["result"]
@@ -308,7 +305,7 @@ def jenkins_monitor_build(build_no)
   # Now Check to see if the token matches
   build_match = true
   #build_match = response.include?(ss_token) if use_token_match # Enable this if using token matching
-  @auto.log "#-------------------------------------------------------------#\n#   Monitoring Build Progress (id: #{build_no})"
+  @rpm.log "#-------------------------------------------------------------#\n#   Monitoring Build Progress (id: #{build_no})"
   if build_no.to_i > 0 && result["still_building"] == true && build_match
     start_time = Time.now
     elapsed = 0
@@ -317,22 +314,22 @@ def jenkins_monitor_build(build_no)
       result = jenkins_build_status(build_no)
       results += "Status - building: #{result["still_building"].to_s}, result: #{result["success"]}\n"
       if result["still_building"] == false
-        @auto.log "Success - #{result["success"]}"
+        @rpm.log "Success - #{result["success"]}"
         complete = true if result["success"] == "SUCCESS"
     complete = false if result["success"] != "SUCCESS"
         break
       else
         elapsed = Time.now - start_time
-        @auto.log "Still building ...elapsed: #{elapsed.to_i.to_s}, pausing for #{sleep_interval.to_s} seconds"
+        @rpm.log "Still building ...elapsed: #{elapsed.to_i.to_s}, pausing for #{sleep_interval.to_s} seconds"
         sleep sleep_interval
       end
       elapsed = Time.now - start_time
     end
   elsif  result["success"] != "SUCCESS"
-    @auto.log "Build failed on initial parameters, either could not retrieve build id or token did not match output"
+    @rpm.log "Build failed on initial parameters, either could not retrieve build id or token did not match output"
     complete = false
   else
-    @auto.log "Build Successful"
+    @rpm.log "Build Successful"
     complete = true
   end
   complete
@@ -348,16 +345,16 @@ def jenkins_build(build_arguments = {})
   #response = rest_call(url, "POST", options)
   last_build = next_build 
   result = "Web server response: " + response["header"]
-  @auto.log result
+  @rpm.log result
   unless response["header"].include?("HTTPFound 302") #response["status"] == "failure"
-    @auto.log "Command_Failed: Build did not launch"
+    @rpm.log "Command_Failed: Build did not launch"
     return -1
   end
   launched = false
   10.times do 
     test_result = jenkins_job_build_data(last_build)
     if test_result.is_a?(String) && test_result.include?("failure")
-      @auto.log "Job not ready waiting..."
+      @rpm.log "Job not ready waiting..."
       sleep(6)
     else
       launched = true
@@ -367,7 +364,7 @@ def jenkins_build(build_arguments = {})
   if launched
     return last_build
   else
-    @auto.log "Command_Failed: Build did not launch in 60 seconds"
+    @rpm.log "Command_Failed: Build did not launch in 60 seconds"
     return -1
   end
 end
@@ -421,7 +418,7 @@ def rpd_transfer_properties(package_id, prefixes = [], prop_type = "package")
     @params.each_pair do |prop,val|
       prefixes.each do |prefix|
         if prop.start_with?(prefix) && !val.nil? && val.length > 0
-          @auto.log("Setting value for property: #{prop} - #{val}")
+          @rpm.log("Setting value for property: #{prop} - #{val}")
           RlmUtilities.rlm_set_q_property_value(SS_integration_dns, SS_integration_username, SS_integration_password, package_id, "#{prop_type} property add", prop, val.to_s)
         end
       end
@@ -430,7 +427,7 @@ def rpd_transfer_properties(package_id, prefixes = [], prop_type = "package")
       prefixes.each do |prefix|
         if prop.start_with?(prefix) && !val.nil? && val.length > 0
         prop_mod = prop.gsub("#{component}_","")
-          @auto.log("Request Params - Setting value for property: #{prop_mod} - #{val}")
+          @rpm.log("Request Params - Setting value for property: #{prop_mod} - #{val}")
           RlmUtilities.rlm_set_q_property_value(SS_integration_dns, SS_integration_username, SS_integration_password, package_id, "#{prop_type} property add", prop_mod, val.to_s)
         end
       end
@@ -440,7 +437,7 @@ def rpd_transfer_properties(package_id, prefixes = [], prop_type = "package")
         prop_name = "RPM_VERSION" if prop_name == "RPM_COMPONENT_VERSION"
         val = @params[k]
         if  !val.nil? && val.length > 0
-          @auto.log("Setting value for property: #{prop_name} - #{val}")
+          @rpm.log("Setting value for property: #{prop_name} - #{val}")
           RlmUtilities.rlm_set_q_property_value(SS_integration_dns, SS_integration_username, SS_integration_password, package_id, "#{prop_type} property add", prop_name, val)    
       end
     end
@@ -455,7 +452,7 @@ def rpd_create_package_instance(package_id_or_name, wait_till_created = true, lo
   if package_id_or_name.is_a?(String)
     package_id = rpd_get_package_id(package_id_or_name)
     if package_id.to_i < 0
-      @auto.log "Command_Failed: Package name not found"
+      @rpm.log "Command_Failed: Package name not found"
       exit(1)
     end
   else
@@ -464,12 +461,12 @@ def rpd_create_package_instance(package_id_or_name, wait_till_created = true, lo
   package_instance_response = RlmUtilities.create_package_instance(SS_integration_dns, SS_integration_username, SS_integration_password, package_id, locked, instance_name)
   package_instance_id = package_instance_response[0]["id"] rescue nil
   if package_instance_id.nil?
-    @auto.log("Command_Failed: package instance creation failed.")
+    @rpm.log("Command_Failed: package instance creation failed.")
     exit(1)
     #raise "Error while creating the package instance."   
   else
     #pack_response "Package Instance", "#{package_instance_response[0]["value"].split(" ")[5]}:#{package_instance_response[0]["value"].split(" ")[2]}" rescue nil
-    @auto.log("package instance processing...")
+    @rpm.log("package instance processing...")
   end
 
   ######################## Check the status of package instance created ############################### 
@@ -483,12 +480,12 @@ def rpd_create_package_instance(package_id_or_name, wait_till_created = true, lo
     end while (package_instance_status != "Ready" && package_instance_status != "Error")
 
     if package_instance_status == "Error" || package_instance_status != "Ready"
-      @auto.log "Command_Failed: There were some problem while creating the package instance."
+      @rpm.log "Command_Failed: There were some problem while creating the package instance."
     else
-      @auto.log("package instance is now in Ready state.")
+      @rpm.log("package instance is now in Ready state.")
     end
   else
-    @auto.log "Working asynchronously - instance creation may still be happening"
+    @rpm.log "Working asynchronously - instance creation may still be happening"
   end
   {"status" => package_instance_status, "package_instance_id" => package_instance_id, "package_id" => package_id, "package_instance_response" => package_instance_response}
 end
@@ -497,11 +494,11 @@ def rpd_deploy_package_instance(package_instance_id, deploy_route, target_env_id
   ######################## Instance Deployment stage begins ############################### 
   deployment_instance_id = RlmUtilities.deploy_package_instance(SS_integration_dns, SS_integration_username, SS_integration_password, package_instance_id, deploy_route, target_env_id)
   if deployment_instance_id.nil?
-    @auto.log("Command_Failed: Cannot deploy instance.")
+    @rpm.log("Command_Failed: Cannot deploy instance.")
     #raise "Error while deploying the package instance."  
     exit(1) 
   else
-    @auto.log("package instance deployment is now started.")
+    @rpm.log("package instance deployment is now started.")
   end
 
   ######################## Check the status of deployment ############################### 
@@ -513,9 +510,9 @@ def rpd_deploy_package_instance(package_instance_id, deploy_route, target_env_id
   end while (deploy_status != "pass" && deploy_status != "fail" && deploy_status != "cancelled")
   
   if deploy_status == "fail" ||  deploy_status == "cancelled" || deploy_status != "pass"
-    @auto.log "Command_Failed: There were some problem while deploying the package instance."
+    @rpm.log "Command_Failed: There were some problem while deploying the package instance."
   else
-    @auto.log("package instance deployed successfully.")
+    @rpm.log("package instance deployed successfully.")
   end
   {"status" => deploy_status, "deployment_instance_id" => deployment_instance_id}
 end

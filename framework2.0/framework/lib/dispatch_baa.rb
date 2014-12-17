@@ -131,14 +131,14 @@ class DispatchBAA < DispatchBase
       result["job_names"] << job_name
       log "#=> Building Job from Package:\n\tGroup: #{group_path}\n\tPackage: #{package_id}"
       log "# #{os_details["name"]} - Targets: #{servers.inspect}"
-      targets = @baa.baa_soap_map_server_names_to_rest_uri(servers.keys)
+      targets = @baa.baa_soap_map_server_names_to_rest_uri(server_dns_names(servers))
       log "\tCreating package job..."
       cur_jobs = @baa.execute_cli_command("Job","listAllByGroup",[group_path])
       if cur_jobs.split("\n").include?(job_name)
         log "\tJob Exists: deleting..."
         ans = @baa.execute_cli_command("DeployJob","deleteJobByGroupAndName",[group_path, job_name])
       end
-      job_db_key = @baa.create_package_job(job_name, job_group_id, package_id, servers.keys)
+      job_db_key = @baa.create_package_job(job_name, job_group_id, package_id, server_dns_names(servers))
       if job_db_key.start_with?("ERROR")
         log job_db_key
         raise "Command_Failed: job creation failed"
@@ -285,7 +285,7 @@ class DispatchBAA < DispatchBase
       log "# Copying script to target: "
       clean_line_breaks(os, script_file, content)
       files_to_deploy = ["//#{BAA_RPM_HOSTNAME}#{script_file}", "//#{BAA_RPM_HOSTNAME}#{wrapper_path}"]
-      result = @baa.create_file_deploy_job(job_name, group_path, files_to_deploy, target_path, servers.keys, {"execute_now" => true})
+      result = @baa.create_file_deploy_job(job_name, group_path, files_to_deploy, target_path, server_dns_names(servers), {"execute_now" => true})
       result.each{|k,v| log("#{k}: #{v}") }
       log "# Executing script on target via wrapper:"
       job_params = [@params["SS_application"], 
@@ -296,7 +296,7 @@ class DispatchBAA < DispatchBase
         target_path,
         File.basename(wrapper_path)
         ]
-      result = create_nsh_script_job(nsh_script_name, nsh_script_group, job_params, {"servers" => servers.keys, "execute_now" => true})
+      result = create_nsh_script_job(nsh_script_name, nsh_script_group, job_params, {"servers" => server_dns_names(servers), "execute_now" => true})
       result.each{|k,v| log("#{k}: #{v}") }
     end
     result

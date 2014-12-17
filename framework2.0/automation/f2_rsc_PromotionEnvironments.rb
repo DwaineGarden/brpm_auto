@@ -1,23 +1,14 @@
+# f2_rsc_promotionEnvironments
+# Presents a list of environments for promotions with some judgements about routing
 
-def log_it(it)
-  #log_path = "/Users/brady/Documents/dev_rpm/logs"
-  log_path = File.join(@params["SS_automation_results_dir"], "resource_logs")
-  txt = it.is_a?(String) ? it : it.inspect
-  write_to txt
-  Dir.mkdir(log_path) unless File.exist?(log_path)
-  fil = File.open("#{log_path}/output-env_#{@params["SS_run_key"]}", "a")
-  fil.puts txt
-  fil.close
-end
+#---------------------- Declarations ------------------------------#
+FRAMEWORK_DIR = @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib") unless defined?(FRAMEWORK_DIR)
 
-def hashify_list(list)
-  response = {}
-  list.each do |item,val| 
-    response[val] = item
-  end
-  return [response]
-end
+body = File.open(File.join(FRAMEWORK_DIR,"lib","resource_framework.rb")).read
+result = eval(body)
+@script_name_handle = "promotion_envs"
 
+#---------------------- Main Script ------------------------------#
 def execute(script_params, parent_id, offset, max_records)
   #returns all the environments of a component
   log_it "Starting Automation"
@@ -46,7 +37,7 @@ def execute(script_params, parent_id, offset, max_records)
       else
         xtra = "- must pass #{promo_env}"
       end 
-      envs[gate.environment_id.to_s] = "#{env_name} #{xtra}"
+      envs["#{gate.environment_id.to_s}|#{env_name}"] = "#{env_name} #{xtra}"
     end
     
     log_it envs

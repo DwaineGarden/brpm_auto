@@ -1,7 +1,5 @@
-# dispatch_srun.rb
-#  Module for action dispatch with nsh protocol
-
-require 'erb'
+# dispatch_base.rb
+#  Module for action dispatch common methods
 require 'digest/md5'
 
 DEFAULT_PARAMS_FILTER = "ENV_"
@@ -237,6 +235,7 @@ class DispatchBase < BrpmAutomation
     version = p_obj.get("step_version")    
     staging_server = p_obj.get("staging_server", path_server)
     brpm_hostname = p_obj.get("SS_base_url").gsub(/^.*\:\/\//, "").gsub(/\:\d.*/, "")
+    files_to_deploy << p_obj.get_attachment_nsh_path(brpm_hostname, p_obj.get("Upload Action File") unless p_obj.get("Upload Action File") == ""
     files_to_deploy << p_obj.get_attachment_nsh_path(brpm_hostname, p_obj.uploadfile_1) unless p_obj.uploadfile_1 == ""
     files_to_deploy << p_obj.get_attachment_nsh_path(brpm_hostname, p_obj.uploadfile_2) unless p_obj.uploadfile_2 == ""
     if p_obj.nsh_paths != ""
@@ -277,6 +276,21 @@ class DispatchBase < BrpmAutomation
     result = execute_shell(cmd)
     md5 = Digest::MD5.file(instance_path).hexdigest
     {"instance_path" => instance_path, "md5" => md5}
+  end
+
+  # Return the name or dns of servers in a hash list
+  # if dns exists, uses that, otherwise, name
+  # ==== Attributes
+  #
+  # * +servers+ - standard servers hash
+  # ==== Returns
+  #
+  # * array of server dns's
+  # 
+  def server_dns_names(servers)
+    result = []
+    servers.each{|name,props| result << (props["dns"].length > 2 ? props["dns"] : name) }
+    result
   end
    
 end

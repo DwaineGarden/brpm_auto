@@ -6,6 +6,9 @@
 ################################################################################
 #---------------------- f2_directExecute -----------------------#
 # Description: Direct execute on the command line
+#=> About the f2 framework: upon loading the automation, several utility classes will be available
+#   @rpm: the BrpmAutomation class, @p: the Param class, @rest: the BrpmRest class and 
+#   @transport: the Transport class - the transport class will be loaded dependent on the SS_transport property value (ssh, nsh or baa) 
 
 #---------------------- Arguments --------------------------#
 ###
@@ -22,18 +25,14 @@
 #---------------------- Declarations -----------------------#
 params["direct_execute"] = true #Set for local execution
 
-#=> ------------- IMPORTANT ------------------- <=#
-#- This loads the BRPM Framework and sets: @p = Params, @auto = BrpmAutomation and @rest = BrpmRest
-require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
-
 #---------------------- Main Body --------------------------#
 # Check if we have been passed a package id from a promotion
 
 result = run_command(params, @p.get("command"),"")
 
 # Apply success or failure criteria
-if result.index(@p.get("success")).nil?
-  @rpm.log "Command_Failed - term not found: [#{@p.get("success")}]\n"
-else
+if result.include?(@p.get("success"))
   @rpm.log "Success - found term: #{@p.get("success")}\n"
+else
+  @rpm.log "Command_Failed - term not found: [#{@p.get("success")}]\n"
 end

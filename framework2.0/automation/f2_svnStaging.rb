@@ -4,10 +4,12 @@
 # Copyright (c) BMC Software, Inc. 2001-2014
 # All Rights Reserved.
 ################################################################################
-#---------------------- f2_artifactStaging -----------------------#
+#---------------------- f2_svnStaging -----------------------#
 # Description: Stage Artifacts on RPM Server for Deployment
-#  from an Svn source
-#
+#  from an Svn source.  
+#=> About the f2 framework: upon loading the automation, several utility classes will be available
+#   @rpm: the BrpmAutomation class, @p: the Param class, @rest: the BrpmRest class and 
+#   @transport: the Transport class - the transport class will be loaded dependent on the SS_transport property value (ssh, nsh or baa) 
 #---------------------- Arguments --------------------------#
 ###
 # Svn Target:
@@ -38,15 +40,7 @@ SS_integration_password_enc = "__SS__Cj1JWFp6VjNYdHhtYw=="
 
 #---------------------- Declarations -----------------------#
 params["direct_execute"] = true #Set for local execution
-require 'fileutils'
 
-#=> ------------- IMPORTANT ------------------- <=#
-#- This loads the BRPM Framework and sets: @p = Params, @auto = BrpmAutomation and @rest = BrpmRest
-require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
-rpm_load_module("nsh", "dispatch_nsh", "scm")
-
-nsh_path = "#{defined?(NSH_PATH) ? NSH_PATH : "/opt/bmc/blade8.5"}/NSH"
-@srun = DispatchNSH.new(nsh_path, @params)
 #---------------------- Methods ----------------------------#
 
 #---------------------- Variables --------------------------#
@@ -57,7 +51,7 @@ artifact_path = @p.get("step_version_artifact_url", nil)
 brpm_hostname = @p.SS_base_url.gsub(/^.*\:\/\//, "").gsub(/\:\d.*/, "")
 svn_target = @p.get("Svn Target", @p.svn_target)
 svn_revision = @p.get("Svn Revision", @p.svn_revision)
-staging_path = @srun.get_staging_dir(version, true)
+staging_path = @transport.get_staging_dir(version, true)
 
 #---------------------- Main Body --------------------------#
 svn_url = artifact_path.nil? ? SS_integration_dns : artifact_path
@@ -82,7 +76,7 @@ raise "Command_Failed: no svn target to checkout" if svn_target == ""
 @rpm.log "\t SubversionURL: "    
 result = @svn.export(svn_target)
 
-result = @srun.package_files(staging_path, version)
+result = @transport.package_files(staging_path, version)
 @rpm.log "SRUN Result: #{result.inspect}"
 @p.assign_local_param("instance_#{@p.SS_component}", result)
 @rpm.log "Saved in JSON Params: #{"instance_#{@p.SS_component}"}"

@@ -17,7 +17,8 @@ BAA_FRAMEWORK_NSH_SCRIPT = "/BRPM/NSHScripts/FrameworkScriptExecute"
 RPM_STAGING_PATH = "/Users/brady/Documents/dev_rpm/scripts/staging"
 # This defines a path for a library of automations (from Git or Svn for instance)
 ACTION_LIBRARY_PATH = "/opt/bmb/RLM4.4/persist/script_library"
-
+# Custom Lib/Module directory (to add customer content to framework)
+CUSTOMER_LIB_DIR = "/home/bbyrd/brpm_lib"
 # Place your own global constants
 DATA_CENTER_NAMES = ["HOU", "LEX", "PUNE"]
 

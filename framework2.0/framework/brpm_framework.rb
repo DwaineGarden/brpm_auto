@@ -21,9 +21,14 @@ end
 def rpm_load_module(*module_names)
   result = ""
   module_names.each do |mod_name|
+    user_load_path = defined?(CUSTOMER_LIB_DIR) ? "#{CUSTOMER_LIB_DIR}/lib/#{mod_name}" : nil
     load_path = "#{FRAMEWORK_DIR}/lib/#{mod_name}"
     if File.exist?("#{load_path}.rb")
       require load_path
+      result += "success - #{load_path}\n"
+      load_path = "#{FRAMEWORK_DIR}/lib/#{mod_name}"
+    elsif !user_load_path.nil? && File.exist?("#{user_load_path}.rb")
+      require user_load_path
       result += "success - #{load_path}\n"
     else
       result += "ERROR - file not found #{load_path}\n"

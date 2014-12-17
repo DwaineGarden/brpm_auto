@@ -63,7 +63,7 @@ class DispatchSSH < DispatchBase
       target_path = transfer_properties["RPM_CHANNEL_ROOT"]
       log "# Copying script to target: "
       clean_line_breaks(os, script_file, content)
-      @ssh.set_servers(servers.keys)
+      @ssh.set_servers(server_dns_names(servers))
       result = @ssh.copy_files([script_file], target_path)
       log @ssh.display_result(result)
       log "# Executing script on target via wrapper:"
@@ -131,7 +131,7 @@ class DispatchSSH < DispatchBase
       log "# #{os_details["name"]} - Targets: #{servers.inspect}"
       target_path = servers.first[1].has_key?("CHANNEL_ROOT") ? servers.first[1]["CHANNEL_ROOT"] : os_details["tmp_dir"] if target_path == ""
       log "# Deploying package on target:"
-      @ssh.set_servers(servers.keys)
+      @ssh.set_servers(server_dns_names(servers))
       result = @ssh.copy_files(instance_path, target_path)
       log @ssh.display_result(result)
       log "# Unzipping package on target:"

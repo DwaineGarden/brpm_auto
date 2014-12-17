@@ -4,7 +4,7 @@
 # Copyright (c) BMC Software, Inc. 2001-2014
 # All Rights Reserved.
 ################################################################################
-#---------------------- f2_executeLibraryAction -----------------------#
+#---------------------- f2_executeLibraryAction_git -----------------------#
 # Description: Executes a shell script on target_servers
 # Shell script is taken from an external library of scripts
 # Make sure the property ACTION_LIBRARY_PATH is defined
@@ -12,6 +12,9 @@
 #  #![.py]/usr/bin/python %% 
 # Executes on ALL Servers selected for step
 #  copies all the standard properties and prefixed properties(ENV_) to environment variables
+#=> About the f2 framework: upon loading the automation, several utility classes will be available
+#   @rpm: the BrpmAutomation class, @p: the Param class, @rest: the BrpmRest class and 
+#   @transport: the Transport class - the transport class will be loaded dependent on the SS_transport property value (ssh, nsh or baa) 
 #
 #---------------------- Arguments --------------------------#
 ###

@@ -1,8 +1,11 @@
 # Description: Set request input Deployment
 #  Instructions: Modify this automation for each flavor of application deployment
 #    add any arguments you want to be available to other steps here by prefixing them with "ARG_"
-#---------------------- Utility Test -----------------------#
-# Description: Enter Request inputs for promotion
+#=> About the f2 framework: upon loading the automation, several utility classes will be available
+#   @rpm: the BrpmAutomation class, @p: the Param class, @rest: the BrpmRest class and 
+#   @transport: the Transport class - the transport class will be loaded dependent on the SS_transport property value (ssh, nsh or baa) 
+#---------------------- f2_getRequestInputs_basic -----------------------#
+# Description: Enter Request inputs for component deploy and promotion
 # Author(s): 2014 Brady Byrd
 #---------------------- Arguments --------------------------#
 ###
@@ -33,9 +36,6 @@
 
 #---------------------- Declarations -----------------------#
 params["direct_execute"] = true #Set for local execution
-#=> ------------- IMPORTANT ------------------- <=#
-#- This loads the BRPM Framework and sets: @p = Params, @auto = BrpmAutomation and @rest = BrpmRest
-require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
 
 #---------------------- Methods ----------------------------#
 # Assign local variables to properties and script arguments
@@ -53,6 +53,7 @@ component_list = components.reject{|l| ["general","[default]"].include?(l["name"
 @p.assign_local_param("environments", environments)
 @p.assign_local_param("components", components)
 @p.assign_local_param("Packaging_Environment_Types", ["Development", "Integration"])
+@p.assign_local_param("promotion_environment", @p.get("Promotion Environment"))
 # Figure out promotion environment
 promotion_environment = @p.get("promotion_environment") # sent in rest
 promotion_environment = @p.get("Promotion Environment") if promotion_environment == "" # from script arguments

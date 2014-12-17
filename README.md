@@ -1,5 +1,3 @@
-# brpm_auto
-
 ## Framework and Automations for BRPM
 
 ### The BRPM Framework is a collection of libraries to enhance the capability and experience of developing automation for BRPM.
@@ -11,7 +9,7 @@ To use the framework in your environment, follow these steps:
 ## Framework 2.0 is the most current version
 2. Download the most recent framework.zip
 
-3. View and copy the contents of the util_f2_deploy_framework.rb automation a new automation on your brpm instance
+3. View and copy the contents of the `util_f2_deploy_framework.rb` automation a new automation on your brpm instance
 
 4. Create a new request (any application, I use Utility) and add a Deploy Framework step.  Assign the new deploy_framework automation to the step.
 
@@ -21,12 +19,18 @@ To use the framework in your environment, follow these steps:
 
 ### Transport
 The new framework assumes that we are taking actions against the assigned target servers.  To do this you have to have a transport agent - currently the framework supports NSH, SSH and BAA.  The framework is constructed in a two layer fashion to provide abstraction from the details of the transport agent so you can just write functional automations.
+#### How does it work?
+For each agent protocol there are two classes, a Transport class that interacts with the specific capabilities and a Dispatch class that provides the high-level capabilities. For example, for NSH, the TransportNSH class has all the nexec, ncp, scriptutil, proxy interactions etc.  The DispatchNSH class has high level routines like `package_artifacts` and `script_execute`
 
 ### Framework Base automations
-There are several automations that provide deployment basics in a transport independent fashion
-`f2_artifactPackaging` - this automation takes file artifacts from either a VersionTag, paths entered in the arguments or files directly uploaded into the step. It then invokes the transfer agent (nsh, ssh or baa) to copy and package the files into an archive.
-`f2_artifactDeploy` - this automation deploys the package from packaging to the assigned step targets
-`demo_flow - brpd actions` - these automations demonstrate how to execute an embedded shell script on remote targets
+There are several automations that provide deployment basics in a transport independent fashion 
+
+`f2_artifactPackaging` - this automation takes file artifacts from either a VersionTag, paths entered in the arguments or files directly uploaded into the step. It then invokes the transfer agent (nsh, ssh or baa) to copy and package the files into an archive. 
+
+`f2_artifactDeploy` - this automation deploys the package from packaging to the assigned step targets 
+
+`demo_flow - brpd actions` - these automations demonstrate how to execute an embedded shell script on remote targets 
+
 `f2_executeLibraryAction` - this automation executes a shell script from a file library (alternate version updates the library from git)
 
 ## Framework 1.0 Instructions

@@ -46,10 +46,7 @@ if !cur_content.include?("class BrpmAutomation")
 end
 result = run_command(params,"cd #{params["SS_script_support_path"]} && cp -f #{File.join(persist_dir,"lib", "ssh_script_header.rb")} ssh_script_header.rb", "")
  
-write_to "To invoke the framework, put this line in all your automations:"
-if @params["path_to_persist"].length > 0
-  write_to "require #{persist_dir}/brpm_framework.rb"
-else
-  write_to "require @params[\"SS_automation_results_dir\"].gsub(\"automation_results\",\"persist/automation_lib/brpm_framework.rb\")"
-end
+write_to "The framework will now be loaded for all your automations (except resource automation)."
+write_to "The transport agent for the framework will load depending on the SS_transport property which can be (ssh, nsh or baa)."
+write_to "Note: this has replaced the default script header, you will need to reload the framwork after any RPM patch is applied"
 
