@@ -94,7 +94,8 @@ class DispatchNSH < DispatchBase
       result = @nsh.ncp(nil, @nsh.nsh_path(file_path), staging_path)
       log "\tCopy Result: #{result}"
     end
-    package_staged_artifacts(staging_path, version)
+    package_file = "package_#{version}.zip"
+    @nsh.package_staged_artifacts(staging_path, package_file)
   end
   
   # Deploys a packaged instance based on staging info

@@ -235,12 +235,13 @@ class DispatchBase < BrpmAutomation
     version = p_obj.get("step_version")    
     staging_server = p_obj.get("staging_server", path_server)
     brpm_hostname = p_obj.get("SS_base_url").gsub(/^.*\:\/\//, "").gsub(/\:\d.*/, "")
-    files_to_deploy << p_obj.get_attachment_nsh_path(brpm_hostname, p_obj.get("Upload Action File") unless p_obj.get("Upload Action File") == ""
+    files_to_deploy << p_obj.get_attachment_nsh_path(brpm_hostname, p_obj.get("Upload Action File")) unless p_obj.get("Upload Action File") == ""
     files_to_deploy << p_obj.get_attachment_nsh_path(brpm_hostname, p_obj.uploadfile_1) unless p_obj.uploadfile_1 == ""
     files_to_deploy << p_obj.get_attachment_nsh_path(brpm_hostname, p_obj.uploadfile_2) unless p_obj.uploadfile_2 == ""
-    if p_obj.nsh_paths != ""
+    entered_paths = p_obj.get("nsh_paths", p_obj.get("artifact_paths"))
+    if entered_paths != ""
       staging_server = "none"
-      p_obj.nsh_paths.split(',').each do |path|
+      entered_paths.split(',').each do |path|
         ans = p_obj.split_nsh_path(path)
         staging_server = ans[0] if ans[0].length > 2
         files_to_deploy << "//#{staging_server}#{ans[1].strip}" if ans[1].length > 2
@@ -249,11 +250,17 @@ class DispatchBase < BrpmAutomation
     unless artifact_path.nil?
       staging_server = "none"
       staging_server = artifact_paths[0] if artifact_paths[0].length > 2
-      artifact_paths[1].split(',').each do |path|
-        staging = staging_server
-        ans = p_obj.split_nsh_path(path)
-        staging = ans[0] if ans[0].length > 2
-        files_to_deploy << "//#{staging}#{ans[1].strip}" if ans[1].length > 2
+      if artifact_path.start_with?("//")
+        artifact_paths[1].split(',').each do |path|
+          staging = staging_server
+          ans = p_obj.split_nsh_path(path)
+          staging = ans[0] if ans[0].length > 2
+          files_to_deploy << "//#{staging}#{ans[1].strip}" if ans[1].length > 2
+        end
+      else
+        artifact_paths.split(',').each do |path|
+          files_to_deploy << path
+        end
       end
     end
     files_to_deploy
@@ -272,7 +279,7 @@ class DispatchBase < BrpmAutomation
     package_file = "package_#{version}.zip"
     instance_path = File.join(staging_path, package_file)
     return {"instance_path" => "ERROR - no files in staging area", "md5" => ""} if Dir.entries(staging_path).size < 3
-    cmd = "cd #{staging_path} && zip -r #{package_file} *"
+    cmd = "cd #{staging_path} && zip -r #{package_file} *" unless Windows
     result = execute_shell(cmd)
     md5 = Digest::MD5.file(instance_path).hexdigest
     {"instance_path" => instance_path, "md5" => md5}

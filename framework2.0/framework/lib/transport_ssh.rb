@@ -173,7 +173,9 @@ class TransportSSH < BrpmAutomation
         end
       }
       fil.close
-      output = File.open(outfile).read
+      fil1 = File.open(outfile)
+      output = fil1.read
+      fil1.close
       cmd_result["stdout"] = output if output.length > 2
       cmd_result["status"] = 0
     rescue Exception => e

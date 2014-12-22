@@ -18,6 +18,7 @@ require 'timeout'
 require 'rest-client'
 
 KEYWORD_SWITCHES = ["RPM_PARAMS_FILTER","RPM_SRUN_WRAPPER","RPM_INCLUDE"] unless defined?(KEYWORD_SWITCHES)
+Windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/) unless defined?(Windows)
 
 module AutomationHeader
   def load_helper(lib_path)
@@ -454,17 +455,18 @@ class BrpmAutomation
     cmd_result["stdout"] = "Running #{command}\n"
     output_dir = File.join(@params["SS_output_dir"],"#{precision_timestamp}")
     errfile = "#{output_dir}_stderr.txt"
-    command = "#{command} 2>#{errfile}#{exit_code_failure}"
+    command = "#{command} 2>#{errfile}#{exit_code_failure}" unless Windows
     fil = File.open(errfile, "w+")
     fil.close    
     cmd_result["stdout"] += "Script Output:\n"
     begin
-      orig_stderr = $stderr.clone
       cmd_result["stdout"] += `#{command}`
       status = $?
       cmd_result["pid"] = status.pid
       cmd_result["status"] = status.to_i
-      stderr = File.open(errfile).read
+      fil = File.open(errfile)
+      stderr = fil.read
+      fil.close
       cmd_result["stderr"] = stderr if stderr.length > 2
     rescue Exception => e
       cmd_result["stderr"] = "ERROR\n#{e.message}\n#{e.backtrace}"
@@ -604,7 +606,7 @@ class BrpmAutomation
   def semaphore(semaphore_key)
     semaphore_dir = "#{@params["SS_automation_results_dir"]}/semaphores"
     semaphore_name = "#{semaphore_key}.pid"
-    File.mkdir(semaphore_dir) unless File.exist?(semaphore_dir)
+    FileUtils.mkdir(semaphore_dir) unless File.exist?(semaphore_dir)
     return false if File.exist?(File.join(semaphore_dir, semaphore_name))
     fil = File.open(File.join(semaphore_dir, semaphore_name), "w+")
     fil.puts precision_timestamp
@@ -622,12 +624,28 @@ class BrpmAutomation
   #
   # true if semaphore deleted, false if it doesn't exist
   #
-  def clear_semaphore(semaphore_key)
+  def semaphore_clear(semaphore_key)
     semaphore_dir = "#{@params["SS_automation_results_dir"]}/semaphores"
     semaphore_name = "#{semaphore_key}.pid"
     return false unless File.exist?(File.join(semaphore_dir, semaphore_name))
     File.delete(File.join(semaphore_dir, semaphore_name))
     return true
+  end
+  
+  # Checks if a semaphore exists
+  # 
+  # ==== Attributes
+  #
+  # * +semaphore_key+ - string to name semaphore
+  # ==== Returns
+  #
+  # true if semaphore exists, false if it doesn't exist
+  #
+  def semaphore_exists(semaphore_key)
+    semaphore_dir = "#{@params["SS_automation_results_dir"]}/semaphores"
+    semaphore_name = "#{semaphore_key}.pid"
+    return true if File.exist?(File.join(semaphore_dir, semaphore_name))
+    return false
   end
   
   # Checks/Creates a staging directory
@@ -640,7 +658,8 @@ class BrpmAutomation
   # staging path or ERROR_ if force is false and path does not exist
   #  
   def get_staging_dir(version, force = false)
-    pattern = File.join(RPM_STAGING_PATH, "#{Time.now.year.to_s}", path_safe(get_param("SS_application")), path_safe(get_param("SS_component")), path_safe(version))
+    staging_path = defined?(RPM_STAGING_PATH) ? RPM_STAGING_PATH : File.join(@params["SS_automation_results_dir"],"staging")
+    pattern = File.join(staging_path, "#{Time.now.year.to_s}", path_safe(get_param("SS_application")), path_safe(get_param("SS_component")), path_safe(version))
     if force
       FileUtils.mkdir_p(pattern)
     else
@@ -724,6 +743,7 @@ class BrpmAutomation
   private
   
   def exit_code_failure
+    return "" if Windows
     size_ = EXIT_CODE_FAILURE.size
     exit_code_failure_first_part  = EXIT_CODE_FAILURE[0..3]
     exit_code_failure_second_part = EXIT_CODE_FAILURE[4..size_]
