@@ -648,6 +648,32 @@ class BrpmAutomation
     return false
   end
   
+  # Waits a specified period for a semaphore to clear
+  # throws error after wait time if semaphore does not clear
+  # ==== Attributes
+  #
+  # * +semaphore_key+ - string to name semaphore
+  # * +wait_time+ - time in minutes before failure (default = 15mins)
+  # ==== Returns
+  #
+  # true if semaphore is cleared
+  #
+  def semaphore_wait(semaphore_key, wait_time = 15)
+    interval = 20; elapsed = 0
+    semaphore_dir = "#{@params["SS_automation_results_dir"]}/semaphores"
+    semaphore_name = "#{semaphore_key}.pid"
+    semaphore = File.join(semaphore_dir, semaphore_name)
+    return true if !File.exist?(semaphore)
+    until !File.exist?(semaphore) || (elapsed/60 > wait_time) do
+      sleep interval
+      elapsed += interval
+    end
+    if File.exist?(semaphore)
+      raise "ERROR: Semaphore (#{semaphore}) still exists after #{wait_time} minutes"
+    end
+    return true
+  end
+
   # Checks/Creates a staging directory
   # 
   # ==== Attributes

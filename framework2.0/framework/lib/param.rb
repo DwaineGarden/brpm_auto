@@ -327,4 +327,10 @@ class Param < BrpmAutomation
     slist
   end
   
+  # Returns the request id for use in rest calls
+  #
+  def rest_request_id
+    (@params["request_id"].to_i - 1000).to_s
+  end
+  
 end

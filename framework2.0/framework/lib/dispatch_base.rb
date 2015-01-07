@@ -299,5 +299,13 @@ class DispatchBase < BrpmAutomation
     servers.each{|name,props| result << (props["dns"].length > 2 ? props["dns"] : name) }
     result
   end
-   
+  
+  # Returns the short name for the os platform
+  # Send the OS
+  def os_platform(platform)
+    return "nix" if platform.downcase =~ /nix/
+    return "win" if platform.downcase =~ /win/
+    "nux"
+  end
+  
 end

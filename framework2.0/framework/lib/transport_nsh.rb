@@ -99,7 +99,7 @@ class TransportNSH < BrpmAutomation
   #
   # * results of command
   def nsh_command(command, raw_result = false)
-    path = create_temp_script("echo Running #{command}\n#{command}\n",{"temp_path" => "/tmp"})
+    path = create_temp_script("echo Running #{command}\n#{command}\n")
     result = nsh(path, raw_result)
     File.delete path unless @test_mode
     result

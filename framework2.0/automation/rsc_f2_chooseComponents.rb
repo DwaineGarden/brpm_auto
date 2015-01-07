@@ -29,6 +29,9 @@ def execute(script_params, parent_id, offset, max_records)
     if script_params["Choose Components"] == "all"
       return default_table([["1","All","Deploying All"]])
     end
+    if script_params["Choose Components"] == "none"
+      return default_table([["1","none","No Components Chosen"]])
+    end
     app = App.find_by_name(@params["SS_application"])
     app.components.each do |comp|
       tech_stacks << comp.name unless ["General","[default]"].include?(comp.name)
