@@ -39,13 +39,14 @@ FileUtils.rm_r(%w(brpm_framework.rb lib), :force => true) if Dir.entries(persist
 if Dir.entries(persist_dir).include?("customer_include.rb")
   #result = run_command(params,"cd #{persist_dir} && mv -f customer_include.rb orig_customer_include.rb", "") 
   write_to "A new customer_include_default file exists - check for important changes from new version"
-else
+end
+FileUtils.cd(persist_dir, :verbose => true)
+result = run_command(params,"unzip -o #{framework_zip}", "")
+if !File.exist?(File.join(persist_dir,"customer_include.rb"))
   write_to "Creating a new customer_include.rb file in #{persist_dir}"
   write_to "You must edit the file and change the defaults to match your environment"
   FileUtils.cp File.join(persist_dir,"customer_include_default.rb"), File.join(persist_dir,"customer_include.rb")
 end
-FileUtils.cd(persist_dir, :verbose => true)
-result = run_command(params,"unzip -o #{framework_zip}", "")
 cur_content = File.open(File.join(params["SS_script_support_path"], "ssh_script_header.rb")).read
 if !cur_content.include?("class BrpmAutomation")
   FileUtils.cd(params["SS_script_support_path"], :verbose => true)
