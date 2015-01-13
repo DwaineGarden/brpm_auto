@@ -258,7 +258,7 @@ class DispatchBase < BrpmAutomation
           files_to_deploy << "//#{staging}#{ans[1].strip}" if ans[1].length > 2
         end
       else
-        artifact_paths.split(',').each do |path|
+        artifact_paths[1].split(',').each do |path|
           files_to_deploy << path
         end
       end

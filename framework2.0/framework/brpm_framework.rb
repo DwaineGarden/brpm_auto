@@ -62,10 +62,13 @@ else
   ARG_PREFIX = "ARG_" unless defined?(ARG_PREFIX)
   @rest = BrpmRest.new(@p.SS_base_url, @params)
   #Load the transport for the step, transport follows environment property SS_transport
-  transport = @p.get("SS_transport", @p.get("ss_transport", "nsh"))
-  @p.assign_local_param("ss_transport", transport)
-  @p.find_or_add("SS_transport", transport)
-  @p.save_local_params
+  transport = @p.get("ss_transport")
+  if transport == ""
+    transport = @p.get("SS_transport", "nsh") 
+    @p.assign_local_param("ss_transport", transport)
+    @p.find_or_add("SS_transport", transport)
+    @p.save_local_params
+  end
   @rpm.log "Loading transport modules for: #{transport}"
   rpm_load_module("transport_#{transport}", "dispatch_#{transport}")
 end

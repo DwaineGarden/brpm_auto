@@ -60,11 +60,11 @@ base_dir = dir_parts[0..-3].join("/") # should be "/opt/bmc" or "C:/Program File
 @deploy = File.join(base_dir, "rpm_demo", "deploy")
 @rpm.message_box "Building content for sample deploy"
 @rpm.log "Building staging directories"
-FileUtils.mkdir_p(@staging, :verbose => true)
+FileUtils.mkdir_p(File.join(@staging, "AppServer"), :verbose => true)
 FileUtils.mkdir_p(@deploy, :verbose => true)
 #Copy files to be used for appserver deploy
 @rpm.log "Copying content to staging"
-FileUtils.cp_r @p.SS_script_support_path.gsub("script_support", "tasks"), @staging
+FileUtils.cp_r @p.SS_script_support_path.gsub("script_support", "tasks"), File.join(@staging, "AppServer")
 # Now copy/create files for db deploy
 @rpm.log "Creating database scripts"
 query1 = "select a.name as app, ac.id, c.name from application_components ac inner join apps a on ac.app_id = a.id inner join components c on c.id = ac.component_id"

@@ -350,7 +350,7 @@ class BrpmAutomation
   # * +url+ - the url for the request
   # * +method+ - the http method [get, put, post]
   # * +options+ - a hash of options
-  #      +verbose+: gives verbose output
+  #      +verbose+: gives verbose output (yes/no)
   #      +data+: required for put and post methods a hash of post data
   #      +username+: username for basic http authentication
   #      +password+: password for basic http authentication

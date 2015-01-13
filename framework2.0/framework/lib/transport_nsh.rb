@@ -122,11 +122,17 @@ class TransportNSH < BrpmAutomation
     paths = src_path.map{|pth| pth.include?(" ") ? "\"#{pth}\"" : pth }
     path_arg = paths.join(" ")
     cmd = "#{nsh_cmd("ncp")} -vrA #{path_arg} -h #{target_hosts.join(" ")} -d \"#{target_path}\"" unless target_hosts.nil?
-    cmd = "#{nsh_cmd("cp")} -vr #{path_arg.gsub("localhost","@")} #{target_path}" if target_hosts.nil?
-    cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
-    log cmd if @verbose
-    result = execute_shell(cmd)
-    display_result(result)
+    #cmd = "#{nsh_cmd("cp")} -vr #{path_arg.gsub("localhost","@")} #{target_path}" if target_hosts.nil?
+    if target_hosts.nil? # Local copy
+      FileUtils.cp_r path_arg.gsub("//localhost",""), target_path, :verbose => true
+      res = "cp #{path_arg.gsub("//localhost","")} #{target_path}"
+    else
+      cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
+      log cmd if @verbose
+      result = execute_shell(cmd)
+      res = display_result(result)
+    end
+    res
   end
 
   # Runs a command via nsh on a windows target
