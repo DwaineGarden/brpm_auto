@@ -54,7 +54,7 @@ else
   if File.exist?(customer_include_file)
     @rpm.log "Loading customer include file: #{customer_include_file}"
     require customer_include_file
-  elsif File.exist customer_include_file = File.join(FRAMEWORK_DIR,"customer_include_default.rb")
+  elsif File.exist? customer_include_file = File.join(FRAMEWORK_DIR,"customer_include_default.rb")
     @rpm.log "Loading default customer include file: #{customer_include_file}"
     require customer_include_file
   end

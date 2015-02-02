@@ -129,6 +129,7 @@ class DispatchNSH < DispatchBase
       log "# #{os_details["name"]} - Targets: #{servers.inspect}"
       target_path = @nsh.nsh_path(target_path) if target_path != ""
       target_path = @nsh.nsh_path(servers.first[1].has_key?("CHANNEL_ROOT") ? servers.first[1]["CHANNEL_ROOT"] : os_details["tmp_dir"]) if target_path == ""
+      target_path = File.join(target_path, @p.SS_run_key)
       log "# Deploying package on target:"
       result = @nsh.ncp(server_dns_names(servers), instance_path, target_path)
       log result

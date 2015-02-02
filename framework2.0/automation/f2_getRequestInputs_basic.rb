@@ -53,9 +53,9 @@ component_list = components.reject{|l| ["general","[default]"].include?(l["name"
 @p.assign_local_param("environments", environments)
 @p.assign_local_param("components", components)
 @p.assign_local_param("Packaging_Environment_Types", ["Development", "Integration"])
-@p.assign_local_param("promotion_environment", @p.get("Promotion Environment"))
 # Figure out promotion environment
 promotion_environment = @p.get("promotion_environment") # sent in rest
+@p.assign_local_param("promotion_environment", @p.get("Promotion Environment")) if promotion_environment == ""
 promotion_environment = @p.get("Promotion Environment") if promotion_environment == "" # from script arguments
 # Figure out promotion request template
 @p.assign_local_param("promotion_request_template",@p.get("origin_request_template")) if @p.get("promotion_request_template") == ""
@@ -69,7 +69,8 @@ elsif choose_components == "none" # this picks up if it was sent via rest in the
 else
   components_to_deploy = @p.get("Components").split(",").uniq if @p.get("Choose Components") == "choose"
 end
-  
+@p.assign_local_param("components_to_deploy", components_to_deploy)
+
 #---------------------- Main Body --------------------------#
 # Set a property in General for each component to deploy 
 props = "name, value, component, global\n" 

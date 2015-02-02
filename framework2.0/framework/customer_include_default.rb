@@ -4,7 +4,7 @@
 # ===== Use this routine to override and provide global methods for all your automation
 
 # set your own automation token
-Token = "<YOUR_AUTOMATION_TOKEN>" #decrypt_string_with_prefix(@params["SS_api_token"])
+Token = "a56d64cbcffcce91d306670489fa4cf51b53316c" #"<YOUR_AUTOMATION_TOKEN>" #decrypt_string_with_prefix(@params["SS_api_token"])
 # Hostname so nsh paths can be constructed from local paths
 BAA_RPM_HOSTNAME = "localhost"
 # Change this to set BAA base path 

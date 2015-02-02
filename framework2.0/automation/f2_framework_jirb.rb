@@ -7,7 +7,7 @@ FileUtils.cd script_support, :verbose => true
 require "#{script_support}/ssh_script_header"
 
 input_file = "#{rlm_base_path}/automation_results/request/Utility/21675/step_34584/scriptinput_11260_1416331563.txt"
-input_file = "/opt/bmc/RLM4.4/automation_results/request/RLM_Suite/1312/step_3811/scriptinput_213_1417469845.txt"
+input_file = "/opt/bmc/RLM4.4/automation_results/request/JFP_GBIPB_BW/1367/step_4941/scriptinput_208_1421610040.txt"
 
 script_params = params = load_input_params(input_file)
 
