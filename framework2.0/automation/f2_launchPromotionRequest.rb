@@ -207,7 +207,7 @@ if(target_env_id.nil? || target_env_id.length < 1 || template_name.length < 2)
   exit(1)
 end
 @p.assign_local_param("calling_request", @p.get("SS_request_number"))
-if target_stage.length > 1
+if !target_stage.nil?
   @rpm.message_box("Launching Promotion Request","title")
   @rpm.log "\tRequest Template: #{template_name}"
   @rpm.log "\tEnvironment: #{target_env_name}"

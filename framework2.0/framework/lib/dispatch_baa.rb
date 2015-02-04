@@ -180,12 +180,18 @@ class DispatchBAA < DispatchBase
     job_type = "NSHScriptJob"
     version = get_option(options,"version", get_param("SS_component_version"))
     targets = get_option(options, "servers")
-    targets = get_server_list.keys if targets == ""
+    if targets == ""
+      servers = get_server_list 
+      targets = server_dns_names(servers)
+    end
+    script_group = "/#{script_group}" unless script_group.start_with?("/")
     num_par_procs = get_option(options,"num_par_procs", 50)
     execute_now = get_option(options,"execute_now", false)
     target_type = get_option(options,"target_type", "servers")
     job_name = get_option(options, "job_name", default_item_name)
     group_path = get_option(options, "group_path", default_group_path(version, true))
+    log "\tBuilding group path..."
+    job_group_id = @baa.ensure_group_path(group_path, "Jobs")
     args = [
       group_path, #jobGroup
       job_name,  #jobName
