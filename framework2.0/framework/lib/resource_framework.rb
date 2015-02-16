@@ -56,7 +56,7 @@ module ResourceFramework
   end  
 
   def default_list(msg)
-    result = [{0 => msg}]
+    result = [{msg => 0}]
     select_hash = {}
     result.unshift(select_hash)
   end  

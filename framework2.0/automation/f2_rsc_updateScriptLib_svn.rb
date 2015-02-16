@@ -11,24 +11,32 @@
 #   position: A2:B2
 ###
 
+#=== General Integration Server: svn_github ===#
+# [integration_id=9]
+SS_integration_dns = "https://github.com"
+SS_integration_username = "bradybyrd"
+SS_integration_password = "-private-"
+SS_integration_details = "svn_path: /usr/bin/svn
+options: --no-auth-cache --non-interactive  --trust-server-cert --force"
+SS_integration_password_enc = "__SS__Cj1NemJvRjJhalZIVg=="
+#=== End ===#
+
 #---------------------- Declarations ------------------------------#
 FRAMEWORK_DIR = @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib") unless defined?(FRAMEWORK_DIR)
+@script_name_handle = "update_svn"
 body = File.open(File.join(FRAMEWORK_DIR,"lib","resource_framework.rb")).read
 result = eval(body)
-@script_name_handle = "update_svn"
-load_customer_include(FRAMEWORK_DIR)
 
 #---------------------- Methods ------------------------------#
-  
+
 #---------------------- Main Script ------------------------------#
 def execute(script_params, parent_id, offset, max_records)
   log_it "Starting Automation"
-  svn_path = "/opt/svn/1.7.5/opt/CollabNet_Subversion/bin/svn"
-  cmd_options = "--non-interactive  --trust-server-cert --force"
-  prerun = "export LD_LIBRARY_PATH=#{svn_path.gsub("bin/svn", "lib")}"
-  rpm_svn_url = "https://svn.nam.nsroot.net:9050"
-  svn_username = "rlmadmin"
-  svn_password_enc = "__SS__Ck54a1UwNFdhdFJXUQ=="
+  svn_path = get_integration_details("svn_path")
+  svn_options = get_integration_details("options")
+  svn_url = "#{SS_integration_dns}/BMC-RLM/brpm_auto/trunk/framework2.0/script_library"
+  svn_base_dir = action_library_path
+  prerun = "" #"export LD_LIBRARY_PATH=#{svn_path.gsub("bin/svn", "lib")} && "
   pout = []
   script_params.each{|k,v| pout << "#{k} => #{v}" }
   log_it "Current Params:\n#{pout.sort.join("\n") }"
@@ -37,14 +45,15 @@ def execute(script_params, parent_id, offset, max_records)
     log_it no_list 
     return no_list
   end
-  raise "Command_Failed: no library path defined, set property: ACTION_LIBRARY_PATH" if !defined?(ACTION_LIBRARY_PATH)
   begin
-    credential = "--username #{svn_username} --password #{decrypt_string_with_prefix(svn_password_enc)}"
-    svn_cmd = "#{prerun} && #{svn_path} export #{credential} #{cmd_options} ."
-    status = `cd #{ACTION_LIBRARY_PATH} ; #{svn_cmd}`
+    credential = "--username #{SS_integration_username} --password #{decrypt_string_with_prefix(SS_integration_password_enc)}"
+    svn_cmd = "#{prerun}#{svn_path} export #{credential} #{svn_options} #{svn_url} ."
+    log_it "Running: #{svn_cmd} in #{svn_base_dir}"
+    FileUtils.cd(svn_base_dir, :verbose => true)
+    status = `#{svn_cmd}`
     log_it("Svn result: #{status}")
     lines = status.split("\n")
-    default_list("Svn: #{lines[0]}")    
+    default_list("Svn: #{lines[-1]}")    
   rescue Exception => e
     log_it "#{e.message}\n#{e.backtrace}"
   end

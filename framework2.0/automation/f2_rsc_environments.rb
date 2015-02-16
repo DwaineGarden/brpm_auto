@@ -3,10 +3,9 @@
 
 #---------------------- Declarations ------------------------------#
 FRAMEWORK_DIR = @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib") unless defined?(FRAMEWORK_DIR)
-
+@script_name_handle = "envs"
 body = File.open(File.join(FRAMEWORK_DIR,"lib","resource_framework.rb")).read
 result = eval(body)
-@script_name_handle = "envs"
 
 #---------------------- Methods ------------------------------#
 

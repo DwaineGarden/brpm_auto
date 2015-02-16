@@ -97,7 +97,11 @@ script_file = @transport.make_temp_file(action_txt)
 result = @transport.execute_script_per_server(script_file, {"transfer_properties" => transfer_properties, "transfer_prefix" => transfer_prefix })
 #@rpm.log "SRUN Result: #{result.inspect}"
 exit_status = "Success"
-result.split("\n").each{|line| exit_status = line if line.start_with?("EXIT_CODE:") }
+result.split("\n").each do |line|
+  if line.start_with?("EXIT_CODE:")
+    raise "ERROR - EXITCODE Failure: #{line}" if line.gsub(/EXIT_CODE:\s/,"").strip.chomp.to_i != 0
+  end
+end
 
 pack_response("script_file_to_execute", script_path)
 pack_response("output_status", exit_status)

@@ -10,11 +10,10 @@
 #	CITI_BMA_TOKEN_SERVER_NAME or CITI_BMA_TOKEN_NODE_NAME
 
 echo -e "\n\n\n#############################################################"
-echo -e "##"
+echo -e "##       Websphere Admin Action: $CITI_WAS_START_STOP_ACTION"
 echo -e "#############################################################\n"
 DATE1=`date +"%m/%d/%y"`
 TIME1=`date +"%H:%M:%S"`
-echo "INFO: Performing action: $CITI_WAS_START_STOP_ACTION"
 echo "INFO: Start of Start/Stop execution on Server $VL_DISPATCH_TARGET_HOST"
 echo "INFO: Start/Stop on Server Start Time: $DATE1 $TIME1"
 echo "INFO: Start/Stop Target: $VL_DISPATCH_TARGET_HOST"

@@ -107,6 +107,7 @@ class DispatchNSH < DispatchBase
     log "#----------- Executing Script on Remote Hosts -----------------#"
     log "# Script: #{script_file}"
     result = "No servers to execute on"
+    grouped_result = []
     # Loop through the platforms
     OS_PLATFORMS.each do |os, os_details|
       servers_list = get_platform_servers(os) if seed_servers == ""
@@ -115,7 +116,6 @@ class DispatchNSH < DispatchBase
       log "No servers selected for: #{os_details["name"]}" if servers_list.size == 0
       next if servers_list.size == 0      
       log "# #{os_details["name"]} - Targets: #{servers_list.inspect}"
-      grouped_result = []
       servers_list.each do |item|
         servers = {item[0] => item[1]}
         log "#=> Endpoint: #{servers.keys[0]}"

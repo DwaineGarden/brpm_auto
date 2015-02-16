@@ -110,11 +110,11 @@ module AutomationHeader
     hosts = server_list.map{ |srv| srv[0] }
   end
 
-  def get_integration_details(key, details_yml = nil)
+  def get_integration_details(key = nil, details_yml = nil)
     details_yml = SS_integration_details if details_yml.nil?
     # SS_integration_details = "Project: TST\nDefault item: lots of stuff\n"
     details = YAML.load(details_yml)
-    details[key]
+    key.nil? ? details : details[key]
   end
 
   def set_property_flag(prop, value = nil)
