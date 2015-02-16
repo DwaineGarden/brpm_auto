@@ -14,6 +14,7 @@ echo -e "##"
 echo -e "#############################################################\n"
 DATE1=`date +"%m/%d/%y"`
 TIME1=`date +"%H:%M:%S"`
+echo "INFO: Performing action: $CITI_WAS_START_STOP_ACTION"
 echo "INFO: Start of Start/Stop execution on Server $VL_DISPATCH_TARGET_HOST"
 echo "INFO: Start/Stop on Server Start Time: $DATE1 $TIME1"
 echo "INFO: Start/Stop Target: $VL_DISPATCH_TARGET_HOST"
@@ -69,9 +70,15 @@ else
    clusterName="$CITI_BMA_TOKEN_SERVER_NAME,$CITI_BMA_TOKEN_NODE_NAME"
 fi
 
-echo "Running Command..$CITI_EMT_WAS_HOME/bin/emt -Action ExecutePyScript -CellName $CITI_BMA_TOKEN_CELL_NAME -DMGRFunctionalId $CITI_WAS_ADMIN_USER -ScriptLocation ./citi_wasnd_cluster_stop.py -ScriptArguments $clusterName"
+if [[ "$CITI_WAS_START_STOP_ACTION" =~ "start" ]]
+then
+	echo "Running Command..$CITI_EMT_WAS_HOME/bin/emt -Action ExecutePyScript -CellName $CITI_BMA_TOKEN_CELL_NAME -DMGRFunctionalId $CITI_WAS_ADMIN_USER -ScriptLocation ./citi_wasnd_cluster_start.py -ScriptArguments $clusterName"
+	result=`$CITI_EMT_WAS_HOME/bin/emt -Action ExecutePyScript -CellName $CITI_BMA_TOKEN_CELL_NAME -DMGRFunctionalId $CITI_WAS_ADMIN_USER -ScriptLocation $VL_CHANNEL_ROOT/citi_wasnd_cluster_start.py -ScriptArguments "$clusterName" 2>&1`
+else
+	echo "Running Command..$CITI_EMT_WAS_HOME/bin/emt -Action ExecutePyScript -CellName $CITI_BMA_TOKEN_CELL_NAME -DMGRFunctionalId $CITI_WAS_ADMIN_USER -ScriptLocation ./citi_wasnd_cluster_stop.py -ScriptArguments $clusterName"
+	result=`$CITI_EMT_WAS_HOME/bin/emt -Action ExecutePyScript -CellName $CITI_BMA_TOKEN_CELL_NAME -DMGRFunctionalId $CITI_WAS_ADMIN_USER -ScriptLocation $VL_CHANNEL_ROOT/citi_wasnd_cluster_stop.py -ScriptArguments "$clusterName" 2>&1`
+fi
 
-result=`$CITI_EMT_WAS_HOME/bin/emt -Action ExecutePyScript -CellName $CITI_BMA_TOKEN_CELL_NAME -DMGRFunctionalId $CITI_WAS_ADMIN_USER -ScriptLocation $VL_CHANNEL_ROOT/citi_wasnd_cluster_stop.py -ScriptArguments "$clusterName" 2>&1`
 
 echo "$result"
 if [[ "$result" =~ "[ERROR]" ]]

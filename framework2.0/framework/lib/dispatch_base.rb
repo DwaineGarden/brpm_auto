@@ -38,7 +38,7 @@ class DispatchBase < BrpmAutomation
   def get_transfer_properties(keyword_filter = DEFAULT_PARAMS_FILTER, strip_filter = true)
     result = {}
     STANDARD_PROPERTIES.each{|prop| result[prop.gsub("SS_","RPM_")] = @params[prop] }
-    @params.each{|k,v| result[strip_filter ? k.gsub(keyword_filter,"") : k] = @p.get(k) if k.include?(keyword_filter) }
+    @params.each{|k,v| result[strip_filter ? k.gsub(keyword_filter,"") : k] = v if k.include?(keyword_filter) }
     result
   end
 
@@ -57,7 +57,7 @@ class DispatchBase < BrpmAutomation
      props["VL_CONTENT_PATH"] = payload_path if payload_path
      props["VL_CONTENT_NAME"] = File.basename(payload_path)  if payload_path
      props["VL_CHANNEL_ROOT"] = props["RPM_CHANNEL_ROOT"]
-     props["VL_DISPATCH_TARGET_HOST"] = server.nil? ? get_server_list.keys[0] : servers.first[0]
+     props["VL_DISPATCH_TARGET_HOST"] = servers.nil? ? get_server_list.keys[0] : servers.first[0]
   end
 
   # Add server properties to transfer properties

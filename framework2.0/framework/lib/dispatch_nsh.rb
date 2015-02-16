@@ -78,6 +78,70 @@ class DispatchNSH < DispatchBase
     result
   end
   
+  # Wrapper to run a shell action
+  # opens passed script path, or executes passed text
+  # processes the script in erb first to allow param substitution
+  # this method will separately resolve each server properties and execute in sequence
+  # note script may have keyword directives (see additional docs) 
+  # ==== Attributes
+  #
+  # * +script_file+ - the path to the script or the text of the script
+  # * +options+ - hash of options, includes: 
+  # * +-servers to override step servers
+  # * +-transfer_properties - the properties to push to the wrapper script
+  # * +-transfer_prefix - prefix to grab transfer properties from params 
+  #
+  # ==== Returns
+  #
+  # action output
+  #
+  def execute_script_per_server(script_file, options = {})
+    # get the body of the action
+    content = File.open(script_file).read
+    seed_servers = get_option(options, "servers")
+    transfer_properties = get_option(options, "transfer_properties",{})
+    keyword_items = get_keyword_items(content)
+    params_filter = get_option(keyword_items, "RPM_PARAMS_FILTER")
+    params_filter = get_option(options, "transfer_prefix", DEFAULT_PARAMS_FILTER)
+    transfer_properties.merge!(get_transfer_properties(params_filter, strip_prefix = true))
+    log "#----------- Executing Script on Remote Hosts -----------------#"
+    log "# Script: #{script_file}"
+    result = "No servers to execute on"
+    # Loop through the platforms
+    OS_PLATFORMS.each do |os, os_details|
+      servers_list = get_platform_servers(os) if seed_servers == ""
+      servers_list = get_platform_servers(os, seed_servers) if seed_servers != ""
+      message_box "OS Platform: #{os_details["name"]}"
+      log "No servers selected for: #{os_details["name"]}" if servers_list.size == 0
+      next if servers_list.size == 0      
+      log "# #{os_details["name"]} - Targets: #{servers_list.inspect}"
+      grouped_result = []
+      servers_list.each do |item|
+        servers = {item[0] => item[1]}
+        log "#=> Endpoint: #{servers.keys[0]}"
+        log "# Setting Properties:"
+        add_channel_properties(transfer_properties, servers, os)
+        brpd_compatibility(transfer_properties, nil, servers)
+        transfer_properties.each{|k,v| log "\t#{k} => #{v}" }
+        shebang = read_shebang(os, content)
+        log "Shebang: #{shebang.inspect}"
+        wrapper_path = build_wrapper_script(os, shebang, transfer_properties, {"script_target" => File.basename(script_file)})
+        log "# Wrapper: #{wrapper_path}"
+        target_path = @nsh.nsh_path(transfer_properties["RPM_CHANNEL_ROOT"])
+        log "# Copying script to target: "
+        clean_line_breaks(os, script_file, content)
+        result = @nsh.ncp(server_dns_names(servers), script_file, target_path)
+        grouped_result << result
+        log result
+        log "# Executing script on target via wrapper:"
+        result = @nsh.script_exec(server_dns_names(servers), wrapper_path, target_path)
+        grouped_result << result
+        log result
+      end
+    end
+    grouped_result.join("\n")
+  end
+
   # Copies remote files to a local staging repository
   # 
   # ==== Attributes

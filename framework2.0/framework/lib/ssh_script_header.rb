@@ -701,8 +701,8 @@ class BrpmAutomation
   end
 
   # Servers in params need to be filtered by OS
-  def get_platform_servers(os_platform)
-    servers = get_server_list(@params)
+  def get_platform_servers(os_platform, alt_servers = nil)
+    servers = alt_servers.nil? ? get_server_list(@params) : alt_servers
     result = servers.select{|k,v| v["os_platform"].downcase =~ /#{os_platform}/ }
   end
 

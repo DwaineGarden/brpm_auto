@@ -90,19 +90,15 @@ additional_properties.split("|").each do |item|
   pair = item.split("=")
   transfer_properties[pair[0].strip] = pair[1].strip if pair.size == 2
 end
-per_server_results = []
-servers.each do |item|
-  server = {item[0] => item[1]}
-  # Preprocess script body with ERB
-  action_txt = ERB.new(script).result(binding)
-  @rpm.message_box "Executing LibraryAction - #{File.basename(script_path)}"
-  script_file = @transport.make_temp_file(action_txt)
-  result = @transport.execute_script(script_file, {"servers" => server, "transfer_properties" => transfer_properties, "transfer_prefix" => transfer_prefix })
-  #@rpm.log "SRUN Result: #{result.inspect}"
-  exit_status = "Success"
-  result.split("\n").each{|line| exit_status = line if line.start_with?("EXIT_CODE:") }
-  per_server_results << result
-end
+# Preprocess script body with ERB
+action_txt = ERB.new(script).result(binding)
+@rpm.message_box "Executing LibraryAction - #{File.basename(script_path)}"
+script_file = @transport.make_temp_file(action_txt)
+result = @transport.execute_script_per_server(script_file, {"transfer_properties" => transfer_properties, "transfer_prefix" => transfer_prefix })
+#@rpm.log "SRUN Result: #{result.inspect}"
+exit_status = "Success"
+result.split("\n").each{|line| exit_status = line if line.start_with?("EXIT_CODE:") }
+
 pack_response("script_file_to_execute", script_path)
 pack_response("output_status", exit_status)
 @p.assign_local_param("script_#{@p.SS_component}", script_path)
