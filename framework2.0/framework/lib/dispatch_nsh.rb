@@ -28,7 +28,11 @@ class DispatchNSH < DispatchBase
   # ==== Attributes
   #
   # * +script_file+ - the path to the script or the text of the script
-  # * +options+ - hash of options, includes: servers to override step servers
+  # * +options+ - hash of options, includes: 
+  # * +-servers to override step servers
+  # * +-transfer_properties - the properties to push to the wrapper script
+  # * +-transfer_prefix - prefix to grab transfer properties from params 
+  #
   # ==== Returns
   #
   # action output
@@ -37,6 +41,7 @@ class DispatchNSH < DispatchBase
     # get the body of the action
     content = File.open(script_file).read
     seed_servers = get_option(options, "servers")
+    loop_servers = get_option(options, "each_server")
     transfer_properties = get_option(options, "transfer_properties",{})
     keyword_items = get_keyword_items(content)
     params_filter = get_option(keyword_items, "RPM_PARAMS_FILTER")
@@ -51,11 +56,11 @@ class DispatchNSH < DispatchBase
       servers = get_platform_servers(os, seed_servers) if seed_servers != ""
       message_box "OS Platform: #{os_details["name"]}"
       log "No servers selected for: #{os_details["name"]}" if servers.size == 0
-      next if servers.size == 0
+      next if servers.size == 0      
       log "# #{os_details["name"]} - Targets: #{servers.inspect}"
       log "# Setting Properties:"
       add_channel_properties(transfer_properties, servers, os)
-      brpd_compatibility(transfer_properties)
+      brpd_compatibility(transfer_properties, nil, servers)
       transfer_properties.each{|k,v| log "\t#{k} => #{v}" }
       shebang = read_shebang(os, content)
       log "Shebang: #{shebang.inspect}"

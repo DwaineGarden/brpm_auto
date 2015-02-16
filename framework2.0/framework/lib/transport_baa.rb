@@ -371,6 +371,10 @@ class TransportBAA < BrpmAutomation
       end
       if part_type == "file"
         summary = add_file_to_template(template_dbkey, part, options)
+      elsif part =~ /\.\w\w\w/
+        summary = add_file_to_template(template_dbkey, part, options)
+      elsif part.end_with?("/")
+        summary = add_directory_to_template(template_dbkey, part, options)
       else
         summary = add_directory_to_template(template_dbkey, part, options)
       end

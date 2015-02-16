@@ -2,7 +2,7 @@
 #  Module for action dispatch common methods
 require 'digest/md5'
 
-DEFAULT_PARAMS_FILTER = "ENV_"
+DEFAULT_PARAMS_FILTER = "ENV_" if !defined?(DEFAULT_PARAMS_FILTER)
 STANDARD_PROPERTIES = ["SS_application", "SS_component", "SS_environment", "SS_component_version", "SS_request_number"]
 OS_PLATFORMS = {
   "win" => {"name" => "Windows", "tmp_dir" => "/C/Windows/temp"},
@@ -53,10 +53,11 @@ class DispatchBase < BrpmAutomation
   #
   # nothing - modifies passed property hash
   #
-  def brpd_compatibility(props, payload_path = nil)
+  def brpd_compatibility(props, payload_path = nil, servers = nil)
      props["VL_CONTENT_PATH"] = payload_path if payload_path
      props["VL_CONTENT_NAME"] = File.basename(payload_path)  if payload_path
      props["VL_CHANNEL_ROOT"] = props["RPM_CHANNEL_ROOT"]
+     props["VL_DISPATCH_TARGET_HOST"] = server.nil? ? get_server_list.keys[0] : servers.first[0]
   end
 
   # Add server properties to transfer properties

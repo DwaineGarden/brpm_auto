@@ -3,12 +3,13 @@
 #  Called by f2_executeLibraryAction
 
 #---------------------- Declarations ------------------------------#
-FRAMEWORK_DIR = @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib") unless defined?(FRAMEWORK_DIR)
-
-#---------------------- Methods ------------------------------#
+FFRAMEWORK_DIR = @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib") unless defined?(FRAMEWORK_DIR)
 body = File.open(File.join(FRAMEWORK_DIR,"lib","resource_framework.rb")).read
 result = eval(body)
-@script_name_handle = "librarytree"
+@script_name_handle = "libararytree"
+load_customer_include(FRAMEWORK_DIR)
+
+#---------------------- Methods ------------------------------#
 
 #---------------------- Main Script ------------------------------#
 def execute(script_params, parent_id, offset, max_records)
@@ -16,8 +17,8 @@ def execute(script_params, parent_id, offset, max_records)
   #pout = []
   #script_params.each{|k,v| pout << "#{k} => #{v}" }
   #log_it "Current Params:\n#{pout.sort.join("\n") }"
-  raise "Command_Failed: no library path defined, set property: ACTION_LIBRARY_PATH" if !defined?(ACTION_LIBRARY_PATH)
-  library_root = ACTION_LIBRARY_PATH
+  library_root = action_library_path
+  log_it "ActionLibrary: #{library_root}"
   begin
     if parent_id.blank?
       # root folder

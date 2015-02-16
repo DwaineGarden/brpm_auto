@@ -10,18 +10,25 @@
 #   type: in-text
 #   position: A2:B2
 ###
+
 #---------------------- Declarations ------------------------------#
 FRAMEWORK_DIR = @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib") unless defined?(FRAMEWORK_DIR)
-
 body = File.open(File.join(FRAMEWORK_DIR,"lib","resource_framework.rb")).read
 result = eval(body)
-@script_name_handle = "update_git"
+@script_name_handle = "update_svn"
+load_customer_include(FRAMEWORK_DIR)
 
 #---------------------- Methods ------------------------------#
   
 #---------------------- Main Script ------------------------------#
 def execute(script_params, parent_id, offset, max_records)
   log_it "Starting Automation"
+  svn_path = "/opt/svn/1.7.5/opt/CollabNet_Subversion/bin/svn"
+  cmd_options = "--non-interactive  --trust-server-cert --force"
+  prerun = "export LD_LIBRARY_PATH=#{svn_path.gsub("bin/svn", "lib")}"
+  rpm_svn_url = "https://svn.nam.nsroot.net:9050"
+  svn_username = "rlmadmin"
+  svn_password_enc = "__SS__Ck54a1UwNFdhdFJXUQ=="
   pout = []
   script_params.each{|k,v| pout << "#{k} => #{v}" }
   log_it "Current Params:\n#{pout.sort.join("\n") }"
@@ -32,11 +39,12 @@ def execute(script_params, parent_id, offset, max_records)
   end
   raise "Command_Failed: no library path defined, set property: ACTION_LIBRARY_PATH" if !defined?(ACTION_LIBRARY_PATH)
   begin
-    @rpm.log "Here is a message"
-    status = `cd #{ACTION_LIBRARY_PATH} ; git pull origin master`
-    log_it("Git result: #{status}")
+    credential = "--username #{svn_username} --password #{decrypt_string_with_prefix(svn_password_enc)}"
+    svn_cmd = "#{prerun} && #{svn_path} export #{credential} #{cmd_options} ."
+    status = `cd #{ACTION_LIBRARY_PATH} ; #{svn_cmd}`
+    log_it("Svn result: #{status}")
     lines = status.split("\n")
-    default_list("Git: #{lines[0]}")    
+    default_list("Svn: #{lines[0]}")    
   rescue Exception => e
     log_it "#{e.message}\n#{e.backtrace}"
   end

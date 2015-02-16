@@ -6,7 +6,7 @@ FRAMEWORK_DIR = @params["SS_automation_results_dir"].gsub("automation_results","
 body = File.open(File.join(FRAMEWORK_DIR,"lib","resource_framework.rb")).read
 result = eval(body)
 @script_name_handle = "promotion_envs"
-
+load_customer_include(FRAMEWORK_DIR)
 #---------------------- Methods ------------------------------#
 def plan_route_constraints
   route_options = []; last_status = false
@@ -62,7 +62,7 @@ def execute(script_params, parent_id, offset, max_records)
     route = routes[routes.map(&:name).index("[default]")] if ipos.nil?
     cur_pos = -1; promo = false; promo_env = ""; xtra = ""
     route.route_gates.each_with_index do |gate, idx|
-      stage = ""
+      stage = "none"
       parallel = !gate.different_level_from_previous
       env_name = gate.environment.name
       if env_name == @params["SS_environment"]
@@ -80,10 +80,10 @@ def execute(script_params, parent_id, offset, max_records)
         xtra = "- status: must pass #{promo_env}"
       end 
       plan_options.each{|k| stage = k["stage"] if k["environments"].include?(env_name)}
-      stage_stg = stage == "" ? stage : " - stage: #{stage}"
+      stage_stg = stage == "none" ? stage : " - stage: #{stage}"
       envs["#{gate.environment_id.to_s}|#{env_name}|#{stage}"] = "#{env_name}#{stage_stg}      #{xtra}"
       rt_info = {"environment_id" => gate.environment_id.to_s, "environment" => env_name, "environment_type" => gate.environment_type.name, "note" => xtra}
-      rt_info["stage"] = stage if stage != ""
+      rt_info["stage"] = stage if stage != "none"
       app_route_options << rt_info
     end
     log_it envs

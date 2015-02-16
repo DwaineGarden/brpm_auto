@@ -73,18 +73,18 @@ module ResourceFramework
     fil.close
   end
   
-  def load_customer_include
-    customer_include_file = File.join(FRAMEWORK_DIR, "customer_include.rb")
+  def load_customer_include(framework_dir)
+    customer_include_file = File.join(framework_dir, "customer_include.rb")
     begin
       if File.exist?(customer_include_file)
-        @rpm.log "Loading customer include file: #{customer_include_file}"
+        log_it "Loading customer include file: #{customer_include_file}"
         eval(File.open(customer_include_file).read) 
-      elsif File.exist customer_include_file = File.join(FRAMEWORK_DIR,"customer_include_default.rb")
-        @rpm.log "Loading default customer include file: #{customer_include_file}"
+      elsif File.exist customer_include_file = File.join(framework_dir,"customer_include_default.rb")
+        log_it "Loading default customer include file: #{customer_include_file}"
         eval(File.open(customer_include_file).read)
       end
     rescue Exception => e
-      @rpm.log "Error loading customer include: #{e.message}\n#{e.backtrace}"
+      log_it "Error loading customer include: #{e.message}\n#{e.backtrace}"
     end 
   end
     
@@ -96,7 +96,11 @@ module ResourceFramework
     return [response]
   end
   
+  def action_library_path
+    raise "Command_Failed: no library path defined, set property: ACTION_LIBRARY_PATH" if !defined?(ACTION_LIBRARY_PATH)
+    ACTION_LIBRARY_PATH
+  end
 end
 
 extend ResourceFramework
-load_customer_include
+
