@@ -39,11 +39,13 @@ brpm_hostname = @p.SS_base_url.gsub(/^.*\:\/\//, "").gsub(/\:\d.*/, "")
 # Check if we have been passed a package instance 
 staging_info = @p.required("instance_#{@p.SS_component}")
 staging_path = staging_info["instance_path"]
+alt_servers = @p.get("alternate_deploy_server_#{@p.SS_component}")
 
 #---------------------- Main Body --------------------------#
 # Deploy and unzip the package on all targets
 transfer_properties = @transport.get_transfer_properties
 options = {"allow_md5_mismatch" => true, "transfer_properties" => transfer_properties}
+options["servers"] = alt_servers unless alt_servers == ""
 #=> Call the framework routine to deploy the package instance
 result = @transport.deploy_package_instance(staging_info, options)
 #@rpm.log "Dispatch Result: #{result.inspect}"

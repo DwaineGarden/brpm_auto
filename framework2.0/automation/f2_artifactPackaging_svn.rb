@@ -45,10 +45,11 @@ def fetch_from_svn(svn_url)
   svn_stage = "/tmp/svn_#{@p.SS_run_key}"
   FileUtils.mkdir(svn_stage)
   svn_options = {"url" => svn_url, "base_path" => svn_stage, "username" => SS_integration_username, "password" => decrypt_string_with_prefix(SS_integration_password_enc), "command_options" => cmd_options, "prerun_lines" => prerun_lines, "verbose" => true}
-  @svn = Svn.new(svn_path, @params, options)
+  @svn = Svn.new(svn_path, @params, svn_options)
   result = @svn.export
   @rpm.log "Svn export results: #{result}"
-  [svn_stage]
+  contents = Dir.entries(svn_stage)
+  contents.reject{|l| [".", ".."].include?(l) }.map{|k| File.join(svn_stage, k)}
 end
 
 #---------------------- Variables --------------------------#

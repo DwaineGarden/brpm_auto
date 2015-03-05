@@ -330,12 +330,13 @@ class BrpmAutomation
   #
   # true if semaphore created, false if already exists
   #
-  def semaphore(semaphore_key)
+  def semaphore(semaphore_key, test = false)
     return false if @p_obj.nil?
     semaphore_dir = "#{p_obj.SS_automation_results_dir}/semaphores"
     semaphore_name = "#{semaphore_key}.pid"
     File.mkdir(semaphore_dir) unless File.exist?(semaphore_dir)
     return false if File.exist?(File.join(semaphore_dir, semaphore_name))
+    return true if test
     fil = File.open(File.join(semaphore_dir, semaphore_name), "w+")
     fil.puts precision_timestamp
     fil.flush

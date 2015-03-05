@@ -200,7 +200,7 @@ class TransportNSH < BrpmAutomation
     script_file = "nsh_script_#{Time.now.strftime("%Y%m%d%H%M%S")}.sh"
     full_path = File.join(@params["SS_output_dir"],script_file)
     fil = File.open(full_path,"w+")
-    #fil.write script_body.gsub("\r", "")
+    fil.write script_body.gsub("\r", "")
     fil.flush
     fil.close
     result = script_exec(target_hosts, full_path, target_path, options)
@@ -292,12 +292,13 @@ class TransportNSH < BrpmAutomation
   # hash of instance_path and md5 - {"instance_path" => "", "md5" => ""}
   def package_staged_artifacts(staging_path, package_name)
     instance_path = File.join(staging_path, package_name)
-    return {"instance_path" => "ERROR - no files in staging area", "md5" => ""} if Dir.entries(staging_path).size < 3
+    staging_artifacts = Dir.entries(staging_path).reject{|k| [".",".."].include?(k) }
+    return {"instance_path" => "ERROR - no files in staging area", "md5" => ""} if staging_artifacts.size < 3
     FileUtils.cd(staging_path, :verbose => true)
     cmd = "#{nsh_cmd("zip")} -r #{package_name} *"
     result = execute_shell(cmd)
     md5 = Digest::MD5.file(instance_path).hexdigest
-    {"instance_path" => instance_path, "md5" => md5}
+    {"instance_path" => instance_path, "md5" => md5, "manifest" => staging_artifacts }
   end
 
   private
