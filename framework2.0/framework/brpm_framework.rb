@@ -8,6 +8,7 @@
 
 SleepDelay = [5,10,25,60] # Pattern for sleep pause in polling 
 RLM_BASE_PROPERTIES = ["SS_application", "SS_environment", "SS_component", "SS_component_version", "request_id", "step_name"]
+require "#{File.dirname(__FILE__)}/lib/brpm_automation"
 
 # Compatibility Routines
 def get_request_params
@@ -45,10 +46,15 @@ end
 if @params["SS_script_target"] == "resource_automation"
   # do something else
 else
+  @rpm = BrpmAutomation.new(@params)
+  if @params["SS_script_type"] != 'test' && @params["SS_script_target"] != "resource_automation" && !@params.has_key?("SS_no_framework") 
+    automation_settings = @params["SS_script_support_path"].gsub("lib/script_support","config/automation_settings.rb")
+    require "#{automation_settings}" if File.exist?(automation_settings)    
+  end  
   @request_params = {} if not defined?(@request_params)
   SS_output_file = @params["SS_output_file"]
   FRAMEWORK_DIR = @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib") unless defined?(FRAMEWORK_DIR)
-  rpm_load_module("param", "rest") # baa_transport, nsh_transport, ssh_transport, legacy_framework, scm, ticket, dispatch_baa, dispath_nsh
+  rpm_load_module("param", "rest") 
   @p = Param.new(@params, @request_params)
   customer_include_file = File.join(FRAMEWORK_DIR, "customer_include.rb")
   if File.exist?(customer_include_file)

@@ -119,6 +119,11 @@ class TransportNSH < BrpmAutomation
   def ncp(target_hosts, src_path, target_path)
     #ncp -vr /c/dev/SmartRelease_2/lib -h bradford-96204e -d "/c/dev/BMC Software/file_store"
     src_path = [src_path] if src_path.is_a?(String)
+    if target_hosts.nil?
+      res = split_nsh_path(src_path[0])
+      target_hosts = [res[0]] unless res[0] == ""
+      src_path[0] = res[1] unless res[0] == ""
+    end
     paths = src_path.map{|pth| pth.include?(" ") ? "\"#{pth}\"" : pth }
     path_arg = paths.join(" ")
     cmd = "#{nsh_cmd("ncp")} -vrA #{path_arg} -h #{target_hosts.join(" ")} -d \"#{target_path}\"" unless target_hosts.nil?
