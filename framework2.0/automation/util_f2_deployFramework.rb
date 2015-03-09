@@ -58,7 +58,7 @@ FileUtils.cp_r(File.join(tmp_dir, "framework/."), persist_dir, :verbose => true)
 cur_content = File.open(File.join(params["SS_script_support_path"], "ssh_script_header.rb")).read
 if !cur_content.include?("Initialize RPM Framework")
   add_lines = "#=> Initialize RPM Framework\n"
-  add_lines += "framework_addition = #{File.join(persist_dir,"lib", "ssh_script_header_additions.rb")}\n"
+  add_lines += "framework_addition = \"#{File.join(persist_dir,"lib", "ssh_script_header_additions.rb")}\"\n"
   add_lines += "load framework_addition\n"
   add_lines += "#=> End RPM Framework Addition\n"
   fil = File.open(File.join(params["SS_script_support_path"], "ssh_script_header.rb"), "w+")
