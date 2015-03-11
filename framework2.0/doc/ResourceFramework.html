@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>module ResourceFramework - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="module">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>framework/lib/resource_framework.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-i-action_library_path">#action_library_path</a>
+    
+    <li><a href="#method-i-create_request_params_file">#create_request_params_file</a>
+    
+    <li><a href="#method-i-default_list">#default_list</a>
+    
+    <li><a href="#method-i-default_table">#default_table</a>
+    
+    <li><a href="#method-i-get_request_params">#get_request_params</a>
+    
+    <li><a href="#method-i-hashify_list">#hashify_list</a>
+    
+    <li><a href="#method-i-init_request_params">#init_request_params</a>
+    
+    <li><a href="#method-i-load_customer_include">#load_customer_include</a>
+    
+    <li><a href="#method-i-log_it">#log_it</a>
+    
+    <li><a href="#method-i-save_request_params">#save_request_params</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Jira.html">Jira</a>
+  
+    <li><a href="./Jira/JiraClient.html">Jira::JiraClient</a>
+  
+    <li><a href="./AutomationHeader.html">AutomationHeader</a>
+  
+    <li><a href="./BrpmAutomation.html">BrpmAutomation</a>
+  
+    <li><a href="./BrpmRequest.html">BrpmRequest</a>
+  
+    <li><a href="./BrpmRest.html">BrpmRest</a>
+  
+    <li><a href="./DispatchBAA.html">DispatchBAA</a>
+  
+    <li><a href="./DispatchBase.html">DispatchBase</a>
+  
+    <li><a href="./DispatchNSH.html">DispatchNSH</a>
+  
+    <li><a href="./DispatchSSH.html">DispatchSSH</a>
+  
+    <li><a href="./Git.html">Git</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Param.html">Param</a>
+  
+    <li><a href="./ResourceFramework.html">ResourceFramework</a>
+  
+    <li><a href="./Svn.html">Svn</a>
+  
+    <li><a href="./TransportBAA.html">TransportBAA</a>
+  
+    <li><a href="./TransportNSH.html">TransportNSH</a>
+  
+    <li><a href="./TransportSSH.html">TransportSSH</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="module">module ResourceFramework</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-action_library_path" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">action_library_path</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="action_library_path-source">
+            <pre><span class="ruby-comment"># File framework/lib/resource_framework.rb, line 99</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">action_library_path</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Command_Failed: no library path defined, set property: ACTION_LIBRARY_PATH&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-keyword">defined?</span>(<span class="ruby-constant">ACTION_LIBRARY_PATH</span>)
+  <span class="ruby-constant">ACTION_LIBRARY_PATH</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- action_library_path-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- action_library_path-method -->
+
+    
+      <div id="method-i-create_request_params_file" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create_request_params_file</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="create_request_params_file-source">
+            <pre><span class="ruby-comment"># File framework/lib/resource_framework.rb, line 2</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_request_params_file</span>
+  <span class="ruby-identifier">request_data_file_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_output_dir&quot;</span>])
+  <span class="ruby-identifier">request_data_file</span> = <span class="ruby-node">&quot;#{request_data_file_dir}/request_data.json&quot;</span>
+  <span class="ruby-identifier">fil</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">request_data_file</span>,<span class="ruby-string">&quot;w&quot;</span>)
+  <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;{\&quot;request_data_file\&quot;:\&quot;Created #{Time.now.strftime(&quot;%m/%d/%Y %H:%M:%S&quot;)}\&quot;}&quot;</span>
+  <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">close</span>
+  <span class="ruby-identifier">file_part</span> = <span class="ruby-identifier">request_data_file</span>[<span class="ruby-identifier">request_data_file</span>.<span class="ruby-identifier">index</span>(<span class="ruby-string">&quot;/automation_results&quot;</span>)<span class="ruby-operator">..</span><span class="ruby-value">255</span>]
+  <span class="ruby-identifier">data_file_url</span> = <span class="ruby-node">&quot;#{@params[&quot;SS_base_url&quot;]}#{file_part}&quot;</span>
+  <span class="ruby-identifier">write_to</span> <span class="ruby-node">&quot;Request Run Data: #{data_file_url}&quot;</span>
+  <span class="ruby-identifier">request_data_file</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create_request_params_file-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create_request_params_file-method -->
+
+    
+      <div id="method-i-default_list" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">default_list</span><span
+            class="method-args">(msg)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="default_list-source">
+            <pre><span class="ruby-comment"># File framework/lib/resource_framework.rb, line 58</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">default_list</span>(<span class="ruby-identifier">msg</span>)
+  <span class="ruby-identifier">result</span> = [{<span class="ruby-identifier">msg</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>}]
+  <span class="ruby-identifier">select_hash</span> = {}
+  <span class="ruby-identifier">result</span>.<span class="ruby-identifier">unshift</span>(<span class="ruby-identifier">select_hash</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- default_list-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- default_list-method -->
+
+    
+      <div id="method-i-default_table" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">default_table</span><span
+            class="method-args">(other_rows = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="default_table-source">
+            <pre><span class="ruby-comment"># File framework/lib/resource_framework.rb, line 49</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">default_table</span>(<span class="ruby-identifier">other_rows</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">totalItems</span> = <span class="ruby-value">1</span>
+  <span class="ruby-identifier">table_entries</span> = [[<span class="ruby-node">&quot;#&quot;</span>,<span class="ruby-string">&quot;Status&quot;</span>,<span class="ruby-string">&quot;Information&quot;</span>]]
+  <span class="ruby-identifier">table_entries</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-string">&quot;1&quot;</span>,<span class="ruby-string">&quot;Error&quot;</span>, <span class="ruby-string">&quot;Insufficient Data&quot;</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">other_rows</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">other_rows</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">row</span><span class="ruby-operator">|</span> <span class="ruby-identifier">table_entries</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">row</span> } <span class="ruby-keyword">unless</span> <span class="ruby-identifier">other_rows</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">per_page</span>=<span class="ruby-value">10</span>
+  {<span class="ruby-value">:totalItems</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">totalItems</span>, <span class="ruby-value">:perPage</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">per_page</span>, <span class="ruby-value">:data</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">table_entries</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- default_table-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- default_table-method -->
+
+    
+      <div id="method-i-get_request_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_request_params</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_request_params-source">
+            <pre><span class="ruby-comment"># File framework/lib/resource_framework.rb, line 27</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_request_params</span>
+  <span class="ruby-comment"># Uses a json document in automation_results to store free-form information</span>
+  <span class="ruby-identifier">cur</span> = <span class="ruby-identifier">init_request_params</span>
+  <span class="ruby-comment">#message_box(&quot;Current Request Data&quot;,&quot;sep&quot;)</span>
+  <span class="ruby-ivar">@request_params</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">cur</span>).<span class="ruby-identifier">read</span>)
+  <span class="ruby-ivar">@request_params</span>.<span class="ruby-identifier">each</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">write_to</span>(<span class="ruby-node">&quot;#{k} =&gt; #{v.is_a?(String) ? v : v.inspect}&quot;</span>) }
+  <span class="ruby-ivar">@orig_request_params</span> = <span class="ruby-ivar">@request_params</span>.<span class="ruby-identifier">dup</span>
+  <span class="ruby-ivar">@request_params</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_request_params-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_request_params-method -->
+
+    
+      <div id="method-i-hashify_list" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">hashify_list</span><span
+            class="method-args">(list)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="hashify_list-source">
+            <pre><span class="ruby-comment"># File framework/lib/resource_framework.rb, line 91</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">hashify_list</span>(<span class="ruby-identifier">list</span>)
+  <span class="ruby-identifier">response</span> = {}
+  <span class="ruby-identifier">list</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span>,<span class="ruby-identifier">val</span><span class="ruby-operator">|</span> 
+    <span class="ruby-identifier">response</span>[<span class="ruby-identifier">val</span>] = <span class="ruby-identifier">item</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> [<span class="ruby-identifier">response</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- hashify_list-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- hashify_list-method -->
+
+    
+      <div id="method-i-init_request_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">init_request_params</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="init_request_params-source">
+            <pre><span class="ruby-comment"># File framework/lib/resource_framework.rb, line 14</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">init_request_params</span>
+  <span class="ruby-identifier">request_data_file_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_output_dir&quot;</span>])
+  <span class="ruby-identifier">request_data_file</span> = <span class="ruby-node">&quot;#{request_data_file_dir}/request_data.json&quot;</span>
+  <span class="ruby-identifier">sleep</span>(<span class="ruby-value">2</span>) <span class="ruby-keyword">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">request_data_file</span>)
+  <span class="ruby-keyword">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">request_data_file</span>)
+    <span class="ruby-identifier">create_request_params_file</span>  
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">file_part</span> = <span class="ruby-identifier">request_data_file</span>[<span class="ruby-identifier">request_data_file</span>.<span class="ruby-identifier">index</span>(<span class="ruby-string">&quot;/automation_results&quot;</span>)<span class="ruby-operator">..</span><span class="ruby-value">255</span>]
+  <span class="ruby-identifier">data_file_url</span> = <span class="ruby-node">&quot;#{@params[&quot;SS_base_url&quot;]}#{file_part}&quot;</span>
+  <span class="ruby-identifier">write_to</span> <span class="ruby-node">&quot;Request Run Data: #{data_file_url}&quot;</span>
+  <span class="ruby-identifier">request_data_file</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- init_request_params-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- init_request_params-method -->
+
+    
+      <div id="method-i-load_customer_include" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">load_customer_include</span><span
+            class="method-args">(framework_dir)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="load_customer_include-source">
+            <pre><span class="ruby-comment"># File framework/lib/resource_framework.rb, line 76</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">load_customer_include</span>(<span class="ruby-identifier">framework_dir</span>)
+  <span class="ruby-identifier">customer_include_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">framework_dir</span>, <span class="ruby-string">&quot;customer_include.rb&quot;</span>)
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">customer_include_file</span>)
+      <span class="ruby-identifier">log_it</span> <span class="ruby-node">&quot;Loading customer include file: #{customer_include_file}&quot;</span>
+      <span class="ruby-identifier">eval</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">customer_include_file</span>).<span class="ruby-identifier">read</span>) 
+    <span class="ruby-keyword">elsif</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist</span> <span class="ruby-identifier">customer_include_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">framework_dir</span>,<span class="ruby-string">&quot;customer_include_default.rb&quot;</span>)
+      <span class="ruby-identifier">log_it</span> <span class="ruby-node">&quot;Loading default customer include file: #{customer_include_file}&quot;</span>
+      <span class="ruby-identifier">eval</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">customer_include_file</span>).<span class="ruby-identifier">read</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-identifier">log_it</span> <span class="ruby-node">&quot;Error loading customer include: #{e.message}\n#{e.backtrace}&quot;</span>
+  <span class="ruby-keyword">end</span> 
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- load_customer_include-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- load_customer_include-method -->
+
+    
+      <div id="method-i-log_it" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">log_it</span><span
+            class="method-args">(it)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="log_it-source">
+            <pre><span class="ruby-comment"># File framework/lib/resource_framework.rb, line 64</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">log_it</span>(<span class="ruby-identifier">it</span>)
+  <span class="ruby-identifier">log_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_automation_results_dir&quot;</span>], <span class="ruby-string">&quot;resource_logs&quot;</span>)
+  <span class="ruby-identifier">txt</span> = <span class="ruby-identifier">it</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">it</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">it</span>.<span class="ruby-identifier">inspect</span>
+  <span class="ruby-identifier">write_to</span> <span class="ruby-identifier">txt</span>
+  <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">mkdir</span>(<span class="ruby-identifier">log_path</span>) <span class="ruby-keyword">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">log_path</span>)
+  <span class="ruby-identifier">s_handle</span> = <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@script_name_handle</span>) <span class="ruby-operator">?</span> <span class="ruby-ivar">@script_name_handle</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;rsc_output&quot;</span>
+  <span class="ruby-identifier">fil</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;#{log_path}/#{s_handle}_#{@params[&quot;SS_run_key&quot;]}&quot;</span>, <span class="ruby-string">&quot;a&quot;</span>)
+  <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">txt</span>
+  <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">flush</span>
+  <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">close</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- log_it-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- log_it-method -->
+
+    
+      <div id="method-i-save_request_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">save_request_params</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="save_request_params-source">
+            <pre><span class="ruby-comment"># File framework/lib/resource_framework.rb, line 37</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">save_request_params</span>
+  <span class="ruby-comment"># Uses a json document in automation_results to store free-form information</span>
+  <span class="ruby-identifier">cur</span> = <span class="ruby-identifier">init_request_params</span>
+  <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@orig_request_params</span> <span class="ruby-operator">==</span> <span class="ruby-ivar">@request_params</span>
+    <span class="ruby-identifier">sleep</span>(<span class="ruby-value">2</span>) <span class="ruby-keyword">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">cur</span>)
+    <span class="ruby-identifier">fil</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">cur</span>,<span class="ruby-string">&quot;w+&quot;</span>)
+    <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">write</span> <span class="ruby-ivar">@request_params</span>.<span class="ruby-identifier">to_json</span>
+    <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">flush</span>
+    <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">close</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- save_request_params-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- save_request_params-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+

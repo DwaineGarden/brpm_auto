@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>class Object - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>framework/brpm_framework.rb
+    <li>framework/customer_include_default.rb
+    <li>framework/lib/dispatch_base.rb
+    <li>framework/lib/legacy_framework.rb
+    <li>framework/lib/ssh_script_header.rb
+    <li>framework/lib/ssh_script_header_additions.rb
+    <li>framework/lib/standalone_framework.rb
+    <li>framework/lib/ticket.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link">
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-i-application_info">#application_info</a>
+    
+    <li><a href="#method-i-assign_version_tag_to_steps">#assign_version_tag_to_steps</a>
+    
+    <li><a href="#method-i-create_version_tags">#create_version_tags</a>
+    
+    <li><a href="#method-i-delay_sleep">#delay_sleep</a>
+    
+    <li><a href="#method-i-get_instance_id_from_version">#get_instance_id_from_version</a>
+    
+    <li><a href="#method-i-get_other_request_params">#get_other_request_params</a>
+    
+    <li><a href="#method-i-get_request_params">#get_request_params</a>
+    
+    <li><a href="#method-i-get_rpd_next_environment">#get_rpd_next_environment</a>
+    
+    <li><a href="#method-i-global_timestamp">#global_timestamp</a>
+    
+    <li><a href="#method-i-init_brpm_db_connection">#init_brpm_db_connection</a>
+    
+    <li><a href="#method-i-initialize_framework">#initialize_framework</a>
+    
+    <li><a href="#method-i-jenkins_build">#jenkins_build</a>
+    
+    <li><a href="#method-i-jenkins_build_results">#jenkins_build_results</a>
+    
+    <li><a href="#method-i-jenkins_build_status">#jenkins_build_status</a>
+    
+    <li><a href="#method-i-jenkins_job_build_data">#jenkins_job_build_data</a>
+    
+    <li><a href="#method-i-jenkins_job_data">#jenkins_job_data</a>
+    
+    <li><a href="#method-i-jenkins_monitor_build">#jenkins_monitor_build</a>
+    
+    <li><a href="#method-i-load_helpers">#load_helpers</a>
+    
+    <li><a href="#method-i-load_input_params">#load_input_params</a>
+    
+    <li><a href="#method-i-message_box">#message_box</a>
+    
+    <li><a href="#method-i-monitor_request">#monitor_request</a>
+    
+    <li><a href="#method-i-rpd_attach_deployment_logs">#rpd_attach_deployment_logs</a>
+    
+    <li><a href="#method-i-rpd_attach_logs">#rpd_attach_logs</a>
+    
+    <li><a href="#method-i-rpd_create_package_instance">#rpd_create_package_instance</a>
+    
+    <li><a href="#method-i-rpd_deploy_package_instance">#rpd_deploy_package_instance</a>
+    
+    <li><a href="#method-i-rpd_execute_api">#rpd_execute_api</a>
+    
+    <li><a href="#method-i-rpd_get_package_id">#rpd_get_package_id</a>
+    
+    <li><a href="#method-i-rpd_transfer_properties">#rpd_transfer_properties</a>
+    
+    <li><a href="#method-i-rpm_from_rpd_env">#rpm_from_rpd_env</a>
+    
+    <li><a href="#method-i-rpm_load_module">#rpm_load_module</a>
+    
+    <li><a href="#method-i-save_request_params">#save_request_params</a>
+    
+    <li><a href="#method-i-steps_with_matching_component">#steps_with_matching_component</a>
+    
+    <li><a href="#method-i-ticket_exists">#ticket_exists</a>
+    
+    <li><a href="#method-i-update_other_request_params">#update_other_request_params</a>
+    
+    <li><a href="#method-i-version_tag_exists">#version_tag_exists</a>
+    
+    <li><a href="#method-i-version_tag_query">#version_tag_query</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Jira.html">Jira</a>
+  
+    <li><a href="./Jira/JiraClient.html">Jira::JiraClient</a>
+  
+    <li><a href="./AutomationHeader.html">AutomationHeader</a>
+  
+    <li><a href="./BrpmAutomation.html">BrpmAutomation</a>
+  
+    <li><a href="./BrpmRequest.html">BrpmRequest</a>
+  
+    <li><a href="./BrpmRest.html">BrpmRest</a>
+  
+    <li><a href="./DispatchBAA.html">DispatchBAA</a>
+  
+    <li><a href="./DispatchBase.html">DispatchBase</a>
+  
+    <li><a href="./DispatchNSH.html">DispatchNSH</a>
+  
+    <li><a href="./DispatchSSH.html">DispatchSSH</a>
+  
+    <li><a href="./Git.html">Git</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Param.html">Param</a>
+  
+    <li><a href="./ResourceFramework.html">ResourceFramework</a>
+  
+    <li><a href="./Svn.html">Svn</a>
+  
+    <li><a href="./TransportBAA.html">TransportBAA</a>
+  
+    <li><a href="./TransportNSH.html">TransportNSH</a>
+  
+    <li><a href="./TransportSSH.html">TransportSSH</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class Object</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+    <!-- Constants -->
+    <section id="constants-list" class="section">
+      <h3 class="section-header">Constants</h3>
+      <dl>
+      
+        <dt id="ACTION_LIBRARY_PATH">ACTION_LIBRARY_PATH
+        
+        <dd class="description"><p>This defines a path for a library of automations (from <a
+href="Git.html">Git</a> or <a href="Svn.html">Svn</a> for instance)</p>
+        
+      
+        <dt id="ARG_PREFIX">ARG_PREFIX
+        
+        <dd class="description">
+        
+      
+        <dt id="BAA_BASE_GROUP">BAA_BASE_GROUP
+        
+        <dd class="description"><p>This is the root path for use in BAA/BSA</p>
+        
+      
+        <dt id="BAA_BASE_PATH">BAA_BASE_PATH
+        
+        <dd class="description"><p>Change this to set BAA base path</p>
+        
+      
+        <dt id="BAA_FRAMEWORK_NSH_SCRIPT">BAA_FRAMEWORK_NSH_SCRIPT
+        
+        <dd class="description"><p>The location and name of the standard NSH script for script execution</p>
+        
+      
+        <dt id="BAA_RPM_HOSTNAME">BAA_RPM_HOSTNAME
+        
+        <dd class="description"><p>Hostname so nsh paths can be constructed from local paths</p>
+        
+      
+        <dt id="CUSTOMER_LIB_DIR">CUSTOMER_LIB_DIR
+        
+        <dd class="description"><p>Custom Lib/Module directory (to add customer content to framework)</p>
+        
+      
+        <dt id="DATA_CENTER_NAMES">DATA_CENTER_NAMES
+        
+        <dd class="description"><p>Place your own global constants</p>
+        
+      
+        <dt id="DEFAULT_PARAMS_FILTER">DEFAULT_PARAMS_FILTER
+        
+        <dd class="description">
+        
+      
+        <dt id="FRAMEWORK_DIR">FRAMEWORK_DIR
+        
+        <dd class="description"><p>BRPM Framework Additions</p>
+        
+      
+        <dt id="JiraTicketTypes">JiraTicketTypes
+        
+        <dd class="description">
+        
+      
+        <dt id="Jira_custom_fields">Jira_custom_fields
+        
+        <dd class="description">
+        
+      
+        <dt id="KEYWORD_SWITCHES">KEYWORD_SWITCHES
+        
+        <dd class="description">
+        
+      
+        <dt id="OS_PLATFORMS">OS_PLATFORMS
+        
+        <dd class="description">
+        
+      
+        <dt id="RLM_BASE_PROPERTIES">RLM_BASE_PROPERTIES
+        
+        <dd class="description">
+        
+      
+        <dt id="RPM_STAGING_PATH">RPM_STAGING_PATH
+        
+        <dd class="description"><p>This path will get any files staged by the framework</p>
+        
+      
+        <dt id="SS_output_file">SS_output_file
+        
+        <dd class="description">
+        
+      
+        <dt id="STANDARD_PROPERTIES">STANDARD_PROPERTIES
+        
+        <dd class="description">
+        
+      
+        <dt id="SleepDelay">SleepDelay
+        
+        <dd class="description"><h1 id="label-BRPM+Automation+Framework">BRPM Automation Framework</h1>
+
+<pre>BMC Software - BJB 8/22/2014, BJB 9/17/14</pre>
+
+<h4 id="label-A+collection+of+classes+to+simplify+building+BRPM+automation">A collection of classes to simplify building BRPM automation</h4>
+
+<h3 id="label-Instructions">Instructions</h3>
+
+<p>In your BRPM automation include a block like this to pull in the library
+&lt;tt&gt; <a href="http://"direct_execute"">params</a> = true #Set for
+local execution &lt;tt&gt; require @<a
+href="http://"SS_automation_results_dir"">params</a>.gsub(“automation_results”,“persist/automation_lib/brpm_framework.rb”)</p>
+        
+      
+        <dt id="Token">Token
+        
+        <dd class="description"><p>set your own automation token</p>
+        
+      
+        <dt id="Windows">Windows
+        
+        <dd class="description">
+        
+      
+      </dl>
+    </section>
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-application_info" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">application_info</span><span
+            class="method-args">(options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="application_info-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 79</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">application_info</span>(<span class="ruby-identifier">options</span> = {})
+  <span class="ruby-comment"># Returns route list for the request app</span>
+  <span class="ruby-ivar">@request</span> = <span class="ruby-constant">Request</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_base_url&quot;</span>], <span class="ruby-ivar">@param</span>[<span class="ruby-string">&quot;request_id&quot;</span>])
+  <span class="ruby-identifier">routes</span> = {}
+  <span class="ruby-identifier">envs</span> = {}
+  <span class="ruby-identifier">comps</span> ={}
+  <span class="ruby-identifier">result</span> = <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">app_routes</span>
+  <span class="ruby-identifier">result</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">route</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">routes</span>[<span class="ruby-identifier">route</span>[<span class="ruby-string">&quot;name&quot;</span>]] = <span class="ruby-identifier">route</span>[<span class="ruby-string">&quot;id&quot;</span>]
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">app</span> = <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">app</span>
+  <span class="ruby-identifier">app</span>[<span class="ruby-string">&quot;components&quot;</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">component</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">comps</span>[<span class="ruby-identifier">component</span>[<span class="ruby-string">&quot;name&quot;</span>]] = <span class="ruby-identifier">component</span>[<span class="ruby-string">&quot;id&quot;</span>]
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">app</span>[<span class="ruby-string">&quot;environments&quot;</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">env</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">envs</span>[<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;name&quot;</span>]] = <span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;id&quot;</span>]
+    <span class="ruby-identifier">result_env</span> = <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;environments&quot;</span>, <span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;id&quot;</span>])
+    <span class="ruby-keyword">return</span> <span class="ruby-string">&quot;ERROR&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">result_env</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+    <span class="ruby-identifier">envs</span>[<span class="ruby-string">&quot;environment_type&quot;</span>] = <span class="ruby-identifier">result_env</span>[<span class="ruby-string">&quot;environment_type&quot;</span>]
+  <span class="ruby-keyword">end</span> 
+  {<span class="ruby-string">&quot;routes&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">routes</span>, <span class="ruby-string">&quot;environments&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">envs</span>, <span class="ruby-string">&quot;components&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">comps</span>}
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- application_info-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- application_info-method -->
+
+    
+      <div id="method-i-assign_version_tag_to_steps" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">assign_version_tag_to_steps</span><span
+            class="method-args">(version_tag, steps = [])</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="assign_version_tag_to_steps-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 227</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">assign_version_tag_to_steps</span>(<span class="ruby-identifier">version_tag</span>, <span class="ruby-identifier">steps</span> = [])
+  <span class="ruby-identifier">result</span> = <span class="ruby-string">&quot;Error - failed to update steps&quot;</span>
+  <span class="ruby-identifier">steps</span> = <span class="ruby-identifier">steps_with_matching_component</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">steps</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+  <span class="ruby-identifier">steps</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">step</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">step_data</span> = {<span class="ruby-string">&quot;version_tag_id&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">version_tag</span>[<span class="ruby-string">&quot;id&quot;</span>], <span class="ruby-string">&quot;component_version&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">version_tag</span>[<span class="ruby-string">&quot;name&quot;</span>]}
+    <span class="ruby-identifier">url</span> = <span class="ruby-node">&quot;#{@params[&quot;SS_base_url&quot;]}/v1/steps/#{step[&quot;id&quot;]}?token=#{Token}&quot;</span>
+    <span class="ruby-identifier">rest_result</span> = <span class="ruby-identifier">rest_call</span>(<span class="ruby-identifier">url</span>, <span class="ruby-string">&quot;PUT&quot;</span>, {<span class="ruby-string">&quot;data&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">step_data</span>})
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">rest_result</span>[<span class="ruby-string">&quot;status&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;success&quot;</span>
+      <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Updating step: #{step[&quot;id&quot;]}\nResult: #{rest_result[&quot;response&quot;]}&quot;</span>
+      <span class="ruby-identifier">result</span> = <span class="ruby-string">&quot;success&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- assign_version_tag_to_steps-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- assign_version_tag_to_steps-method -->
+
+    
+      <div id="method-i-create_version_tags" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create_version_tags</span><span
+            class="method-args">(tag_info)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="create_version_tags-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 168</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_version_tags</span>(<span class="ruby-identifier">tag_info</span>)
+  <span class="ruby-comment"># Meant to be called after importing a spreadsheet of versions</span>
+  <span class="ruby-comment"># tag info should be an array of hashes [{ &quot;application&quot; =&gt; &quot;app1&quot;,</span>
+  <span class="ruby-comment">#                                       &quot;component&quot; =&gt; &quot;database&quot;,</span>
+  <span class="ruby-comment">#                                       &quot;environment&quot; =&gt; &quot;UAT&quot; could be &quot;all&quot;,</span>
+  <span class="ruby-comment">#                                       &quot;name&quot; =&gt; &quot;1.2.1&quot;,</span>
+  <span class="ruby-comment">#                                       &quot;artifact_url&quot; =&gt; &quot;file:///home/brady/stuff&quot;}]</span>
+  <span class="ruby-identifier">token</span> = <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_api_token&quot;</span>]
+  <span class="ruby-identifier">token</span> = <span class="ruby-constant">Token</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-constant">Token</span>)
+  <span class="ruby-identifier">results</span> = {<span class="ruby-string">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;failure&quot;</span>, <span class="ruby-string">&quot;message&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>}
+  <span class="ruby-identifier">message</span> = <span class="ruby-node">&quot;Processing tags: #{tag_info.size.to_s} to do\n&quot;</span>
+  <span class="ruby-identifier">version_tag</span> = { <span class="ruby-string">&quot;name&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-string">&quot;artifact_url&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-string">&quot;find_application&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-string">&quot;find_component&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-string">&quot;active&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>}
+  <span class="ruby-identifier">tag_info</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v_tag</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">v_tag</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">&quot;name&quot;</span>)
+      <span class="ruby-identifier">version_tag</span>[<span class="ruby-string">&quot;find_application&quot;</span>] = <span class="ruby-identifier">v_tag</span>[<span class="ruby-string">&quot;application&quot;</span>]
+      <span class="ruby-identifier">version_tag</span>[<span class="ruby-string">&quot;find_component&quot;</span>] = <span class="ruby-identifier">v_tag</span>[<span class="ruby-string">&quot;component&quot;</span>]
+      <span class="ruby-identifier">version_tag</span>[<span class="ruby-string">&quot;find_environment&quot;</span>] = <span class="ruby-identifier">v_tag</span>[<span class="ruby-string">&quot;environment&quot;</span>] <span class="ruby-keyword">unless</span> <span class="ruby-identifier">v_tag</span>[<span class="ruby-string">&quot;environment&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;all&quot;</span>
+      <span class="ruby-identifier">version_tag</span>[<span class="ruby-string">&quot;name&quot;</span>] = <span class="ruby-identifier">v_tag</span>[<span class="ruby-string">&quot;name&quot;</span>]
+      <span class="ruby-identifier">version_tag</span>[<span class="ruby-string">&quot;artifact_url&quot;</span>] = <span class="ruby-identifier">v_tag</span>[<span class="ruby-string">&quot;artifact_url&quot;</span>]
+      <span class="ruby-identifier">message</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;adding #{v_tag[&quot;name&quot;]} to #{v_tag[&quot;component&quot;]}&quot;</span>
+      <span class="ruby-identifier">url</span> = <span class="ruby-node">&quot;#{@params[&quot;SS_base_url&quot;]}/v1/version_tags?token=#{token}&quot;</span>      
+      <span class="ruby-identifier">result</span> = <span class="ruby-identifier">rest_call</span>(<span class="ruby-identifier">url</span>, <span class="ruby-string">&quot;POST&quot;</span>, {<span class="ruby-string">&quot;data&quot;</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-string">&quot;version_tag&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">version_tag</span>}})
+      <span class="ruby-identifier">message</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;, Status: #{result[&quot;status&quot;]}\n&quot;</span>
+      <span class="ruby-identifier">results</span>[<span class="ruby-string">&quot;response&quot;</span>] = <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;response&quot;</span>]
+      <span class="ruby-identifier">results</span>[<span class="ruby-string">&quot;status&quot;</span>] = <span class="ruby-string">&quot;Success&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;status&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;success&quot;</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">message</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;bad record: #{v_tag.inspect}\n&quot;</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">version_tag</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&quot;find_environment&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">version_tag</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">&quot;find_environment&quot;</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">results</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create_version_tags-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create_version_tags-method -->
+
+    
+      <div id="method-i-delay_sleep" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">delay_sleep</span><span
+            class="method-args">(cnt = 0)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="delay_sleep-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 26</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">delay_sleep</span>(<span class="ruby-identifier">cnt</span> = <span class="ruby-value">0</span>)
+  <span class="ruby-comment">#  SleepDelay = [5,10,25,60]</span>
+  <span class="ruby-identifier">delay</span> = (<span class="ruby-identifier">cnt</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">SleepDelay</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">SleepDelay</span>[<span class="ruby-value">-1</span>] <span class="ruby-operator">:</span> <span class="ruby-constant">SleepDelay</span>[<span class="ruby-identifier">cnt</span>]
+  <span class="ruby-identifier">sleep</span>(<span class="ruby-identifier">delay</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- delay_sleep-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- delay_sleep-method -->
+
+    
+      <div id="method-i-get_instance_id_from_version" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_instance_id_from_version</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_instance_id_from_version-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 202</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_instance_id_from_version</span>
+  <span class="ruby-comment"># artifact_url = &quot;brpd://[#{package_id}]#{@package_name}/[#{instance_id}]#{@instance_name}&quot;  </span>
+  <span class="ruby-identifier">result</span> = {}
+  <span class="ruby-identifier">items</span> = <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;step_version_artifact_url&quot;</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;/&quot;</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">items</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">3</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;package_id&quot;</span>] = <span class="ruby-identifier">items</span>[<span class="ruby-value">2</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;]&quot;</span>)[<span class="ruby-value">0</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;[&quot;</span>,<span class="ruby-string">&quot;&quot;</span>)
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;package_name&quot;</span>] = <span class="ruby-identifier">items</span>[<span class="ruby-value">2</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;]&quot;</span>)[<span class="ruby-value">1</span>]
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;instance_id&quot;</span>] = <span class="ruby-identifier">items</span>[<span class="ruby-value">3</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;]&quot;</span>)[<span class="ruby-value">0</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;[&quot;</span>,<span class="ruby-string">&quot;&quot;</span>)
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;instance_name&quot;</span>] = <span class="ruby-identifier">items</span>[<span class="ruby-value">3</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;]&quot;</span>)[<span class="ruby-value">1</span>]
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_instance_id_from_version-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_instance_id_from_version-method -->
+
+    
+      <div id="method-i-get_other_request_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_other_request_params</span><span
+            class="method-args">(other_request)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_other_request_params-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 4</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_other_request_params</span>(<span class="ruby-identifier">other_request</span>)
+  <span class="ruby-comment"># Uses a json document in automation_results to store free-form information</span>
+  <span class="ruby-identifier">request_data_file_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_output_dir&quot;</span>])
+  <span class="ruby-identifier">request_data_file_dir</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-node">&quot;/#{@params[&quot;SS_request_number&quot;]}&quot;</span>,<span class="ruby-node">&quot;/#{other_request}&quot;</span>)
+  <span class="ruby-identifier">request_data_file</span> = <span class="ruby-node">&quot;#{request_data_file_dir}/request_data.json&quot;</span>
+  <span class="ruby-identifier">request_params</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">cur</span>).<span class="ruby-identifier">read</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_other_request_params-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_other_request_params-method -->
+
+    
+      <div id="method-i-get_request_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_request_params</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Compatibility Routines</p>
+          
+
+          
+          <div class="method-source-code" id="get_request_params-source">
+            <pre><span class="ruby-comment"># File framework/brpm_framework.rb, line 14</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_request_params</span>
+   <span class="ruby-identifier">none</span> = <span class="ruby-string">&quot;&quot;</span> <span class="ruby-comment"># just so it doesn't  fail</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_request_params-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_request_params-method -->
+
+    
+      <div id="method-i-get_rpd_next_environment" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_rpd_next_environment</span><span
+            class="method-args">(args)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_rpd_next_environment-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 543</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_rpd_next_environment</span>(<span class="ruby-identifier">args</span>)
+  <span class="ruby-identifier">command</span> = <span class="ruby-string">&quot;route next environment list&quot;</span>
+  <span class="ruby-identifier">rest_result</span> = <span class="ruby-identifier">rpd_execute_api</span>(<span class="ruby-identifier">command</span>,<span class="ruby-identifier">args</span>)
+  <span class="ruby-comment">#log_it(&quot;Next Environment: #{rest_result.inspect}&quot;)</span>
+  <span class="ruby-identifier">result</span> = {}
+  <span class="ruby-identifier">stype</span> = <span class="ruby-string">&quot;open&quot;</span>
+  <span class="ruby-identifier">rest_result</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">item</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Current Environment(s):&quot;</span>
+        <span class="ruby-identifier">stype</span> = <span class="ruby-string">&quot;current&quot;</span>
+      <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">item</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Next Environment(s):&quot;</span>
+        <span class="ruby-identifier">stype</span> = <span class="ruby-string">&quot;promote&quot;</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">result</span>[<span class="ruby-node">&quot;[#{item[&quot;id&quot;]}]#{item[&quot;value&quot;]}&quot;</span>] = <span class="ruby-identifier">stype</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_rpd_next_environment-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_rpd_next_environment-method -->
+
+    
+      <div id="method-i-global_timestamp" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">global_timestamp</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="global_timestamp-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 567</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">global_timestamp</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-keyword">true</span> <span class="ruby-comment">#@p.timestamp == &quot;&quot;</span>
+    <span class="ruby-ivar">@timestamp</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">strftime</span>(<span class="ruby-string">&quot;%Y%m%d%H%M%S&quot;</span>)
+    <span class="ruby-ivar">@request_params</span>[<span class="ruby-string">&quot;timestamp&quot;</span>] = <span class="ruby-ivar">@timestamp</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@timestamp</span> = <span class="ruby-ivar">@p</span>.<span class="ruby-identifier">timestamp</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@timestamp</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- global_timestamp-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- global_timestamp-method -->
+
+    
+      <div id="method-i-init_brpm_db_connection" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">init_brpm_db_connection</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="init_brpm_db_connection-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 51</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">init_brpm_db_connection</span>
+  <span class="ruby-comment"># NOTE - may need additional drivers for your database</span>
+  <span class="ruby-identifier">require</span> <span class="ruby-string">'activerecord-jdbc-adapter'</span>
+  <span class="ruby-identifier">require</span> <span class="ruby-string">'active_record'</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@params</span>)
+    <span class="ruby-identifier">fil</span> = <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_script_support_path&quot;</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;/lib/script_support&quot;</span>,<span class="ruby-string">&quot;&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&quot;/config/database.yml&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">fil</span> = <span class="ruby-value">%xpwd`</span>.<span class="ruby-identifier">chomp</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;/config/database.yml&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">conts</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">fil</span>).<span class="ruby-identifier">read</span>
+  <span class="ruby-identifier">dbs</span> = <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">conts</span>)
+  <span class="ruby-ivar">@db_connection</span> = {
+    <span class="ruby-value">:adapter</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">dbs</span>[<span class="ruby-string">&quot;production&quot;</span>][<span class="ruby-string">&quot;adapter&quot;</span>], 
+    <span class="ruby-value">:username</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">dbs</span>[<span class="ruby-string">&quot;production&quot;</span>][<span class="ruby-string">&quot;username&quot;</span>], 
+    <span class="ruby-value">:password</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">dbs</span>[<span class="ruby-string">&quot;production&quot;</span>][<span class="ruby-string">&quot;password&quot;</span>], 
+    <span class="ruby-value">:host</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">dbs</span>[<span class="ruby-string">&quot;production&quot;</span>][<span class="ruby-string">&quot;host&quot;</span>], 
+    <span class="ruby-value">:database</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">dbs</span>[<span class="ruby-string">&quot;production&quot;</span>][<span class="ruby-string">&quot;database&quot;</span>],
+    <span class="ruby-value">:port</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">dbs</span>[<span class="ruby-string">&quot;production&quot;</span>][<span class="ruby-string">&quot;port&quot;</span>],
+    <span class="ruby-value">:encoding</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'utf8'</span>,
+    <span class="ruby-value">:pool</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'12'</span>,
+    <span class="ruby-value">:wait_timeout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'10'</span>
+  }
+  <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">establish_connection</span>(<span class="ruby-ivar">@db_connection</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- init_brpm_db_connection-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- init_brpm_db_connection-method -->
+
+    
+      <div id="method-i-initialize_framework" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">initialize_framework</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="initialize_framework-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header_additions.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize_framework</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_script_target&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;resource_automation&quot;</span>
+    <span class="ruby-comment"># do something else</span>
+    <span class="ruby-identifier">conts</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">FRAMEWORK_DIR</span>,<span class="ruby-string">&quot;lib&quot;</span>,<span class="ruby-string">&quot;resource_framework.rb&quot;</span>)).<span class="ruby-identifier">read</span>
+    <span class="ruby-identifier">eval</span> <span class="ruby-identifier">conts</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">load</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">FRAMEWORK_DIR</span>, <span class="ruby-string">&quot;brpm_framework.rb&quot;</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- initialize_framework-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- initialize_framework-method -->
+
+    
+      <div id="method-i-jenkins_build" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">jenkins_build</span><span
+            class="method-args">(build_arguments = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="jenkins_build-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 338</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">jenkins_build</span>(<span class="ruby-identifier">build_arguments</span> = {})
+  <span class="ruby-comment"># Fetch the next build number</span>
+  <span class="ruby-identifier">build_details</span> = <span class="ruby-identifier">jenkins_job_data</span>
+  <span class="ruby-identifier">next_build</span> = <span class="ruby-identifier">build_details</span>[<span class="ruby-string">&quot;nextBuildNumber&quot;</span>]
+  <span class="ruby-identifier">url</span> = <span class="ruby-node">&quot;#{BuildServerURL}/build&quot;</span>
+  <span class="ruby-identifier">options</span> = {<span class="ruby-string">&quot;username&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">SS_hudson_username</span>, <span class="ruby-string">&quot;password&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">SS_hudson_password</span>, <span class="ruby-string">&quot;data&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">build_arguments</span>}
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">send_request</span>(<span class="ruby-string">&quot;POST&quot;</span>, <span class="ruby-identifier">url</span>, <span class="ruby-identifier">build_arguments</span>)
+  <span class="ruby-comment">#response = rest_call(url, &quot;POST&quot;, options)</span>
+  <span class="ruby-identifier">last_build</span> = <span class="ruby-identifier">next_build</span> 
+  <span class="ruby-identifier">result</span> = <span class="ruby-string">&quot;Web server response: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;header&quot;</span>]
+  <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;header&quot;</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;HTTPFound 302&quot;</span>) <span class="ruby-comment">#response[&quot;status&quot;] == &quot;failure&quot;</span>
+    <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Command_Failed: Build did not launch&quot;</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-value">-1</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">launched</span> = <span class="ruby-keyword">false</span>
+  <span class="ruby-value">10</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword">do</span> 
+    <span class="ruby-identifier">test_result</span> = <span class="ruby-identifier">jenkins_job_build_data</span>(<span class="ruby-identifier">last_build</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">test_result</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">test_result</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;failure&quot;</span>)
+      <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Job not ready waiting...&quot;</span>
+      <span class="ruby-identifier">sleep</span>(<span class="ruby-value">6</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">launched</span> = <span class="ruby-keyword">true</span>
+      <span class="ruby-keyword">break</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">launched</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">last_build</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Command_Failed: Build did not launch in 60 seconds&quot;</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-value">-1</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- jenkins_build-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- jenkins_build-method -->
+
+    
+      <div id="method-i-jenkins_build_results" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">jenkins_build_results</span><span
+            class="method-args">(build_no, get_link = false)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="jenkins_build_results-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 293</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">jenkins_build_results</span>(<span class="ruby-identifier">build_no</span>, <span class="ruby-identifier">get_link</span> = <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">url</span> = <span class="ruby-node">&quot;#{BuildServerURL}/#{build_no}/consoleText&quot;</span>
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">get_link</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">display_url</span>(<span class="ruby-identifier">url</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">send_request</span>(<span class="ruby-string">&quot;get&quot;</span>, <span class="ruby-identifier">url</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- jenkins_build_results-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- jenkins_build_results-method -->
+
+    
+      <div id="method-i-jenkins_build_status" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">jenkins_build_status</span><span
+            class="method-args">(build_no = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="jenkins_build_status-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 283</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">jenkins_build_status</span>(<span class="ruby-identifier">build_no</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">jenkins_job_build_data</span>(<span class="ruby-identifier">build_no</span>)
+  <span class="ruby-comment"># Now parse for the status and build id</span>
+  <span class="ruby-comment">#@rpm.log &quot;Raw Result: #{response.inspect}&quot;</span>
+  <span class="ruby-identifier">ans</span> = {}
+  <span class="ruby-identifier">ans</span>[<span class="ruby-string">&quot;still_building&quot;</span>] = <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;building&quot;</span>]
+  <span class="ruby-identifier">ans</span>[<span class="ruby-string">&quot;success&quot;</span>] = <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;result&quot;</span>]
+  <span class="ruby-identifier">ans</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- jenkins_build_status-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- jenkins_build_status-method -->
+
+    
+      <div id="method-i-jenkins_job_build_data" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">jenkins_job_build_data</span><span
+            class="method-args">(build_no = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>return the status of a build</p>
+          
+
+          
+          <div class="method-source-code" id="jenkins_job_build_data-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 276</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">jenkins_job_build_data</span>(<span class="ruby-identifier">build_no</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">build_no</span> = <span class="ruby-string">&quot;lastBuild&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">build_no</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">options</span> = {<span class="ruby-string">&quot;username&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">SS_hudson_username</span>, <span class="ruby-string">&quot;password&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">SS_hudson_password</span>}
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rest_call</span>(<span class="ruby-node">&quot;#{BuildServerURL}/#{build_no}/api/json&quot;</span>, <span class="ruby-string">&quot;get&quot;</span>, <span class="ruby-identifier">options</span>)
+  <span class="ruby-identifier">data</span> = <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;status&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;success&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;response&quot;</span>] <span class="ruby-operator">:</span> <span class="ruby-node">&quot;#{response[&quot;status&quot;]}: #{response[&quot;message&quot;]}&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- jenkins_job_build_data-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- jenkins_job_build_data-method -->
+
+    
+      <div id="method-i-jenkins_job_data" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">jenkins_job_data</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="jenkins_job_data-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 269</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">jenkins_job_data</span>
+   <span class="ruby-identifier">options</span> = {<span class="ruby-string">&quot;username&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">SS_hudson_username</span>, <span class="ruby-string">&quot;password&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">SS_hudson_password</span>}
+   <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rest_call</span>(<span class="ruby-node">&quot;#{BuildServerURL}/api/json&quot;</span>, <span class="ruby-string">&quot;get&quot;</span>, <span class="ruby-identifier">options</span>)
+   <span class="ruby-identifier">data</span> = <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;status&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;success&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;response&quot;</span>] <span class="ruby-operator">:</span> <span class="ruby-node">&quot;#{response[&quot;status&quot;]}: #{response[&quot;message&quot;]}&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- jenkins_job_data-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- jenkins_job_data-method -->
+
+    
+      <div id="method-i-jenkins_monitor_build" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">jenkins_monitor_build</span><span
+            class="method-args">(build_no)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="jenkins_monitor_build-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 298</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">jenkins_monitor_build</span>(<span class="ruby-identifier">build_no</span>)
+  <span class="ruby-comment"># start with an initial build result</span>
+  <span class="ruby-comment"># Now parse for the status and build id</span>
+  <span class="ruby-identifier">max_time</span> = <span class="ruby-constant">MaxBuildTime</span>
+  <span class="ruby-identifier">sleep_interval</span> = <span class="ruby-value">15</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">jenkins_build_status</span>(<span class="ruby-identifier">build_no</span>)
+  <span class="ruby-identifier">results</span> = <span class="ruby-node">&quot;Initial test: Build Number: #{build_no}, Status - building: #{result[&quot;still_building&quot;].to_s}, result: #{result[&quot;success&quot;]}\n&quot;</span>
+  <span class="ruby-comment"># Now Check to see if the token matches</span>
+  <span class="ruby-identifier">build_match</span> = <span class="ruby-keyword">true</span>
+  <span class="ruby-comment">#build_match = response.include?(ss_token) if use_token_match # Enable this if using token matching</span>
+  <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-node">&quot;#-------------------------------------------------------------#\n#   Monitoring Build Progress (id: #{build_no})&quot;</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">build_no</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;still_building&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">build_match</span>
+    <span class="ruby-identifier">start_time</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+    <span class="ruby-identifier">elapsed</span> = <span class="ruby-value">0</span>
+    <span class="ruby-identifier">complete</span> = <span class="ruby-keyword">false</span>
+    <span class="ruby-keyword">until</span> <span class="ruby-identifier">elapsed</span> <span class="ruby-operator">&gt;</span> (<span class="ruby-identifier">max_time</span> * <span class="ruby-value">60</span>) <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">result</span> = <span class="ruby-identifier">jenkins_build_status</span>(<span class="ruby-identifier">build_no</span>)
+      <span class="ruby-identifier">results</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;Status - building: #{result[&quot;still_building&quot;].to_s}, result: #{result[&quot;success&quot;]}\n&quot;</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;still_building&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>
+        <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Success - #{result[&quot;success&quot;]}&quot;</span>
+        <span class="ruby-identifier">complete</span> = <span class="ruby-keyword">true</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;success&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;SUCCESS&quot;</span>
+    <span class="ruby-identifier">complete</span> = <span class="ruby-keyword">false</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;success&quot;</span>] <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;SUCCESS&quot;</span>
+        <span class="ruby-keyword">break</span>
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">elapsed</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">start_time</span>
+        <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Still building ...elapsed: #{elapsed.to_i.to_s}, pausing for #{sleep_interval.to_s} seconds&quot;</span>
+        <span class="ruby-identifier">sleep</span> <span class="ruby-identifier">sleep_interval</span>
+      <span class="ruby-keyword">end</span>
+      <span class="ruby-identifier">elapsed</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">start_time</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">elsif</span>  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;success&quot;</span>] <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;SUCCESS&quot;</span>
+    <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Build failed on initial parameters, either could not retrieve build id or token did not match output&quot;</span>
+    <span class="ruby-identifier">complete</span> = <span class="ruby-keyword">false</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Build Successful&quot;</span>
+    <span class="ruby-identifier">complete</span> = <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">complete</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- jenkins_monitor_build-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- jenkins_monitor_build-method -->
+
+    
+      <div id="method-i-load_helpers" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">load_helpers</span><span
+            class="method-args">(lib_path)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="load_helpers-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header_additions.rb, line 8</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">load_helpers</span>(<span class="ruby-identifier">lib_path</span>)
+  <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;#{lib_path}/script_helper.rb&quot;</span>
+  <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;#{lib_path}/file_in_utf.rb&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- load_helpers-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- load_helpers-method -->
+
+    
+      <div id="method-i-load_input_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">load_input_params</span><span
+            class="method-args">(in_file)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>BJB 7/6/2010 Append a user script to the bottom of this one for cap
+execution</p>
+          
+
+          
+          <div class="method-source-code" id="load_input_params-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header_additions.rb, line 14</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">load_input_params</span>(<span class="ruby-identifier">in_file</span>)
+  <span class="ruby-identifier">params</span> = <span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">load</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">in_file</span>))
+  <span class="ruby-identifier">load_helpers</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&quot;SS_script_support_path&quot;</span>])
+  <span class="ruby-ivar">@params</span> = <span class="ruby-identifier">strip_private_flag</span>(<span class="ruby-identifier">params</span>)
+  <span class="ruby-comment">#BJB 11-10-14 Intercept to load framework</span>
+  <span class="ruby-identifier">initialize_framework</span>
+  <span class="ruby-ivar">@params</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- load_input_params-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- load_input_params-method -->
+
+    
+      <div id="method-i-message_box" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">message_box</span><span
+            class="method-args">(msg, mtype = "sep")</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="message_box-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 32</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">message_box</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-identifier">mtype</span> = <span class="ruby-string">&quot;sep&quot;</span>)
+  <span class="ruby-identifier">tot</span> = <span class="ruby-value">72</span>
+  <span class="ruby-identifier">msg</span> = <span class="ruby-identifier">msg</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">64</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">msg</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">65</span>
+  <span class="ruby-identifier">ilen</span> = <span class="ruby-identifier">tot</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">msg</span>.<span class="ruby-identifier">length</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">mtype</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;sep&quot;</span>
+    <span class="ruby-identifier">start</span> = <span class="ruby-node">&quot;##{&quot;-&quot; * (ilen/2).to_i} #{msg} &quot;</span>
+    <span class="ruby-identifier">res</span> = <span class="ruby-node">&quot;#{start}#{&quot;-&quot; * (tot- start.length + 1)}#&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">res</span> = <span class="ruby-node">&quot;##{&quot;-&quot; * tot}#\n&quot;</span>
+    <span class="ruby-identifier">start</span> = <span class="ruby-node">&quot;##{&quot; &quot; * (ilen/2).to_i} #{msg} &quot;</span>
+    <span class="ruby-identifier">res</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#{start}#{&quot; &quot; * (tot- start.length + 1)}#\n&quot;</span>
+    <span class="ruby-identifier">res</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;##{&quot;-&quot; * tot}#\n&quot;</span>   
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span>(<span class="ruby-identifier">res</span>)
+
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- message_box-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- message_box-method -->
+
+    
+      <div id="method-i-monitor_request" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">monitor_request</span><span
+            class="method-args">(request_id, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="monitor_request-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 111</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">monitor_request</span>(<span class="ruby-identifier">request_id</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">target_status</span> = <span class="ruby-string">&quot;complete&quot;</span>
+  <span class="ruby-identifier">max_time</span> = <span class="ruby-value">15</span>*<span class="ruby-value">60</span> <span class="ruby-comment"># seconds = 15 minutes</span>
+  <span class="ruby-identifier">max_time</span> = <span class="ruby-value">60</span> * <span class="ruby-identifier">options</span>[<span class="ruby-string">&quot;max_time&quot;</span>].<span class="ruby-identifier">to_i</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">&quot;max_time&quot;</span>)
+  <span class="ruby-identifier">monitor_step_name</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">&quot;monitor_step_name&quot;</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">options</span>[<span class="ruby-string">&quot;monitor_step_name&quot;</span>] <span class="ruby-operator">:</span> <span class="ruby-string">&quot;none&quot;</span>
+  <span class="ruby-identifier">checking_interval</span> = <span class="ruby-value">15</span> <span class="ruby-comment">#seconds</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">request_id</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">&amp;&amp;</span> [<span class="ruby-string">&quot;created&quot;</span>,<span class="ruby-string">&quot;planned&quot;</span>,<span class="ruby-string">&quot;started&quot;</span>,<span class="ruby-string">&quot;problem&quot;</span>,<span class="ruby-string">&quot;hold&quot;</span>,<span class="ruby-string">&quot;complete&quot;</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">target_status</span>)
+    <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">message_box</span>(<span class="ruby-node">&quot;Montoring Request: #{request_id}&quot;</span>,<span class="ruby-string">&quot;sep&quot;</span>)
+    <span class="ruby-identifier">req_status</span> = <span class="ruby-string">&quot;none&quot;</span>
+    <span class="ruby-identifier">start_time</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+    <span class="ruby-identifier">elapsed</span> = <span class="ruby-value">0</span>
+    <span class="ruby-keyword">until</span> (<span class="ruby-identifier">elapsed</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max_time</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">req_status</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">target_status</span>)
+      <span class="ruby-identifier">rest_result</span> = <span class="ruby-ivar">@rest</span>.<span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;requests&quot;</span>, <span class="ruby-identifier">req_id</span>)
+      <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\tREST Call: #{url}&quot;</span>
+      <span class="ruby-keyword">unless</span> <span class="ruby-identifier">rest_result</span>[<span class="ruby-string">&quot;status&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;success&quot;</span>
+        <span class="ruby-identifier">req_status</span> = <span class="ruby-string">&quot;Command_Failed: Request not found&quot;</span>
+        <span class="ruby-keyword">break</span>
+      <span class="ruby-keyword">end</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">monitor_step_name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;none&quot;</span>
+        <span class="ruby-identifier">req_status</span> = <span class="ruby-identifier">rest_result</span>[<span class="ruby-string">&quot;data&quot;</span>][<span class="ruby-string">&quot;aasm_state&quot;</span>]
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">found</span> = <span class="ruby-keyword">false</span>
+        <span class="ruby-identifier">rest_result</span>[<span class="ruby-string">&quot;data&quot;</span>][<span class="ruby-string">&quot;steps&quot;</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">step</span><span class="ruby-operator">|</span>
+          <span class="ruby-keyword">if</span> <span class="ruby-identifier">step</span>[<span class="ruby-string">&quot;name&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">monitor_step_name</span>
+            <span class="ruby-identifier">req_status</span> = <span class="ruby-identifier">step</span>[<span class="ruby-string">&quot;aasm_state&quot;</span>]
+            <span class="ruby-identifier">found</span> = <span class="ruby-keyword">true</span>
+            <span class="ruby-keyword">break</span>
+          <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">unless</span> <span class="ruby-identifier">found</span>
+          <span class="ruby-identifier">req_status</span> = <span class="ruby-string">&quot;Command_Failed: step not found&quot;</span>
+          <span class="ruby-keyword">break</span>
+        <span class="ruby-keyword">end</span>
+      <span class="ruby-keyword">end</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">req_status</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">target_status</span>
+        <span class="ruby-keyword">break</span>
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\tWaiting(#{elapsed.floor.to_s}) - Current status: #{req_status}&quot;</span>
+        <span class="ruby-identifier">sleep</span>(<span class="ruby-identifier">checking_interval</span>)
+        <span class="ruby-identifier">elapsed</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">start_time</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">req_status</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">target_status</span>
+      <span class="ruby-identifier">req_status</span> =  <span class="ruby-node">&quot;Success test, looking for #{success}: Success!&quot;</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">elapsed</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max_time</span>
+        <span class="ruby-identifier">req_status</span> =  <span class="ruby-node">&quot;Command_Failed: Max time: #{max_time}(secs) reached.  Status is: #{req_status}, looking for: #{target_status}&quot;</span>
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">req_status</span> = <span class="ruby-node">&quot;REST call generated bad data, Status is: #{req_status}, looking for: #{target_status}&quot;</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">req_status</span> =  <span class="ruby-string">&quot;Command_Failed: No Request_id specified&quot;</span>  
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">req_status</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- monitor_request-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- monitor_request-method -->
+
+    
+      <div id="method-i-rpd_attach_deployment_logs" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">rpd_attach_deployment_logs</span><span
+            class="method-args">(instance_id, result_dir, pack_response_argument)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="rpd_attach_deployment_logs-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 391</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">rpd_attach_deployment_logs</span>(<span class="ruby-identifier">instance_id</span>, <span class="ruby-identifier">result_dir</span>, <span class="ruby-identifier">pack_response_argument</span>)   
+  <span class="ruby-identifier">instance_logs</span> = <span class="ruby-constant">RlmUtilities</span>.<span class="ruby-identifier">get_deployment_logs</span>(<span class="ruby-constant">SS_integration_dns</span>, <span class="ruby-constant">SS_integration_username</span>, <span class="ruby-constant">SS_integration_password</span>, <span class="ruby-identifier">instance_id</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">instance_logs</span>
+    <span class="ruby-identifier">rlm_instance_logs</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">result_dir</span>, <span class="ruby-string">&quot;rlm_instance_logs&quot;</span>)
+    <span class="ruby-keyword">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">rlm_instance_logs</span>)
+      <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">mkdir</span>(<span class="ruby-identifier">rlm_instance_logs</span>, <span class="ruby-value">0700</span>)
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">log_file_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">rlm_instance_logs</span>, <span class="ruby-node">&quot;#{instance_id}.txt&quot;</span>)
+    <span class="ruby-identifier">fh</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">log_file_path</span>, <span class="ruby-string">&quot;w&quot;</span>)
+    <span class="ruby-identifier">fh</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">instance_logs</span>)
+    <span class="ruby-identifier">fh</span>.<span class="ruby-identifier">close</span>
+
+    <span class="ruby-identifier">pack_response</span> <span class="ruby-identifier">pack_response_argument</span>, <span class="ruby-identifier">log_file_path</span>
+  <span class="ruby-keyword">end</span> 
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- rpd_attach_deployment_logs-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- rpd_attach_deployment_logs-method -->
+
+    
+      <div id="method-i-rpd_attach_logs" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">rpd_attach_logs</span><span
+            class="method-args">(instance_id, command, result_dir, pack_response_argument)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="rpd_attach_logs-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 374</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">rpd_attach_logs</span>(<span class="ruby-identifier">instance_id</span>, <span class="ruby-identifier">command</span>, <span class="ruby-identifier">result_dir</span>, <span class="ruby-identifier">pack_response_argument</span>)
+  <span class="ruby-identifier">instance_logs</span> = <span class="ruby-constant">RlmUtilities</span>.<span class="ruby-identifier">get_instance_logs</span>(<span class="ruby-constant">SS_integration_dns</span>, <span class="ruby-constant">SS_integration_username</span>, <span class="ruby-constant">SS_integration_password</span>, <span class="ruby-identifier">instance_id</span>, <span class="ruby-identifier">command</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">instance_logs</span>
+    <span class="ruby-identifier">rlm_instance_logs</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">result_dir</span>, <span class="ruby-string">&quot;rlm_instance_logs&quot;</span>)
+    <span class="ruby-keyword">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">rlm_instance_logs</span>)
+      <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">mkdir</span>(<span class="ruby-identifier">rlm_instance_logs</span>, <span class="ruby-value">0700</span>)
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">log_file_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">rlm_instance_logs</span>, <span class="ruby-node">&quot;#{instance_id}.txt&quot;</span>)
+    <span class="ruby-identifier">fh</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">log_file_path</span>, <span class="ruby-string">&quot;w&quot;</span>)
+    <span class="ruby-identifier">fh</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">instance_logs</span>)
+    <span class="ruby-identifier">fh</span>.<span class="ruby-identifier">close</span>
+
+    <span class="ruby-identifier">pack_response</span> <span class="ruby-identifier">pack_response_argument</span>, <span class="ruby-identifier">log_file_path</span>
+  <span class="ruby-keyword">end</span> 
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- rpd_attach_logs-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- rpd_attach_logs-method -->
+
+    
+      <div id="method-i-rpd_create_package_instance" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">rpd_create_package_instance</span><span
+            class="method-args">(package_id_or_name, wait_till_created = true, locked = "No", instance_name = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="rpd_create_package_instance-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 450</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">rpd_create_package_instance</span>(<span class="ruby-identifier">package_id_or_name</span>, <span class="ruby-identifier">wait_till_created</span> = <span class="ruby-keyword">true</span>, <span class="ruby-identifier">locked</span> = <span class="ruby-string">&quot;No&quot;</span>, <span class="ruby-identifier">instance_name</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-comment">########################Create package instance#################################################</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">package_id_or_name</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+    <span class="ruby-identifier">package_id</span> = <span class="ruby-identifier">rpd_get_package_id</span>(<span class="ruby-identifier">package_id_or_name</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">package_id</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">0</span>
+      <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Command_Failed: Package name not found&quot;</span>
+      <span class="ruby-identifier">exit</span>(<span class="ruby-value">1</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">package_id</span> = <span class="ruby-identifier">package_id_or_name</span>
+  <span class="ruby-keyword">end</span>   
+  <span class="ruby-identifier">package_instance_response</span> = <span class="ruby-constant">RlmUtilities</span>.<span class="ruby-identifier">create_package_instance</span>(<span class="ruby-constant">SS_integration_dns</span>, <span class="ruby-constant">SS_integration_username</span>, <span class="ruby-constant">SS_integration_password</span>, <span class="ruby-identifier">package_id</span>, <span class="ruby-identifier">locked</span>, <span class="ruby-identifier">instance_name</span>)
+  <span class="ruby-identifier">package_instance_id</span> = <span class="ruby-identifier">package_instance_response</span>[<span class="ruby-value">0</span>][<span class="ruby-string">&quot;id&quot;</span>] <span class="ruby-keyword">rescue</span> <span class="ruby-keyword">nil</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">package_instance_id</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span>(<span class="ruby-string">&quot;Command_Failed: package instance creation failed.&quot;</span>)
+    <span class="ruby-identifier">exit</span>(<span class="ruby-value">1</span>)
+    <span class="ruby-comment">#raise &quot;Error while creating the package instance.&quot;   </span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-comment">#pack_response &quot;Package Instance&quot;, &quot;#{package_instance_response[0][&quot;value&quot;].split(&quot; &quot;)[5]}:#{package_instance_response[0][&quot;value&quot;].split(&quot; &quot;)[2]}&quot; rescue nil</span>
+    <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span>(<span class="ruby-string">&quot;package instance processing...&quot;</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment">######################## Check the status of package instance created ############################### </span>
+  <span class="ruby-identifier">package_instance_status</span> = <span class="ruby-string">&quot;Waiting&quot;</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">wait_till_created</span>
+    <span class="ruby-identifier">sleep_cnt</span> = <span class="ruby-value">0</span> <span class="ruby-comment"># This delay is required as after creating the instance, status may not immedietly go to constructing</span>
+    <span class="ruby-keyword">begin</span>
+      <span class="ruby-identifier">delay_sleep</span>(<span class="ruby-identifier">sleep_cnt</span>)
+      <span class="ruby-identifier">package_instance_status</span> = <span class="ruby-constant">RlmUtilities</span>.<span class="ruby-identifier">get_package_instance_status</span>(<span class="ruby-constant">SS_integration_dns</span>, <span class="ruby-constant">SS_integration_username</span>, <span class="ruby-constant">SS_integration_password</span>, <span class="ruby-identifier">package_instance_id</span>)
+      <span class="ruby-identifier">sleep_cnt</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>    
+    <span class="ruby-keyword">end</span> <span class="ruby-keyword">while</span> (<span class="ruby-identifier">package_instance_status</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;Ready&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">package_instance_status</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;Error&quot;</span>)
+
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">package_instance_status</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Error&quot;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">package_instance_status</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;Ready&quot;</span>
+      <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Command_Failed: There were some problem while creating the package instance.&quot;</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span>(<span class="ruby-string">&quot;package instance is now in Ready state.&quot;</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Working asynchronously - instance creation may still be happening&quot;</span>
+  <span class="ruby-keyword">end</span>
+  {<span class="ruby-string">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">package_instance_status</span>, <span class="ruby-string">&quot;package_instance_id&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">package_instance_id</span>, <span class="ruby-string">&quot;package_id&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">package_id</span>, <span class="ruby-string">&quot;package_instance_response&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">package_instance_response</span>}
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- rpd_create_package_instance-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- rpd_create_package_instance-method -->
+
+    
+      <div id="method-i-rpd_deploy_package_instance" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">rpd_deploy_package_instance</span><span
+            class="method-args">(package_instance_id, deploy_route, target_env_id)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="rpd_deploy_package_instance-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 493</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">rpd_deploy_package_instance</span>(<span class="ruby-identifier">package_instance_id</span>, <span class="ruby-identifier">deploy_route</span>, <span class="ruby-identifier">target_env_id</span>)
+  <span class="ruby-comment">######################## Instance Deployment stage begins ############################### </span>
+  <span class="ruby-identifier">deployment_instance_id</span> = <span class="ruby-constant">RlmUtilities</span>.<span class="ruby-identifier">deploy_package_instance</span>(<span class="ruby-constant">SS_integration_dns</span>, <span class="ruby-constant">SS_integration_username</span>, <span class="ruby-constant">SS_integration_password</span>, <span class="ruby-identifier">package_instance_id</span>, <span class="ruby-identifier">deploy_route</span>, <span class="ruby-identifier">target_env_id</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">deployment_instance_id</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span>(<span class="ruby-string">&quot;Command_Failed: Cannot deploy instance.&quot;</span>)
+    <span class="ruby-comment">#raise &quot;Error while deploying the package instance.&quot;  </span>
+    <span class="ruby-identifier">exit</span>(<span class="ruby-value">1</span>) 
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span>(<span class="ruby-string">&quot;package instance deployment is now started.&quot;</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment">######################## Check the status of deployment ############################### </span>
+  <span class="ruby-identifier">sleep_cnt</span> = <span class="ruby-value">0</span> <span class="ruby-comment"># This delay is required as after creating the instance, status may not immedietly go to constructing</span>
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">delay_sleep</span>(<span class="ruby-identifier">sleep_cnt</span>)
+    <span class="ruby-identifier">deploy_status</span> = <span class="ruby-constant">RlmUtilities</span>.<span class="ruby-identifier">get_deploy_status</span>(<span class="ruby-constant">SS_integration_dns</span>, <span class="ruby-constant">SS_integration_username</span>, <span class="ruby-constant">SS_integration_password</span>, <span class="ruby-identifier">deployment_instance_id</span>)
+    <span class="ruby-identifier">sleep_cnt</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>    
+  <span class="ruby-keyword">end</span> <span class="ruby-keyword">while</span> (<span class="ruby-identifier">deploy_status</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;pass&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">deploy_status</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;fail&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">deploy_status</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;cancelled&quot;</span>)
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">deploy_status</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;fail&quot;</span> <span class="ruby-operator">||</span>  <span class="ruby-identifier">deploy_status</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;cancelled&quot;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">deploy_status</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;pass&quot;</span>
+    <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Command_Failed: There were some problem while deploying the package instance.&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span>(<span class="ruby-string">&quot;package instance deployed successfully.&quot;</span>)
+  <span class="ruby-keyword">end</span>
+  {<span class="ruby-string">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">deploy_status</span>, <span class="ruby-string">&quot;deployment_instance_id&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">deployment_instance_id</span>}
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- rpd_deploy_package_instance-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- rpd_deploy_package_instance-method -->
+
+    
+      <div id="method-i-rpd_execute_api" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">rpd_execute_api</span><span
+            class="method-args">(command, args = [], options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="rpd_execute_api-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 521</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">rpd_execute_api</span>(<span class="ruby-identifier">command</span>, <span class="ruby-identifier">args</span> = [], <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">url</span> = <span class="ruby-node">&quot;#{SS_integration_dns}/index.php/api/processRequest.xml&quot;</span>
+  <span class="ruby-identifier">request_doc_xml</span> = <span class="ruby-constant">Builder</span><span class="ruby-operator">::</span><span class="ruby-constant">XmlMarkup</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-identifier">request_doc_xml</span>.<span class="ruby-identifier">q</span>(<span class="ruby-value">:auth</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{SS_integration_username} #{SS_integration_password}&quot;</span>) <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">request_doc_xml</span>.<span class="ruby-identifier">request</span>(<span class="ruby-value">:command</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{command}&quot;</span>) <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">arg</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">request_doc_xml</span>.<span class="ruby-identifier">arg</span> <span class="ruby-identifier">arg</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span> 
+  <span class="ruby-identifier">xml_response</span> = <span class="ruby-constant">RestClient</span>.<span class="ruby-identifier">post</span> <span class="ruby-identifier">url</span>, <span class="ruby-identifier">request_doc_xml</span>, <span class="ruby-value">:content_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:xml</span>, <span class="ruby-value">:accept</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:xml</span>
+  <span class="ruby-identifier">xml_to_hash_response</span> = <span class="ruby-constant">XmlSimple</span>.<span class="ruby-identifier">xml_in</span>(<span class="ruby-identifier">xml_response</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">xml_to_hash_response</span>[<span class="ruby-string">&quot;result&quot;</span>][<span class="ruby-value">0</span>][<span class="ruby-string">&quot;rc&quot;</span>] <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;0&quot;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">xml_to_hash_response</span>[<span class="ruby-string">&quot;result&quot;</span>][<span class="ruby-value">0</span>][<span class="ruby-string">&quot;message&quot;</span>] <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;Ok&quot;</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Error while posting to URL #{url}: #{xml_to_hash_response[&quot;result&quot;][0][&quot;message&quot;]}&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">hash_response</span> = <span class="ruby-identifier">xml_to_hash_response</span>[<span class="ruby-string">&quot;result&quot;</span>][<span class="ruby-value">0</span>][<span class="ruby-string">&quot;response&quot;</span>] 
+    <span class="ruby-identifier">hash_response</span> = <span class="ruby-identifier">hash_response</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">hash_response</span>        
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">hash_response</span> = <span class="ruby-identifier">xml_response</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">&quot;raw_output&quot;</span>)   
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">hash_response</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- rpd_execute_api-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- rpd_execute_api-method -->
+
+    
+      <div id="method-i-rpd_get_package_id" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">rpd_get_package_id</span><span
+            class="method-args">(package_name)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="rpd_get_package_id-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 408</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">rpd_get_package_id</span>(<span class="ruby-identifier">package_name</span>)
+  <span class="ruby-keyword">return</span>(<span class="ruby-identifier">package_name</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">package_name</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span>
+  <span class="ruby-identifier">rlm_packages</span> = <span class="ruby-constant">RlmUtilities</span>.<span class="ruby-identifier">get_all_packages</span>(<span class="ruby-constant">SS_integration_dns</span>, <span class="ruby-constant">SS_integration_username</span>, <span class="ruby-constant">SS_integration_password</span>).<span class="ruby-identifier">first</span>
+  <span class="ruby-identifier">rlm_packages</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">package_name</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">rlm_packages</span>[<span class="ruby-identifier">package_name</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;*&quot;</span>)[<span class="ruby-value">0</span>] <span class="ruby-operator">:</span> <span class="ruby-value">-1</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- rpd_get_package_id-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- rpd_get_package_id-method -->
+
+    
+      <div id="method-i-rpd_transfer_properties" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">rpd_transfer_properties</span><span
+            class="method-args">(package_id, prefixes = [], prop_type = "package")</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="rpd_transfer_properties-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 414</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">rpd_transfer_properties</span>(<span class="ruby-identifier">package_id</span>, <span class="ruby-identifier">prefixes</span> = [], <span class="ruby-identifier">prop_type</span> = <span class="ruby-string">&quot;package&quot;</span>)
+  <span class="ruby-comment">#instance property add &lt;instance&gt; &lt;name&gt; &lt;value&gt; [locked]</span>
+  <span class="ruby-identifier">component</span> = <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_component&quot;</span>]
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-ivar">@params</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prop</span>,<span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">prefixes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prefix</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">prop</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-identifier">prefix</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">val</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">val</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+          <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span>(<span class="ruby-node">&quot;Setting value for property: #{prop} - #{val}&quot;</span>)
+          <span class="ruby-constant">RlmUtilities</span>.<span class="ruby-identifier">rlm_set_q_property_value</span>(<span class="ruby-constant">SS_integration_dns</span>, <span class="ruby-constant">SS_integration_username</span>, <span class="ruby-constant">SS_integration_password</span>, <span class="ruby-identifier">package_id</span>, <span class="ruby-node">&quot;#{prop_type} property add&quot;</span>, <span class="ruby-identifier">prop</span>, <span class="ruby-identifier">val</span>.<span class="ruby-identifier">to_s</span>)
+        <span class="ruby-keyword">end</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-ivar">@request_params</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prop</span>,<span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">prefixes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prefix</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">prop</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-identifier">prefix</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">val</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">val</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+        <span class="ruby-identifier">prop_mod</span> = <span class="ruby-identifier">prop</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-node">&quot;#{component}_&quot;</span>,<span class="ruby-string">&quot;&quot;</span>)
+          <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span>(<span class="ruby-node">&quot;Request Params - Setting value for property: #{prop_mod} - #{val}&quot;</span>)
+          <span class="ruby-constant">RlmUtilities</span>.<span class="ruby-identifier">rlm_set_q_property_value</span>(<span class="ruby-constant">SS_integration_dns</span>, <span class="ruby-constant">SS_integration_username</span>, <span class="ruby-constant">SS_integration_password</span>, <span class="ruby-identifier">package_id</span>, <span class="ruby-node">&quot;#{prop_type} property add&quot;</span>, <span class="ruby-identifier">prop_mod</span>, <span class="ruby-identifier">val</span>.<span class="ruby-identifier">to_s</span>)
+        <span class="ruby-keyword">end</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-constant">RLM_BASE_PROPERTIES</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">prop_name</span> = <span class="ruby-string">&quot;RPM_&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;SS_&quot;</span>, <span class="ruby-string">&quot;&quot;</span>).<span class="ruby-identifier">upcase</span>
+        <span class="ruby-identifier">prop_name</span> = <span class="ruby-string">&quot;RPM_VERSION&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">prop_name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;RPM_COMPONENT_VERSION&quot;</span>
+        <span class="ruby-identifier">val</span> = <span class="ruby-ivar">@params</span>[<span class="ruby-identifier">k</span>]
+        <span class="ruby-keyword">if</span>  <span class="ruby-operator">!</span><span class="ruby-identifier">val</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">val</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+          <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span>(<span class="ruby-node">&quot;Setting value for property: #{prop_name} - #{val}&quot;</span>)
+          <span class="ruby-constant">RlmUtilities</span>.<span class="ruby-identifier">rlm_set_q_property_value</span>(<span class="ruby-constant">SS_integration_dns</span>, <span class="ruby-constant">SS_integration_username</span>, <span class="ruby-constant">SS_integration_password</span>, <span class="ruby-identifier">package_id</span>, <span class="ruby-node">&quot;#{prop_type} property add&quot;</span>, <span class="ruby-identifier">prop_name</span>, <span class="ruby-identifier">val</span>)    
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-node">&quot;Command_Failed: cannot set properties = #{e.message}&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-string">&quot;Success&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- rpd_transfer_properties-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- rpd_transfer_properties-method -->
+
+    
+      <div id="method-i-rpm_from_rpd_env" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">rpm_from_rpd_env</span><span
+            class="method-args">(env)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="rpm_from_rpd_env-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 563</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">rpm_from_rpd_env</span>(<span class="ruby-identifier">env</span>)
+  <span class="ruby-identifier">env</span>[<span class="ruby-value">-8</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;-&quot;</span>)[<span class="ruby-value">1</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- rpm_from_rpd_env-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- rpm_from_rpd_env-method -->
+
+    
+      <div id="method-i-rpm_load_module" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">rpm_load_module</span><span
+            class="method-args">(*module_names)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="rpm_load_module-source">
+            <pre><span class="ruby-comment"># File framework/brpm_framework.rb, line 22</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">rpm_load_module</span>(*<span class="ruby-identifier">module_names</span>)
+  <span class="ruby-identifier">result</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-identifier">module_names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">mod_name</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">user_load_path</span> = <span class="ruby-keyword">defined?</span>(<span class="ruby-constant">CUSTOMER_LIB_DIR</span>) <span class="ruby-operator">?</span> <span class="ruby-node">&quot;#{CUSTOMER_LIB_DIR}/lib/#{mod_name}&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">load_path</span> = <span class="ruby-node">&quot;#{FRAMEWORK_DIR}/lib/#{mod_name}&quot;</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-node">&quot;#{load_path}.rb&quot;</span>)
+      <span class="ruby-identifier">require</span> <span class="ruby-identifier">load_path</span>
+      <span class="ruby-identifier">result</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;success - #{load_path}\n&quot;</span>
+      <span class="ruby-identifier">load_path</span> = <span class="ruby-node">&quot;#{FRAMEWORK_DIR}/lib/#{mod_name}&quot;</span>
+    <span class="ruby-keyword">elsif</span> <span class="ruby-operator">!</span><span class="ruby-identifier">user_load_path</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-node">&quot;#{user_load_path}.rb&quot;</span>)
+      <span class="ruby-identifier">require</span> <span class="ruby-identifier">user_load_path</span>
+      <span class="ruby-identifier">result</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;success - #{load_path}\n&quot;</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">result</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;ERROR - file not found #{load_path}\n&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- rpm_load_module-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- rpm_load_module-method -->
+
+    
+      <div id="method-i-save_request_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">save_request_params</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="save_request_params-source">
+            <pre><span class="ruby-comment"># File framework/brpm_framework.rb, line 18</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">save_request_params</span>
+  <span class="ruby-ivar">@p</span>.<span class="ruby-identifier">save_local_params</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- save_request_params-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- save_request_params-method -->
+
+    
+      <div id="method-i-steps_with_matching_component" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">steps_with_matching_component</span><span
+            class="method-args">(req = nil, comp = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="steps_with_matching_component-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 253</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">steps_with_matching_component</span>(<span class="ruby-identifier">req</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">comp</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">req_id</span> = <span class="ruby-identifier">req</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;request_id&quot;</span>].<span class="ruby-identifier">to_i</span> <span class="ruby-operator">-</span> <span class="ruby-value">1000</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">req</span>
+  <span class="ruby-identifier">url</span> = <span class="ruby-node">&quot;#{@params[&quot;SS_base_url&quot;]}/v1/steps?filters[request_id]=#{req_id.to_s}&amp;token=#{Token}&quot;</span>
+  <span class="ruby-identifier">cur_comp</span> = <span class="ruby-identifier">comp</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_component&quot;</span>] <span class="ruby-operator">:</span> <span class="ruby-identifier">comp</span>
+  <span class="ruby-identifier">rest_result</span> = <span class="ruby-identifier">rest_call</span>(<span class="ruby-identifier">url</span>, <span class="ruby-string">&quot;get&quot;</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">rest_result</span>[<span class="ruby-string">&quot;status&quot;</span>] <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;success&quot;</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-string">&quot;Failed&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">steps</span> = []
+  <span class="ruby-identifier">rest_result</span>[<span class="ruby-string">&quot;response&quot;</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">step</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">steps</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">step</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">step</span>[<span class="ruby-string">&quot;installed_component&quot;</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">cur_comp</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">step</span>[<span class="ruby-string">&quot;installed_component&quot;</span>][<span class="ruby-string">&quot;component&quot;</span>][<span class="ruby-string">&quot;name&quot;</span>]
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">steps</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- steps_with_matching_component-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- steps_with_matching_component-method -->
+
+    
+      <div id="method-i-ticket_exists" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">ticket_exists</span><span
+            class="method-args">(foreign_id, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="ticket_exists-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 102</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">ticket_exists</span>(<span class="ruby-identifier">foreign_id</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">result</span> = {}
+  <span class="ruby-identifier">options</span>[<span class="ruby-string">&quot;quiet&quot;</span>] = <span class="ruby-string">&quot;yes&quot;</span>
+  <span class="ruby-identifier">options</span>[<span class="ruby-string">&quot;url_param&quot;</span>] = <span class="ruby-node">&quot;filters[foreign_id]=#{foreign_id}&quot;</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-ivar">@rest</span>.<span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;tickets&quot;</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">options</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-string">&quot;ERROR&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- ticket_exists-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- ticket_exists-method -->
+
+    
+      <div id="method-i-update_other_request_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update_other_request_params</span><span
+            class="method-args">(request_id, updates = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="update_other_request_params-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 12</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update_other_request_params</span>(<span class="ruby-identifier">request_id</span>, <span class="ruby-identifier">updates</span> = {})
+  <span class="ruby-comment"># Uses a json document in automation_results to store free-form information</span>
+  <span class="ruby-identifier">request_data_file_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_output_dir&quot;</span>])
+  <span class="ruby-identifier">request_data_file_dir</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-node">&quot;/#{@params[&quot;SS_request_number&quot;]}&quot;</span>,<span class="ruby-node">&quot;/#{request_id}&quot;</span>)
+  <span class="ruby-identifier">request_data_file</span> = <span class="ruby-node">&quot;#{request_data_file_dir}/request_data.json&quot;</span>
+  <span class="ruby-identifier">request_params</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">request_data_file</span>).<span class="ruby-identifier">read</span>)
+  <span class="ruby-identifier">updates</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">request_params</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">fil</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">request_data_file</span>,<span class="ruby-string">&quot;w+&quot;</span>)
+  <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">request_params</span>.<span class="ruby-identifier">to_json</span>
+  <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">close</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- update_other_request_params-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- update_other_request_params-method -->
+
+    
+      <div id="method-i-version_tag_exists" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">version_tag_exists</span><span
+            class="method-args">(name)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="version_tag_exists-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 216</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">version_tag_exists</span>(<span class="ruby-identifier">name</span>)
+  <span class="ruby-identifier">result</span> = <span class="ruby-string">&quot;Failed&quot;</span>
+  <span class="ruby-identifier">url</span> = <span class="ruby-node">&quot;#{@params[&quot;SS_base_url&quot;]}/v1/version_tags?filters[name]=#{url_encode(name)}&amp;token=#{Token}&quot;</span>
+  <span class="ruby-identifier">rest_result</span> = <span class="ruby-identifier">rest_call</span>(<span class="ruby-identifier">url</span>, <span class="ruby-string">&quot;get&quot;</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">rest_result</span>[<span class="ruby-string">&quot;status&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;success&quot;</span>
+    <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Tag Exists?: #{url}\nResult: #{rest_result[&quot;response&quot;]}&quot;</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">rest_result</span>[<span class="ruby-string">&quot;response&quot;</span>].<span class="ruby-identifier">first</span>[<span class="ruby-string">&quot;id&quot;</span>]
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- version_tag_exists-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- version_tag_exists-method -->
+
+    
+      <div id="method-i-version_tag_query" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">version_tag_query</span><span
+            class="method-args">(name, show_all = false)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="version_tag_query-source">
+            <pre><span class="ruby-comment"># File framework/lib/legacy_framework.rb, line 242</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">version_tag_query</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">show_all</span> = <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">result</span> = <span class="ruby-string">&quot;Failed&quot;</span>
+  <span class="ruby-identifier">url</span> = <span class="ruby-node">&quot;#{@params[&quot;SS_base_url&quot;]}/v1/version_tags?filters[name]=#{url_encode(name)}&amp;token=#{Token}&quot;</span>
+  <span class="ruby-identifier">rest_result</span> = <span class="ruby-identifier">rest_call</span>(<span class="ruby-identifier">url</span>, <span class="ruby-string">&quot;get&quot;</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">rest_result</span>[<span class="ruby-string">&quot;status&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;success&quot;</span>
+    <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Tag Exists?: #{url}\nResult: #{rest_result[&quot;response&quot;]}&quot;</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">rest_result</span>[<span class="ruby-string">&quot;response&quot;</span>].<span class="ruby-identifier">first</span>[<span class="ruby-string">&quot;id&quot;</span>]
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">show_all</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">rest_result</span>[<span class="ruby-string">&quot;response&quot;</span>] <span class="ruby-operator">:</span> <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- version_tag_query-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- version_tag_query-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+

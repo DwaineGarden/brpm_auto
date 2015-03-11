@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>class BAA - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>framework/lib/baa.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link"><a href="BrpmFramework.html">BrpmFramework</a>
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-new">::new</a>
+    
+    <li><a href="#method-i-add_directory_to_template">#add_directory_to_template</a>
+    
+    <li><a href="#method-i-add_file_to_template">#add_file_to_template</a>
+    
+    <li><a href="#method-i-add_target_servers">#add_target_servers</a>
+    
+    <li><a href="#method-i-add_template_content">#add_template_content</a>
+    
+    <li><a href="#method-i-add_template_property">#add_template_property</a>
+    
+    <li><a href="#method-i-assume_role">#assume_role</a>
+    
+    <li><a href="#method-i-copy_job">#copy_job</a>
+    
+    <li><a href="#method-i-create_component">#create_component</a>
+    
+    <li><a href="#method-i-create_component_package">#create_component_package</a>
+    
+    <li><a href="#method-i-create_empty_package">#create_empty_package</a>
+    
+    <li><a href="#method-i-create_empty_template">#create_empty_template</a>
+    
+    <li><a href="#method-i-create_file_deploy_job">#create_file_deploy_job</a>
+    
+    <li><a href="#method-i-create_group">#create_group</a>
+    
+    <li><a href="#method-i-create_nsh_script_job">#create_nsh_script_job</a>
+    
+    <li><a href="#method-i-create_package_job">#create_package_job</a>
+    
+    <li><a href="#method-i-deploy_package">#deploy_package</a>
+    
+    <li><a href="#method-i-ensure_group_path">#ensure_group_path</a>
+    
+    <li><a href="#method-i-execute_cli_command">#execute_cli_command</a>
+    
+    <li><a href="#method-i-execute_cli_command_using_attachments">#execute_cli_command_using_attachments</a>
+    
+    <li><a href="#method-i-execute_job_with_results">#execute_job_with_results</a>
+    
+    <li><a href="#method-i-execute_nsh_script_job">#execute_nsh_script_job</a>
+    
+    <li><a href="#method-i-export_deploy_job_results">#export_deploy_job_results</a>
+    
+    <li><a href="#method-i-get_group_items">#get_group_items</a>
+    
+    <li><a href="#method-i-get_server_id">#get_server_id</a>
+    
+    <li><a href="#method-i-get_session_id">#get_session_id</a>
+    
+    <li><a href="#method-i-group_path_exists">#group_path_exists</a>
+    
+    <li><a href="#method-i-obj_to_url_item">#obj_to_url_item</a>
+    
+    <li><a href="#method-i-package_artifacts">#package_artifacts</a>
+    
+    <li><a href="#method-i-session_id">#session_id</a>
+    
+    <li><a href="#method-i-set_job_properties">#set_job_properties</a>
+    
+    <li><a href="#method-i-set_nsh_script_params">#set_nsh_script_params</a>
+    
+    <li><a href="#method-i-set_template_properties">#set_template_properties</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./AutomationHeader.html">AutomationHeader</a>
+  
+    <li><a href="./BAA.html">BAA</a>
+  
+    <li><a href="./BrpmFramework.html">BrpmFramework</a>
+  
+    <li><a href="./BrpmRequest.html">BrpmRequest</a>
+  
+    <li><a href="./BrpmRest.html">BrpmRest</a>
+  
+    <li><a href="./Git.html">Git</a>
+  
+    <li><a href="./Jira.html">Jira</a>
+  
+    <li><a href="./JiraClient.html">JiraClient</a>
+  
+    <li><a href="./NSH.html">NSH</a>
+  
+    <li><a href="./NSHDispatcher.html">NSHDispatcher</a>
+  
+    <li><a href="./NSHTransport.html">NSHTransport</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Param.html">Param</a>
+  
+    <li><a href="./Svn.html">Svn</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class BAA</h1>
+
+  <div id="description" class="description">
+    
+<p><a href="BAA.html">BAA</a> rest automation class</p>
+
+<pre>this also wraps the BAAUtilities that ships with BRPM</pre>
+
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(baa_url, baa_username, baa_password, baa_role, params, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Initializes the instance of the baa class</p>
+
+<pre>this will authenticate to the Bladelogic server and
+perform an assume_role to the specified role</pre>
+
+<h4 id="method-c-new-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>url</code> - url of the Bladelogic server</p>
+</li><li>
+<p><code>baa_username</code> - user for Bladelogic account</p>
+</li><li>
+<p><code>baa_password</code> - password for Bladelogic account</p>
+</li><li>
+<p><code>baa_role</code> - role for Bladelogic account</p>
+</li><li>
+<p><code>options</code> - hash of options, includes output_file and nsh_path</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 16</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">baa_url</span>, <span class="ruby-identifier">baa_username</span>, <span class="ruby-identifier">baa_password</span>, <span class="ruby-identifier">baa_role</span>, <span class="ruby-identifier">params</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-ivar">@url</span> = <span class="ruby-identifier">baa_url</span>
+  <span class="ruby-ivar">@username</span> = <span class="ruby-identifier">baa_username</span>
+  <span class="ruby-ivar">@password</span> = <span class="ruby-identifier">baa_password</span>
+  <span class="ruby-ivar">@role</span> = <span class="ruby-identifier">baa_role</span>
+  <span class="ruby-ivar">@session_time</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-identifier">get_session_id</span>
+  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">params</span>)
+  <span class="ruby-identifier">assume_role</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-add_directory_to_template" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_directory_to_template</span><span
+            class="method-args">(template_dbkey, asset_path, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Adds a directory to a ComponentTemplate</p>
+
+<h4 id="method-i-add_directory_to_template-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>template_dbkey</code> - dbkey for component template</p>
+</li><li>
+<p><code>asset_path</code> - path to directory</p>
+</li><li>
+<p><code>options</code> - hash of options includes: (see BLCLI documentation
+for Template|addDirectoryPart)</p>
+</li></ul>
+
+<h4 id="method-i-add_directory_to_template-label-Returns">Returns</h4>
+<ul><li>
+<p>returnResult from CLI command</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="add_directory_to_template-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 303</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_directory_to_template</span>(<span class="ruby-identifier">template_dbkey</span>, <span class="ruby-identifier">asset_path</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">namespace</span> = <span class="ruby-string">&quot;Template&quot;</span>
+  <span class="ruby-identifier">command</span> = <span class="ruby-string">&quot;addDirectoryPart&quot;</span>
+  <span class="ruby-identifier">args</span> = [
+    <span class="ruby-identifier">template_dbkey</span>,
+    <span class="ruby-identifier">asset_path</span>,
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_includeLightChecksum&quot;</span> , <span class="ruby-keyword">false</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_includeChecksum&quot;</span> , <span class="ruby-keyword">true</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_includeFileAcls&quot;</span> , <span class="ruby-keyword">false</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_recurse&quot;</span> , <span class="ruby-keyword">true</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_copyfiles&quot;</span> , <span class="ruby-keyword">true</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_auditFileSize&quot;</span> , <span class="ruby-keyword">false</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_auditFileCreatedDate&quot;</span> , <span class="ruby-keyword">false</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_auditFileModifiedDate&quot;</span> , <span class="ruby-keyword">false</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_auditFilePermissions&quot;</span> , <span class="ruby-keyword">false</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_auditFileUidGid&quot;</span> , <span class="ruby-keyword">false</span>)
+    ]
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">command</span>, <span class="ruby-identifier">args</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- add_directory_to_template-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- add_directory_to_template-method -->
+
+    
+      <div id="method-i-add_file_to_template" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_file_to_template</span><span
+            class="method-args">(template_dbkey, asset_path, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Adds a file part to a ComponentTemplate</p>
+
+<h4 id="method-i-add_file_to_template-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>template_dbkey</code> - dbkey for component template</p>
+</li><li>
+<p><code>asset_path</code> - path to file</p>
+</li><li>
+<p><code>options</code> - hash of options includes: (see BLCLI documentation
+for Template|addFilePart)</p>
+</li></ul>
+
+<h4 id="method-i-add_file_to_template-label-Returns">Returns</h4>
+<ul><li>
+<p>returnResult from CLI command</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="add_file_to_template-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 273</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_file_to_template</span>(<span class="ruby-identifier">template_dbkey</span>, <span class="ruby-identifier">asset_path</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">namespace</span> = <span class="ruby-string">&quot;Template&quot;</span>
+  <span class="ruby-identifier">command</span> = <span class="ruby-string">&quot;addFilePart&quot;</span>
+  <span class="ruby-identifier">args</span> = [
+    <span class="ruby-identifier">template_dbkey</span>,
+    <span class="ruby-identifier">asset_path</span>,
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_includeLightChecksum&quot;</span> , <span class="ruby-keyword">false</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_includeChecksum&quot;</span> , <span class="ruby-keyword">true</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_includeFileAcls&quot;</span> , <span class="ruby-keyword">false</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_copyfiles&quot;</span> , <span class="ruby-keyword">true</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_auditFileSize&quot;</span> , <span class="ruby-keyword">false</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_auditFileCreatedDate&quot;</span> , <span class="ruby-keyword">false</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_auditFileModifiedDate&quot;</span> , <span class="ruby-keyword">false</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_auditFilePermissions&quot;</span> , <span class="ruby-keyword">false</span>),
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;b_auditFileUidGid&quot;</span> , <span class="ruby-keyword">false</span>)
+    ]
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">command</span>, <span class="ruby-identifier">args</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- add_file_to_template-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- add_file_to_template-method -->
+
+    
+      <div id="method-i-add_target_servers" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_target_servers</span><span
+            class="method-args">(job_key, servers)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Adds server targets to a Job</p>
+
+<h4 id="method-i-add_target_servers-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>job_key</code> - dbkey for job</p>
+</li><li>
+<p><code>servers</code> - array of servers</p>
+</li></ul>
+
+<h4 id="method-i-add_target_servers-label-Returns">Returns</h4>
+<ul><li>
+<p>job_key from CLI command (BLCLI Job|addTargetServers)</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="add_target_servers-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 497</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_target_servers</span>(<span class="ruby-identifier">job_key</span>, <span class="ruby-identifier">servers</span>)
+  <span class="ruby-identifier">job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;Job&quot;</span>, <span class="ruby-string">&quot;addTargetServers&quot;</span>,
+              [
+                <span class="ruby-identifier">job_key</span>,       <span class="ruby-comment"># Jobkey</span>
+                <span class="ruby-identifier">servers</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,&quot;</span>)    <span class="ruby-comment"># serverslist</span>
+               ])
+  <span class="ruby-identifier">job_key</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- add_target_servers-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- add_target_servers-method -->
+
+    
+      <div id="method-i-add_template_content" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_template_content</span><span
+            class="method-args">(template_dbkey, parts_hash, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Adds files and directories to a ComponentTemplate</p>
+
+<h4 id="method-i-add_template_content-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>template_dbkey</code> - dbkey for component template</p>
+</li><li>
+<p><code>part_array</code> - array of paths to add to the template</p>
+</li><li>
+<p><code>options</code> - hash of options includes: (see BLCLI documentation
+for Template|addDirectoryPart)</p>
+</li></ul>
+
+<h4 id="method-i-add_template_content-label-Returns">Returns</h4>
+<ul><li>
+<p>returnResult from CLI command</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="add_template_content-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 334</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_template_content</span>(<span class="ruby-identifier">template_dbkey</span>, <span class="ruby-identifier">parts_hash</span>, <span class="ruby-identifier">options</span> = {})
+<span class="ruby-identifier">summary</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-identifier">parts_hash</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">part</span>, <span class="ruby-identifier">part_type</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">part_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;file&quot;</span>
+      <span class="ruby-identifier">summary</span> = <span class="ruby-identifier">add_file_to_template</span>(<span class="ruby-identifier">template_dbkey</span>, <span class="ruby-identifier">part</span>, <span class="ruby-identifier">options</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">summary</span> = <span class="ruby-identifier">add_directory_to_template</span>(<span class="ruby-identifier">template_dbkey</span>, <span class="ruby-identifier">part</span>, <span class="ruby-identifier">options</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">summary</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- add_template_content-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- add_template_content-method -->
+
+    
+      <div id="method-i-add_template_property" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_template_property</span><span
+            class="method-args">(template_name, group_path, property_name, property_value, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Sets a single property on a ComponentTemplate</p>
+
+<h4 id="method-i-add_template_property-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>template_name</code> - name for component template</p>
+</li><li>
+<p><code>group_path</code> - group_path</p>
+</li><li>
+<p><code>property_name</code> - name of property</p>
+</li><li>
+<p><code>property_value</code> - value of property</p>
+</li><li>
+<p><code>options</code> - hash of options (see BLCLI docs)</p>
+</li></ul>
+
+<h4 id="method-i-add_template_property-label-Returns">Returns</h4>
+<ul><li>
+<p>returnResult from CLI command (BLCLI Template|addLocalParameter)</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="add_template_property-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 576</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_template_property</span>(<span class="ruby-identifier">template_name</span>, <span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">property_name</span>, <span class="ruby-identifier">property_value</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">prop_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;Template&quot;</span>, <span class="ruby-string">&quot;addLocalParameter&quot;</span>,
+              [
+                <span class="ruby-identifier">template_name</span>,       <span class="ruby-comment"># Component template</span>
+                <span class="ruby-identifier">group_path</span>,         <span class="ruby-comment"># template group</span>
+                <span class="ruby-identifier">property_name</span>,      <span class="ruby-comment">#  Name of property</span>
+                <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;description&quot;</span>),                 <span class="ruby-comment"># property_description</span>
+                <span class="ruby-string">&quot;Primitive:/String&quot;</span>, <span class="ruby-comment">#property_type</span>
+                <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;editable&quot;</span> , <span class="ruby-keyword">true</span>),             <span class="ruby-comment"># editable</span>
+                <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;required&quot;</span>, <span class="ruby-keyword">false</span>),            <span class="ruby-comment"># required</span>
+                <span class="ruby-identifier">property_value</span>    <span class="ruby-comment"># value</span>
+               ])
+  <span class="ruby-identifier">prop_key</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- add_template_property-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- add_template_property-method -->
+
+    
+      <div id="method-i-assume_role" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">assume_role</span><span
+            class="method-args">(role = @role)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Assumes the role (for SOAP only)</p>
+
+<h4 id="method-i-assume_role-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>role</code> - role to assume (uses default role from class if
+ommitted)</p>
+</li></ul>
+
+<h4 id="method-i-assume_role-label-Returns">Returns</h4>
+<ul><li>
+<p>command output</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="assume_role-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 36</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">assume_role</span>(<span class="ruby-identifier">role</span> = <span class="ruby-ivar">@role</span>)
+  <span class="ruby-ivar">@role</span> = <span class="ruby-identifier">role</span>
+  <span class="ruby-constant">BaaUtilities</span>.<span class="ruby-identifier">baa_soap_assume_role</span>(<span class="ruby-ivar">@url</span>, <span class="ruby-identifier">role</span>, <span class="ruby-ivar">@session_id</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- assume_role-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- assume_role-method -->
+
+    
+      <div id="method-i-copy_job" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">copy_job</span><span
+            class="method-args">(source_job, source_group, target_job, target_group)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Copies an NSHScriptJob in <a href="BAA.html">BAA</a> to a new job</p>
+
+<h4 id="method-i-copy_job-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>source_job</code> - name for package (and template)</p>
+</li><li>
+<p><code>source_goup</code> - path in Blade for job</p>
+</li><li>
+<p><code>target_job</code> - array of files/directories to move</p>
+</li><li>
+<p><code>target_group</code> - base path on target to deploy to</p>
+</li></ul>
+
+<h4 id="method-i-copy_job-label-Returns">Returns</h4>
+<ul><li>
+<p>job dbKey</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="copy_job-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 938</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">copy_job</span>(<span class="ruby-identifier">source_job</span>, <span class="ruby-identifier">source_group</span>, <span class="ruby-identifier">target_job</span>, <span class="ruby-identifier">target_group</span>)
+  <span class="ruby-identifier">args</span> = [<span class="ruby-identifier">source_group</span>, <span class="ruby-identifier">source_job</span>]
+  <span class="ruby-identifier">ss_job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;NSHScriptJob&quot;</span>,<span class="ruby-string">&quot;getDBKeyByGroupAndName&quot;</span>,<span class="ruby-identifier">args</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: cannot find job: #{ss_job_key}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ss_job_key</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-identifier">args</span> = [<span class="ruby-identifier">ss_job_key</span>, <span class="ruby-identifier">target_group</span>, <span class="ruby-identifier">target_job</span>]
+  <span class="ruby-identifier">copy_job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;Job&quot;</span>,<span class="ruby-string">&quot;copyJob&quot;</span>,<span class="ruby-identifier">args</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: cannot create job: #{copy_job_key}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">copy_job_key</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-identifier">copy_job_key</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- copy_job-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- copy_job-method -->
+
+    
+      <div id="method-i-create_component" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create_component</span><span
+            class="method-args">(component_name, template_key, server_id)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Creates a Component</p>
+
+<h4 id="method-i-create_component-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>component_name</code> - name of component</p>
+</li><li>
+<p><code>template_key</code> - dbkey of ComponentTemplate</p>
+</li><li>
+<p><code>server_id</code> - id of server to bind template</p>
+</li></ul>
+
+<h4 id="method-i-create_component-label-Returns">Returns</h4>
+<ul><li>
+<p>returnResult from CLI command (BLCLI Component|createComponent)</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="create_component-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 378</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_component</span>(<span class="ruby-identifier">component_name</span>, <span class="ruby-identifier">template_key</span>, <span class="ruby-identifier">server_id</span>)
+  <span class="ruby-identifier">namespace</span> = <span class="ruby-string">&quot;Component&quot;</span>
+  <span class="ruby-identifier">command</span> = <span class="ruby-string">&quot;createComponent&quot;</span>
+  <span class="ruby-identifier">args</span> = [
+    <span class="ruby-identifier">component_name</span>,
+    <span class="ruby-identifier">template_key</span>,
+    <span class="ruby-identifier">server_id</span>
+    ]
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">command</span>, <span class="ruby-identifier">args</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create_component-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create_component-method -->
+
+    
+      <div id="method-i-create_component_package" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create_component_package</span><span
+            class="method-args">(package_name, depot_group_id, template_id, server_name, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Creates a package from a component</p>
+
+<h4 id="method-i-create_component_package-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>package_name</code> - name for package</p>
+</li><li>
+<p><code>depot_group_id</code> - group_id of group_path</p>
+</li><li>
+<p><code>template_id</code> - id of ComponentTemplate</p>
+</li><li>
+<p><code>server_name</code> - name of server to bind to template</p>
+</li><li>
+<p><code>options</code> - hash of options (see BLCLI docs)</p>
+</li></ul>
+
+<h4 id="method-i-create_component_package-label-Returns">Returns</h4>
+<ul><li>
+<p>returnResult from CLI command (BLCLI BlPackage|createPackageFromComponent)</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="create_component_package-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 442</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_component_package</span>(<span class="ruby-identifier">package_name</span>, <span class="ruby-identifier">depot_group_id</span>, <span class="ruby-identifier">template_id</span>, <span class="ruby-identifier">server_name</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">server_id</span> = <span class="ruby-identifier">get_server_id</span>(<span class="ruby-identifier">server_name</span>)
+  <span class="ruby-identifier">component_id</span> = <span class="ruby-identifier">create_component</span>(<span class="ruby-identifier">package_name</span>, <span class="ruby-identifier">template_id</span>, <span class="ruby-identifier">server_id</span>)
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;BlPackage&quot;</span>, <span class="ruby-string">&quot;createPackageFromComponent&quot;</span>,
+              [
+                <span class="ruby-identifier">package_name</span>,       <span class="ruby-comment">#packageName</span>
+                <span class="ruby-identifier">depot_group_id</span>,     <span class="ruby-comment">#groupId</span>
+                <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;bSoftLinked&quot;</span>, <span class="ruby-keyword">true</span>),                   <span class="ruby-comment">#bSoftLinked</span>
+                <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;bCollectFileAcl&quot;</span>, <span class="ruby-keyword">false</span>),              <span class="ruby-comment">#bCollectFileAcl</span>
+                <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;bCollectFileAttributes&quot;</span>, <span class="ruby-keyword">false</span>),       <span class="ruby-comment">#bCollectFileAttributes</span>
+                <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;bCopyFileContents&quot;</span>, <span class="ruby-keyword">true</span>),             <span class="ruby-comment">#bCopyFileContents</span>
+                <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;bCollectRegistryAcl&quot;</span>, <span class="ruby-keyword">false</span>),          <span class="ruby-comment">#bCollectRegistryAcl</span>
+                <span class="ruby-identifier">component_id</span>,      <span class="ruby-comment">#componentKey</span>
+              ])
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create_component_package-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create_component_package-method -->
+
+    
+      <div id="method-i-create_empty_package" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create_empty_package</span><span
+            class="method-args">(package_name, group_id, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Creates an empty Package in the Depot</p>
+
+<h4 id="method-i-create_empty_package-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>package_name</code> - name of the package</p>
+</li><li>
+<p><code>group_id</code> - group_id of group_path</p>
+</li><li>
+<p><code>options</code> - hash of options, includes: “description”</p>
+</li></ul>
+
+<h4 id="method-i-create_empty_package-label-Returns">Returns</h4>
+<ul><li>
+<p>returnResult from CLI command (BLCLI BlPackage|createEmptyPackage)</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="create_empty_package-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 400</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_empty_package</span>(<span class="ruby-identifier">package_name</span>, <span class="ruby-identifier">group_id</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">namespace</span> = <span class="ruby-string">&quot;BlPackage&quot;</span>
+  <span class="ruby-identifier">command</span> = <span class="ruby-string">&quot;createEmptyPackage&quot;</span>
+  <span class="ruby-identifier">args</span> = [
+    <span class="ruby-identifier">package_name</span>,
+    <span class="ruby-identifier">group_id</span>,
+    <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;description&quot;</span> , <span class="ruby-keyword">false</span>)
+    ]
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">command</span>, <span class="ruby-identifier">args</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create_empty_package-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create_empty_package-method -->
+
+    
+      <div id="method-i-create_empty_template" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create_empty_template</span><span
+            class="method-args">(template_name, group_id)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Creates an empty ComponentTemplate</p>
+
+<h4 id="method-i-create_empty_template-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>template_name</code> - dbkey for component template</p>
+</li><li>
+<p><code>group_id</code> - group_id of group_path</p>
+</li></ul>
+
+<h4 id="method-i-create_empty_template-label-Returns">Returns</h4>
+<ul><li>
+<p>returnResult from CLI command (BLCLI Template|createEmptyTemplate)</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="create_empty_template-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 356</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_empty_template</span>(<span class="ruby-identifier">template_name</span>, <span class="ruby-identifier">group_id</span>)
+  <span class="ruby-identifier">namespace</span> = <span class="ruby-string">&quot;Template&quot;</span>
+  <span class="ruby-identifier">command</span> = <span class="ruby-string">&quot;createEmptyTemplate&quot;</span>
+  <span class="ruby-identifier">args</span> = [
+    <span class="ruby-identifier">template_name</span>,
+    <span class="ruby-identifier">group_id</span>,
+    <span class="ruby-keyword">true</span>
+    ]
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">command</span>, <span class="ruby-identifier">args</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create_empty_template-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create_empty_template-method -->
+
+    
+      <div id="method-i-create_file_deploy_job" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create_file_deploy_job</span><span
+            class="method-args">(job_name, group_path, source_files, target_path, targets, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Creates a file deploy Job in <a href="BAA.html">BAA</a></p>
+
+<h4 id="method-i-create_file_deploy_job-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>job_name</code> - name for package (and template)</p>
+</li><li>
+<p><code>group_path</code> - path in Blade for job</p>
+</li><li>
+<p><code>source_files</code> - array of files/directories to move</p>
+</li><li>
+<p><code>target_path</code> - base path on target to deploy to</p>
+</li><li>
+<p><code>targets</code> - array of servers/groups to deploy to</p>
+</li><li>
+<p><code>options</code> - hash of options, includes:
+preserve_file_paths(true/false), num_par_procs=50, target_type=server,
+execute_now</p>
+</li></ul>
+
+<h4 id="method-i-create_file_deploy_job-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of job results</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="create_file_deploy_job-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 896</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_file_deploy_job</span>(<span class="ruby-identifier">job_name</span>, <span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">source_files</span>, <span class="ruby-identifier">target_path</span>, <span class="ruby-identifier">targets</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">result</span> = {<span class="ruby-string">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ERROR&quot;</span>}
+  <span class="ruby-identifier">num_par_procs</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;num_par_procs&quot;</span>, <span class="ruby-value">50</span>)
+  <span class="ruby-identifier">execute_now</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;execute_now&quot;</span>, <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">target_type</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;target_type&quot;</span>, <span class="ruby-string">&quot;server&quot;</span>)
+  <span class="ruby-identifier">preserve_file_paths</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;preserve_file_paths&quot;</span>, <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">args</span> = [
+    <span class="ruby-identifier">job_name</span>, <span class="ruby-comment">#job_name</span>
+    <span class="ruby-identifier">group_path</span>, <span class="ruby-comment">#job_group</span>
+    <span class="ruby-identifier">source_files</span>, <span class="ruby-comment">#source_files</span>
+    <span class="ruby-identifier">target_path</span>, <span class="ruby-comment">#destination</span>
+    <span class="ruby-identifier">preserve_file_paths</span>, <span class="ruby-comment">#isPreserveSourceFilePaths</span>
+    <span class="ruby-identifier">num_par_procs</span>, <span class="ruby-comment">#numTargetsInParallel</span>
+    <span class="ruby-identifier">targets</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,&quot;</span>), <span class="ruby-comment">#targetServerGroups</span>
+  ]
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Creating file deploy job: #{job_name} in: #{group_path}&quot;</span>
+  <span class="ruby-identifier">job_db_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;FileDeployJob&quot;</span>, <span class="ruby-string">&quot;createJobByServerGroups&quot;</span>, <span class="ruby-identifier">args</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">target_type</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;server&quot;</span>
+  <span class="ruby-identifier">job_db_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;FileDeployJob&quot;</span>, <span class="ruby-string">&quot;createJobByServers&quot;</span>, <span class="ruby-identifier">args</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">target_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;server&quot;</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: deploy job failed - #{job_db_key}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">job_db_key</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;job_db_key&quot;</span>] = <span class="ruby-identifier">job_db_key</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">execute_now</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;#=&gt; Executing Job&quot;</span>
+    <span class="ruby-identifier">deploy_results_id</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;FileDeployJob&quot;</span>, <span class="ruby-string">&quot;executeJobAndWait&quot;</span>, [<span class="ruby-identifier">job_db_key</span>])
+    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: deploy job failed - #{deploy_results_id}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">deploy_results_id</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+    <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;deploy_results_id&quot;</span>] = <span class="ruby-identifier">deploy_results_id</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;status&quot;</span>] = <span class="ruby-string">&quot;SUCCESS&quot;</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create_file_deploy_job-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create_file_deploy_job-method -->
+
+    
+      <div id="method-i-create_group" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create_group</span><span
+            class="method-args">(group_name, parent_id, obj_type = "Job")</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Creates a group inside a parent group</p>
+
+<h4 id="method-i-create_group-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>group_path</code> - path to group</p>
+</li><li>
+<p><code>parent_id</code> - group id of parent group</p>
+</li><li>
+<p><code>obj_type</code> - base for group
+[DeployJob/BlPackage/ComponentTemplates]</p>
+</li></ul>
+
+<h4 id="method-i-create_group-label-Returns">Returns</h4>
+<ul><li>
+<p>array of group items or hash of group_object</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="create_group-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 251</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_group</span>(<span class="ruby-identifier">group_name</span>, <span class="ruby-identifier">parent_id</span>, <span class="ruby-identifier">obj_type</span> = <span class="ruby-string">&quot;Job&quot;</span>)
+  <span class="ruby-comment"># Job, Template, Depot</span>
+  <span class="ruby-identifier">namespace</span> = <span class="ruby-node">&quot;#{obj_to_url_item(obj_type, &quot;other&quot;)}Group&quot;</span>
+  <span class="ruby-identifier">command</span> = <span class="ruby-node">&quot;create#{obj_to_url_item(obj_type, &quot;other&quot;)}Group&quot;</span>
+  <span class="ruby-identifier">args</span> = [
+    <span class="ruby-identifier">group_name</span>,
+    <span class="ruby-identifier">parent_id</span>,
+    ]
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">command</span>, <span class="ruby-identifier">args</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create_group-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create_group-method -->
+
+    
+      <div id="method-i-create_nsh_script_job" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create_nsh_script_job</span><span
+            class="method-args">(job_name, group_path, script_name, script_group, job_params, targets, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Creates an <a href="NSH.html">NSH</a> Script Job in <a
+href="BAA.html">BAA</a> to target servers</p>
+
+<h4 id="method-i-create_nsh_script_job-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>job_name</code> - name for package (and template)</p>
+</li><li>
+<p><code>group_path</code> - path in Blade for job</p>
+</li><li>
+<p><code>script_name</code> - name of nsh script</p>
+</li><li>
+<p><code>script_group</code> - path in depot to script</p>
+</li><li>
+<p><code>job_params</code> - array of params (in order) for script job</p>
+</li><li>
+<p><code>targets</code> - array of servers or smartgroups</p>
+</li><li>
+<p><code>options</code> - hash of options, includes: execute_now and
+num_par_proces (max parallel processes), target_type (servers/groups)</p>
+</li></ul>
+
+<h4 id="method-i-create_nsh_script_job-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of job results, includes - job_run_id, job_status</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="create_nsh_script_job-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 738</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_nsh_script_job</span>(<span class="ruby-identifier">job_name</span>, <span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">script_name</span>, <span class="ruby-identifier">script_group</span>, <span class="ruby-identifier">job_params</span>, <span class="ruby-identifier">targets</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">result</span> = {<span class="ruby-string">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ERROR&quot;</span>}
+  <span class="ruby-identifier">job_type</span> = <span class="ruby-string">&quot;NSHScriptJob&quot;</span>
+  <span class="ruby-identifier">num_par_procs</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;num_par_procs&quot;</span>, <span class="ruby-value">50</span>)
+  <span class="ruby-identifier">execute_now</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;execute_now&quot;</span>, <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">target_type</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;target_type&quot;</span>, <span class="ruby-string">&quot;servers&quot;</span>)
+  <span class="ruby-identifier">args</span> = [
+    <span class="ruby-identifier">group_path</span>, <span class="ruby-comment">#jobGroup</span>
+    <span class="ruby-identifier">job_name</span>,  <span class="ruby-comment">#jobName</span>
+    <span class="ruby-string">&quot;Script job from automation&quot;</span>, <span class="ruby-comment">#description</span>
+    <span class="ruby-identifier">script_group</span>,
+    <span class="ruby-identifier">script_name</span>,
+    <span class="ruby-identifier">num_par_procs</span> <span class="ruby-comment"># number of parallel processes</span>
+    ]
+  <span class="ruby-identifier">ss_job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-identifier">job_type</span>,<span class="ruby-string">&quot;createNSHScriptJob&quot;</span>,<span class="ruby-identifier">args</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: cannot create job: #{ss_job_key}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ss_job_key</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Created: #{job_name} in group: #{group_path}&quot;</span>
+  <span class="ruby-comment">#targets.collect!{|k| k.gsub(/^\//,&quot;/Servers/&quot;) unless k.start_with?(&quot;/Servers&quot;) }</span>
+  <span class="ruby-comment">#c. Make the call to addTargetGroup (should be a new method)</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">targets</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">targets</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">2</span>
+    <span class="ruby-identifier">method_call</span> = <span class="ruby-identifier">target_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;servers&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;addTargetServer&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;addTargetGroup&quot;</span>
+    <span class="ruby-identifier">servers</span> = <span class="ruby-identifier">targets</span>.<span class="ruby-identifier">first</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">targets</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">method_call</span> = <span class="ruby-identifier">target_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;servers&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;addTargetServers&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;addTargetGroups&quot;</span> 
+    <span class="ruby-identifier">servers</span> = <span class="ruby-identifier">targets</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,&quot;</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">ss_job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;Job&quot;</span>, <span class="ruby-identifier">method_call</span>,
+          [
+            <span class="ruby-identifier">ss_job_key</span>,       <span class="ruby-comment">#jobName</span>
+            <span class="ruby-identifier">servers</span>     <span class="ruby-comment">#comma separated list of groups</span>
+          ]) 
+  <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: cannot add targets: #{ss_job_key}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ss_job_key</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">execute_now</span>
+    <span class="ruby-identifier">param_result</span> = <span class="ruby-identifier">set_nsh_script_params</span>(<span class="ruby-identifier">job_name</span>, <span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">job_params</span>, <span class="ruby-keyword">false</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: cannot set job parameters: #{param_result}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">param_result</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+    <span class="ruby-identifier">execute_result</span> = <span class="ruby-identifier">execute_job_with_results</span>(<span class="ruby-identifier">param_result</span>[<span class="ruby-string">&quot;job_db_key&quot;</span>], <span class="ruby-identifier">result</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: cannot execute job: #{execute_result.inspect}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">execute_result</span>[<span class="ruby-string">&quot;status&quot;</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;job_db_key&quot;</span>] = <span class="ruby-identifier">ss_job_key</span>
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;status&quot;</span>] = <span class="ruby-string">&quot;SUCCESS&quot;</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create_nsh_script_job-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create_nsh_script_job-method -->
+
+    
+      <div id="method-i-create_package_job" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create_package_job</span><span
+            class="method-args">(job_name, job_group_id, package_id, servers, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Creates a Job from a package</p>
+
+<h4 id="method-i-create_package_job-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>job_name</code> - name for job</p>
+</li><li>
+<p><code>job_group_id</code> - group_id of group_path</p>
+</li><li>
+<p><code>servers</code> - array of servers for job targets</p>
+</li><li>
+<p><code>options</code> - hash of options (see BLCLI docs)</p>
+</li></ul>
+
+<h4 id="method-i-create_package_job-label-Returns">Returns</h4>
+<ul><li>
+<p>job_key from CLI command (BLCLI BlPackage|createDeployJob)</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="create_package_job-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 470</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_package_job</span>(<span class="ruby-identifier">job_name</span>, <span class="ruby-identifier">job_group_id</span>, <span class="ruby-identifier">package_id</span>, <span class="ruby-identifier">servers</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;DeployJob&quot;</span>, <span class="ruby-string">&quot;createDeployJob&quot;</span>,
+              [
+                <span class="ruby-identifier">job_name</span>,       <span class="ruby-comment">#packageName</span>
+                <span class="ruby-identifier">job_group_id</span>,     <span class="ruby-comment">#groupId</span>
+                <span class="ruby-identifier">package_id</span>,         <span class="ruby-comment"># db_key</span>
+                <span class="ruby-identifier">servers</span>.<span class="ruby-identifier">first</span>,
+                <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;isSimulateEnabled&quot;</span> , <span class="ruby-keyword">true</span>),               <span class="ruby-comment">#isSimulateEnabled</span>
+                <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;isCommitEnabled&quot;</span> , <span class="ruby-keyword">true</span>),              <span class="ruby-comment">#isCommitEnabled</span>
+                <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;isStagedIndirect&quot;</span> , <span class="ruby-keyword">false</span>)             <span class="ruby-comment">#isStagedIndirect</span>
+              ])
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">servers</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>
+    <span class="ruby-identifier">add_target_servers</span>(<span class="ruby-identifier">job_key</span>, <span class="ruby-identifier">servers</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>])
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">job_key</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create_package_job-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create_package_job-method -->
+
+    
+      <div id="method-i-deploy_package" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">deploy_package</span><span
+            class="method-args">(job_name, package_id, group_path, target_servers, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Deploys an existing Package in <a href="BAA.html">BAA</a> to target servers</p>
+
+<h4 id="method-i-deploy_package-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>job_name</code> - name for deploy job</p>
+</li><li>
+<p><code>package_id</code> - id of existing package</p>
+</li><li>
+<p><code>group_path</code> - path in Blade to store job</p>
+</li><li>
+<p><code>target_servers</code> - array of file/nsh paths</p>
+</li><li>
+<p><code>options</code> - hash of options, includes:</p>
+
+<pre>execute_now - (true/false to execute the job immediately default - true)
+properties (hash of name/values to set),</pre>
+</li></ul>
+
+<h4 id="method-i-deploy_package-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of job results, includes - job_run_id, job_status</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="deploy_package-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 689</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">deploy_package</span>(<span class="ruby-identifier">job_name</span>, <span class="ruby-identifier">package_id</span>, <span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">target_servers</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">execute_now</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;execute_now&quot;</span>,<span class="ruby-keyword">true</span>)
+  <span class="ruby-identifier">properties</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;properties&quot;</span>,{})
+  <span class="ruby-identifier">result</span> = {<span class="ruby-string">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ERROR&quot;</span>}
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;#=&gt; Building Job from Package:\n\tGroup: #{group_path}\n\tPackage: #{package_id}&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;#=&gt; Mapping selected servers: #{target_servers.join(&quot;,&quot;)}&quot;</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;ERROR: No servers found&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">target_servers</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-identifier">targets</span> = <span class="ruby-identifier">baa_soap_map_server_names_to_rest_uri</span>(<span class="ruby-identifier">target_servers</span>)
+  <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;\tBuilding group path...&quot;</span>
+  <span class="ruby-identifier">job_group_id</span> = <span class="ruby-identifier">ensure_group_path</span>(<span class="ruby-identifier">group_path</span>, <span class="ruby-string">&quot;Jobs&quot;</span>)
+  <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;\tCreating package job...&quot;</span>
+  <span class="ruby-identifier">cur_jobs</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;Job&quot;</span>,<span class="ruby-string">&quot;listAllByGroup&quot;</span>,[<span class="ruby-identifier">group_path</span>])
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">cur_jobs</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;\n&quot;</span>).<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">job_name</span>)
+    <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;\tJob Exists: deleting...&quot;</span>
+    <span class="ruby-identifier">ans</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;DeployJob&quot;</span>,<span class="ruby-string">&quot;deleteJobByGroupAndName&quot;</span>,[<span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">job_name</span>])
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">job_db_key</span> = <span class="ruby-identifier">create_package_job</span>(<span class="ruby-identifier">job_name</span>, <span class="ruby-identifier">job_group_id</span>, <span class="ruby-identifier">package_id</span>, <span class="ruby-identifier">target_servers</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">job_db_key</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+    <span class="ruby-identifier">log</span> <span class="ruby-identifier">job_db_key</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Command_Failed: job creation failed&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;job_db_key&quot;</span>] = <span class="ruby-identifier">job_db_key</span>
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;status&quot;</span>] = <span class="ruby-string">&quot;JOB_CREATED_SUCCESSFULLY&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;\tApplying properties...&quot;</span>
+  <span class="ruby-identifier">prop_results</span> = <span class="ruby-identifier">set_job_properties</span>(<span class="ruby-identifier">job_name</span>, <span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">properties</span>)
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;property_results&quot;</span>] = <span class="ruby-identifier">prop_results</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">execute_now</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;#=&gt; Executing Job&quot;</span>
+    <span class="ruby-identifier">execute_results</span> = <span class="ruby-identifier">execute_job_with_results</span>(<span class="ruby-identifier">job_db_key</span>, <span class="ruby-identifier">result</span>)
+    <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;results&quot;</span>] = <span class="ruby-identifier">execute_results</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- deploy_package-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- deploy_package-method -->
+
+    
+      <div id="method-i-ensure_group_path" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">ensure_group_path</span><span
+            class="method-args">(group_path, obj_type = "Jobs")</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Ensures that a group_path exists, will create if necessary</p>
+
+<h4 id="method-i-ensure_group_path-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>group_path</code> - path to group</p>
+</li><li>
+<p><code>obj_type</code> - base for group
+[DeployJob/BlPackage/ComponentTemplates]</p>
+</li></ul>
+
+<h4 id="method-i-ensure_group_path-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of group_object or “ERROR”</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="ensure_group_path-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 213</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">ensure_group_path</span>(<span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">obj_type</span> = <span class="ruby-string">&quot;Jobs&quot;</span>)
+  <span class="ruby-identifier">result</span> = <span class="ruby-keyword">nil</span>; <span class="ruby-identifier">create_result</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-identifier">cur_path</span> = <span class="ruby-identifier">group_path</span>.<span class="ruby-identifier">dup</span>
+  <span class="ruby-identifier">path_exists</span> = <span class="ruby-keyword">false</span>
+  <span class="ruby-identifier">parts</span> = <span class="ruby-identifier">group_path</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;/&quot;</span>)
+  <span class="ruby-identifier">not_there</span> = []
+  <span class="ruby-keyword">until</span> <span class="ruby-identifier">path_exists</span>
+    <span class="ruby-identifier">cur_path</span> = <span class="ruby-identifier">group_path</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-identifier">not_there</span>.<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;/&quot;</span>),<span class="ruby-string">&quot;&quot;</span>).<span class="ruby-identifier">chomp</span>(<span class="ruby-string">&quot;/&quot;</span>)
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">group_path_exists</span>(<span class="ruby-identifier">cur_path</span>, <span class="ruby-identifier">obj_type</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;ERROR&quot;</span>
+      <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;#{cur_path} - not present&quot;</span>
+      <span class="ruby-identifier">not_there</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">cur_path</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;/&quot;</span>)[<span class="ruby-value">-1</span>]
+      <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;NotThere: #{not_there.join(&quot;,&quot;)}&quot;</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">path_exists</span> = <span class="ruby-keyword">true</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;#{cur_path} - Found&quot;</span>
+  <span class="ruby-identifier">not_there</span>.<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">cur_path</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;/#{item}&quot;</span>
+    <span class="ruby-identifier">create_result</span> = <span class="ruby-identifier">create_group</span>(<span class="ruby-identifier">item</span>, <span class="ruby-identifier">result</span>, <span class="ruby-identifier">obj_type</span>)
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Creating: #{cur_path} =&gt; #{create_result}&quot;</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">create_result</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">create_result</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">create_result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- ensure_group_path-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- ensure_group_path-method -->
+
+    
+      <div id="method-i-execute_cli_command" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">execute_cli_command</span><span
+            class="method-args">(namespace, command, args, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Executes a BLCLI command</p>
+
+<pre>(follow BLCLI docs)</pre>
+
+<h4 id="method-i-execute_cli_command-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>namespace</code> - namespace of command</p>
+</li><li>
+<p><code>command</code> - command to run</p>
+</li><li>
+<p><code>args</code> - array of arguments to the command</p>
+</li><li>
+<p><code>options</code> - hash of options includes: client_timeout (default is
+300 seconds)</p>
+</li></ul>
+
+<h4 id="method-i-execute_cli_command-label-Returns">Returns</h4>
+<ul><li>
+<p>text result from command or “ERROR: SoapError” if failure</p>
+</li><li>
+<p>logs to a special stderr file the verbose output in the step output folder</p>
+</li></ul>
+
+<h4 id="method-i-execute_cli_command-label-Examples">Examples</h4>
+
+<pre>result = @baa.execute_cli_command(&quot;Server&quot;, &quot;listAllServersInGroup&quot;, [&quot;mysmartgroup&quot;])</pre>
+          
+
+          
+          <div class="method-source-code" id="execute_cli_command-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 81</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">command</span>, <span class="ruby-identifier">args</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">response</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">check_session</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;CLI: #{namespace}, #{command}, #{args.inspect}&quot;</span>
+    <span class="ruby-identifier">client</span> = <span class="ruby-constant">Savon</span>.<span class="ruby-identifier">client</span>(<span class="ruby-node">&quot;#{@url}/services/BSACLITunnelService.wsdl&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">wsdl</span>, <span class="ruby-identifier">http</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">http</span>.<span class="ruby-identifier">auth</span>.<span class="ruby-identifier">ssl</span>.<span class="ruby-identifier">verify_mode</span> = <span class="ruby-value">:none</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">client</span>.<span class="ruby-identifier">http</span>.<span class="ruby-identifier">read_timeout</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;client_timeout&quot;</span>,<span class="ruby-value">300</span>)
+    <span class="ruby-identifier">redirect_stdout</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">response</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">request</span>(<span class="ruby-value">:execute_command_by_param_list</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">soap</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">soap</span>.<span class="ruby-identifier">endpoint</span> = <span class="ruby-node">&quot;#{@url}/services/CLITunnelService&quot;</span>
+        <span class="ruby-identifier">soap</span>.<span class="ruby-identifier">header</span> = {<span class="ruby-string">&quot;ins1:sessionId&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@session_id</span>}
+        <span class="ruby-identifier">soap</span>.<span class="ruby-identifier">body</span> = { <span class="ruby-value">:nameSpace</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">namespace</span>, <span class="ruby-value">:commandName</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">command</span>, <span class="ruby-value">:commandArguments</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">args</span> }
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">raw_result</span> = <span class="ruby-identifier">response</span>.<span class="ruby-identifier">body</span>[<span class="ruby-value">:execute_command_by_param_list_response</span>][<span class="ruby-value">:return</span>]
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">cli_result</span>(<span class="ruby-identifier">raw_result</span>)
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-node">&quot;ERROR: SoapError: #{e.message}\n#{e.backtrace}&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- execute_cli_command-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- execute_cli_command-method -->
+
+    
+      <div id="method-i-execute_cli_command_using_attachments" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">execute_cli_command_using_attachments</span><span
+            class="method-args">(namespace, command, args)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Executes a BLCLI command to return an attachment</p>
+
+<h4 id="method-i-execute_cli_command_using_attachments-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>namespace</code> - namespace of command</p>
+</li><li>
+<p><code>command</code> - command to run</p>
+</li><li>
+<p><code>args</code> - array of arguments to the command</p>
+</li></ul>
+
+<h4 id="method-i-execute_cli_command_using_attachments-label-Returns">Returns</h4>
+<ul><li>
+<p>response_object hash which includes the attachment <a
+href="http://"attachment"">response</a> base64 encoded</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="execute_cli_command_using_attachments-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 117</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">execute_cli_command_using_attachments</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">command</span>, <span class="ruby-identifier">args</span>)
+  <span class="ruby-identifier">payload</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">client</span> = <span class="ruby-constant">Savon</span>.<span class="ruby-identifier">client</span>(<span class="ruby-node">&quot;#{@url}/services/BSACLITunnelService.wsdl&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">wsdl</span>, <span class="ruby-identifier">http</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">http</span>.<span class="ruby-identifier">auth</span>.<span class="ruby-identifier">ssl</span>.<span class="ruby-identifier">verify_mode</span> = <span class="ruby-value">:none</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">client</span>.<span class="ruby-identifier">http</span>.<span class="ruby-identifier">read_timeout</span> = <span class="ruby-value">300</span>
+    <span class="ruby-identifier">client</span>.<span class="ruby-identifier">config</span>.<span class="ruby-identifier">log</span> = <span class="ruby-keyword">false</span>
+    <span class="ruby-identifier">response</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">request</span>(<span class="ruby-value">:execute_command_using_attachments</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">soap</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">soap</span>.<span class="ruby-identifier">endpoint</span> = <span class="ruby-node">&quot;#{@url}/services/CLITunnelService&quot;</span>
+      <span class="ruby-identifier">soap</span>.<span class="ruby-identifier">header</span> = {<span class="ruby-string">&quot;ins1:sessionId&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@session_id</span>}
+      <span class="ruby-identifier">body_details</span> = { <span class="ruby-value">:nameSpace</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">namespace</span>, <span class="ruby-value">:commandName</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">command</span>, <span class="ruby-value">:commandArguments</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">args</span> }
+      <span class="ruby-identifier">body_details</span>.<span class="ruby-identifier">merge!</span>({<span class="ruby-value">:payload</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">payload</span>}) <span class="ruby-keyword">if</span> <span class="ruby-identifier">payload</span>
+      <span class="ruby-identifier">soap</span>.<span class="ruby-identifier">body</span> = <span class="ruby-identifier">body_details</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-node">&quot;ERROR: SoapError: #{e.message}\n#{e.backtrace}&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">response</span>.<span class="ruby-identifier">body</span>[<span class="ruby-value">:execute_command_using_attachments_response</span>][<span class="ruby-value">:return</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- execute_cli_command_using_attachments-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- execute_cli_command_using_attachments-method -->
+
+    
+      <div id="method-i-execute_job_with_results" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">execute_job_with_results</span><span
+            class="method-args">(job_db_key, results = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Executes a Job in <a href="BAA.html">BAA</a> and returns detailed results</p>
+
+<h4 id="method-i-execute_job_with_results-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>job_db_key</code> - db_key of job</p>
+</li><li>
+<p><code>results</code> - hash of existing results to add to</p>
+</li></ul>
+
+<h4 id="method-i-execute_job_with_results-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of job results, includes - job_run_id, job_status</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="execute_job_with_results-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 827</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">execute_job_with_results</span>(<span class="ruby-identifier">job_db_key</span>, <span class="ruby-identifier">results</span> = {})
+  <span class="ruby-identifier">job_url</span> = <span class="ruby-identifier">baa_soap_db_key_to_rest_uri</span>(<span class="ruby-identifier">job_db_key</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Could not fetch REST URI for job: #{job_db_key}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">job_url</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">job_result</span> = <span class="ruby-identifier">execute_job</span>(<span class="ruby-identifier">job_url</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Could run specified job, did not get a valid response from server&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">job_result</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">execution_status</span> = <span class="ruby-string">&quot;_SUCCESSFULLY&quot;</span>
+  <span class="ruby-identifier">execution_status</span> = <span class="ruby-string">&quot;_WITH_WARNINGS&quot;</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">job_result</span>[<span class="ruby-string">&quot;had_warnings&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;true&quot;</span>)
+  <span class="ruby-keyword">if</span> (<span class="ruby-identifier">job_result</span>[<span class="ruby-string">&quot;had_errors&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;true&quot;</span>)
+    <span class="ruby-identifier">execution_status</span> = <span class="ruby-string">&quot;_WITH_ERRORS&quot;</span>
+    <span class="ruby-identifier">log</span>(<span class="ruby-string">&quot;Job Execution failed: Please check job logs for errors&quot;</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">results</span>[<span class="ruby-string">&quot;status&quot;</span>] = <span class="ruby-identifier">job_result</span>[<span class="ruby-string">&quot;status&quot;</span>] <span class="ruby-operator">+</span> <span class="ruby-identifier">execution_status</span>
+  <span class="ruby-identifier">job_run_url</span> = <span class="ruby-identifier">job_result</span>[<span class="ruby-string">&quot;job_run_url&quot;</span>]
+  <span class="ruby-identifier">results</span>[<span class="ruby-string">&quot;job_run_url&quot;</span>] = <span class="ruby-identifier">job_run_url</span>
+  <span class="ruby-identifier">job_run_id</span> = <span class="ruby-identifier">get_job_run_id</span>(<span class="ruby-identifier">job_run_url</span>)
+  <span class="ruby-identifier">results</span>[<span class="ruby-string">&quot;job_run_id&quot;</span>] = <span class="ruby-identifier">job_run_id</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Could not fetch job_run_id&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">job_run_id</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">job_result_url</span> = <span class="ruby-identifier">get_job_result_url</span>(<span class="ruby-identifier">job_run_url</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Could not fetch job_result_url&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">job_result_url</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">job_result</span> = <span class="ruby-identifier">get_per_target_results</span>(<span class="ruby-identifier">job_result_url</span>)
+  <span class="ruby-identifier">results</span>[<span class="ruby-string">&quot;target_status&quot;</span>] = <span class="ruby-identifier">job_result</span>
+  <span class="ruby-identifier">results</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- execute_job_with_results-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- execute_job_with_results-method -->
+
+    
+      <div id="method-i-execute_nsh_script_job" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">execute_nsh_script_job</span><span
+            class="method-args">(job_name, group_path, job_params, targets, target_type = "server")</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Executes an <a href="NSH.html">NSH</a> Script Job in <a
+href="BAA.html">BAA</a> to target servers</p>
+
+<h4 id="method-i-execute_nsh_script_job-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>job_name</code> - name for package (and template)</p>
+</li><li>
+<p><code>group_path</code> - path in Blade for job</p>
+</li><li>
+<p><code>job_params</code> - array of params (in order) for script job</p>
+</li><li>
+<p><code>targets</code> - array of servers or smartgroups</p>
+</li><li>
+<p><code>target_type</code> - server/group type of server target</p>
+</li></ul>
+
+<h4 id="method-i-execute_nsh_script_job-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of job results, includes - job_run_id, job_status</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="execute_nsh_script_job-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 794</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">execute_nsh_script_job</span>(<span class="ruby-identifier">job_name</span>, <span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">job_params</span>, <span class="ruby-identifier">targets</span>, <span class="ruby-identifier">target_type</span> = <span class="ruby-string">&quot;server&quot;</span>)
+  <span class="ruby-identifier">result</span> = {<span class="ruby-string">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ERROR&quot;</span>}
+  <span class="ruby-identifier">job_type</span> = <span class="ruby-string">&quot;NSHScriptJob&quot;</span>
+  <span class="ruby-identifier">ss_job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-identifier">job_type</span>,<span class="ruby-string">&quot;getDBKeyByGroupAndName&quot;</span>,[<span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">job_name</span>])
+  <span class="ruby-identifier">ss_job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;Job&quot;</span>,<span class="ruby-string">&quot;clearTargetServers&quot;</span>,[<span class="ruby-identifier">ss_job_key</span>]) <span class="ruby-keyword">if</span> <span class="ruby-identifier">target_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;server&quot;</span>
+  <span class="ruby-identifier">ss_job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;Job&quot;</span>,<span class="ruby-string">&quot;clearTargetGroups&quot;</span>,[<span class="ruby-identifier">ss_job_key</span>]) <span class="ruby-keyword">if</span> <span class="ruby-identifier">target_type</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;server&quot;</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: cannot clear targets: #{ss_job_key}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ss_job_key</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-identifier">ss_job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;Job&quot;</span>,<span class="ruby-string">&quot;addTargetServers&quot;</span>,[<span class="ruby-identifier">ss_job_key</span>,<span class="ruby-identifier">targets</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,&quot;</span>)])  <span class="ruby-keyword">if</span> <span class="ruby-identifier">target_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;server&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">targets</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>
+  <span class="ruby-identifier">ss_job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;Job&quot;</span>,<span class="ruby-string">&quot;addTargetGroups&quot;</span>,[<span class="ruby-identifier">ss_job_key</span>,<span class="ruby-identifier">targets</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,&quot;</span>)])  <span class="ruby-keyword">if</span> <span class="ruby-identifier">target_type</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;server&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">targets</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>
+  <span class="ruby-identifier">ss_job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;Job&quot;</span>,<span class="ruby-string">&quot;addTargetServer&quot;</span>,[<span class="ruby-identifier">ss_job_key</span>,<span class="ruby-identifier">targets</span>.<span class="ruby-identifier">join</span>])  <span class="ruby-keyword">if</span> <span class="ruby-identifier">target_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;server&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">targets</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+  <span class="ruby-identifier">ss_job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;Job&quot;</span>,<span class="ruby-string">&quot;addTargetGroup&quot;</span>,[<span class="ruby-identifier">ss_job_key</span>,<span class="ruby-identifier">targets</span>.<span class="ruby-identifier">join</span>])  <span class="ruby-keyword">if</span> <span class="ruby-identifier">target_type</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;server&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">targets</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: cannot add targets: #{ss_job_key}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ss_job_key</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-identifier">message_box</span>(<span class="ruby-string">&quot;Executing NSHScript Job&quot;</span>,<span class="ruby-string">&quot;title&quot;</span>)
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;#{job_name} in group: #{group_path}&quot;</span>
+  <span class="ruby-identifier">param_result</span> = <span class="ruby-identifier">set_nsh_script_params</span>(<span class="ruby-identifier">job_name</span>, <span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">job_params</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: cannot set job parameters: #{param_result}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">param_result</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-identifier">execute_result</span> = <span class="ruby-identifier">execute_job_with_results</span>(<span class="ruby-identifier">param_result</span>[<span class="ruby-string">&quot;job_db_key&quot;</span>], <span class="ruby-identifier">result</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: cannot add targets: #{execute_result.insepct}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">execute_result</span>[<span class="ruby-string">&quot;status&quot;</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;result&quot;</span>] = <span class="ruby-identifier">execute_result</span>
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;status&quot;</span>] = <span class="ruby-string">&quot;SUCCESS&quot;</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- execute_nsh_script_job-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- execute_nsh_script_job-method -->
+
+    
+      <div id="method-i-export_deploy_job_results" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">export_deploy_job_results</span><span
+            class="method-args">(job_folder, job_name, job_run_id, output_file = "/tmp/test.csv")</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Exports DeployJob results to specified file</p>
+
+<h4 id="method-i-export_deploy_job_results-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>job_folder</code> - group folder of job</p>
+</li><li>
+<p><code>job_name</code> - name of job</p>
+</li><li>
+<p><code>job_run_id</code> - if of the job run</p>
+</li><li>
+<p><code>output_file</code> - file to export to</p>
+</li></ul>
+
+<h4 id="method-i-export_deploy_job_results-label-Returns">Returns</h4>
+<ul><li>
+<p>returnResult from CLI command (BLCLI Utility|exportDeployRun)</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="export_deploy_job_results-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 603</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">export_deploy_job_results</span>(<span class="ruby-identifier">job_folder</span>, <span class="ruby-identifier">job_name</span>, <span class="ruby-identifier">job_run_id</span>, <span class="ruby-identifier">output_file</span> = <span class="ruby-string">&quot;/tmp/test.csv&quot;</span>)
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">execute_cli_command_using_attachments</span>(<span class="ruby-string">&quot;Utility&quot;</span>, <span class="ruby-string">&quot;exportDeployRun&quot;</span>, [<span class="ruby-identifier">job_folder</span>, <span class="ruby-identifier">job_name</span>, <span class="ruby-identifier">job_run_id</span>, <span class="ruby-identifier">output_file</span>])
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">result</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:attachment</span>))
+    <span class="ruby-identifier">attachment</span> = <span class="ruby-identifier">result</span>[<span class="ruby-value">:attachment</span>]
+    <span class="ruby-identifier">csv_data</span> = <span class="ruby-constant">Base64</span>.<span class="ruby-identifier">decode64</span>(<span class="ruby-identifier">attachment</span>)
+    <span class="ruby-identifier">fil</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">output_file</span>,<span class="ruby-string">&quot;w+&quot;</span>)
+    <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">csv_data</span>
+    <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">flush</span>
+    <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">close</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-string">&quot;Success&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-string">&quot;Failed to export results&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">nil</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- export_deploy_job_results-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- export_deploy_job_results-method -->
+
+    
+      <div id="method-i-get_group_items" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_group_items</span><span
+            class="method-args">(group_path, obj_type = "DeployJob", return_contents = true, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the object in a group_path</p>
+
+<h4 id="method-i-get_group_items-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>group_path</code> - path to group</p>
+</li><li>
+<p><code>obj_type</code> - base for group
+[DeployJob/BlPackage/ComponentTemplates]</p>
+</li><li>
+<p><code>return_contents</code> - true to return a list of items in the group,
+false returns the full object</p>
+</li><li>
+<p><code>options</code> - hash of options includes: verbose</p>
+</li></ul>
+
+<h4 id="method-i-get_group_items-label-Returns">Returns</h4>
+<ul><li>
+<p>array of group items or hash of group_object</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="get_group_items-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 174</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_group_items</span>(<span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">obj_type</span> = <span class="ruby-string">&quot;DeployJob&quot;</span>, <span class="ruby-identifier">return_contents</span> = <span class="ruby-keyword">true</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">group_path</span> = <span class="ruby-node">&quot;#{group_path}/&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">group_path</span>.<span class="ruby-identifier">end_with?</span>(<span class="ruby-string">&quot;/&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">return_contents</span>
+  <span class="ruby-identifier">group_path</span> = <span class="ruby-node">&quot;/#{group_path}&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">group_path</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-string">&quot;/&quot;</span>)
+  <span class="ruby-identifier">url</span> = <span class="ruby-node">&quot;#{@url}/group/#{obj_to_url_item(obj_type)}#{group_path}#{bl_auth}&quot;</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">rest_call</span>(<span class="ruby-constant">URI</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-identifier">url</span>), <span class="ruby-string">&quot;get&quot;</span>)
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;RAW RESULT\n#{url}\n#{result.inspect}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;verbose&quot;</span>, <span class="ruby-keyword">false</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-node">&quot;ERROR: #{result[&quot;data&quot;][&quot;ErrorResponse&quot;][&quot;Error&quot;]}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;data&quot;</span>].<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">&quot;ErrorResponse&quot;</span>)
+<span class="ruby-keyword">return</span> [] <span class="ruby-keyword">if</span> <span class="ruby-identifier">return_contents</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;data&quot;</span>][<span class="ruby-string">&quot;GroupChildrenResponse&quot;</span>][<span class="ruby-string">&quot;GroupChildren&quot;</span>][<span class="ruby-string">&quot;PropertySetInstances&quot;</span>].<span class="ruby-identifier">nil?</span> 
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;data&quot;</span>][<span class="ruby-string">&quot;GroupChildrenResponse&quot;</span>][<span class="ruby-string">&quot;GroupChildren&quot;</span>][<span class="ruby-string">&quot;PropertySetInstances&quot;</span>][<span class="ruby-string">&quot;Elements&quot;</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">return_contents</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;data&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_group_items-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_group_items-method -->
+
+    
+      <div id="method-i-get_server_id" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_server_id</span><span
+            class="method-args">(server_name)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the id of a server</p>
+
+<h4 id="method-i-get_server_id-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>server_name</code> - name of server</p>
+</li></ul>
+
+<h4 id="method-i-get_server_id-label-Returns">Returns</h4>
+<ul><li>
+<p>server_id (BLCLI - Server|getServerIdByName)</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="get_server_id-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 420</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_server_id</span>(<span class="ruby-identifier">server_name</span>)
+  <span class="ruby-identifier">namespace</span> = <span class="ruby-string">&quot;Server&quot;</span>
+  <span class="ruby-identifier">command</span> = <span class="ruby-string">&quot;getServerIdByName&quot;</span>
+  <span class="ruby-identifier">args</span> = [
+    <span class="ruby-identifier">server_name</span>
+    ]
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">command</span>, <span class="ruby-identifier">args</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_server_id-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_server_id-method -->
+
+    
+      <div id="method-i-get_session_id" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_session_id</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets a new session id via SOAP login</p>
+
+<h4 id="method-i-get_session_id-label-Returns">Returns</h4>
+<ul><li>
+<p><a href="BAA.html#method-i-session_id">#session_id</a></p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="get_session_id-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 47</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_session_id</span>
+  <span class="ruby-ivar">@session_id</span> = <span class="ruby-constant">BaaUtilities</span>.<span class="ruby-identifier">baa_soap_login</span>(<span class="ruby-ivar">@url</span>, <span class="ruby-ivar">@username</span>, <span class="ruby-ivar">@password</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Could not login to BAA Cli Tunnel Service&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@session_id</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-ivar">@session_time</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_session_id-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_session_id-method -->
+
+    
+      <div id="method-i-group_path_exists" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">group_path_exists</span><span
+            class="method-args">(group_path, obj_type = "Jobs")</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Verifies that a path exists</p>
+
+<h4 id="method-i-group_path_exists-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>group_path</code> - path to group</p>
+</li><li>
+<p><code>obj_type</code> - base for group
+[DeployJob/BlPackage/ComponentTemplates]</p>
+</li></ul>
+
+<h4 id="method-i-group_path_exists-label-Returns">Returns</h4>
+<ul><li>
+<p>group_id or “ERROR”</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="group_path_exists-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 196</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">group_path_exists</span>(<span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">obj_type</span> = <span class="ruby-string">&quot;Jobs&quot;</span>)
+  <span class="ruby-identifier">res</span> = <span class="ruby-identifier">get_group_items</span>(<span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">obj_type</span>, <span class="ruby-keyword">false</span>)
+  <span class="ruby-keyword">return</span>(<span class="ruby-string">&quot;ERROR&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-identifier">group_id</span> = <span class="ruby-identifier">res</span>[<span class="ruby-string">&quot;GroupResponse&quot;</span>][<span class="ruby-string">&quot;Group&quot;</span>][<span class="ruby-string">&quot;groupId&quot;</span>]
+  <span class="ruby-identifier">group_id</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- group_path_exists-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- group_path_exists-method -->
+
+    
+      <div id="method-i-obj_to_url_item" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">obj_to_url_item</span><span
+            class="method-args">(obj_type, info_type = "folder")</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns the string for url and soap params</p>
+
+<h4 id="method-i-obj_to_url_item-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>obj_type</code> - type of object [BlPackage,DeployJob,Template]</p>
+</li><li>
+<p><code>info_type</code> - object or folder</p>
+</li></ul>
+
+<h4 id="method-i-obj_to_url_item-label-Returns">Returns</h4>
+<ul><li>
+<p>string to use in url</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="obj_to_url_item-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 149</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">obj_to_url_item</span>(<span class="ruby-identifier">obj_type</span>, <span class="ruby-identifier">info_type</span> = <span class="ruby-string">&quot;folder&quot;</span>)
+  <span class="ruby-keyword">case</span> <span class="ruby-identifier">obj_type</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;BlPackage&quot;</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">info_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;folder&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;Depot&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;Depot&quot;</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;DeployJob&quot;</span>, <span class="ruby-string">&quot;Jobs&quot;</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">info_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;folder&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;Jobs&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;Job&quot;</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;Template&quot;</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">info_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;folder&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;Component Templates&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;Template&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">obj_type</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- obj_to_url_item-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- obj_to_url_item-method -->
+
+    
+      <div id="method-i-package_artifacts" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">package_artifacts</span><span
+            class="method-args">(package_name, group_path, artifacts, options)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Packages passed references in <a href="BAA.html">BAA</a> using a component
+template</p>
+
+<pre>* note artifacts all need to reside on the same server</pre>
+
+<h4 id="method-i-package_artifacts-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>package_name</code> - name for package (and template)</p>
+</li><li>
+<p><code>group_path</code> - path in Blade to store package</p>
+</li><li>
+<p><code>artifacts</code> - array of file/nsh paths</p>
+</li><li>
+<p><code>options</code> - hash of options, includes:</p>
+
+<pre>properties (hash of name/values to set),
+staging_server (default is first artifact server)</pre>
+</li></ul>
+
+<h4 id="method-i-package_artifacts-label-Returns">Returns</h4>
+<ul><li>
+<p>package_id</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="package_artifacts-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 634</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">package_artifacts</span>(<span class="ruby-identifier">package_name</span>, <span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">artifacts</span>, <span class="ruby-identifier">options</span>)
+  <span class="ruby-identifier">result</span> = {<span class="ruby-string">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ERROR&quot;</span>, <span class="ruby-string">&quot;group_path&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">group_path</span>, <span class="ruby-string">&quot;package_name&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">package_name</span>}
+  <span class="ruby-identifier">artifact_hash</span> = {}
+  <span class="ruby-identifier">artifact_hash</span> = <span class="ruby-identifier">artifacts</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">artifacts</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)
+  <span class="ruby-identifier">artifact_type</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;artifact_type&quot;</span>, <span class="ruby-string">&quot;file&quot;</span>)
+  <span class="ruby-identifier">artifacts</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">artifact_hash</span>[<span class="ruby-identifier">l</span>] = <span class="ruby-identifier">artifact_type</span> } <span class="ruby-keyword">if</span> <span class="ruby-identifier">artifacts</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
+  <span class="ruby-identifier">properties</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;properties&quot;</span>, <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">staging_server</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;staging_server&quot;</span>, <span class="ruby-keyword">nil</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">staging_server</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">pair</span> = <span class="ruby-identifier">split_nsh_path</span>(<span class="ruby-identifier">artifact_hash</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">first</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Command_Failed: no staging server in options or artifacts&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">pair</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">2</span>
+    <span class="ruby-identifier">staging_server</span> = <span class="ruby-identifier">pair</span>[<span class="ruby-value">0</span>]
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;staging_server&quot;</span>] = <span class="ruby-identifier">staging_server</span>
+  <span class="ruby-identifier">group_id</span> = <span class="ruby-identifier">ensure_group_path</span>(<span class="ruby-identifier">group_path</span>, <span class="ruby-string">&quot;Template&quot;</span>)
+  <span class="ruby-comment"># group_items = get_group_items(group_path, &quot;Template&quot;, true, options)</span>
+  <span class="ruby-identifier">templates_in_path</span> = <span class="ruby-identifier">get_group_items</span>(<span class="ruby-identifier">group_path</span>, <span class="ruby-string">&quot;Template&quot;</span>, <span class="ruby-keyword">true</span>, <span class="ruby-identifier">options</span>)
+  <span class="ruby-identifier">cur_templates</span> = <span class="ruby-identifier">templates_in_path</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>[<span class="ruby-string">&quot;name&quot;</span>] }
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">cur_templates</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">package_name</span>)
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;#=&gt; Component Template exists: #{package_name}&quot;</span>
+    <span class="ruby-identifier">template_id</span> = <span class="ruby-identifier">templates_in_path</span>[<span class="ruby-identifier">cur_templates</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">package_name</span>)][<span class="ruby-string">&quot;dbKey&quot;</span>]
+  <span class="ruby-keyword">else</span> <span class="ruby-comment"># Create a new one</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;#=&gt; Create Component Template: #{package_name}&quot;</span>
+    <span class="ruby-identifier">template_id</span> = <span class="ruby-identifier">create_empty_template</span>(<span class="ruby-identifier">package_name</span>, <span class="ruby-identifier">group_id</span>)
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\tApplying properties...to template with id #{template_id}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">properties</span>
+    <span class="ruby-identifier">template_id</span> = <span class="ruby-identifier">set_template_properties</span>(<span class="ruby-identifier">package_name</span>, <span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">properties</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">properties</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\tAdd content to template #{template_id}\n&quot;</span>
+  <span class="ruby-identifier">template_id</span> = <span class="ruby-identifier">add_template_content</span>(<span class="ruby-identifier">template_id</span>, <span class="ruby-identifier">artifact_hash</span>)
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;template_db_key&quot;</span>] = <span class="ruby-identifier">template_id</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: #{template_id}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">template_id</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;#=&gt; Create component package: #{staging_server}\n&quot;</span>
+  <span class="ruby-identifier">depot_group_id</span> = <span class="ruby-identifier">ensure_group_path</span>(<span class="ruby-identifier">group_path</span>, <span class="ruby-string">&quot;BlPackage&quot;</span>)
+  <span class="ruby-identifier">package_id</span> = <span class="ruby-identifier">create_component_package</span>(<span class="ruby-identifier">package_name</span>, <span class="ruby-identifier">depot_group_id</span>, <span class="ruby-identifier">template_id</span>, <span class="ruby-identifier">staging_server</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: #{package_id}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">package_id</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;status&quot;</span>] = <span class="ruby-string">&quot;SUCCESS&quot;</span>
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;package_id&quot;</span>] = <span class="ruby-identifier">package_id</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- package_artifacts-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- package_artifacts-method -->
+
+    
+      <div id="method-i-session_id" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">session_id</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns current session id</p>
+
+<h4 id="method-i-session_id-label-Returns">Returns</h4>
+<ul><li>
+<p><a href="BAA.html#method-i-session_id">#session_id</a></p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="session_id-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 59</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">session_id</span>
+  <span class="ruby-ivar">@session_id</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- session_id-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- session_id-method -->
+
+    
+      <div id="method-i-set_job_properties" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_job_properties</span><span
+            class="method-args">(job_name, group_path, props)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Sets override package properties on a Job</p>
+
+<h4 id="method-i-set_job_properties-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>job_name</code> - dbkey for component template</p>
+</li><li>
+<p><code>group_path</code> - group_path</p>
+</li><li>
+<p><code>props</code> - hash of name/values for properties to set</p>
+</li></ul>
+
+<h4 id="method-i-set_job_properties-label-Returns">Returns</h4>
+<ul><li>
+<p>text of all property adds from CLI command (BLCLI
+DeployJob|setOverriddenParameterValue)</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="set_job_properties-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 517</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_job_properties</span>(<span class="ruby-identifier">job_name</span>, <span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">props</span>)
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">result</span> = []
+    <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Setting package properties on job:&quot;</span>
+    <span class="ruby-identifier">props</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prop</span>,<span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t#{prop} =&gt; #{val}&quot;</span>
+      <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-string">&quot;DeployJob&quot;</span>, <span class="ruby-string">&quot;setOverriddenParameterValue&quot;</span>,
+              [
+                  <span class="ruby-identifier">group_path</span>,     <span class="ruby-comment">#groupName</span>
+                  <span class="ruby-identifier">job_name</span>,       <span class="ruby-comment">#jobName</span>
+                  <span class="ruby-identifier">prop</span>,           <span class="ruby-comment">#parameterName</span>
+                  <span class="ruby-identifier">val</span>     <span class="ruby-comment">#valueAsString</span>
+              ])
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e1</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Could not set property values: #{e1.message}&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_job_properties-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_job_properties-method -->
+
+    
+      <div id="method-i-set_nsh_script_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_nsh_script_params</span><span
+            class="method-args">(job_name, group_path, job_params,clear_params=true)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Sets parameters on an <a href="NSH.html">NSH</a> Script Job in <a
+href="BAA.html">BAA</a></p>
+
+<h4 id="method-i-set_nsh_script_params-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>job_name</code> - name for package (and template)</p>
+</li><li>
+<p><code>group_path</code> - path in Blade for job</p>
+</li><li>
+<p><code>job_params</code> - array of params (in order) for script job</p>
+</li></ul>
+
+<h4 id="method-i-set_nsh_script_params-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of job results</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="set_nsh_script_params-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 862</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_nsh_script_params</span>(<span class="ruby-identifier">job_name</span>, <span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">job_params</span>,<span class="ruby-identifier">clear_params</span>=<span class="ruby-keyword">true</span>)
+  <span class="ruby-identifier">result</span> = {<span class="ruby-string">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ERROR&quot;</span>}
+  <span class="ruby-identifier">job_type</span> = <span class="ruby-string">&quot;NSHScriptJob&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Executing NSH Script Job&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Job: #{job_name}, In: #{group_path}&quot;</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">clear_params</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;\tRemove parameters&quot;</span>
+    <span class="ruby-identifier">ss_job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-identifier">job_type</span>,<span class="ruby-string">&quot;clearNSHScriptParameterValuesByGroupAndName&quot;</span>,[<span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">job_name</span>])
+    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: cannot clear parameter values: #{ss_job_key}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ss_job_key</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">job_params</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">param</span>, <span class="ruby-identifier">idx</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\tAdding param ##{idx}: #{param}&quot;</span>
+    <span class="ruby-identifier">ss_job_key</span> = <span class="ruby-identifier">execute_cli_command</span>(<span class="ruby-identifier">job_type</span>,<span class="ruby-string">&quot;addNSHScriptParameterValueByGroupAndName&quot;</span>,[<span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">job_name</span>, <span class="ruby-identifier">idx</span>, <span class="ruby-identifier">param</span>])
+    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: cannot clear parameter values: #{ss_job_key}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ss_job_key</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;ERROR&quot;</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;job_db_key&quot;</span>] = <span class="ruby-identifier">ss_job_key</span>
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;status&quot;</span>] = <span class="ruby-string">&quot;SUCCESS&quot;</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_nsh_script_params-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_nsh_script_params-method -->
+
+    
+      <div id="method-i-set_template_properties" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_template_properties</span><span
+            class="method-args">(template_name, group_path, props, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Sets properties on a ComponentTemplate</p>
+
+<h4 id="method-i-set_template_properties-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>template_name</code> - name for component template</p>
+</li><li>
+<p><code>group_path</code> - group_path</p>
+</li><li>
+<p><code>props</code> - hash of name/values for properties to set</p>
+</li><li>
+<p><code>options</code> - hash of options (see BLCLI docs)</p>
+</li></ul>
+
+<h4 id="method-i-set_template_properties-label-Returns">Returns</h4>
+<ul><li>
+<p>returnResult from CLI command (BLCLI Template|addLocalParameter)</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="set_template_properties-source">
+            <pre><span class="ruby-comment"># File framework/lib/baa.rb, line 549</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_template_properties</span>(<span class="ruby-identifier">template_name</span>, <span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">props</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Setting template properties:&quot;</span>
+    <span class="ruby-identifier">props</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prop</span>,<span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t#{prop} =&gt; #{val}&quot;</span>
+      <span class="ruby-identifier">result</span> = <span class="ruby-identifier">add_template_property</span>(<span class="ruby-identifier">template_name</span>, <span class="ruby-identifier">group_path</span>, <span class="ruby-identifier">prop</span>, <span class="ruby-identifier">val</span>, <span class="ruby-identifier">options</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e1</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Could not set property values: #{e1.message}&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_template_properties-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_template_properties-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+

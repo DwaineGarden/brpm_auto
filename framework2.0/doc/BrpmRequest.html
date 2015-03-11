@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>class BrpmRequest - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>framework/lib/rest.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link"><a href="BrpmRest.html">BrpmRest</a>
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-new">::new</a>
+    
+    <li><a href="#method-i-app">#app</a>
+    
+    <li><a href="#method-i-app_components">#app_components</a>
+    
+    <li><a href="#method-i-app_environments">#app_environments</a>
+    
+    <li><a href="#method-i-app_routes">#app_routes</a>
+    
+    <li><a href="#method-i-get_list">#get_list</a>
+    
+    <li><a href="#method-i-groups">#groups</a>
+    
+    <li><a href="#method-i-installed_components">#installed_components</a>
+    
+    <li><a href="#method-i-owner">#owner</a>
+    
+    <li><a href="#method-i-plan">#plan</a>
+    
+    <li><a href="#method-i-plan_routes">#plan_routes</a>
+    
+    <li><a href="#method-i-plan_stages">#plan_stages</a>
+    
+    <li><a href="#method-i-request">#request</a>
+    
+    <li><a href="#method-i-requestor">#requestor</a>
+    
+    <li><a href="#method-i-route_environments">#route_environments</a>
+    
+    <li><a href="#method-i-stage">#stage</a>
+    
+    <li><a href="#method-i-steps">#steps</a>
+    
+    <li><a href="#method-i-update_state">#update_state</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Jira.html">Jira</a>
+  
+    <li><a href="./Jira/JiraClient.html">Jira::JiraClient</a>
+  
+    <li><a href="./AutomationHeader.html">AutomationHeader</a>
+  
+    <li><a href="./BrpmAutomation.html">BrpmAutomation</a>
+  
+    <li><a href="./BrpmRequest.html">BrpmRequest</a>
+  
+    <li><a href="./BrpmRest.html">BrpmRest</a>
+  
+    <li><a href="./DispatchBAA.html">DispatchBAA</a>
+  
+    <li><a href="./DispatchBase.html">DispatchBase</a>
+  
+    <li><a href="./DispatchNSH.html">DispatchNSH</a>
+  
+    <li><a href="./DispatchSSH.html">DispatchSSH</a>
+  
+    <li><a href="./Git.html">Git</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Param.html">Param</a>
+  
+    <li><a href="./ResourceFramework.html">ResourceFramework</a>
+  
+    <li><a href="./Svn.html">Svn</a>
+  
+    <li><a href="./TransportBAA.html">TransportBAA</a>
+  
+    <li><a href="./TransportNSH.html">TransportNSH</a>
+  
+    <li><a href="./TransportSSH.html">TransportSSH</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class BrpmRequest</h1>
+
+  <div id="description" class="description">
+    
+<p>Class for interacting with requests</p>
+
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(id, base_url, params, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Initializes an instance of the class</p>
+
+<h4 id="method-c-new-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>id</code> - id of the request to work with</p>
+</li><li>
+<p><code>base_url</code> - url of brpm server</p>
+</li><li>
+<p><code>options</code> - hash of options (see rest_call for description)</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 307</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">id</span>, <span class="ruby-identifier">base_url</span>, <span class="ruby-identifier">params</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-ivar">@id</span> = <span class="ruby-identifier">id</span>
+  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">base_url</span>, <span class="ruby-identifier">params</span>,  <span class="ruby-identifier">options</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;requests&quot;</span>, <span class="ruby-ivar">@id</span>)
+  <span class="ruby-ivar">@request</span> = <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;data&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-app" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">app</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the app associated with the request</p>
+
+<h4 id="method-i-app-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of app information</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="app-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 366</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">app</span>
+  <span class="ruby-ivar">@request</span>[<span class="ruby-string">&quot;apps&quot;</span>].<span class="ruby-identifier">first</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- app-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- app-method -->
+
+    
+      <div id="method-i-app_components" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">app_components</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the components associated with request application</p>
+
+<h4 id="method-i-app_components-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of components</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="app_components-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 386</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">app_components</span>
+  <span class="ruby-identifier">installed_components</span> <span class="ruby-keyword">unless</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@installed_components</span>)
+  <span class="ruby-ivar">@installed_components</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>[<span class="ruby-string">&quot;application_component&quot;</span>][<span class="ruby-string">&quot;component&quot;</span>]}.<span class="ruby-identifier">uniq</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- app_components-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- app_components-method -->
+
+    
+      <div id="method-i-app_environments" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">app_environments</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the components associated with request application</p>
+
+<h4 id="method-i-app_environments-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of components</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="app_environments-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 396</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">app_environments</span>
+  <span class="ruby-identifier">installed_components</span> <span class="ruby-keyword">unless</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@installed_components</span>)
+  <span class="ruby-ivar">@installed_components</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>[<span class="ruby-string">&quot;application_environment&quot;</span>][<span class="ruby-string">&quot;environment&quot;</span>]}.<span class="ruby-identifier">uniq</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- app_environments-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- app_environments-method -->
+
+    
+      <div id="method-i-app_routes" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">app_routes</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the routes available for the app</p>
+
+<h4 id="method-i-app_routes-label-Returns">Returns</h4>
+<ul><li>
+<p>array of hashes of routes</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="app_routes-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 455</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">app_routes</span>
+  <span class="ruby-identifier">res</span> = <span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;apps&quot;</span>, <span class="ruby-identifier">app</span>[<span class="ruby-string">&quot;id&quot;</span>])
+  <span class="ruby-identifier">res</span>[<span class="ruby-string">&quot;data&quot;</span>][<span class="ruby-string">&quot;routes&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- app_routes-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- app_routes-method -->
+
+    
+      <div id="method-i-get_list" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_list</span><span
+            class="method-args">(filter_param)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets a list of requests based on a filter</p>
+
+<h4 id="method-i-get_list-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>filter_param</code> - filter for requests there are extensive filter
+options ex: <a href="http://"planned_end_date"">filters</a>&gt;2013-04-22</p>
+</li></ul>
+
+<h4 id="method-i-get_list-label-Returns">Returns</h4>
+<ul><li>
+<p>array of request hashs</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="get_list-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 324</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_list</span>(<span class="ruby-identifier">filter_param</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rest_call</span>(<span class="ruby-identifier">rest_url</span>(<span class="ruby-string">&quot;requests&quot;</span>, <span class="ruby-ivar">@id</span>, <span class="ruby-identifier">filter_param</span>), <span class="ruby-string">&quot;get&quot;</span>)
+  <span class="ruby-ivar">@request</span> = <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;data&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_list-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_list-method -->
+
+    
+      <div id="method-i-groups" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">groups</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the groups available</p>
+
+<h4 id="method-i-groups-label-Returns">Returns</h4>
+<ul><li>
+<p>array of hashes of groups</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="groups-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 493</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">groups</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;groups&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- groups-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- groups-method -->
+
+    
+      <div id="method-i-installed_components" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">installed_components</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the <a
+href="BrpmRequest.html#method-i-installed_components">#installed_components</a>
+associated with request application</p>
+
+<h4 id="method-i-installed_components-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of <a
+href="BrpmRequest.html#method-i-installed_components">#installed_components</a></p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="installed_components-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 375</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">installed_components</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@installed_components</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@installed_components</span>)
+  <span class="ruby-identifier">res</span> = <span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;installed_components&quot;</span>, <span class="ruby-keyword">nil</span>, {<span class="ruby-string">&quot;filters&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;filters[app_name]=#{url_encode(app[&quot;name&quot;])}&quot;</span>})
+  <span class="ruby-ivar">@installed_components</span> = <span class="ruby-identifier">res</span>[<span class="ruby-string">&quot;data&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- installed_components-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- installed_components-method -->
+
+    
+      <div id="method-i-owner" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">owner</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the owner of the request</p>
+
+<h4 id="method-i-owner-label-Returns">Returns</h4>
+<ul><li>
+<p>username of request owner</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="owner-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 406</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">owner</span>
+  <span class="ruby-identifier">request</span>[<span class="ruby-string">&quot;owner&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- owner-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- owner-method -->
+
+    
+      <div id="method-i-plan" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">plan</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the plan of the request</p>
+
+<h4 id="method-i-plan-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of plan or nil if not part of a plan</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="plan-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 424</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">plan</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">nil</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">request</span>[<span class="ruby-string">&quot;plan_member&quot;</span>].<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">plan_id</span> = <span class="ruby-identifier">request</span>[<span class="ruby-string">&quot;plan_member&quot;</span>][<span class="ruby-string">&quot;plan&quot;</span>][<span class="ruby-string">&quot;id&quot;</span>]
+  <span class="ruby-identifier">res</span> = <span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;plans&quot;</span>, <span class="ruby-identifier">plan_id</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- plan-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- plan-method -->
+
+    
+      <div id="method-i-plan_routes" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">plan_routes</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the routes available for the app/plan</p>
+
+<h4 id="method-i-plan_routes-label-Returns">Returns</h4>
+<ul><li>
+<p>array of hashes of plan routes</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="plan_routes-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 445</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">plan_routes</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">nil</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">request</span>[<span class="ruby-string">&quot;plan_member&quot;</span>].<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">plan</span>[<span class="ruby-string">&quot;plan_routes&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- plan_routes-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- plan_routes-method -->
+
+    
+      <div id="method-i-plan_stages" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">plan_stages</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the plan stages available for the plan</p>
+
+<h4 id="method-i-plan_stages-label-Returns">Returns</h4>
+<ul><li>
+<p>array of hashes of plan stages</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="plan_stages-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 484</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">plan_stages</span>
+  <span class="ruby-identifier">plan</span>[<span class="ruby-string">&quot;plan_stages&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- plan_stages-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- plan_stages-method -->
+
+    
+      <div id="method-i-request" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">request</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Provides a host status for the passed targets</p>
+
+<h4 id="method-i-request-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of request</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="request-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 357</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">request</span>
+  <span class="ruby-ivar">@request</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- request-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- request-method -->
+
+    
+      <div id="method-i-requestor" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">requestor</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the requestor of the request</p>
+
+<h4 id="method-i-requestor-label-Returns">Returns</h4>
+<ul><li>
+<p>username of requestor</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="requestor-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 415</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">requestor</span>
+  <span class="ruby-identifier">request</span>[<span class="ruby-string">&quot;requestor&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- requestor-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- requestor-method -->
+
+    
+      <div id="method-i-route_environments" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">route_environments</span><span
+            class="method-args">(route_id)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the environments available for the route</p>
+
+<h4 id="method-i-route_environments-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>route_id</code> - id of the route</p>
+</li></ul>
+
+<h4 id="method-i-route_environments-label-Returns">Returns</h4>
+<ul><li>
+<p>array of environments for the route</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="route_environments-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 469</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">route_environments</span>(<span class="ruby-identifier">route_id</span>)
+  <span class="ruby-comment"># Returns environment list for a particular route</span>
+  <span class="ruby-identifier">envs</span> = {}
+  <span class="ruby-identifier">res</span> = <span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;routes&quot;</span>, <span class="ruby-identifier">route_id</span>)
+  <span class="ruby-identifier">res</span>[<span class="ruby-string">&quot;data&quot;</span>][<span class="ruby-string">&quot;route_gates&quot;</span>].<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">gate</span>,<span class="ruby-identifier">idx</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">envs</span>[<span class="ruby-identifier">gate</span>[<span class="ruby-string">&quot;environment&quot;</span>][<span class="ruby-string">&quot;name&quot;</span>]] = {<span class="ruby-string">&quot;id&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">gate</span>[<span class="ruby-string">&quot;environment&quot;</span>][<span class="ruby-string">&quot;id&quot;</span>], <span class="ruby-string">&quot;position&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">idx</span>.<span class="ruby-identifier">to_s</span> }
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">envs</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- route_environments-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- route_environments-method -->
+
+    
+      <div id="method-i-stage" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">stage</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the stage of the plan the request is in</p>
+
+<h4 id="method-i-stage-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of stage</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="stage-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 435</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">stage</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">nil</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">request</span>[<span class="ruby-string">&quot;plan_member&quot;</span>].<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">request</span>[<span class="ruby-string">&quot;plan_member&quot;</span>][<span class="ruby-string">&quot;stage&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- stage-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- stage-method -->
+
+    
+      <div id="method-i-steps" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">steps</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns the steps for the request</p>
+
+<h4 id="method-i-steps-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of steps from request</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="steps-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 334</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">steps</span>
+  <span class="ruby-identifier">steps</span> = <span class="ruby-ivar">@request</span>[<span class="ruby-string">&quot;steps&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- steps-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- steps-method -->
+
+    
+      <div id="method-i-update_state" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update_state</span><span
+            class="method-args">(aasm_event)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Updates the aasm state of the request</p>
+
+<h4 id="method-i-update_state-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>aasm_event</code> - event name [plan, start, problem, resolve]</p>
+</li></ul>
+
+<h4 id="method-i-update_state-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of uppdated request</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="update_state-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 347</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update_state</span>(<span class="ruby-identifier">aasm_event</span>) 
+  <span class="ruby-identifier">request_info</span> = {<span class="ruby-string">&quot;request&quot;</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-string">&quot;aasm_event&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">aasm_event</span> }}
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">update</span>(<span class="ruby-string">&quot;requests&quot;</span>, <span class="ruby-ivar">@id</span>, <span class="ruby-identifier">request_info</span>)    
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- update_state-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- update_state-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+

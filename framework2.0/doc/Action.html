@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>class Action - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>framework/lib/action.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link"><a href="BrpmFramework.html">BrpmFramework</a>
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-new">::new</a>
+    
+    <li><a href="#method-i-action_platform">#action_platform</a>
+    
+    <li><a href="#method-i-brpd_compatibility">#brpd_compatibility</a>
+    
+    <li><a href="#method-i-display_result">#display_result</a>
+    
+    <li><a href="#method-i-get_channel_root">#get_channel_root</a>
+    
+    <li><a href="#method-i-pre_process_action">#pre_process_action</a>
+    
+    <li><a href="#method-i-run-21">#run!</a>
+    
+    <li><a href="#method-i-run_nsh_local-21">#run_nsh_local!</a>
+    
+    <li><a href="#method-i-set_platform_info">#set_platform_info</a>
+    
+    <li><a href="#method-i-set_transfer_properties">#set_transfer_properties</a>
+    
+    <li><a href="#method-i-temp_action_name">#temp_action_name</a>
+    
+    <li><a href="#method-i-transport_payload">#transport_payload</a>
+    
+    <li><a href="#method-i-wrapper_script">#wrapper_script</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Action.html">Action</a>
+  
+    <li><a href="./AutomationHeader.html">AutomationHeader</a>
+  
+    <li><a href="./BAA.html">BAA</a>
+  
+    <li><a href="./BrpmFramework.html">BrpmFramework</a>
+  
+    <li><a href="./BrpmRequest.html">BrpmRequest</a>
+  
+    <li><a href="./BrpmRest.html">BrpmRest</a>
+  
+    <li><a href="./Git.html">Git</a>
+  
+    <li><a href="./Jira.html">Jira</a>
+  
+    <li><a href="./JiraClient.html">JiraClient</a>
+  
+    <li><a href="./NSH.html">NSH</a>
+  
+    <li><a href="./NSHTransport.html">NSHTransport</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Param.html">Param</a>
+  
+    <li><a href="./SrunDispatcher.html">SrunDispatcher</a>
+  
+    <li><a href="./Svn.html">Svn</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class Action</h1>
+
+  <div id="description" class="description">
+    
+<p>Base class for working with actions - e.g. shell and other languages -
+supports BRPD actions</p>
+
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(params_obj, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Initializes an instance of the class</p>
+
+<h4 id="method-c-new-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>params_obj</code> - pass the params object from the main script (@p)</p>
+</li><li>
+<p><code>options</code> - hash of options includes:</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File framework/lib/action.rb, line 14</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">params_obj</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-ivar">@standard_properties</span> = [<span class="ruby-string">&quot;SS_application&quot;</span>, <span class="ruby-string">&quot;SS_component&quot;</span>, <span class="ruby-string">&quot;SS_environment&quot;</span>, <span class="ruby-string">&quot;SS_component_version&quot;</span>, <span class="ruby-string">&quot;request_number&quot;</span>]
+  <span class="ruby-ivar">@p</span> = <span class="ruby-identifier">params_obj</span>
+  <span class="ruby-keyword">super</span> <span class="ruby-ivar">@p</span>
+  <span class="ruby-identifier">lib_path</span> = <span class="ruby-ivar">@p</span>.<span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;SS_script_support_path&quot;</span>)
+  <span class="ruby-ivar">@action_platforms</span> = {<span class="ruby-string">&quot;default&quot;</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-string">&quot;transport&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;nsh&quot;</span>, <span class="ruby-string">&quot;platform&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;linux&quot;</span>, <span class="ruby-string">&quot;language&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;bash&quot;</span>, <span class="ruby-string">&quot;comment_char&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#&quot;</span>, <span class="ruby-string">&quot;env_char&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-string">&quot;lb&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;\n&quot;</span>, <span class="ruby-string">&quot;ext&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;sh&quot;</span>}}
+  <span class="ruby-ivar">@action_platforms</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-constant">ACTION_PLATFORMS</span>) <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-constant">ACTION_PLATFORMS</span>)
+  <span class="ruby-ivar">@automation_category</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;automation_category&quot;</span>, <span class="ruby-ivar">@p</span>.<span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;SS_automation_category&quot;</span>, <span class="ruby-string">&quot;shell&quot;</span>))
+  <span class="ruby-ivar">@output_dir</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;output_dir&quot;</span>, <span class="ruby-ivar">@p</span>.<span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;SS_output_dir&quot;</span>))
+  <span class="ruby-identifier">action_platform</span>(<span class="ruby-identifier">options</span>)
+  <span class="ruby-ivar">@nsh_path</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;nsh_path&quot;</span>, <span class="ruby-constant">NSH_PATH</span>)
+  <span class="ruby-ivar">@debug</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;debug&quot;</span>, <span class="ruby-keyword">false</span>)
+  <span class="ruby-ivar">@nsh</span> = <span class="ruby-constant">NSH</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@nsh_path</span>)
+  <span class="ruby-identifier">set_transfer_properties</span>(<span class="ruby-identifier">options</span>)
+  <span class="ruby-identifier">timeout</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;timeout&quot;</span>, <span class="ruby-ivar">@p</span>.<span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;step_estimate&quot;</span>, <span class="ruby-string">&quot;60&quot;</span>))
+  <span class="ruby-ivar">@timeout</span> = <span class="ruby-identifier">timeout</span>.<span class="ruby-identifier">to_i</span> * <span class="ruby-value">60</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-action_platform" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">action_platform</span><span
+            class="method-args">(options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Translates the automation_category into platform information</p>
+
+<h4 id="method-i-action_platform-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>category</code> - automation category</p>
+</li></ul>
+
+<h4 id="method-i-action_platform-label-Returns">Returns</h4>
+<ul><li>
+<p>hash of plaform info e.g. {“transport” =&gt; “nsh”, “platform”
+=&gt; “windows”, “language” =&gt; “batch”}</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="action_platform-source">
+            <pre><span class="ruby-comment"># File framework/lib/action.rb, line 40</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">action_platform</span>(<span class="ruby-identifier">options</span> = {})
+  <span class="ruby-ivar">@platform</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;platform&quot;</span>)
+  <span class="ruby-ivar">@platform_info</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;action_platform&quot;</span>, <span class="ruby-keyword">nil</span>)
+  <span class="ruby-ivar">@platform</span> = <span class="ruby-ivar">@platform_info</span>[<span class="ruby-string">&quot;platform&quot;</span>] <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@platform_info</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-ivar">@platform</span> = <span class="ruby-ivar">@automation_category</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@platform</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-identifier">found_platform</span> = {}
+  <span class="ruby-ivar">@action_platforms</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> 
+    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@platform</span> <span class="ruby-operator">=~</span> <span class="ruby-node">%r#{k}/</span>
+      <span class="ruby-ivar">@platform_info</span> = <span class="ruby-identifier">v</span>
+      <span class="ruby-ivar">@platform</span> = <span class="ruby-identifier">k</span>
+      <span class="ruby-keyword">break</span>
+    <span class="ruby-keyword">end</span>
+     }
+  <span class="ruby-ivar">@platform_info</span> = <span class="ruby-ivar">@action_platforms</span>[<span class="ruby-string">&quot;default&quot;</span>] <span class="ruby-keyword">if</span> <span class="ruby-ivar">@platform_info</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">found_platform</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- action_platform-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- action_platform-method -->
+
+    
+      <div id="method-i-brpd_compatibility" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">brpd_compatibility</span><span
+            class="method-args">(payload_path, target_dir)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Sets BRPD Compatibility properties</p>
+
+<h4 id="method-i-brpd_compatibility-label-Returns">Returns</h4>
+
+<p>hash</p>
+          
+
+          
+          <div class="method-source-code" id="brpd_compatibility-source">
+            <pre><span class="ruby-comment"># File framework/lib/action.rb, line 278</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">brpd_compatibility</span>(<span class="ruby-identifier">payload_path</span>, <span class="ruby-identifier">target_dir</span>)
+   <span class="ruby-ivar">@transfer_properties</span>[<span class="ruby-string">&quot;VL_CONTENT_PATH&quot;</span>] = <span class="ruby-identifier">payload_path</span> 
+   <span class="ruby-ivar">@transfer_properties</span>[<span class="ruby-string">&quot;VL_CONTENT_NAME&quot;</span>] = <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">payload_path</span>) 
+   <span class="ruby-ivar">@transfer_properties</span>[<span class="ruby-string">&quot;VL_CHANNEL_ROOT&quot;</span>] = <span class="ruby-identifier">target_dir</span>
+
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- brpd_compatibility-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- brpd_compatibility-method -->
+
+    
+      <div id="method-i-display_result" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">display_result</span><span
+            class="method-args">(cmd_result)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Pretty display of cmd_result object</p>
+
+<h4 id="method-i-display_result-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>cmd_result</code> - hash of results e.g. {“stdout” =&gt;
+“results”, “stderr” =&gt; “”, “pid” =&gt; “10245”}</p>
+</li></ul>
+
+<h4 id="method-i-display_result-label-Returns">Returns</h4>
+<ul><li>
+<p>text output of result</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="display_result-source">
+            <pre><span class="ruby-comment"># File framework/lib/action.rb, line 227</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">display_result</span>(<span class="ruby-identifier">cmd_result</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-string">&quot;No results&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">cmd_result</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-node">&quot;ExitCode: #{cmd_result[&quot;status&quot;]} - &quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">cmd_result</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">&quot;status&quot;</span>)
+  <span class="ruby-identifier">result</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;Process: #{cmd_result[&quot;pid&quot;]}\nSTDOUT:\n#{cmd_result[&quot;stdout&quot;]}\n&quot;</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-node">&quot;STDERR:\n #{cmd_result[&quot;stderr&quot;]}\n#{result}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">cmd_result</span>[<span class="ruby-string">&quot;stderr&quot;</span>].<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- display_result-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- display_result-method -->
+
+    
+      <div id="method-i-get_channel_root" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_channel_root</span><span
+            class="method-args">(property_list = {}, os = "generic")</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns a base path for a remote server using a cascade of options if the
+server properties has a channel_root item, that will be used, otherwise if
+the (params) properties has a channel_root, that will be used, otherwise
+use the default /tmp, /C/Windows/temp values</p>
+
+<h4 id="method-i-get_channel_root-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>property_list</code> - hash of properties for the sever</p>
+</li></ul>
+
+<h4 id="method-i-get_channel_root-label-Returns">Returns</h4>
+
+<p>nsh path on target</p>
+          
+
+          
+          <div class="method-source-code" id="get_channel_root-source">
+            <pre><span class="ruby-comment"># File framework/lib/action.rb, line 307</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_channel_root</span>(<span class="ruby-identifier">property_list</span> = {}, <span class="ruby-identifier">os</span> = <span class="ruby-string">&quot;generic&quot;</span>)
+  <span class="ruby-identifier">default_path</span> = <span class="ruby-identifier">os</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;windows&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;/C/Windows/temp&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;/tmp&quot;</span>
+  <span class="ruby-identifier">path</span> = <span class="ruby-ivar">@p</span>.<span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;channel_root&quot;</span>, <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">path</span> = <span class="ruby-ivar">@p</span>.<span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;CHANNEL_ROOT&quot;</span>, <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">property_list</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">path</span> = <span class="ruby-identifier">v</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">k</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;channel_root&quot;</span> }
+  <span class="ruby-identifier">path</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">default_path</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_channel_root-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_channel_root-method -->
+
+    
+      <div id="method-i-pre_process_action" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">pre_process_action</span><span
+            class="method-args">(action_path, payload_path = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Add header and environment variables and processes ERB in an action_file</p>
+
+<h4 id="method-i-pre_process_action-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>action_path</code> - path to action on the file system</p>
+</li></ul>
+
+<h4 id="method-i-pre_process_action-label-Returns">Returns</h4>
+
+<p>modified action text</p>
+          
+
+          
+          <div class="method-source-code" id="pre_process_action-source">
+            <pre><span class="ruby-comment"># File framework/lib/action.rb, line 245</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">pre_process_action</span>(<span class="ruby-identifier">action_path</span>, <span class="ruby-identifier">payload_path</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">lb</span> = <span class="ruby-identifier">line_break</span>
+  <span class="ruby-identifier">env</span> = <span class="ruby-ivar">@platform_info</span>[<span class="ruby-string">&quot;environment_set&quot;</span>]
+  <span class="ruby-identifier">cmt</span> = <span class="ruby-ivar">@platform_info</span>[<span class="ruby-string">&quot;comment_char&quot;</span>]
+  <span class="ruby-identifier">language</span> = <span class="ruby-ivar">@platform_info</span>[<span class="ruby-string">&quot;language&quot;</span>]
+  <span class="ruby-identifier">shebang</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-identifier">content</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">action_path</span>).<span class="ruby-identifier">read</span>
+  <span class="ruby-identifier">content</span> = <span class="ruby-constant">ERB</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">content</span>).<span class="ruby-identifier">result</span>(<span class="ruby-identifier">binding</span>)
+  <span class="ruby-identifier">items</span> = <span class="ruby-identifier">content</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp">%r^\s*\#\!.*/</span>)
+  <span class="ruby-identifier">shebang</span> = <span class="ruby-identifier">items</span>[<span class="ruby-value">0</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">items</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">payload_path</span>
+    <span class="ruby-ivar">@transfer_properties</span>[<span class="ruby-string">&quot;RPM_PAYLOAD&quot;</span>] = <span class="ruby-identifier">payload_path</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">env_header</span> = <span class="ruby-node">&quot;#{cmt} Environment vars to define#{lb}&quot;</span>
+  <span class="ruby-ivar">@standard_properties</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">prop</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@transfer_properties</span>[<span class="ruby-identifier">prop</span>] = <span class="ruby-ivar">@p</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">prop</span>) }
+  <span class="ruby-ivar">@transfer_properties</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>,<span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">env_header</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#{env}#{key}=#{val}#{lb}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">language</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;batch&quot;</span>
+    <span class="ruby-identifier">env_header</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#{env}#{key}=\&quot;#{val}\&quot;#{lb}&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">language</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;batch&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">file_content</span> = <span class="ruby-node">&quot;#{shebang}#{lb}#{env_header}#{lb}#{content}&quot;</span>
+  <span class="ruby-identifier">fil</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">action_path</span>,<span class="ruby-string">&quot;w+&quot;</span>)
+  <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">file_content</span>
+  <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">flush</span>
+  <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">close</span>
+  <span class="ruby-identifier">file_content</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- pre_process_action-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- pre_process_action-method -->
+
+    
+      <div id="method-i-run-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">run!</span><span
+            class="method-args">(action, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Runs the action script on the remote targets</p>
+
+<h4 id="method-i-run-21-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>action</code> - text of action script</p>
+</li></ul>
+
+<h4 id="method-i-run-21-label-Returns">Returns</h4>
+<ul><li>
+<p>command_run hash {stdout =&gt; &lt;results&gt;, stderr =&gt; any errors,
+pid =&gt; process id, status =&gt; exit_code}</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="run-21-source">
+            <pre><span class="ruby-comment"># File framework/lib/action.rb, line 96</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">run!</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">message_box</span> <span class="ruby-string">&quot;Executing Remote Script&quot;</span>
+  <span class="ruby-identifier">servers</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;servers&quot;</span>, <span class="ruby-ivar">@p</span>.<span class="ruby-identifier">server_list</span>.<span class="ruby-identifier">keys</span>)
+  <span class="ruby-identifier">target_path</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;target_path&quot;</span>, <span class="ruby-identifier">windows?</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;/C/Windows/temp&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;/tmp&quot;</span>)
+  <span class="ruby-identifier">wrapper_script</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;wrapper_script&quot;</span>, <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">max_time</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;max_time&quot;</span>, <span class="ruby-ivar">@timeout</span>)
+  <span class="ruby-identifier">payload</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;payload&quot;</span>, <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Targets:       #{servers.join(&quot;,&quot;)}&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Target Path:   #{target_path}&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Max time(sec): #{max_time}&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Script Details:&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t Platform:  #{@platform}&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t Transport: #{@platform_info[&quot;transport&quot;]}&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t Payload:  #{payload}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">payload</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">action</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;\n&quot;</span>)
+    <span class="ruby-identifier">action_name</span> = <span class="ruby-identifier">temp_action_name</span>
+    <span class="ruby-identifier">action_path</span> = <span class="ruby-identifier">create_temp_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">action_name</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">action_name</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">action</span>)
+    <span class="ruby-identifier">action_path</span> = <span class="ruby-identifier">action</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t Source:    #{action_path}&quot;</span>
+  <span class="ruby-identifier">payload_path</span> = <span class="ruby-identifier">payload</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">transport_payload</span>(<span class="ruby-identifier">payload</span>, <span class="ruby-identifier">target_path</span>, <span class="ruby-identifier">servers</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>
+  <span class="ruby-identifier">brpd_compatibility</span>(<span class="ruby-identifier">payload_path</span>, <span class="ruby-identifier">target_path</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">payload</span>
+  <span class="ruby-identifier">pre_process_action</span>(<span class="ruby-identifier">action_path</span>, <span class="ruby-identifier">payload_path</span>)
+  <span class="ruby-identifier">wrapper_path</span> = <span class="ruby-identifier">wrapper_script</span>(<span class="ruby-identifier">wrapper_script</span>, <span class="ruby-identifier">action_path</span>, <span class="ruby-identifier">target_path</span>, <span class="ruby-identifier">servers</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">wrapper_script</span>
+  <span class="ruby-identifier">script_path</span> = <span class="ruby-identifier">wrapper_script</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">action_path</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">wrapper_path</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-ivar">@nsh</span>.<span class="ruby-identifier">script_exec</span>(<span class="ruby-identifier">servers</span>, <span class="ruby-identifier">script_path</span>, <span class="ruby-identifier">target_path</span>, {<span class="ruby-string">&quot;raw_result&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>, <span class="ruby-string">&quot;timeout&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max_time</span>})
+  <span class="ruby-identifier">message_box</span> <span class="ruby-string">&quot;Script Results&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-identifier">display_result</span>(<span class="ruby-identifier">result</span>)
+  <span class="ruby-identifier">res</span> = <span class="ruby-identifier">remove_temp_files</span>(<span class="ruby-identifier">action_path</span>, <span class="ruby-identifier">target_path</span>, <span class="ruby-identifier">servers</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">wrapper_script</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@debug</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- run-21-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- run-21-method -->
+
+    
+      <div id="method-i-run_nsh_local-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">run_nsh_local!</span><span
+            class="method-args">(action, max_time = 3600)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Executes a script directly via <a href="NSH.html">NSH</a></p>
+
+<pre>use this if you have an nsh script to run from the localhost</pre>
+
+<h4 id="method-i-run_nsh_local-21-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>action</code> - may be a path to action or text of action</p>
+</li><li>
+<p><code>max_time</code> - maximum time to run (sec) - default = 3600</p>
+</li></ul>
+
+<h4 id="method-i-run_nsh_local-21-label-Returns">Returns</h4>
+<ul><li>
+<p>command_run hash {stdout =&gt; &lt;results&gt;, stderr =&gt; any errors,
+pid =&gt; process id, status =&gt; exit_code}</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="run_nsh_local-21-source">
+            <pre><span class="ruby-comment"># File framework/lib/action.rb, line 139</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">run_nsh_local!</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">max_time</span> = <span class="ruby-value">3600</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">action</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">%r\/|\\/</span>
+    <span class="ruby-identifier">action_path</span> = <span class="ruby-identifier">action</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">action_path</span> = <span class="ruby-identifier">create_temp_action</span>(<span class="ruby-identifier">action</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-ivar">@nsh</span>.<span class="ruby-identifier">nsh</span>(<span class="ruby-identifier">action_path</span>, <span class="ruby-keyword">true</span>)
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- run_nsh_local-21-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- run_nsh_local-21-method -->
+
+    
+      <div id="method-i-set_platform_info" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_platform_info</span><span
+            class="method-args">(platform, platform_info)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Overrides the build-in platform information</p>
+
+<h4 id="method-i-set_platform_info-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>automation_category</code> - automation_category to associate with
+platform_info</p>
+</li><li>
+<p><code>platform_info</code> - hash of plaform info e.g. {“transport”
+=&gt; “nsh”, “platform” =&gt; “windows”, “language” =&gt;
+“batch”}</p>
+</li></ul>
+
+<h4 id="method-i-set_platform_info-label-Returns">Returns</h4>
+
+<p>*</p>
+          
+
+          
+          <div class="method-source-code" id="set_platform_info-source">
+            <pre><span class="ruby-comment"># File framework/lib/action.rb, line 66</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_platform_info</span>(<span class="ruby-identifier">platform</span>, <span class="ruby-identifier">platform_info</span>)
+  <span class="ruby-ivar">@platform</span> = <span class="ruby-identifier">platform</span>
+  <span class="ruby-ivar">@platform_info</span> = <span class="ruby-identifier">platform_info</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_platform_info-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_platform_info-method -->
+
+    
+      <div id="method-i-set_transfer_properties" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_transfer_properties</span><span
+            class="method-args">(options)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Sets the properties to env up as environment variables</p>
+
+<h4 id="method-i-set_transfer_properties-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>options</code> - hash of options - looking for transfer_properties or
+property_filter (prefix in params), retain_property_prefix leaves the
+prefix on</p>
+</li></ul>
+
+<h4 id="method-i-set_transfer_properties-label-Returns">Returns</h4>
+<ul><li>
+<p>Sets the @transfer_properties instance var</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="set_transfer_properties-source">
+            <pre><span class="ruby-comment"># File framework/lib/action.rb, line 79</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_transfer_properties</span>(<span class="ruby-identifier">options</span>)
+  <span class="ruby-ivar">@transfer_properties</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;transfer_properties&quot;</span>, {})
+  <span class="ruby-identifier">prop_filter</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;property_filter&quot;</span>, <span class="ruby-string">&quot;ARG_&quot;</span>)
+  <span class="ruby-identifier">retain_prefix</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;retain_property_prefix&quot;</span>, <span class="ruby-keyword">false</span>)
+  <span class="ruby-ivar">@p</span>.<span class="ruby-identifier">local_params</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@transfer_properties</span>[(<span class="ruby-identifier">retain_prefix</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">k</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-identifier">prop_filter</span>,<span class="ruby-string">&quot;&quot;</span>))] = <span class="ruby-identifier">v</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-identifier">prop_filter</span>) }
+  <span class="ruby-ivar">@p</span>.<span class="ruby-identifier">params</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@transfer_properties</span>[(<span class="ruby-identifier">retain_prefix</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">k</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-identifier">prop_filter</span>,<span class="ruby-string">&quot;&quot;</span>))] = <span class="ruby-identifier">v</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-identifier">prop_filter</span>) }
+  <span class="ruby-ivar">@transfer_properties</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_transfer_properties-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_transfer_properties-method -->
+
+    
+      <div id="method-i-temp_action_name" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">temp_action_name</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns a temp name for the action on the target</p>
+
+<h4 id="method-i-temp_action_name-label-Returns">Returns</h4>
+
+<p>action name</p>
+          
+
+          
+          <div class="method-source-code" id="temp_action_name-source">
+            <pre><span class="ruby-comment"># File framework/lib/action.rb, line 291</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">temp_action_name</span>
+  <span class="ruby-identifier">file_name</span> = <span class="ruby-node">&quot;action_#{@platform_info[&quot;language&quot;]}_#{precision_timestamp}.#{@platform_info[&quot;ext&quot;]}&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- temp_action_name-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- temp_action_name-method -->
+
+    
+      <div id="method-i-transport_payload" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">transport_payload</span><span
+            class="method-args">(payload_path, target_path, servers)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Copies payload to targets and then returns path on target</p>
+
+<h4 id="method-i-transport_payload-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>payload_path</code> - path to script to transport</p>
+</li><li>
+<p><code>target_path</code> - path on target to copy to</p>
+</li><li>
+<p><code>servers</code> - array of servers to copy to</p>
+</li></ul>
+
+<h4 id="method-i-transport_payload-label-Returns">Returns</h4>
+<ul><li>
+<p>path to payload on target</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="transport_payload-source">
+            <pre><span class="ruby-comment"># File framework/lib/action.rb, line 204</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">transport_payload</span>(<span class="ruby-identifier">payload_path</span>, <span class="ruby-identifier">target_path</span>, <span class="ruby-identifier">servers</span>)
+  <span class="ruby-identifier">file_name</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">payload_path</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@platform_info</span>[<span class="ruby-string">&quot;platform&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;windows&quot;</span>
+    <span class="ruby-identifier">win_path</span> = <span class="ruby-ivar">@nsh</span>.<span class="ruby-identifier">dos_path</span>(<span class="ruby-identifier">target_path</span>)
+    <span class="ruby-identifier">file_path</span> = <span class="ruby-node">&quot;#{win_path}\\#{file_name}&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">file_path</span> = <span class="ruby-node">&quot;#{target_path}/#{file_name}&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Transporting payload:&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t Target:    #{file_path}&quot;</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-ivar">@nsh</span>.<span class="ruby-identifier">ncp</span>(<span class="ruby-identifier">servers</span>, <span class="ruby-identifier">payload_path</span>, <span class="ruby-identifier">target_path</span>)
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t Copy Results:    #{result}&quot;</span>
+  <span class="ruby-identifier">file_path</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- transport_payload-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- transport_payload-method -->
+
+    
+      <div id="method-i-wrapper_script" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">wrapper_script</span><span
+            class="method-args">(wrapper_script, action_path, target_path, servers)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Detects need for a wrapper script - creates it and copies to targets looks
+for “WRAPPER: ” in the first 10 lines, use it like a shebang ex: #
+WIN_WRAPPER: C:\appsperl %% this line will be plucked out of the script and
+a new batch script created with it upin execution, both the batch script
+and the main script will be copied to the targets then the batch script
+will be run which will call the main script from the %% keyword filename
+will be automatically substituted in.</p>
+
+<h4 id="method-i-wrapper_script-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>action_path</code> - path to script to transport</p>
+</li><li>
+<p><code>target_path</code> - path on target to copy to</p>
+</li><li>
+<p><code>servers</code> - array of servers to copy to</p>
+</li></ul>
+
+<h4 id="method-i-wrapper_script-label-Returns">Returns</h4>
+<ul><li>
+<p>path to wrapper script</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="wrapper_script-source">
+            <pre><span class="ruby-comment"># File framework/lib/action.rb, line 165</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">wrapper_script</span>(<span class="ruby-identifier">wrapper_script</span>, <span class="ruby-identifier">action_path</span>, <span class="ruby-identifier">target_path</span>, <span class="ruby-identifier">servers</span>)
+  <span class="ruby-identifier">lb</span> = <span class="ruby-identifier">line_break</span>
+  <span class="ruby-identifier">env</span> = <span class="ruby-ivar">@platform_info</span>[<span class="ruby-string">&quot;environment_set&quot;</span>]
+  <span class="ruby-identifier">cmt</span> = <span class="ruby-ivar">@platform_info</span>[<span class="ruby-string">&quot;comment_char&quot;</span>]
+  <span class="ruby-identifier">script_name</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">action_path</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">windows?</span>
+    <span class="ruby-identifier">win_path</span> = <span class="ruby-ivar">@nsh</span>.<span class="ruby-identifier">dos_path</span>(<span class="ruby-identifier">target_path</span>)
+    <span class="ruby-identifier">ext</span> = <span class="ruby-string">&quot;bat&quot;</span>
+    <span class="ruby-identifier">script_path</span> = <span class="ruby-node">&quot;#{win_path}\\#{script_name}&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">ext</span> = <span class="ruby-string">&quot;sh&quot;</span>
+    <span class="ruby-identifier">script_path</span> = <span class="ruby-node">&quot;#{target_path}/#{script_name}&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Executing via wrapper script:&quot;</span>
+  <span class="ruby-identifier">wrapper_script</span>.<span class="ruby-identifier">chomp!</span>(<span class="ruby-string">&quot;\r&quot;</span>) 
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">wrapper_script</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;%%&quot;</span>)
+    <span class="ruby-identifier">wrapper_script</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-string">&quot;%%&quot;</span>, <span class="ruby-identifier">script_path</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">wrapper_script</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot; #{script_path}&quot;</span>
+    <span class="ruby-identifier">wrapper_script</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">lb</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">new_path</span> = <span class="ruby-identifier">create_temp_action</span>(<span class="ruby-identifier">wrapper_script</span>, <span class="ruby-node">&quot;wrapper_#{precision_timestamp}.#{ext}&quot;</span>)
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t Target:    #{new_path}&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t Wrapper:   #{wrapper_script}&quot;</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-ivar">@nsh</span>.<span class="ruby-identifier">ncp</span>(<span class="ruby-identifier">servers</span>, <span class="ruby-identifier">action_path</span>, <span class="ruby-identifier">target_path</span>)
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t Copy Results:    #{result}&quot;</span>
+  <span class="ruby-identifier">new_path</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- wrapper_script-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- wrapper_script-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+

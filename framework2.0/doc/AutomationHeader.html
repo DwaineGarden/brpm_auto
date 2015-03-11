@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>module AutomationHeader - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="module">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>framework/lib/ssh_script_header.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-i-create_output_file">#create_output_file</a>
+    
+    <li><a href="#method-i-display_result">#display_result</a>
+    
+    <li><a href="#method-i-fetch_url">#fetch_url</a>
+    
+    <li><a href="#method-i-get_integration_details">#get_integration_details</a>
+    
+    <li><a href="#method-i-get_param">#get_param</a>
+    
+    <li><a href="#method-i-get_selected_hosts">#get_selected_hosts</a>
+    
+    <li><a href="#method-i-get_server_list">#get_server_list</a>
+    
+    <li><a href="#method-i-get_servers_by_property_value">#get_servers_by_property_value</a>
+    
+    <li><a href="#method-i-hostname_from_url">#hostname_from_url</a>
+    
+    <li><a href="#method-i-init_log_file">#init_log_file</a>
+    
+    <li><a href="#method-i-initialize_framework">#initialize_framework</a>
+    
+    <li><a href="#method-i-load_helper">#load_helper</a>
+    
+    <li><a href="#method-i-load_input_params">#load_input_params</a>
+    
+    <li><a href="#method-i-output_separator">#output_separator</a>
+    
+    <li><a href="#method-i-pack_response">#pack_response</a>
+    
+    <li><a href="#method-i-read_shebang">#read_shebang</a>
+    
+    <li><a href="#method-i-run_command">#run_command</a>
+    
+    <li><a href="#method-i-set_application_version">#set_application_version</a>
+    
+    <li><a href="#method-i-set_build_flag_data">#set_build_flag_data</a>
+    
+    <li><a href="#method-i-set_component_flag">#set_component_flag</a>
+    
+    <li><a href="#method-i-set_property_flag">#set_property_flag</a>
+    
+    <li><a href="#method-i-set_server_flag">#set_server_flag</a>
+    
+    <li><a href="#method-i-set_titles_acceptable-3F">#set_titles_acceptable?</a>
+    
+    <li><a href="#method-i-write_to">#write_to</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Jira.html">Jira</a>
+  
+    <li><a href="./Jira/JiraClient.html">Jira::JiraClient</a>
+  
+    <li><a href="./AutomationHeader.html">AutomationHeader</a>
+  
+    <li><a href="./BrpmAutomation.html">BrpmAutomation</a>
+  
+    <li><a href="./BrpmRequest.html">BrpmRequest</a>
+  
+    <li><a href="./BrpmRest.html">BrpmRest</a>
+  
+    <li><a href="./DispatchBAA.html">DispatchBAA</a>
+  
+    <li><a href="./DispatchBase.html">DispatchBase</a>
+  
+    <li><a href="./DispatchNSH.html">DispatchNSH</a>
+  
+    <li><a href="./DispatchSSH.html">DispatchSSH</a>
+  
+    <li><a href="./Git.html">Git</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Param.html">Param</a>
+  
+    <li><a href="./ResourceFramework.html">ResourceFramework</a>
+  
+    <li><a href="./Svn.html">Svn</a>
+  
+    <li><a href="./TransportBAA.html">TransportBAA</a>
+  
+    <li><a href="./TransportNSH.html">TransportNSH</a>
+  
+    <li><a href="./TransportSSH.html">TransportSSH</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="module">module AutomationHeader</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-create_output_file" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create_output_file</span><span
+            class="method-args">(params)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="create_output_file-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 56</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_output_file</span>(<span class="ruby-identifier">params</span>)
+  <span class="ruby-identifier">init_log_file</span>(<span class="ruby-identifier">params</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create_output_file-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create_output_file-method -->
+
+    
+      <div id="method-i-display_result" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">display_result</span><span
+            class="method-args">(cmd_result)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Pretty display of cmd_result object</p>
+
+<h4 id="method-i-display_result-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>cmd_result</code> - hash of results e.g. {“stdout” =&gt;
+“results”, “stderr” =&gt; “”, “pid” =&gt; “10245”}</p>
+</li></ul>
+
+<h4 id="method-i-display_result-label-Returns">Returns</h4>
+<ul><li>
+<p>text output of result</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="display_result-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 251</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">display_result</span>(<span class="ruby-identifier">cmd_result</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-string">&quot;No results&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">cmd_result</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-node">&quot;ExitCode: #{cmd_result[&quot;status&quot;]} - &quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">cmd_result</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">&quot;status&quot;</span>)
+  <span class="ruby-identifier">result</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;Process: #{cmd_result[&quot;pid&quot;]}\nSTDOUT:\n#{cmd_result[&quot;stdout&quot;]}\n&quot;</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-node">&quot;STDERR:\n #{cmd_result[&quot;stderr&quot;]}\n#{result}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">cmd_result</span>[<span class="ruby-string">&quot;stderr&quot;</span>].<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- display_result-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- display_result-method -->
+
+    
+      <div id="method-i-fetch_url" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">fetch_url</span><span
+            class="method-args">(path, testing=false)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="fetch_url-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 210</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">fetch_url</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">testing</span>=<span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">ss_url</span> = <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_base_url&quot;</span>] <span class="ruby-comment">#  Leave this alone  </span>
+  <span class="ruby-identifier">tmp</span> = (<span class="ruby-identifier">path</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;://&quot;</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">path</span> <span class="ruby-operator">:</span> <span class="ruby-node">&quot;#{ss_url}/#{path}&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot; &quot;</span>, <span class="ruby-string">&quot;%20&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;&amp;&quot;</span>, <span class="ruby-string">&quot;&amp;amp;&quot;</span>)
+  <span class="ruby-identifier">jobUri</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">tmp</span>)
+  <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Fetching: #{jobUri}&quot;</span>
+  <span class="ruby-identifier">request</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">jobUri</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">testing</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- fetch_url-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- fetch_url-method -->
+
+    
+      <div id="method-i-get_integration_details" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_integration_details</span><span
+            class="method-args">(key = nil, details_yml = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_integration_details-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 113</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_integration_details</span>(<span class="ruby-identifier">key</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">details_yml</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">details_yml</span> = <span class="ruby-constant">SS_integration_details</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">details_yml</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-comment"># SS_integration_details = &quot;Project: TST\nDefault item: lots of stuff\n&quot;</span>
+  <span class="ruby-identifier">details</span> = <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">details_yml</span>)
+  <span class="ruby-identifier">key</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">details</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">details</span>[<span class="ruby-identifier">key</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_integration_details-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_integration_details-method -->
+
+    
+      <div id="method-i-get_param" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_param</span><span
+            class="method-args">(key_name)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_param-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 39</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_param</span>(<span class="ruby-identifier">key_name</span>)
+  <span class="ruby-ivar">@params</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">key_name</span>) <span class="ruby-operator">?</span> <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;key_name&quot;</span>] <span class="ruby-operator">:</span> <span class="ruby-string">&quot;&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_param-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_param-method -->
+
+    
+      <div id="method-i-get_selected_hosts" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_selected_hosts</span><span
+            class="method-args">(server_list = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_selected_hosts-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 108</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_selected_hosts</span>(<span class="ruby-identifier">server_list</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">serverlist</span> = <span class="ruby-identifier">get_server_list</span>(<span class="ruby-ivar">@params</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serverlist</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">hosts</span> = <span class="ruby-identifier">server_list</span>.<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">srv</span><span class="ruby-operator">|</span> <span class="ruby-identifier">srv</span>[<span class="ruby-value">0</span>] }
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_selected_hosts-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_selected_hosts-method -->
+
+    
+      <div id="method-i-get_server_list" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_server_list</span><span
+            class="method-args">(params)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_server_list-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 78</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_server_list</span>(<span class="ruby-identifier">params</span>)
+  <span class="ruby-identifier">rxp</span> = <span class="ruby-regexp">%rserver\d+_/</span>
+  <span class="ruby-identifier">slist</span> = {}
+  <span class="ruby-identifier">lastcur</span> = <span class="ruby-value">-1</span>
+  <span class="ruby-identifier">curname</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-identifier">params</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">reject</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-identifier">k</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">scan</span>(<span class="ruby-identifier">rxp</span>).<span class="ruby-identifier">empty?</span> }.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">server</span>, <span class="ruby-identifier">idx</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">cur</span> = (<span class="ruby-identifier">server</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">scan</span>(<span class="ruby-identifier">rxp</span>)[<span class="ruby-value">0</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;server&quot;</span>,<span class="ruby-string">&quot;&quot;</span>).<span class="ruby-identifier">to_i</span> * <span class="ruby-value">0.001</span>).<span class="ruby-identifier">round</span> * <span class="ruby-value">1000</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">cur</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">lastcur</span>
+    <span class="ruby-identifier">prop</span> = <span class="ruby-identifier">server</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-identifier">rxp</span>, <span class="ruby-string">&quot;&quot;</span>)
+    <span class="ruby-identifier">slist</span>[<span class="ruby-identifier">curname</span>][<span class="ruby-identifier">prop</span>] = <span class="ruby-identifier">server</span>[<span class="ruby-value">1</span>]
+    <span class="ruby-keyword">else</span> <span class="ruby-comment"># new server</span>
+      <span class="ruby-identifier">lastcur</span> = <span class="ruby-identifier">cur</span>
+      <span class="ruby-identifier">curname</span> = <span class="ruby-identifier">server</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">chomp</span>(<span class="ruby-string">&quot;0&quot;</span>)
+      <span class="ruby-identifier">slist</span>[<span class="ruby-identifier">curname</span>] = {}
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">slist</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_server_list-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_server_list-method -->
+
+    
+      <div id="method-i-get_servers_by_property_value" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_servers_by_property_value</span><span
+            class="method-args">(prop_name, value, servers = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_servers_by_property_value-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 97</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_servers_by_property_value</span>(<span class="ruby-identifier">prop_name</span>, <span class="ruby-identifier">value</span>, <span class="ruby-identifier">servers</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">servers</span> = <span class="ruby-identifier">get_server_list</span>(<span class="ruby-ivar">@params</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">servers</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">hosts</span> = []
+  <span class="ruby-identifier">servers</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">server</span>, <span class="ruby-identifier">idx</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">server</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prop</span>, <span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">hosts</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">server</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">prop</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">prop_name</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">val</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">downcase</span>))
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">hosts</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_servers_by_property_value-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_servers_by_property_value-method -->
+
+    
+      <div id="method-i-hostname_from_url" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">hostname_from_url</span><span
+            class="method-args">(url)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="hostname_from_url-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 203</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">hostname_from_url</span>(<span class="ruby-identifier">url</span>)
+  <span class="ruby-identifier">url_frag</span> = <span class="ruby-identifier">url</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;:&quot;</span>)
+  <span class="ruby-identifier">url</span> = <span class="ruby-identifier">url_frag</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">url_frag</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">:</span> <span class="ruby-identifier">url_frag</span>[<span class="ruby-value">0</span>]
+  <span class="ruby-identifier">url</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;//&quot;</span>,<span class="ruby-string">&quot;&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- hostname_from_url-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- hostname_from_url-method -->
+
+    
+      <div id="method-i-init_log_file" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">init_log_file</span><span
+            class="method-args">(params)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="init_log_file-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 60</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">init_log_file</span>(<span class="ruby-identifier">params</span>)
+  <span class="ruby-ivar">@output_file</span> = <span class="ruby-identifier">params</span>[<span class="ruby-string">&quot;SS_output_file&quot;</span>]
+  <span class="ruby-ivar">@hand</span> = <span class="ruby-constant">FileInUTF</span>.<span class="ruby-identifier">open</span>(<span class="ruby-ivar">@output_file</span>, <span class="ruby-string">&quot;a&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- init_log_file-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- init_log_file-method -->
+
+    
+      <div id="method-i-initialize_framework" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">initialize_framework</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="initialize_framework-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 260</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize_framework</span>
+  <span class="ruby-comment"># Create a new output file and note it in the return message: sets @hand</span>
+  <span class="ruby-identifier">init_log_file</span>(<span class="ruby-ivar">@params</span>)
+  <span class="ruby-ivar">@rpm</span> = <span class="ruby-constant">BrpmAutomation</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@params</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_script_type&quot;</span>] <span class="ruby-operator">!=</span> <span class="ruby-string">'test'</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_script_target&quot;</span>] <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;resource_automation&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@params</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">&quot;SS_no_framework&quot;</span>) 
+    <span class="ruby-identifier">automation_settings</span> = <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_script_support_path&quot;</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;lib/script_support&quot;</span>,<span class="ruby-string">&quot;config/automation_settings.rb&quot;</span>)
+    <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;#{automation_settings}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">automation_settings</span>)    
+    <span class="ruby-identifier">f_dir</span> = <span class="ruby-keyword">defined?</span>(<span class="ruby-constant">FRAMEWORK_DIR</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">FRAMEWORK_DIR</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_automation_results_dir&quot;</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;automation_results&quot;</span>,<span class="ruby-string">&quot;persist/automation_lib&quot;</span>)
+    <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;#{f_dir}/brpm_framework&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- initialize_framework-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- initialize_framework-method -->
+
+    
+      <div id="method-i-load_helper" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">load_helper</span><span
+            class="method-args">(lib_path)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="load_helper-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 24</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">load_helper</span>(<span class="ruby-identifier">lib_path</span>)
+  <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;#{lib_path}/script_helper.rb&quot;</span>
+  <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;#{lib_path}/file_in_utf.rb&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- load_helper-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- load_helper-method -->
+
+    
+      <div id="method-i-load_input_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">load_input_params</span><span
+            class="method-args">(in_file)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>BJB 7/6/2010 Append a user script to the bottom of this one for cap
+execution</p>
+          
+
+          
+          <div class="method-source-code" id="load_input_params-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 30</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">load_input_params</span>(<span class="ruby-identifier">in_file</span>)
+  <span class="ruby-identifier">params</span> = <span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">load</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">in_file</span>))
+  <span class="ruby-identifier">load_helper</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&quot;SS_script_support_path&quot;</span>])
+  <span class="ruby-ivar">@params</span> = <span class="ruby-identifier">strip_private_flag</span>(<span class="ruby-identifier">params</span>)
+  <span class="ruby-comment">#BJB 11-10-14 Intercept to load framework</span>
+  <span class="ruby-identifier">initialize_framework</span>
+  <span class="ruby-ivar">@params</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- load_input_params-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- load_input_params-method -->
+
+    
+      <div id="method-i-output_separator" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">output_separator</span><span
+            class="method-args">(phrase)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="output_separator-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 43</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">output_separator</span>(<span class="ruby-identifier">phrase</span>)
+  <span class="ruby-identifier">divider</span> = <span class="ruby-string">&quot;===========================================================&quot;</span>
+  <span class="ruby-node">&quot;\n#{divider.slice(0..20)} #{phrase} #{divider.slice(0..(divider.length-phrase.length))}\n&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- output_separator-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- output_separator-method -->
+
+    
+      <div id="method-i-pack_response" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">pack_response</span><span
+            class="method-args">(argument_name, response)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="pack_response-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 187</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">pack_response</span>(<span class="ruby-identifier">argument_name</span>, <span class="ruby-identifier">response</span>)
+  <span class="ruby-identifier">flag</span> = <span class="ruby-node">&quot;#------ Block to Set Pack Response ---------------#\n&quot;</span>
+  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">argument_name</span>.<span class="ruby-identifier">nil?</span>    
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)
+      <span class="ruby-comment"># Used for out-table output parameter</span>
+      <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;$$SS_Pack_Response{#{argument_name}@@#{response.to_json}}$$&quot;</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;$$SS_Pack_Response{#{argument_name}=&gt;#{response}}$$&quot;</span>
+    <span class="ruby-keyword">end</span>        
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;\n#------- End Set Pack Response Block ---------------#\n&quot;</span>
+  <span class="ruby-identifier">write_to</span> <span class="ruby-identifier">flag</span>
+  <span class="ruby-identifier">flag</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- pack_response-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- pack_response-method -->
+
+    
+      <div id="method-i-read_shebang" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">read_shebang</span><span
+            class="method-args">(os_platform, action_txt)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="read_shebang-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 218</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">read_shebang</span>(<span class="ruby-identifier">os_platform</span>, <span class="ruby-identifier">action_txt</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">os_platform</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">%rwin/</span>
+    <span class="ruby-identifier">result</span> = {<span class="ruby-string">&quot;ext&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;.bat&quot;</span>, <span class="ruby-string">&quot;cmd&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;cmd /c&quot;</span>, <span class="ruby-string">&quot;shebang&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>}
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">result</span> = {<span class="ruby-string">&quot;ext&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;.sh&quot;</span>, <span class="ruby-string">&quot;cmd&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;/bin/bash &quot;</span>, <span class="ruby-string">&quot;shebang&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>}
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">action_txt</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-node">&quot;#![&quot;</span>) <span class="ruby-comment"># Custom shebang</span>
+    <span class="ruby-identifier">shebang</span> = <span class="ruby-identifier">action_txt</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp">%r\#\!.*/</span>).<span class="ruby-identifier">first</span>
+    <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;shebang&quot;</span>] = <span class="ruby-identifier">shebang</span>
+    <span class="ruby-identifier">items</span> = <span class="ruby-identifier">shebang</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp">%r\#\!\[.*\]/</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">items</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+      <span class="ruby-identifier">ext</span> = <span class="ruby-identifier">items</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-node">&quot;#![&quot;</span>,<span class="ruby-string">&quot;&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;]&quot;</span>,<span class="ruby-string">&quot;&quot;</span>)
+      <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;ext&quot;</span>] = <span class="ruby-identifier">ext</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ext</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-string">&quot;.&quot;</span>)
+      <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;cmd&quot;</span>] = <span class="ruby-identifier">shebang</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-identifier">items</span>[<span class="ruby-value">0</span>],<span class="ruby-string">&quot;&quot;</span>).<span class="ruby-identifier">strip</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;cmd&quot;</span>] = <span class="ruby-identifier">shebang</span>
+    <span class="ruby-keyword">end</span>      
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">action_txt</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-node">&quot;#!/&quot;</span>) <span class="ruby-comment"># Basic shebang</span>
+    <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;shebang&quot;</span>] = <span class="ruby-string">&quot;standard&quot;</span>
+  <span class="ruby-keyword">else</span> <span class="ruby-comment"># no shebang</span>
+    <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;shebang&quot;</span>] = <span class="ruby-string">&quot;none&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- read_shebang-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- read_shebang-method -->
+
+    
+      <div id="method-i-run_command" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">run_command</span><span
+            class="method-args">(params, command, arguments = nil, b_quiet = false)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="run_command-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 65</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">run_command</span>(<span class="ruby-identifier">params</span>, <span class="ruby-identifier">command</span>, <span class="ruby-identifier">arguments</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">b_quiet</span> = <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">command</span> = <span class="ruby-identifier">command</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">command</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">command</span>
+  <span class="ruby-identifier">command</span> = <span class="ruby-node">&quot;#{command} #{arguments}&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">arguments</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-comment">#command += exit_code_failure(params)</span>
+  <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">message_box</span> <span class="ruby-node">&quot;Run command: #{command}&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">b_quiet</span>
+  <span class="ruby-identifier">cmd_result</span> = <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">execute_shell</span>(<span class="ruby-identifier">command</span>)
+  <span class="ruby-identifier">data_returned</span> = <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">display_result</span>(<span class="ruby-identifier">cmd_result</span>)
+  <span class="ruby-identifier">data_returned</span> = <span class="ruby-constant">CGI</span><span class="ruby-operator">::</span><span class="ruby-identifier">escapeHTML</span>(<span class="ruby-identifier">data_returned</span>)
+  <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">log</span> <span class="ruby-identifier">data_returned</span>  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">b_quiet</span>
+  <span class="ruby-ivar">@rpm</span>.<span class="ruby-identifier">message_box</span>(<span class="ruby-string">&quot;Results End&quot;</span>)  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">b_quiet</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">data_returned</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- run_command-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- run_command-method -->
+
+    
+      <div id="method-i-set_application_version" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_application_version</span><span
+            class="method-args">(prop, value)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_application_version-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 178</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_application_version</span>(<span class="ruby-identifier">prop</span>, <span class="ruby-identifier">value</span>)
+  <span class="ruby-comment"># set_application_flag(app_name, version)</span>
+  <span class="ruby-identifier">flag</span> = <span class="ruby-node">&quot;#------ Block to Set Application Version ---------------#\n&quot;</span>
+  <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;$$SS_Set_application{#{prop}=&gt;#{value}}$$&quot;</span>
+  <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;\n#------ End Set Application ---------------#\n&quot;</span>
+  <span class="ruby-identifier">write_to</span>(<span class="ruby-identifier">flag</span>)
+  <span class="ruby-identifier">flag</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_application_version-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_application_version-method -->
+
+    
+      <div id="method-i-set_build_flag_data" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_build_flag_data</span><span
+            class="method-args">(set_item, set_data, acceptable_titles)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_build_flag_data-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 157</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_build_flag_data</span>(<span class="ruby-identifier">set_item</span>, <span class="ruby-identifier">set_data</span>, <span class="ruby-identifier">acceptable_titles</span>)
+  <span class="ruby-identifier">flag</span> = <span class="ruby-string">&quot;&quot;</span>; <span class="ruby-identifier">msg</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-identifier">lines</span> = <span class="ruby-identifier">set_data</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;\n&quot;</span>)
+  <span class="ruby-identifier">titles</span> = <span class="ruby-identifier">lines</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;,&quot;</span>).<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">it</span><span class="ruby-operator">|</span> <span class="ruby-identifier">it</span>.<span class="ruby-identifier">strip</span> }
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">set_titles_acceptable?</span>(<span class="ruby-identifier">titles</span>, <span class="ruby-identifier">acceptable_titles</span>)
+    <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;$$SS_Set_#{set_item}{\n&quot;</span>
+    <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#{titles.join(&quot;, &quot;)}\n&quot;</span>
+    <span class="ruby-identifier">lines</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;,&quot;</span>).<span class="ruby-identifier">count</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">titles</span>.<span class="ruby-identifier">count</span>
+        <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#{line}\n&quot;</span> 
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">msg</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;Skipped: #{line}&quot;</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot;}$$\n&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;ERROR - Unable to set #{set_item} - improper format\n&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">msg</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_build_flag_data-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_build_flag_data-method -->
+
+    
+      <div id="method-i-set_component_flag" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_component_flag</span><span
+            class="method-args">(components)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_component_flag-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 143</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_component_flag</span>(<span class="ruby-identifier">components</span>)
+  <span class="ruby-comment"># comps = &quot;comp_name, version\ncomp2_name, version2&quot;</span>
+  <span class="ruby-identifier">flag</span> = <span class="ruby-node">&quot;#------ Block to Set Components ---------------#\n&quot;</span>
+  <span class="ruby-identifier">acceptable_fields</span> = [<span class="ruby-string">&quot;name&quot;</span>, <span class="ruby-string">&quot;version&quot;</span>, <span class="ruby-string">&quot;environment&quot;</span>, <span class="ruby-string">&quot;application&quot;</span>]
+  <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">set_build_flag_data</span>(<span class="ruby-string">&quot;components&quot;</span>, <span class="ruby-identifier">components</span>, <span class="ruby-identifier">acceptable_fields</span>)
+  <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;\n#------ End Set Components ---------------#\n&quot;</span>
+  <span class="ruby-identifier">write_to</span> <span class="ruby-identifier">flag</span>
+  <span class="ruby-identifier">flag</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_component_flag-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_component_flag-method -->
+
+    
+      <div id="method-i-set_property_flag" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_property_flag</span><span
+            class="method-args">(prop, value = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_property_flag-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 120</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_property_flag</span>(<span class="ruby-identifier">prop</span>, <span class="ruby-identifier">value</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">acceptable_fields</span> = [<span class="ruby-string">&quot;name&quot;</span>, <span class="ruby-string">&quot;value&quot;</span>, <span class="ruby-string">&quot;environment&quot;</span>, <span class="ruby-string">&quot;component&quot;</span>, <span class="ruby-string">&quot;global&quot;</span>, <span class="ruby-string">&quot;private&quot;</span>]
+  <span class="ruby-identifier">flag</span> = <span class="ruby-node">&quot;#------ Block to Set Property ---------------#\n&quot;</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">set_build_flag_data</span>(<span class="ruby-string">&quot;properties&quot;</span>, <span class="ruby-identifier">prop</span>, <span class="ruby-identifier">acceptable_fields</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;$$SS_Set_property{#{prop}=&gt;#{value}}$$&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;\n#------- End Set Property ---------------#\n&quot;</span>
+  <span class="ruby-identifier">write_to</span> <span class="ruby-identifier">flag</span>
+  <span class="ruby-identifier">flag</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_property_flag-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_property_flag-method -->
+
+    
+      <div id="method-i-set_server_flag" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_server_flag</span><span
+            class="method-args">(servers)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_server_flag-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 133</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_server_flag</span>(<span class="ruby-identifier">servers</span>)
+  <span class="ruby-comment"># servers = &quot;server_name, env\ncserver2_name, env2&quot;</span>
+  <span class="ruby-identifier">acceptable_fields</span> = [<span class="ruby-string">&quot;name&quot;</span>, <span class="ruby-string">&quot;environment&quot;</span>, <span class="ruby-string">&quot;group&quot;</span>]
+  <span class="ruby-identifier">flag</span> = <span class="ruby-node">&quot;#------ Block to Set Servers ---------------#\n&quot;</span>
+  <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">set_build_flag_data</span>(<span class="ruby-string">&quot;servers&quot;</span>, <span class="ruby-identifier">servers</span>, <span class="ruby-identifier">acceptable_fields</span>)
+  <span class="ruby-identifier">flag</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;\n#------ End Set Servers ---------------#\n&quot;</span>
+  <span class="ruby-identifier">write_to</span> <span class="ruby-identifier">flag</span>
+  <span class="ruby-identifier">flag</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_server_flag-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_server_flag-method -->
+
+    
+      <div id="method-i-set_titles_acceptable-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_titles_acceptable?</span><span
+            class="method-args">(cur_titles, acceptable_titles)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_titles_acceptable-3F-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 153</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_titles_acceptable?</span>(<span class="ruby-identifier">cur_titles</span>, <span class="ruby-identifier">acceptable_titles</span>)
+  <span class="ruby-identifier">cur_titles</span>.<span class="ruby-identifier">each</span>.<span class="ruby-identifier">reject</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">cur</span><span class="ruby-operator">|</span> <span class="ruby-identifier">acceptable_titles</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">cur</span>)}.<span class="ruby-identifier">count</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_titles_acceptable-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_titles_acceptable-3F-method -->
+
+    
+      <div id="method-i-write_to" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">write_to</span><span
+            class="method-args">(message, newline = true)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="write_to-source">
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header.rb, line 48</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">write_to</span>(<span class="ruby-identifier">message</span>, <span class="ruby-identifier">newline</span> = <span class="ruby-keyword">true</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">message</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">sep</span> = <span class="ruby-identifier">newline</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;\n&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-ivar">@hand</span>.<span class="ruby-identifier">print</span>(<span class="ruby-identifier">message</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">sep</span>)
+  <span class="ruby-ivar">@hand</span>.<span class="ruby-identifier">flush</span>
+  <span class="ruby-identifier">print</span>(<span class="ruby-identifier">message</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">sep</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- write_to-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- write_to-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
