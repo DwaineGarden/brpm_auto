@@ -8,6 +8,8 @@
 
 SleepDelay = [5,10,25,60] # Pattern for sleep pause in polling 
 RLM_BASE_PROPERTIES = ["SS_application", "SS_environment", "SS_component", "SS_component_version", "request_id", "step_name"]
+KEYWORD_SWITCHES = ["RPM_PARAMS_FILTER","RPM_SRUN_WRAPPER","RPM_INCLUDE"] unless defined?(KEYWORD_SWITCHES)
+Windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/) unless defined?(Windows)
 require "#{File.dirname(__FILE__)}/lib/brpm_automation"
 
 # Compatibility Routines

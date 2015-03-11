@@ -195,8 +195,8 @@ class DispatchNSH < DispatchBase
     result = "No servers to execute on"
     # Loop through the platforms
     OS_PLATFORMS.each do |os, os_details|
-      servers_list = get_platform_servers(os) if seed_servers == ""
-      servers_list = get_platform_servers(os, seed_servers) if seed_servers != ""
+      servers = get_platform_servers(os) if seed_servers == ""
+      servers = get_platform_servers(os, seed_servers) if seed_servers != ""
       message_box "OS Platform: #{os_details["name"]}"
       log "No servers selected for: #{os_details["name"]}" if servers.size == 0
       next if servers.size == 0

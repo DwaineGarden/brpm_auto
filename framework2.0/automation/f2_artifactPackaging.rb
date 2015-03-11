@@ -53,6 +53,7 @@ SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
 files_to_deploy = @transport.get_artifact_paths(@p, options = {})
 transfer_properties = @transport.get_transfer_properties
 result = @transport.package_artifacts(files_to_deploy, {"version" => @p.step_version, "transfer_properties" => transfer_properties})
+raise "Command_Failed: No artifacts in staging area" if result["instance_path"].start_with?("ERROR")
 #@rpm.log "SRUN Result: #{result.inspect}"
 @p.assign_local_param("instance_#{@p.SS_component}_content", files_to_deploy)
 @p.assign_local_param("instance_#{@p.SS_component}", result)

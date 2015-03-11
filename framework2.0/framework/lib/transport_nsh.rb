@@ -298,7 +298,7 @@ class TransportNSH < BrpmAutomation
   def package_staged_artifacts(staging_path, package_name)
     instance_path = File.join(staging_path, package_name)
     staging_artifacts = Dir.entries(staging_path).reject{|k| [".",".."].include?(k) }
-    return {"instance_path" => "ERROR - no files in staging area", "md5" => ""} if staging_artifacts.size < 3
+    return {"instance_path" => "ERROR - no files in staging area", "md5" => ""} if staging_artifacts.size < 1
     FileUtils.cd(staging_path, :verbose => true)
     cmd = "#{nsh_cmd("zip")} -r #{package_name} *"
     result = execute_shell(cmd)
