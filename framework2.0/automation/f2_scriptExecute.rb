@@ -47,7 +47,8 @@ SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
 
 #---------------------- Variables --------------------------#
 script_path = @p.get("Upload Action File")
-script_path = @p.get(nsh_path, script_path)
+script_path = @p.get("nsh_path", script_path)
+transfer_proeprties = {}
 
 #---------------------- Main Body --------------------------#
 raise "Command_Failed: No script to execute: #{script_path}" if script_path == "" || !File.exist?(script_path)
@@ -58,7 +59,7 @@ script = File.open(script_path).read
 action_txt = ERB.new(script).result(binding)
 @rpm.message_box "Executing LibraryAction - #{File.basename(script_path)}"
 script_file = @transport.make_temp_file(action_txt)
-result = @transport.execute_script(script_file, {"transfer_properties" => transfer_properties, "transfer_prefix" => transfer_prefix })
+result = @transport.execute_script(script_file, {"transfer_properties" => transfer_properties)
 #@rpm.log "SRUN Result: #{result.inspect}"
 exit_status = "Success"
 result.split("\n").each{|line| exit_status = line if line.start_with?("EXIT_CODE:") }
