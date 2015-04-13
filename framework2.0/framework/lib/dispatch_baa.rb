@@ -346,6 +346,7 @@ end
 require "#{@params["SS_script_support_path"]}/baa_utilities"
 @rpm.log "Initializing BAA transport"
 baa_path = defined?(BAA_BASE_PATH) ? BAA_BASE_PATH : "/opt/bmc/blade8.5"
-@baa = TransportBAA.new(baa_path, @params)
+baa_url = defined?(SS_integration_dns) ? SS_integration_dns : "http://unknownBladelogicServerSetIntegration"
+@baa = TransportBAA.new(baa_url, @params)
 @rpm.log "Path to BAA: #{BAA_BASE_PATH}"
 @transport = DispatchBAA.new(@baa, @params)

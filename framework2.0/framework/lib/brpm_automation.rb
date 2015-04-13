@@ -276,7 +276,7 @@ class BrpmAutomation
   #
   def privatize(txt)
     private_properties unless defined?(@private_props)
-    @private_props.each{|v| txt.gsub!(v,"-private-") }
+    @private_props.each{|v| txt.gsub!(v,"-private-") unless v.nil? || v.length < 2 }
     txt.gsub!(decrypt_string_with_prefix(SS_integration_password_enc), "-private-") if defined?(SS_integration_password)
     txt
   end
@@ -523,6 +523,12 @@ class BrpmAutomation
     result
   end
   
+  def get_integration_details(key = nil, details_yml = nil)
+    details_yml = SS_integration_details if details_yml.nil?
+    # SS_integration_details = "Project: TST\nDefault item: lots of stuff\n"
+    details = YAML.load(details_yml)
+    key.nil? ? details : details[key]
+  end
 
   private
   

@@ -75,6 +75,6 @@ write_to "Note: this has modified the default script header, you will need to re
 
 if params["update script library"] == "yes"
   script_lib = File.join(params["SS_script_support_path"], "LIBRARY", "automation")
-  FileUtils.mkdir_p(File.join(script_lib, "Framework")) unless File.exist?(File.join(script_lib, "Framework"))
-  FileUtils.cp_r File.join(tmp_dir, "automation/."), File.join(script_lib, "Framework"), :verbose => true
+  #FileUtils.mkdir_p(File.join(script_lib, "Framework")) unless File.exist?(File.join(script_lib, "Framework"))
+  FileUtils.cp_r File.join(tmp_dir, "automation/."), File.join(script_lib, "General"), :verbose => true
 end

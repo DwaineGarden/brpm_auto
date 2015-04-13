@@ -41,14 +41,14 @@ SS_integration_details = "role : BLAdmins
 authentication_mode : SRP"
 SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
 #=== End ===#
-@baa.set_credential(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc), get_integration_details("role")) if @p.SS_transport == "baa"
+@baa.set_credential(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc), get_integration_details("role")) if @p.get("SS_transport", "ss_transport") == "baa"
 
 #---------------------- Methods ----------------------------#
 
 #---------------------- Variables --------------------------#
 script_path = @p.get("Upload Action File")
 script_path = @p.get("nsh_path", script_path)
-transfer_proeprties = {}
+transfer_properties = {}
 
 #---------------------- Main Body --------------------------#
 raise "Command_Failed: No script to execute: #{script_path}" if script_path == "" || !File.exist?(script_path)
@@ -63,7 +63,6 @@ result = @transport.execute_script(script_file, {"transfer_properties" => transf
 #@rpm.log "SRUN Result: #{result.inspect}"
 exit_status = "Success"
 result.split("\n").each{|line| exit_status = line if line.start_with?("EXIT_CODE:") }
-pack_response("script_file_to_execute", script_path)
 pack_response("output_status", exit_status)
 @p.assign_local_param("script_#{@p.SS_component}", script_path)
 @p.save_local_params
