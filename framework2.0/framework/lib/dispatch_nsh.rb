@@ -217,6 +217,22 @@ class DispatchNSH < DispatchBase
     end
     result
   end
+  
+  # Copies remote files to a local staging repository
+  # 
+  # ==== Attributes
+  #
+  # * +source+ - nsh path to source file
+  # * +destination+ - path to destination file
+  # * +options+ - hash of options 
+  #
+  def copy_file(source, destination, options = {})
+    message_box "Copying files via NSH"
+    log "\t Source: #{source}"
+    log "\t Destination: #{destination}"
+    result = @nsh.cp(source, destination)
+    log "\tCopy Result: #{result}"
+  end
       
 end
 

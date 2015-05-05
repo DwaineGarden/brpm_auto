@@ -306,6 +306,25 @@ class TransportNSH < BrpmAutomation
     {"instance_path" => instance_path, "md5" => md5, "manifest" => staging_artifacts }
   end
 
+  # Copies a single file from source to destination via nsh paths
+  #
+  # ==== Attributes
+  #
+  # * +src_path+ - NSH path to source files
+  # * +target_path+ - NSH path to copy to 
+  #
+  # ==== Returns
+  #
+  # * results of command
+  def cp(src_path, target_path)
+    cmd = "#{nsh_cmd("cp")} #{src_path} \"#{target_path}\""
+    cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
+    log cmd if @verbose
+    result = execute_shell(cmd)
+    res = display_result(result)
+    res
+  end
+
   private
 
   def create_temp_script(body, options = {})

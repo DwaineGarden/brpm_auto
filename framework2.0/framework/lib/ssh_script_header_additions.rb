@@ -1,10 +1,6 @@
 #BRPM Framework Additions
 FRAMEWORK_DIR = File.dirname(File.dirname(File.expand_path(__FILE__))) unless defined?(FRAMEWORK_DIR)
 
-require 'popen4'
-require 'timeout'
-require 'rest-client'
-
 def load_helpers(lib_path)
   require "#{lib_path}/script_helper.rb"
   require "#{lib_path}/file_in_utf.rb"
@@ -21,11 +17,5 @@ def load_input_params(in_file)
 end
 
 def initialize_framework
-  if @params["SS_script_target"] == "resource_automation"
-    # do something else
-    conts = File.open(File.join(FRAMEWORK_DIR,"lib","resource_framework.rb")).read
-    eval conts
-  else
-    load File.join(FRAMEWORK_DIR, "brpm_framework.rb")
-  end
+  require File.join(FRAMEWORK_DIR, "brpm_framework.rb")
 end

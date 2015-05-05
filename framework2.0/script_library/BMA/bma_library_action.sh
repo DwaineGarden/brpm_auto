@@ -4,14 +4,7 @@
 #set -x
 #  Custom RPD action for BMA CLI orchestration.
 #  SDunbar BMC
-#Modified by:	Santosh Kunnothmannur(BMC)
-#Modified date: 2014-12-17	- Updated file changes as received from Scott
-#Modified date: 2014-12-22  - Updated RPM_applicationNAME to RPM_application to reflect RPM passed variables
-#Modified date: 2014-12-29  - Added RPM passed variables ROOT_STAGING_DIR, SOURCE_STREAM 
-#							- Updated CONFIG_FILE to use STAGING_DIR instead of CLEARCASE VIEW
-#Modified date: 2015-01-02  - Updated BMA report name to include RPM_environment and RPM_application details. 
-#Modified date: 2015-01-06  - Updated BMA merged path to reflect app name prefix
-#Modified date: 2015-02-19  - Updated ServerTmp and consumed merged files with a condition of file existence
+#Modified by:	Santosh Kunnothmannur(BMC), Brady Byrd
 # Development only variables
 # This are used to override production values for the development purposes
 #####FOR PACKAGE
@@ -24,31 +17,27 @@
 #BMA_TOKEN_SET=
 
 #####Variables
-BMA_DIR=<%=integration_details["BMA_HOME"] %> #"/opt/bmc/bma"
-LOG_LEVEL="ERROR"
-BMA_LIC=<%=integration_details["BMA_LICENSE"] %> #"/opt/bmc/BARA_perm.lic"
-BMA_PROP=<%=bma_properties_path %> #"/opt/bmc/bma_properties/setupDeliver."??_bmaMiddlewareServer??
+BMA_DIR=<%=@bma["home_dir"] %> #"/opt/bmc/bma"
+LOG_LEVEL=<%=@bma["log_level"] %>
+BMA_LIC=<%=@bma["license"] %> #"/opt/bmc/BARA_perm.lic"
+BMA_PROP=<%=@bma["properties"] %> #"/opt/bmc/bma_properties/setupDeliver."??_bmaMiddlewareServer??
 BMA_OPTIONS="-properties ${BMA_PROP} -license ${BMA_LIC} -logLevel ${LOG_LEVEL}"
-BMA_WORKING=<%=integration_details["BMA_WORKING"] %> #"/opt/bmc/bma_working"
+BMA_WORKING=<%=@bma["working_dir"] %> #"/opt/bmc/bma_working"
 
 BMA_CONFIG_PACKAGE=<%=File.basename(bma_config_package_path) %>
-BMA_MODE=<%=bma_action %>
+BMA_MODE=<%=@bma["action"] %>
 BMA_SERVER_PROFILE=<%=File.basename(bma_server_profile_path) %>
 BMA_SERVER_PROFILES_DIR=<%=File.dirname(bma_server_profile_path) %>
-BMA_SNAPSHOTS_DIR=<%=bma_snapshots_path %>
 BMA_CONFIG_PACKAGES_DIR=<%=File.dirname(bma_config_package_path) %>
-BMA_ARCHIVE_DIR=<%=bma_archive_path %>
 BMA_TOKEN_SET=<%=bma_tokenset_name %>
-BMA_WAS_ADMIN_USER=<%=bma_was_admin_user %>
-BMA_WAS_ADMIN_PASSWORD=<%=bma_was_admin_password %>
-BMA_REPORTS_DIR=${BMA_WORKING}/reports
+BMA_SNAPSHOTS_DIR=<%=@bma["snapshots_path"] %>
+BMA_ARCHIVE_DIR=<%=@bma["archive_path"] %>
+BMA_REPORTS_DIR=<%=@bma["reports_path"] %>
+
 BMA_OS_ID=bmaadmin
 CLEANUP_DAYS=40 #The number of days to keep working directory log files
+DATE=<%=@timestamp %>
 
-DATE=`date +%Y%m%d%H%M`
-
-#Santosh-Added 12292014
-STAGING_DIR="$ROOT_STAGE_DIR/staging/$RPM_environment/$RPM_application/mwconfig"
 ######################## MAIN
 
 if [[ ${BMA_MW_PLATFORM} == *portal* ]]; then
@@ -196,9 +185,8 @@ export JAVA_HOME=$BMA_DIR/jre
 #Start routine
 
 echo "#-------------------------------------------------------#"
-echo "#     BMA Execution"
+echo "#     BMA Execution - #{BMA_MODE}"
 echo "#-------------------------------------------------------#"
-echo "=> BMA Mode set to: $BMA_MODE"
 
 case $BMA_MODE in
 testconnection)
@@ -218,7 +206,7 @@ install)
 	fi
 	;;
 drift)
-	bmaDriftReport $BMA_COMPARE_SNAPSHOT1 $BMA_COMPARE_SNAPSHOT2
+	bmaDriftReport <%=bma_compare_snapshot1 %> <%=bma_compare_snapshot2 %>
 	if [ `echo $?` -gt 0 ]
 	then
 		echo "Failed BMA Drift, exiting Job."

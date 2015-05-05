@@ -98,7 +98,7 @@ class BrpmAutomation
     methods = %w{get post put}
     result = {"status" => "ERROR", "response" => "", "message" => ""}
     method = method.downcase
-    verbose = get_option(options, "verbose") == "yes" or get_option(options, "verbose")
+    verbose = get_option(options, "verbose") == "yes" || get_option(options, "verbose")
     headers = get_option(options, "headers", {:accept => :json, :content_type => :json})
     return result["message"] = "ERROR - #{method} not recognized" unless methods.include?(method)
     log "Rest URL: #{url}" if verbose
@@ -550,6 +550,11 @@ class BrpmAutomation
     fil = File.open(file_path,"w+")
     fil.close
     file_path
+  end
+  
+  def load_helper(lib_path)
+    require "#{lib_path}/script_helper.rb"
+    require "#{lib_path}/file_in_utf.rb"
   end
   
 end
