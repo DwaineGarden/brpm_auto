@@ -3,7 +3,8 @@
 
 #---------------------- Declarations ------------------------------#
 @script_name_handle = "library_tree"
-conts = File.open('C:/BMC/persist/automation_libs/brpm_framework.rb').read
+FRAMEWORK_DIR = "C:/BMC/persist/automation_libs"
+conts = File.open("#{FRAMEWORK_DIR}/brpm_framework.rb").read
 eval conts
 
 #---------------------- Methods ------------------------------#

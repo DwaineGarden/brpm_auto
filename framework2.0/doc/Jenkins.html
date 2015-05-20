@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>class Jenkins - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>framework/lib/jenkins.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link"><a href="BrpmAutomation.html">BrpmAutomation</a>
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-new">::new</a>
+    
+    <li><a href="#method-i-build">#build</a>
+    
+    <li><a href="#method-i-build_results">#build_results</a>
+    
+    <li><a href="#method-i-build_status">#build_status</a>
+    
+    <li><a href="#method-i-get_build_artifact">#get_build_artifact</a>
+    
+    <li><a href="#method-i-jenkins_rest_call">#jenkins_rest_call</a>
+    
+    <li><a href="#method-i-job_build_data">#job_build_data</a>
+    
+    <li><a href="#method-i-job_data">#job_data</a>
+    
+    <li><a href="#method-i-job_list">#job_list</a>
+    
+    <li><a href="#method-i-monitor_build">#monitor_build</a>
+    
+    <li><a href="#method-i-set_job_name">#set_job_name</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Jira.html">Jira</a>
+  
+    <li><a href="./Jira/JiraClient.html">Jira::JiraClient</a>
+  
+    <li><a href="./AutomationHeader.html">AutomationHeader</a>
+  
+    <li><a href="./BrpmAutomation.html">BrpmAutomation</a>
+  
+    <li><a href="./BrpmRequest.html">BrpmRequest</a>
+  
+    <li><a href="./BrpmRest.html">BrpmRest</a>
+  
+    <li><a href="./DispatchBAA.html">DispatchBAA</a>
+  
+    <li><a href="./DispatchBase.html">DispatchBase</a>
+  
+    <li><a href="./DispatchNSH.html">DispatchNSH</a>
+  
+    <li><a href="./DispatchSSH.html">DispatchSSH</a>
+  
+    <li><a href="./Git.html">Git</a>
+  
+    <li><a href="./Jenkins.html">Jenkins</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Param.html">Param</a>
+  
+    <li><a href="./ResourceFramework.html">ResourceFramework</a>
+  
+    <li><a href="./Svn.html">Svn</a>
+  
+    <li><a href="./TransportBAA.html">TransportBAA</a>
+  
+    <li><a href="./TransportNSH.html">TransportNSH</a>
+  
+    <li><a href="./TransportSSH.html">TransportSSH</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class Jenkins</h1>
+
+  <div id="description" class="description">
+    
+<p>Base class for working with Subversion</p>
+
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(url, params, options)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Initializes an instance of the class</p>
+
+<h4 id="method-c-new-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>url</code> - url for <a href="Jenkins.html">Jenkins</a> server…</p>
+</li><li>
+<p><code>params</code> - params hash</p>
+</li><li>
+<p><code>options</code> - hash of options includes:… job_name - jenkins job
+name (from url)… username - jenkins user username… password - jenkins
+user password… verbose - true for verbose output (default = false)…
+simulate - simulate command - echo it (default = false)…</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File framework/lib/jenkins.rb, line 20</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">url</span>, <span class="ruby-identifier">params</span>, <span class="ruby-identifier">options</span>)
+  <span class="ruby-ivar">@url</span> = <span class="ruby-identifier">url</span>
+  <span class="ruby-ivar">@username</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;username&quot;</span>)
+  <span class="ruby-ivar">@password</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;password&quot;</span>)
+  <span class="ruby-ivar">@job_name</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;job_name&quot;</span>)
+  <span class="ruby-ivar">@verbose</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;verbose&quot;</span>, <span class="ruby-keyword">false</span>)
+  <span class="ruby-ivar">@simulate</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;simulate&quot;</span>, <span class="ruby-keyword">false</span>)
+  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">params</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-build" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build</span><span
+            class="method-args">(build_arguments = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Performs a build on the active project</p>
+
+<h4 id="method-i-build-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>build_arguments</code> - a hash of the build arguments</p>
+</li></ul>
+
+<h4 id="method-i-build-label-Returns">Returns</h4>
+<ul><li>
+<p><code>job_data</code> - a hash of job information</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="build-source">
+            <pre><span class="ruby-comment"># File framework/lib/jenkins.rb, line 203</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">build</span>(<span class="ruby-identifier">build_arguments</span> = {})
+  <span class="ruby-comment"># Fetch the next build number</span>
+  <span class="ruby-identifier">build_details</span> = <span class="ruby-identifier">job_data</span>
+  <span class="ruby-identifier">next_build</span> = <span class="ruby-identifier">build_details</span>[<span class="ruby-string">&quot;data&quot;</span>][<span class="ruby-string">&quot;nextBuildNumber&quot;</span>]
+  <span class="ruby-identifier">url_part</span> = <span class="ruby-string">&quot;build&quot;</span>
+  <span class="ruby-identifier">options</span> = {<span class="ruby-string">&quot;method&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">post</span>, <span class="ruby-string">&quot;data&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">build_arguments</span>}
+  <span class="ruby-identifier">reponse</span> = <span class="ruby-identifier">jenkins_rest_call</span>(<span class="ruby-identifier">url_part</span>, <span class="ruby-identifier">options</span>)
+  <span class="ruby-identifier">last_build</span> = <span class="ruby-identifier">next_build</span>  
+  <span class="ruby-identifier">result</span> = <span class="ruby-string">&quot;Web server response: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;header&quot;</span>]
+  <span class="ruby-identifier">log</span> <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;header&quot;</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;HTTPFound 302&quot;</span>) <span class="ruby-comment">#response[&quot;status&quot;] == &quot;failure&quot;</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Command_Failed: Build did not launch&quot;</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-value">-1</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">launched</span> = <span class="ruby-keyword">false</span>
+  <span class="ruby-value">10</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword">do</span> 
+    <span class="ruby-identifier">test_result</span> = <span class="ruby-identifier">job_build_data</span>(<span class="ruby-identifier">last_build</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">test_result</span>[<span class="ruby-string">&quot;data&quot;</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">test_result</span>[<span class="ruby-string">&quot;data&quot;</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;failure&quot;</span>)
+      <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Job not ready waiting...&quot;</span>
+      <span class="ruby-identifier">sleep</span>(<span class="ruby-value">6</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">launched</span> = <span class="ruby-keyword">true</span>
+      <span class="ruby-keyword">break</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">launched</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">last_build</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Command_Failed: Build did not launch in 60 seconds&quot;</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-value">-1</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- build-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- build-method -->
+
+    
+      <div id="method-i-build_results" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_results</span><span
+            class="method-args">(build_no, get_link = false)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns the raw results of a build</p>
+
+<h4 id="method-i-build_results-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>build_no</code> - the id of a build (omit for latest build)</p>
+</li><li>
+<p><code>get_link</code> - returns a link to the results instead (optional -
+default = false)</p>
+</li></ul>
+
+<h4 id="method-i-build_results-label-Returns">Returns</h4>
+<ul><li>
+<p><code>job_data</code> - text of build output</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="build_results-source">
+            <pre><span class="ruby-comment"># File framework/lib/jenkins.rb, line 135</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">build_results</span>(<span class="ruby-identifier">build_no</span>, <span class="ruby-identifier">get_link</span> = <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">url_part</span> = <span class="ruby-node">&quot;#{build_no}/consoleText&quot;</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">get_link</span>
+    <span class="ruby-identifier">response</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-ivar">@url</span>,<span class="ruby-string">&quot;job&quot;</span>,<span class="ruby-ivar">@job_name</span>, <span class="ruby-identifier">url_part</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">response</span> = <span class="ruby-identifier">jenkins_rest_call</span>(<span class="ruby-identifier">url_part</span>, {<span class="ruby-string">&quot;headers&quot;</span> =<span class="ruby-operator">&gt;</span> {}})
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">response</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- build_results-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- build_results-method -->
+
+    
+      <div id="method-i-build_status" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_status</span><span
+            class="method-args">(build_no = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns the status of a build</p>
+
+<h4 id="method-i-build_status-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>build_no</code> - the id of a build (omit for latest build)</p>
+</li></ul>
+
+<h4 id="method-i-build_status-label-Returns">Returns</h4>
+<ul><li>
+<p><code>hash</code> - still_building (ture/false) and status (success/fail)</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="build_status-source">
+            <pre><span class="ruby-comment"># File framework/lib/jenkins.rb, line 115</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">build_status</span>(<span class="ruby-identifier">build_no</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">job_build_data</span>(<span class="ruby-identifier">build_no</span>)
+  <span class="ruby-comment"># Now parse for the status and build id</span>
+  <span class="ruby-comment">#log &quot;Raw Result: #{response.inspect}&quot;</span>
+  <span class="ruby-identifier">ans</span> = {}
+  <span class="ruby-identifier">ans</span>[<span class="ruby-string">&quot;still_building&quot;</span>] = <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;data&quot;</span>][<span class="ruby-string">&quot;building&quot;</span>]
+  <span class="ruby-identifier">ans</span>[<span class="ruby-string">&quot;success&quot;</span>] = <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;status&quot;</span>]
+  <span class="ruby-identifier">ans</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- build_status-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- build_status-method -->
+
+    
+      <div id="method-i-get_build_artifact" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_build_artifact</span><span
+            class="method-args">(build_no, artifact_name, target_path = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns the status of a build</p>
+
+<h4 id="method-i-get_build_artifact-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>build_no</code> - jenkins build id</p>
+</li><li>
+<p><code>artifact_name</code> - name from the build artifacts list in job data</p>
+</li><li>
+<p><code>target_path</code> - folder to download to (default is SS_output_dir)</p>
+</li></ul>
+
+<h4 id="method-i-get_build_artifact-label-Returns">Returns</h4>
+<ul><li>
+<p><code>status</code> - success or failure</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="get_build_artifact-source">
+            <pre><span class="ruby-comment"># File framework/lib/jenkins.rb, line 248</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_build_artifact</span>(<span class="ruby-identifier">build_no</span>, <span class="ruby-identifier">artifact_name</span>, <span class="ruby-identifier">target_path</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-comment"># http://vw-aus-rem-dv11.bmc.com:8080/job/BRPM_4.6-D_WAR/lastSuccessfulBuild/artifact/brpm_231.war</span>
+  <span class="ruby-identifier">url_part</span> = <span class="ruby-node">&quot;#{build_no}/artifact/#{artifact_name}&quot;</span>
+  <span class="ruby-identifier">url</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-ivar">@url</span>,<span class="ruby-string">&quot;job&quot;</span>,<span class="ruby-ivar">@job_name</span>, <span class="ruby-identifier">url_part</span>)
+  <span class="ruby-identifier">target_path</span> = <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_output_dir&quot;</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">target_path</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">fetch_artifact</span>(<span class="ruby-identifier">url</span>, <span class="ruby-identifier">target_path</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_build_artifact-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_build_artifact-method -->
+
+    
+      <div id="method-i-jenkins_rest_call" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">jenkins_rest_call</span><span
+            class="method-args">(url_part, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Calls the jenkins server via rest Uses the current project and auth
+information</p>
+
+<h4 id="method-i-jenkins_rest_call-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>options</code> - a hash of options, includes:</p>
+</li></ul>
+
+<pre>url_part - the fragment of the url past the project ex.
+for this url: http://vw-aus-rem-dv11.bmc.com:8080/job/BRPM_4.6-D_WAR/231/api/json
+the fragment is &quot;231/api/json&quot;
+username - override existing username
+password - override existing password
+method - get/post, defaults to get</pre>
+
+<h4 id="method-i-jenkins_rest_call-label-Returns">Returns</h4>
+<ul><li>
+<p><code>rest_result</code> - hash of information including status
+(success-failure) and data - the rest result</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="jenkins_rest_call-source">
+            <pre><span class="ruby-comment"># File framework/lib/jenkins.rb, line 45</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">jenkins_rest_call</span>(<span class="ruby-identifier">url_part</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">result</span> = {<span class="ruby-string">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Failure&quot;</span>}
+  <span class="ruby-identifier">options</span>[<span class="ruby-string">&quot;username&quot;</span>] = <span class="ruby-ivar">@username</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">&quot;username&quot;</span>)
+  <span class="ruby-identifier">options</span>[<span class="ruby-string">&quot;password&quot;</span>] = <span class="ruby-ivar">@password</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">&quot;password&quot;</span>)
+  <span class="ruby-identifier">method</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;method&quot;</span>) <span class="ruby-operator">==</span> <span class="ruby-string">&quot;post&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;post&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;get&quot;</span>
+  <span class="ruby-identifier">url</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-ivar">@url</span>,<span class="ruby-string">&quot;job&quot;</span>,<span class="ruby-ivar">@job_name</span>, <span class="ruby-identifier">url_part</span>)
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Full url [#{method}]: #{url}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@simulate</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@verbose</span>      
+  <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@simulate</span>
+    <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rest_call</span>(<span class="ruby-identifier">url</span>, <span class="ruby-identifier">method</span>, <span class="ruby-identifier">options</span>) 
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Response: #{response.inspect}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@verbose</span>
+    <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;data&quot;</span>] = <span class="ruby-node">&quot;#{response[&quot;status&quot;]}: #{response[&quot;message&quot;]}&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;status&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;success&quot;</span>
+    <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;data&quot;</span>] = <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;data&quot;</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;status&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;success&quot;</span>
+    <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;status&quot;</span>] = <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;status&quot;</span>]
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;status&quot;</span>] = <span class="ruby-string">&quot;simulate&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- jenkins_rest_call-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- jenkins_rest_call-method -->
+
+    
+      <div id="method-i-job_build_data" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">job_build_data</span><span
+            class="method-args">(build_no = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns the data of a build</p>
+
+<h4 id="method-i-job_build_data-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>build_no</code> - the id of a build (omit for latest build)</p>
+</li></ul>
+
+<h4 id="method-i-job_build_data-label-Returns">Returns</h4>
+<ul><li>
+<p><code>job_data</code> - a hash of job information</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="job_build_data-source">
+            <pre><span class="ruby-comment"># File framework/lib/jenkins.rb, line 101</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">job_build_data</span>(<span class="ruby-identifier">build_no</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">build_no</span> = <span class="ruby-string">&quot;lastBuild&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">build_no</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">jenkins_rest_call</span>(<span class="ruby-node">&quot;#{build_no}/api/json&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- job_build_data-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- job_build_data-method -->
+
+    
+      <div id="method-i-job_data" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">job_data</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns the data of a Build Job</p>
+
+<h4 id="method-i-job_data-label-Returns">Returns</h4>
+<ul><li>
+<p><code>job_data</code> - a hash of job information</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="job_data-source">
+            <pre><span class="ruby-comment"># File framework/lib/jenkins.rb, line 88</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">job_data</span>
+  <span class="ruby-identifier">jenkins_rest_call</span>(<span class="ruby-string">&quot;/api/json&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- job_data-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- job_data-method -->
+
+    
+      <div id="method-i-job_list" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">job_list</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns the array of Build Jobs</p>
+
+<h4 id="method-i-job_list-label-Returns">Returns</h4>
+<ul><li>
+<p><code>job_list</code> - an array of hashes with job information</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="job_list-source">
+            <pre><span class="ruby-comment"># File framework/lib/jenkins.rb, line 75</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">job_list</span>
+  <span class="ruby-identifier">options</span> = {<span class="ruby-string">&quot;username&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@username</span>, <span class="ruby-string">&quot;password&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@password</span>}
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rest_call</span>(<span class="ruby-node">&quot;#{@url}/api/json&quot;</span>, <span class="ruby-string">&quot;get&quot;</span>, <span class="ruby-identifier">options</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-string">&quot;ERROR&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;status&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;ERROR&quot;</span>
+  <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;data&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- job_list-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- job_list-method -->
+
+    
+      <div id="method-i-monitor_build" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">monitor_build</span><span
+            class="method-args">(build_no)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Monitors a running build</p>
+
+<h4 id="method-i-monitor_build-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>build_no</code> - the id of a build (omit for latest build)</p>
+</li></ul>
+
+<h4 id="method-i-monitor_build-label-Returns">Returns</h4>
+<ul><li>
+<p><code>job_data</code> - a hash of job information</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="monitor_build-source">
+            <pre><span class="ruby-comment"># File framework/lib/jenkins.rb, line 154</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">monitor_build</span>(<span class="ruby-identifier">build_no</span>)
+  <span class="ruby-comment"># start with an initial build result</span>
+  <span class="ruby-comment"># Now parse for the status and build id</span>
+  <span class="ruby-identifier">max_time</span> = <span class="ruby-constant">MaxBuildTime</span>
+  <span class="ruby-identifier">sleep_interval</span> = <span class="ruby-value">15</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">build_status</span>(<span class="ruby-identifier">build_no</span>)
+  <span class="ruby-identifier">results</span> = <span class="ruby-node">&quot;Initial test: Build Number: #{build_no}, Status - building: #{result[&quot;still_building&quot;].to_s}, result: #{result[&quot;success&quot;]}\n&quot;</span>
+  <span class="ruby-comment"># Now Check to see if the token matches</span>
+  <span class="ruby-identifier">build_match</span> = <span class="ruby-keyword">true</span>
+  <span class="ruby-comment">#build_match = response.include?(ss_token) if use_token_match # Enable this if using token matching</span>
+  <span class="ruby-identifier">message_box</span> <span class="ruby-node">&quot;Monitoring Build Progress (id: #{build_no})&quot;</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">build_no</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;still_building&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">build_match</span>
+    <span class="ruby-identifier">start_time</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+    <span class="ruby-identifier">elapsed</span> = <span class="ruby-value">0</span>
+    <span class="ruby-identifier">complete</span> = <span class="ruby-keyword">false</span>
+    <span class="ruby-keyword">until</span> <span class="ruby-identifier">elapsed</span> <span class="ruby-operator">&gt;</span> (<span class="ruby-identifier">max_time</span> * <span class="ruby-value">60</span>) <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">result</span> = <span class="ruby-identifier">build_status</span>(<span class="ruby-identifier">build_no</span>)
+      <span class="ruby-identifier">results</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;Status - building: #{result[&quot;still_building&quot;].to_s}, result: #{result[&quot;success&quot;]}\n&quot;</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;still_building&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>
+        <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Success - #{result[&quot;success&quot;]}&quot;</span>
+        <span class="ruby-identifier">complete</span> = <span class="ruby-keyword">true</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;success&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;SUCCESS&quot;</span>
+        <span class="ruby-identifier">complete</span> = <span class="ruby-keyword">false</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;success&quot;</span>] <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;SUCCESS&quot;</span>
+        <span class="ruby-keyword">break</span>
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">elapsed</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">start_time</span>
+        <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Still building ...elapsed: #{elapsed.to_i.to_s}, pausing for #{sleep_interval.to_s} seconds&quot;</span>
+        <span class="ruby-identifier">sleep</span> <span class="ruby-identifier">sleep_interval</span>
+      <span class="ruby-keyword">end</span>
+      <span class="ruby-identifier">elapsed</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">start_time</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">elsif</span>  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;success&quot;</span>] <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;SUCCESS&quot;</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Build failed on initial parameters, either could not retrieve build id or token did not match output&quot;</span>
+    <span class="ruby-identifier">complete</span> = <span class="ruby-keyword">false</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Build Successful&quot;</span>
+    <span class="ruby-identifier">complete</span> = <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">complete</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- monitor_build-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- monitor_build-method -->
+
+    
+      <div id="method-i-set_job_name" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_job_name</span><span
+            class="method-args">(new_name)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_job_name-source">
+            <pre><span class="ruby-comment"># File framework/lib/jenkins.rb, line 64</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_job_name</span>(<span class="ruby-identifier">new_name</span>)
+  <span class="ruby-ivar">@job_name</span> = <span class="ruby-identifier">new_name</span>
+  <span class="ruby-identifier">new_name</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_job_name-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_job_name-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+

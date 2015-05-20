@@ -181,7 +181,7 @@ class TransportNSH < BrpmAutomation
     script_dir = File.dirname(script_path)
     err_file = touch_file("#{script_dir}/nsh_errors_#{Time.now.strftime("%Y%m%d%H%M%S%L")}.txt")
     script_path = "\"#{script_path}\"" if script_path.include?(" ")
-    cmd = "#{nsh_cmd("scriptutil")} -d \"#{target_path}\" -h #{target_hosts.join(" ")} -H \"Results from: %h\" -s #{script_path}"
+    cmd = "#{nsh_cmd("scriptutil")} -d \"#{target_path}\" -h #{target_hosts.join(" ")} -s #{script_path}"
     cmd = cmd + " 2>#{err_file}" unless Windows
     result = execute_shell(cmd)
     result["stderr"] = "#{result["stderr"]}\n#{File.open(err_file).read}"
@@ -202,7 +202,8 @@ class TransportNSH < BrpmAutomation
   # * output of script
   #
   def script_execute_body(target_hosts, script_body, target_path, options = {})
-    script_file = "nsh_script_#{Time.now.strftime("%Y%m%d%H%M%S")}.sh"
+    ext = get_option(options,"platform", "linux").downcase == "linux" ? ".sh" : ".bat"
+    script_file = "nsh_script_#{Time.now.strftime("%Y%m%d%H%M%S")}#{ext}"
     full_path = File.join(@params["SS_output_dir"],script_file)
     fil = File.open(full_path,"w+")
     fil.write script_body.gsub("\r", "")

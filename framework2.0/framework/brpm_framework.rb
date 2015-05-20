@@ -44,7 +44,7 @@ customer_include_file = File.join(FRAMEWORK_DIR,"customer_include_default.rb") i
 conts = File.open(customer_include_file).read
 eval conts # Use eval for resource automation to be dynamic
 
-if @params["SS_script_target"] == "resource_automation"
+if @params.nil? || @params["SS_script_target"] == "resource_automation"
   puts "Loading customer include file: #{customer_include_file}"
   conts = File.open(File.join(FRAMEWORK_DIR,"lib","resource_framework.rb")).read
   eval conts

@@ -109,8 +109,9 @@ class DispatchBase < BrpmAutomation
   #
   # path to file
   #
-  def make_temp_file(content)
-    file_path = File.join(@params["SS_output_dir"],"shell_#{precision_timestamp}.sh")
+  def make_temp_file(content, platform = "linux")
+    ext = platform.downcase == "linux" ? ".sh" : ".bat"
+    file_path = File.join(@params["SS_output_dir"],"shell_#{precision_timestamp}#{ext}")
     fil = File.open(file_path, "w+")
     fil.puts content
     fil.flush
@@ -144,7 +145,7 @@ class DispatchBase < BrpmAutomation
       properties["RPM_CHANNEL_ROOT"] = dos_path(properties["RPM_CHANNEL_ROOT"])
       properties["VL_CHANNEL_ROOT"] = properties["RPM_CHANNEL_ROOT"]
       wrapper = "#{wrapper}.bat"
-      script = "@echo off\r\necho |hostname > junk.txt\r\nset /p HOST=<junk.txt\r\nrm junk.txt\r\n"
+      script = "@echo off\r\necho |hostname > junk.txt\r\nset /p HOST=<junk.txt\r\necho y | del junk.txt\r\n"
       script += "echo ============== HOSTNAME: %HOST% ==============\r\n"
       script += "echo #{msg} \r\n"
       properties.each{|k,v| script += "set #{k}=#{v}\r\n" }
@@ -152,7 +153,7 @@ class DispatchBase < BrpmAutomation
       script += "cd %RPM_CHANNEL_ROOT%\r\n"
       script += "#{cmd}\r\n"
       script += "echo EXIT_CODE: %errorlevel%\r\n"
-      script +=  "timeout /T 500\r\necho y | del #{target}\r\n"
+      script +=  "timeout /T 5\r\necho y | del #{target}\r\n"
     else
       wrapper = "#{wrapper}.sh"
       script = "echo \"============== HOSTNAME: `hostname` ==============\"\n"
@@ -190,7 +191,7 @@ class DispatchBase < BrpmAutomation
     if os_platform =~ /win/
       target_path = dos_path(target_path)
       wrapper = "#{wrapper}.bat"
-      script = "@echo off\r\necho |hostname > junk.txt\r\nset /p HOST=<junk.txt\r\nrm junk.txt\r\n"
+      script = "@echo off\r\necho |hostname > junk.txt\r\nset /p HOST=<junk.txt\r\necho y | del junk.txt\r\n"
       script += "echo ============== HOSTNAME: %HOST% ==============\r\n"
       script += "echo #{msg} \r\n"
       script += "set RPM_CHANNEL_ROOT=#{target_path}\r\n"
@@ -198,7 +199,7 @@ class DispatchBase < BrpmAutomation
       script += "cd %RPM_CHANNEL_ROOT%\r\n"
       script += "#{command} #{target}\r\n"
       script += "echo EXIT_CODE: %errorlevel%\r\n"
-      script += "timeout /T 500\r\necho y | del #{target}\r\n"
+      script += "timeout /T 5\r\necho y | del #{target}\r\n"
     else
       wrapper = "#{wrapper}.sh"
       script = "echo \"============== HOSTNAME: `hostname` ==============\"\n"
@@ -298,7 +299,13 @@ class DispatchBase < BrpmAutomation
   # 
   def server_dns_names(servers)
     result = []
-    servers.each{|name,props| result << (props["dns"].length > 2 ? props["dns"] : name) }
+    servers.each do |name,props|
+      if props["dns"].length < 3 || props["dns"].start_with?("http")
+        result << name
+      else
+        result << props["dns"]
+      end
+    end
     result
   end
   

@@ -8,6 +8,7 @@ def execute_library_action
   step_name = @p.step_name
   msg = "Executing library action for step: #{step_name}\n"
   action_name = @p.get("Select Library Action")
+  action_name = @p.get("f2_LibraryScript") if action_name == ""
   if action_name == ""
     action_name = "test/env_command.rb"
     library_action = File.join(ACTION_LIBRARY_PATH, action_name)

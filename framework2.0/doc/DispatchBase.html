@@ -128,6 +128,8 @@
   
     <li><a href="./Git.html">Git</a>
   
+    <li><a href="./Jenkins.html">Jenkins</a>
+  
     <li><a href="./Object.html">Object</a>
   
     <li><a href="./Param.html">Param</a>
@@ -349,7 +351,7 @@ wrapper will call</p>
 
           
           <div class="method-source-code" id="build_wrapper_script-source">
-            <pre><span class="ruby-comment"># File framework/lib/dispatch_base.rb, line 135</span>
+            <pre><span class="ruby-comment"># File framework/lib/dispatch_base.rb, line 136</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">build_wrapper_script</span>(<span class="ruby-identifier">os_platform</span>, <span class="ruby-identifier">shebang</span>, <span class="ruby-identifier">properties</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-identifier">msg</span> = <span class="ruby-string">&quot;Environment variables from BRPM&quot;</span>
   <span class="ruby-identifier">wrapper</span> = <span class="ruby-node">&quot;srun_wrapper_#{precision_timestamp}&quot;</span>
@@ -362,7 +364,7 @@ wrapper will call</p>
     <span class="ruby-identifier">properties</span>[<span class="ruby-string">&quot;RPM_CHANNEL_ROOT&quot;</span>] = <span class="ruby-identifier">dos_path</span>(<span class="ruby-identifier">properties</span>[<span class="ruby-string">&quot;RPM_CHANNEL_ROOT&quot;</span>])
     <span class="ruby-identifier">properties</span>[<span class="ruby-string">&quot;VL_CHANNEL_ROOT&quot;</span>] = <span class="ruby-identifier">properties</span>[<span class="ruby-string">&quot;RPM_CHANNEL_ROOT&quot;</span>]
     <span class="ruby-identifier">wrapper</span> = <span class="ruby-node">&quot;#{wrapper}.bat&quot;</span>
-    <span class="ruby-identifier">script</span> = <span class="ruby-string">&quot;@echo off\r\necho |hostname &gt; junk.txt\r\nset /p HOST=&lt;junk.txt\r\nrm junk.txt\r\n&quot;</span>
+    <span class="ruby-identifier">script</span> = <span class="ruby-string">&quot;@echo off\r\necho |hostname &gt; junk.txt\r\nset /p HOST=&lt;junk.txt\r\necho y | del junk.txt\r\n&quot;</span>
     <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot;echo ============== HOSTNAME: %HOST% ==============\r\n&quot;</span>
     <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;echo #{msg} \r\n&quot;</span>
     <span class="ruby-identifier">properties</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;set #{k}=#{v}\r\n&quot;</span> }
@@ -370,7 +372,7 @@ wrapper will call</p>
     <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot;cd %RPM_CHANNEL_ROOT%\r\n&quot;</span>
     <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#{cmd}\r\n&quot;</span>
     <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot;echo EXIT_CODE: %errorlevel%\r\n&quot;</span>
-    <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span>  <span class="ruby-node">&quot;timeout /T 500\r\necho y | del #{target}\r\n&quot;</span>
+    <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span>  <span class="ruby-node">&quot;timeout /T 5\r\necho y | del #{target}\r\n&quot;</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">wrapper</span> = <span class="ruby-node">&quot;#{wrapper}.sh&quot;</span>
     <span class="ruby-identifier">script</span> = <span class="ruby-string">&quot;echo \&quot;============== HOSTNAME: `hostname` ==============\&quot;\n&quot;</span>
@@ -480,7 +482,7 @@ script_file</p>
 
           
           <div class="method-source-code" id="create_command_wrapper-source">
-            <pre><span class="ruby-comment"># File framework/lib/dispatch_base.rb, line 186</span>
+            <pre><span class="ruby-comment"># File framework/lib/dispatch_base.rb, line 187</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create_command_wrapper</span>(<span class="ruby-identifier">command</span>, <span class="ruby-identifier">os_platform</span>, <span class="ruby-identifier">source_path</span>, <span class="ruby-identifier">target_path</span>)
   <span class="ruby-identifier">msg</span> = <span class="ruby-string">&quot;Environment variables from BRPM&quot;</span>
   <span class="ruby-identifier">wrapper</span> = <span class="ruby-node">&quot;srun_wrapper_#{precision_timestamp}&quot;</span>
@@ -488,7 +490,7 @@ script_file</p>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">os_platform</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">%rwin/</span>
     <span class="ruby-identifier">target_path</span> = <span class="ruby-identifier">dos_path</span>(<span class="ruby-identifier">target_path</span>)
     <span class="ruby-identifier">wrapper</span> = <span class="ruby-node">&quot;#{wrapper}.bat&quot;</span>
-    <span class="ruby-identifier">script</span> = <span class="ruby-string">&quot;@echo off\r\necho |hostname &gt; junk.txt\r\nset /p HOST=&lt;junk.txt\r\nrm junk.txt\r\n&quot;</span>
+    <span class="ruby-identifier">script</span> = <span class="ruby-string">&quot;@echo off\r\necho |hostname &gt; junk.txt\r\nset /p HOST=&lt;junk.txt\r\necho y | del junk.txt\r\n&quot;</span>
     <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot;echo ============== HOSTNAME: %HOST% ==============\r\n&quot;</span>
     <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;echo #{msg} \r\n&quot;</span>
     <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;set RPM_CHANNEL_ROOT=#{target_path}\r\n&quot;</span>
@@ -496,7 +498,7 @@ script_file</p>
     <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot;cd %RPM_CHANNEL_ROOT%\r\n&quot;</span>
     <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#{command} #{target}\r\n&quot;</span>
     <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot;echo EXIT_CODE: %errorlevel%\r\n&quot;</span>
-    <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;timeout /T 500\r\necho y | del #{target}\r\n&quot;</span>
+    <span class="ruby-identifier">script</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;timeout /T 5\r\necho y | del #{target}\r\n&quot;</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">wrapper</span> = <span class="ruby-node">&quot;#{wrapper}.sh&quot;</span>
     <span class="ruby-identifier">script</span> = <span class="ruby-string">&quot;echo \&quot;============== HOSTNAME: `hostname` ==============\&quot;\n&quot;</span>
@@ -553,7 +555,7 @@ script_file</p>
 
           
           <div class="method-source-code" id="get_artifact_paths-source">
-            <pre><span class="ruby-comment"># File framework/lib/dispatch_base.rb, line 231</span>
+            <pre><span class="ruby-comment"># File framework/lib/dispatch_base.rb, line 232</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_artifact_paths</span>(<span class="ruby-identifier">p_obj</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-identifier">files_to_deploy</span> = []
   <span class="ruby-identifier">artifact_path</span> = <span class="ruby-identifier">p_obj</span>.<span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;step_version_artifact_url&quot;</span>, <span class="ruby-keyword">nil</span>)
@@ -651,7 +653,7 @@ included in key)</p>
         
         <div class="method-heading">
           <span class="method-name">make_temp_file</span><span
-            class="method-args">(content)</span>
+            class="method-args">(content, platform = "linux")</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -673,8 +675,9 @@ included in key)</p>
           
           <div class="method-source-code" id="make_temp_file-source">
             <pre><span class="ruby-comment"># File framework/lib/dispatch_base.rb, line 112</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">make_temp_file</span>(<span class="ruby-identifier">content</span>)
-  <span class="ruby-identifier">file_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_output_dir&quot;</span>],<span class="ruby-node">&quot;shell_#{precision_timestamp}.sh&quot;</span>)
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">make_temp_file</span>(<span class="ruby-identifier">content</span>, <span class="ruby-identifier">platform</span> = <span class="ruby-string">&quot;linux&quot;</span>)
+  <span class="ruby-identifier">ext</span> = <span class="ruby-identifier">platform</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;linux&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;.sh&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;.bat&quot;</span>
+  <span class="ruby-identifier">file_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_output_dir&quot;</span>],<span class="ruby-node">&quot;shell_#{precision_timestamp}#{ext}&quot;</span>)
   <span class="ruby-identifier">fil</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file_path</span>, <span class="ruby-string">&quot;w+&quot;</span>)
   <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">content</span>
   <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">flush</span>
@@ -707,7 +710,7 @@ included in key)</p>
 
           
           <div class="method-source-code" id="os_platform-source">
-            <pre><span class="ruby-comment"># File framework/lib/dispatch_base.rb, line 307</span>
+            <pre><span class="ruby-comment"># File framework/lib/dispatch_base.rb, line 314</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">os_platform</span>(<span class="ruby-identifier">platform</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-string">&quot;nix&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">platform</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">%rnix/</span>
   <span class="ruby-keyword">return</span> <span class="ruby-string">&quot;win&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">platform</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">%rwin/</span>
@@ -751,12 +754,12 @@ included in key)</p>
 
           
           <div class="method-source-code" id="package_staged_artifacts-source">
-            <pre><span class="ruby-comment"># File framework/lib/dispatch_base.rb, line 279</span>
+            <pre><span class="ruby-comment"># File framework/lib/dispatch_base.rb, line 280</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">package_staged_artifacts</span>(<span class="ruby-identifier">staging_path</span>, <span class="ruby-identifier">version</span>)
   <span class="ruby-identifier">package_file</span> = <span class="ruby-node">&quot;package_#{version}.zip&quot;</span>
   <span class="ruby-identifier">instance_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">staging_path</span>, <span class="ruby-identifier">package_file</span>)
   <span class="ruby-identifier">staging_artifacts</span> = <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">entries</span>(<span class="ruby-identifier">staging_path</span>).<span class="ruby-identifier">reject</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> [<span class="ruby-string">&quot;.&quot;</span>,<span class="ruby-string">&quot;..&quot;</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">k</span>) }
-  <span class="ruby-keyword">return</span> {<span class="ruby-string">&quot;instance_path&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ERROR - no files in staging area&quot;</span>, <span class="ruby-string">&quot;md5&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>} <span class="ruby-keyword">if</span> <span class="ruby-identifier">staging_artifacts</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">3</span>
+  <span class="ruby-keyword">return</span> {<span class="ruby-string">&quot;instance_path&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ERROR - no files in staging area&quot;</span>, <span class="ruby-string">&quot;md5&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>} <span class="ruby-keyword">if</span> <span class="ruby-identifier">staging_artifacts</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">1</span>
   <span class="ruby-identifier">cmd</span> = <span class="ruby-node">&quot;cd #{staging_path} &amp;&amp; zip -r #{package_file} *&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-constant">Windows</span>
   <span class="ruby-identifier">result</span> = <span class="ruby-identifier">execute_shell</span>(<span class="ruby-identifier">cmd</span>)
   <span class="ruby-identifier">md5</span> = <span class="ruby-constant">Digest</span><span class="ruby-operator">::</span><span class="ruby-constant">MD5</span>.<span class="ruby-identifier">file</span>(<span class="ruby-identifier">instance_path</span>).<span class="ruby-identifier">hexdigest</span>
@@ -799,10 +802,16 @@ otherwise, name</p>
 
           
           <div class="method-source-code" id="server_dns_names-source">
-            <pre><span class="ruby-comment"># File framework/lib/dispatch_base.rb, line 299</span>
+            <pre><span class="ruby-comment"># File framework/lib/dispatch_base.rb, line 300</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">server_dns_names</span>(<span class="ruby-identifier">servers</span>)
   <span class="ruby-identifier">result</span> = []
-  <span class="ruby-identifier">servers</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">name</span>,<span class="ruby-identifier">props</span><span class="ruby-operator">|</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">props</span>[<span class="ruby-string">&quot;dns&quot;</span>].<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">props</span>[<span class="ruby-string">&quot;dns&quot;</span>] <span class="ruby-operator">:</span> <span class="ruby-identifier">name</span>) }
+  <span class="ruby-identifier">servers</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>,<span class="ruby-identifier">props</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">props</span>[<span class="ruby-string">&quot;dns&quot;</span>].<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">3</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">props</span>[<span class="ruby-string">&quot;dns&quot;</span>].<span class="ruby-identifier">start_with?</span>(<span class="ruby-string">&quot;http&quot;</span>)
+      <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">name</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">props</span>[<span class="ruby-string">&quot;dns&quot;</span>]
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">result</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- server_dns_names-source -->

@@ -91,6 +91,8 @@
     
     <li><a href="#method-i-execute_shell">#execute_shell</a>
     
+    <li><a href="#method-i-get_integration_details">#get_integration_details</a>
+    
     <li><a href="#method-i-get_keyword_items">#get_keyword_items</a>
     
     <li><a href="#method-i-get_option">#get_option</a>
@@ -118,6 +120,8 @@
     <li><a href="#method-i-private_properties">#private_properties</a>
     
     <li><a href="#method-i-privatize">#privatize</a>
+    
+    <li><a href="#method-i-read_shebang">#read_shebang</a>
     
     <li><a href="#method-i-required_option">#required_option</a>
     
@@ -166,6 +170,8 @@
     <li><a href="./DispatchSSH.html">DispatchSSH</a>
   
     <li><a href="./Git.html">Git</a>
+  
+    <li><a href="./Jenkins.html">Jenkins</a>
   
     <li><a href="./Object.html">Object</a>
   
@@ -433,6 +439,39 @@ pid =&gt; process id, status =&gt; exit_code}</p>
 
         
       </div><!-- execute_shell-method -->
+
+    
+      <div id="method-i-get_integration_details" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_integration_details</span><span
+            class="method-args">(key = nil, details_yml = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_integration_details-source">
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 526</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_integration_details</span>(<span class="ruby-identifier">key</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">details_yml</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">details_yml</span> = <span class="ruby-constant">SS_integration_details</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">details_yml</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-comment"># SS_integration_details = &quot;Project: TST\nDefault item: lots of stuff\n&quot;</span>
+  <span class="ruby-identifier">details</span> = <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">details_yml</span>)
+  <span class="ruby-identifier">key</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">details</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">details</span>[<span class="ruby-identifier">key</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_integration_details-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_integration_details-method -->
 
     
       <div id="method-i-get_keyword_items" class="method-detail ">
@@ -1016,7 +1055,7 @@ around the message</p>
             <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 277</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">privatize</span>(<span class="ruby-identifier">txt</span>)
   <span class="ruby-identifier">private_properties</span> <span class="ruby-keyword">unless</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@private_props</span>)
-  <span class="ruby-ivar">@private_props</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">txt</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-identifier">v</span>,<span class="ruby-string">&quot;-private-&quot;</span>) }
+  <span class="ruby-ivar">@private_props</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">txt</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-identifier">v</span>,<span class="ruby-string">&quot;-private-&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">2</span> }
   <span class="ruby-identifier">txt</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-identifier">decrypt_string_with_prefix</span>(<span class="ruby-constant">SS_integration_password_enc</span>), <span class="ruby-string">&quot;-private-&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-constant">SS_integration_password</span>)
   <span class="ruby-identifier">txt</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1028,6 +1067,57 @@ around the message</p>
 
         
       </div><!-- privatize-method -->
+
+    
+      <div id="method-i-read_shebang" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">read_shebang</span><span
+            class="method-args">(os_platform, action_txt)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="read_shebang-source">
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 501</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">read_shebang</span>(<span class="ruby-identifier">os_platform</span>, <span class="ruby-identifier">action_txt</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">os_platform</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">%rwin/</span>
+    <span class="ruby-identifier">result</span> = {<span class="ruby-string">&quot;ext&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;.bat&quot;</span>, <span class="ruby-string">&quot;cmd&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;cmd /c&quot;</span>, <span class="ruby-string">&quot;shebang&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>}
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">result</span> = {<span class="ruby-string">&quot;ext&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;.sh&quot;</span>, <span class="ruby-string">&quot;cmd&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;/bin/bash &quot;</span>, <span class="ruby-string">&quot;shebang&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>}
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">action_txt</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-node">&quot;#![&quot;</span>) <span class="ruby-comment"># Custom shebang</span>
+    <span class="ruby-identifier">shebang</span> = <span class="ruby-identifier">action_txt</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp">%r\#\!.*/</span>).<span class="ruby-identifier">first</span>
+    <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;shebang&quot;</span>] = <span class="ruby-identifier">shebang</span>
+    <span class="ruby-identifier">items</span> = <span class="ruby-identifier">shebang</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp">%r\#\!\[.*\]/</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">items</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+      <span class="ruby-identifier">ext</span> = <span class="ruby-identifier">items</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-node">&quot;#![&quot;</span>,<span class="ruby-string">&quot;&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;]&quot;</span>,<span class="ruby-string">&quot;&quot;</span>)
+      <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;ext&quot;</span>] = <span class="ruby-identifier">ext</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ext</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-string">&quot;.&quot;</span>)
+      <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;cmd&quot;</span>] = <span class="ruby-identifier">shebang</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-identifier">items</span>[<span class="ruby-value">0</span>],<span class="ruby-string">&quot;&quot;</span>).<span class="ruby-identifier">strip</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;cmd&quot;</span>] = <span class="ruby-identifier">shebang</span>
+    <span class="ruby-keyword">end</span>      
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">action_txt</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-node">&quot;#!/&quot;</span>) <span class="ruby-comment"># Basic shebang</span>
+    <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;shebang&quot;</span>] = <span class="ruby-string">&quot;standard&quot;</span>
+  <span class="ruby-keyword">else</span> <span class="ruby-comment"># no shebang</span>
+    <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;shebang&quot;</span>] = <span class="ruby-string">&quot;none&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- read_shebang-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- read_shebang-method -->
 
     
       <div id="method-i-required_option" class="method-detail ">
@@ -1121,7 +1211,7 @@ around the message</p>
   <span class="ruby-identifier">methods</span> = <span class="ruby-node">%w{get post put}</span>
   <span class="ruby-identifier">result</span> = {<span class="ruby-string">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ERROR&quot;</span>, <span class="ruby-string">&quot;response&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-string">&quot;message&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>}
   <span class="ruby-identifier">method</span> = <span class="ruby-identifier">method</span>.<span class="ruby-identifier">downcase</span>
-  <span class="ruby-identifier">verbose</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;verbose&quot;</span>) <span class="ruby-operator">==</span> <span class="ruby-string">&quot;yes&quot;</span> <span class="ruby-keyword">or</span> <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;verbose&quot;</span>)
+  <span class="ruby-identifier">verbose</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;verbose&quot;</span>) <span class="ruby-operator">==</span> <span class="ruby-string">&quot;yes&quot;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;verbose&quot;</span>)
   <span class="ruby-identifier">headers</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;headers&quot;</span>, {<span class="ruby-value">:accept</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:json</span>, <span class="ruby-value">:content_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:json</span>})
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;message&quot;</span>] = <span class="ruby-node">&quot;ERROR - #{method} not recognized&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">methods</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">method</span>)
   <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Rest URL: #{url}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">verbose</span>

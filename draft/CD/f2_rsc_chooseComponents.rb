@@ -11,12 +11,13 @@
 ###
 #---------------------- Declarations ------------------------------#
 @script_name_handle = "choose_comps"
-require 'C:/BMC/persist/automation_libs/brpm_framework.rb'
-
+FRAMEWORK_DIR = "C:/BMC/persist/automation_libs"
+eval File.open("#{FRAMEWORK_DIR}/brpm_framework.rb").read
+ 
 #---------------------- Methods --------------------------------#
 
 #---------------------- Main Body --------------------------#
-  
+
 def execute(script_params, parent_id, offset, max_records)
   begin
     log_it("starting_automation\nScript Params\n#{script_params.inspect}")

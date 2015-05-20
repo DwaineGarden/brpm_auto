@@ -72,6 +72,8 @@
     
     <li><a href="#method-c-new">::new</a>
     
+    <li><a href="#method-i-copy_file">#copy_file</a>
+    
     <li><a href="#method-i-deploy_package_instance">#deploy_package_instance</a>
     
     <li><a href="#method-i-execute_script">#execute_script</a>
@@ -113,6 +115,8 @@
     <li><a href="./DispatchSSH.html">DispatchSSH</a>
   
     <li><a href="./Git.html">Git</a>
+  
+    <li><a href="./Jenkins.html">Jenkins</a>
   
     <li><a href="./Object.html">Object</a>
   
@@ -210,6 +214,49 @@ them</p>
       <h3 class="section-header">Public Instance Methods</h3>
 
     
+      <div id="method-i-copy_file" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">copy_file</span><span
+            class="method-args">(source, destination, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Copies remote files to a local staging repository</p>
+
+<h4 id="method-i-copy_file-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>source</code> - nsh path to source file</p>
+</li><li>
+<p><code>destination</code> - path to destination file</p>
+</li><li>
+<p><code>options</code> - hash of options</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="copy_file-source">
+            <pre><span class="ruby-comment"># File framework/lib/dispatch_nsh.rb, line 229</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">copy_file</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">destination</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">message_box</span> <span class="ruby-string">&quot;Copying files via NSH&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t Source: #{source}&quot;</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t Destination: #{destination}&quot;</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-ivar">@nsh</span>.<span class="ruby-identifier">cp</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">destination</span>)
+  <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\tCopy Result: #{result}&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- copy_file-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- copy_file-method -->
+
+    
       <div id="method-i-deploy_package_instance" class="method-detail ">
         
         <div class="method-heading">
@@ -257,8 +304,8 @@ channel_root</p>
   <span class="ruby-identifier">result</span> = <span class="ruby-string">&quot;No servers to execute on&quot;</span>
   <span class="ruby-comment"># Loop through the platforms</span>
   <span class="ruby-constant">OS_PLATFORMS</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">os</span>, <span class="ruby-identifier">os_details</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">servers_list</span> = <span class="ruby-identifier">get_platform_servers</span>(<span class="ruby-identifier">os</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">seed_servers</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;&quot;</span>
-    <span class="ruby-identifier">servers_list</span> = <span class="ruby-identifier">get_platform_servers</span>(<span class="ruby-identifier">os</span>, <span class="ruby-identifier">seed_servers</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">seed_servers</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;&quot;</span>
+    <span class="ruby-identifier">servers</span> = <span class="ruby-identifier">get_platform_servers</span>(<span class="ruby-identifier">os</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">seed_servers</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;&quot;</span>
+    <span class="ruby-identifier">servers</span> = <span class="ruby-identifier">get_platform_servers</span>(<span class="ruby-identifier">os</span>, <span class="ruby-identifier">seed_servers</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">seed_servers</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;&quot;</span>
     <span class="ruby-identifier">message_box</span> <span class="ruby-node">&quot;OS Platform: #{os_details[&quot;name&quot;]}&quot;</span>
     <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;No servers selected for: #{os_details[&quot;name&quot;]}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">servers</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
     <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">servers</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>

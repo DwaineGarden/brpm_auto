@@ -72,6 +72,8 @@
     
     <li><a href="#method-c-new">::new</a>
     
+    <li><a href="#method-i-cp">#cp</a>
+    
     <li><a href="#method-i-cred_errors-3F">#cred_errors?</a>
     
     <li><a href="#method-i-get_attachment_nsh_path">#get_attachment_nsh_path</a>
@@ -133,6 +135,8 @@
     <li><a href="./DispatchSSH.html">DispatchSSH</a>
   
     <li><a href="./Git.html">Git</a>
+  
+    <li><a href="./Jenkins.html">Jenkins</a>
   
     <li><a href="./Object.html">Object</a>
   
@@ -257,6 +261,53 @@ them</p>
       <h3 class="section-header">Public Instance Methods</h3>
 
     
+      <div id="method-i-cp" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">cp</span><span
+            class="method-args">(src_path, target_path)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Copies a single file from source to destination via nsh paths</p>
+
+<h4 id="method-i-cp-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>src_path</code> - NSH path to source files</p>
+</li><li>
+<p><code>target_path</code> - NSH path to copy to</p>
+</li></ul>
+
+<h4 id="method-i-cp-label-Returns">Returns</h4>
+<ul><li>
+<p>results of command</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="cp-source">
+            <pre><span class="ruby-comment"># File framework/lib/transport_nsh.rb, line 320</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">cp</span>(<span class="ruby-identifier">src_path</span>, <span class="ruby-identifier">target_path</span>)
+  <span class="ruby-identifier">cmd</span> = <span class="ruby-node">&quot;#{nsh_cmd(&quot;cp&quot;)} #{src_path} \&quot;#{target_path}\&quot;&quot;</span>
+  <span class="ruby-identifier">cmd</span> = <span class="ruby-ivar">@test_mode</span> <span class="ruby-operator">?</span> <span class="ruby-node">&quot;echo \&quot;#{cmd}\&quot;&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">cmd</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-identifier">cmd</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@verbose</span>
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">execute_shell</span>(<span class="ruby-identifier">cmd</span>)
+  <span class="ruby-identifier">res</span> = <span class="ruby-identifier">display_result</span>(<span class="ruby-identifier">result</span>)
+  <span class="ruby-identifier">res</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- cp-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- cp-method -->
+
+    
       <div id="method-i-cred_errors-3F" class="method-detail ">
         
         <div class="method-heading">
@@ -328,7 +379,7 @@ them</p>
 
           
           <div class="method-source-code" id="get_attachment_nsh_path-source">
-            <pre><span class="ruby-comment"># File framework/lib/transport_nsh.rb, line 280</span>
+            <pre><span class="ruby-comment"># File framework/lib/transport_nsh.rb, line 281</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_attachment_nsh_path</span>(<span class="ruby-identifier">attachment_local_path</span>, <span class="ruby-identifier">brpm_hostname</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">attachment_local_path</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;:&quot;</span>
     <span class="ruby-identifier">attachment_local_path</span>[<span class="ruby-value">1</span>] = <span class="ruby-identifier">attachment_local_path</span>[<span class="ruby-value">0</span>]
@@ -457,7 +508,7 @@ them</p>
 
           
           <div class="method-source-code" id="ls-source">
-            <pre><span class="ruby-comment"># File framework/lib/transport_nsh.rb, line 223</span>
+            <pre><span class="ruby-comment"># File framework/lib/transport_nsh.rb, line 224</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">ls</span>(<span class="ruby-identifier">nsh_path</span>)
   <span class="ruby-identifier">res</span> = <span class="ruby-identifier">nsh_command</span>(<span class="ruby-node">&quot;ls #{nsh_path}&quot;</span>)
   <span class="ruby-identifier">res</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;\n&quot;</span>).<span class="ruby-identifier">reject</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-string">&quot;Running &quot;</span>)}
@@ -704,7 +755,7 @@ them</p>
 
           
           <div class="method-source-code" id="nsh_path-source">
-            <pre><span class="ruby-comment"># File framework/lib/transport_nsh.rb, line 257</span>
+            <pre><span class="ruby-comment"># File framework/lib/transport_nsh.rb, line 258</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">nsh_path</span>(<span class="ruby-identifier">source_path</span>, <span class="ruby-identifier">server</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">path</span> = <span class="ruby-string">&quot;&quot;</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">source_path</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;:\\&quot;</span>)
@@ -755,11 +806,11 @@ them</p>
 
           
           <div class="method-source-code" id="package_staged_artifacts-source">
-            <pre><span class="ruby-comment"># File framework/lib/transport_nsh.rb, line 298</span>
+            <pre><span class="ruby-comment"># File framework/lib/transport_nsh.rb, line 299</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">package_staged_artifacts</span>(<span class="ruby-identifier">staging_path</span>, <span class="ruby-identifier">package_name</span>)
   <span class="ruby-identifier">instance_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">staging_path</span>, <span class="ruby-identifier">package_name</span>)
   <span class="ruby-identifier">staging_artifacts</span> = <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">entries</span>(<span class="ruby-identifier">staging_path</span>).<span class="ruby-identifier">reject</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> [<span class="ruby-string">&quot;.&quot;</span>,<span class="ruby-string">&quot;..&quot;</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">k</span>) }
-  <span class="ruby-keyword">return</span> {<span class="ruby-string">&quot;instance_path&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ERROR - no files in staging area&quot;</span>, <span class="ruby-string">&quot;md5&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>} <span class="ruby-keyword">if</span> <span class="ruby-identifier">staging_artifacts</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">3</span>
+  <span class="ruby-keyword">return</span> {<span class="ruby-string">&quot;instance_path&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ERROR - no files in staging area&quot;</span>, <span class="ruby-string">&quot;md5&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>} <span class="ruby-keyword">if</span> <span class="ruby-identifier">staging_artifacts</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">1</span>
   <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cd</span>(<span class="ruby-identifier">staging_path</span>, <span class="ruby-value">:verbose</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
   <span class="ruby-identifier">cmd</span> = <span class="ruby-node">&quot;#{nsh_cmd(&quot;zip&quot;)} -r #{package_name} *&quot;</span>
   <span class="ruby-identifier">result</span> = <span class="ruby-identifier">execute_shell</span>(<span class="ruby-identifier">cmd</span>)
@@ -815,7 +866,7 @@ remote host</p>
   <span class="ruby-identifier">script_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">script_path</span>)
   <span class="ruby-identifier">err_file</span> = <span class="ruby-identifier">touch_file</span>(<span class="ruby-node">&quot;#{script_dir}/nsh_errors_#{Time.now.strftime(&quot;%Y%m%d%H%M%S%L&quot;)}.txt&quot;</span>)
   <span class="ruby-identifier">script_path</span> = <span class="ruby-node">&quot;\&quot;#{script_path}\&quot;&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">script_path</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot; &quot;</span>)
-  <span class="ruby-identifier">cmd</span> = <span class="ruby-node">&quot;#{nsh_cmd(&quot;scriptutil&quot;)} -d \&quot;#{target_path}\&quot; -h #{target_hosts.join(&quot; &quot;)} -H \&quot;Results from: %h\&quot; -s #{script_path}&quot;</span>
+  <span class="ruby-identifier">cmd</span> = <span class="ruby-node">&quot;#{nsh_cmd(&quot;scriptutil&quot;)} -d \&quot;#{target_path}\&quot; -h #{target_hosts.join(&quot; &quot;)} -s #{script_path}&quot;</span>
   <span class="ruby-identifier">cmd</span> = <span class="ruby-identifier">cmd</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot; 2&gt;#{err_file}&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-constant">Windows</span>
   <span class="ruby-identifier">result</span> = <span class="ruby-identifier">execute_shell</span>(<span class="ruby-identifier">cmd</span>)
   <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;stderr&quot;</span>] = <span class="ruby-node">&quot;#{result[&quot;stderr&quot;]}\n#{File.open(err_file).read}&quot;</span>
@@ -864,7 +915,8 @@ remote host</p>
           <div class="method-source-code" id="script_execute_body-source">
             <pre><span class="ruby-comment"># File framework/lib/transport_nsh.rb, line 204</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">script_execute_body</span>(<span class="ruby-identifier">target_hosts</span>, <span class="ruby-identifier">script_body</span>, <span class="ruby-identifier">target_path</span>, <span class="ruby-identifier">options</span> = {})
-  <span class="ruby-identifier">script_file</span> = <span class="ruby-node">&quot;nsh_script_#{Time.now.strftime(&quot;%Y%m%d%H%M%S&quot;)}.sh&quot;</span>
+  <span class="ruby-identifier">ext</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>,<span class="ruby-string">&quot;platform&quot;</span>, <span class="ruby-string">&quot;linux&quot;</span>).<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;linux&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;.sh&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;.bat&quot;</span>
+  <span class="ruby-identifier">script_file</span> = <span class="ruby-node">&quot;nsh_script_#{Time.now.strftime(&quot;%Y%m%d%H%M%S&quot;)}#{ext}&quot;</span>
   <span class="ruby-identifier">full_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_output_dir&quot;</span>],<span class="ruby-identifier">script_file</span>)
   <span class="ruby-identifier">fil</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">full_path</span>,<span class="ruby-string">&quot;w+&quot;</span>)
   <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">script_body</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;\r&quot;</span>, <span class="ruby-string">&quot;&quot;</span>)
@@ -908,7 +960,7 @@ remote host</p>
 
           
           <div class="method-source-code" id="status-source">
-            <pre><span class="ruby-comment"># File framework/lib/transport_nsh.rb, line 237</span>
+            <pre><span class="ruby-comment"># File framework/lib/transport_nsh.rb, line 238</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">status</span>(<span class="ruby-identifier">target_hosts</span>)
   <span class="ruby-identifier">result</span> = {}
   <span class="ruby-identifier">target_hosts</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">host</span><span class="ruby-operator">|</span>

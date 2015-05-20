@@ -53,7 +53,6 @@
     <li>framework/lib/legacy_framework.rb
     <li>framework/lib/ssh_script_header.rb
     <li>framework/lib/ssh_script_header_additions.rb
-    <li>framework/lib/standalone_framework.rb
     <li>framework/lib/ticket.rb
   </ul>
 </nav>
@@ -88,8 +87,6 @@
     <li><a href="#method-i-get_instance_id_from_version">#get_instance_id_from_version</a>
     
     <li><a href="#method-i-get_other_request_params">#get_other_request_params</a>
-    
-    <li><a href="#method-i-get_request_params">#get_request_params</a>
     
     <li><a href="#method-i-get_rpd_next_environment">#get_rpd_next_environment</a>
     
@@ -137,8 +134,6 @@
     
     <li><a href="#method-i-rpm_load_module">#rpm_load_module</a>
     
-    <li><a href="#method-i-save_request_params">#save_request_params</a>
-    
     <li><a href="#method-i-steps_with_matching_component">#steps_with_matching_component</a>
     
     <li><a href="#method-i-ticket_exists">#ticket_exists</a>
@@ -182,6 +177,8 @@
     <li><a href="./DispatchSSH.html">DispatchSSH</a>
   
     <li><a href="./Git.html">Git</a>
+  
+    <li><a href="./Jenkins.html">Jenkins</a>
   
     <li><a href="./Object.html">Object</a>
   
@@ -317,18 +314,7 @@ href="Git.html">Git</a> or <a href="Svn.html">Svn</a> for instance)</p>
       
         <dt id="SleepDelay">SleepDelay
         
-        <dd class="description"><h1 id="label-BRPM+Automation+Framework">BRPM Automation Framework</h1>
-
-<pre>BMC Software - BJB 8/22/2014, BJB 9/17/14</pre>
-
-<h4 id="label-A+collection+of+classes+to+simplify+building+BRPM+automation">A collection of classes to simplify building BRPM automation</h4>
-
-<h3 id="label-Instructions">Instructions</h3>
-
-<p>In your BRPM automation include a block like this to pull in the library
-&lt;tt&gt; <a href="http://"direct_execute"">params</a> = true #Set for
-local execution &lt;tt&gt; require @<a
-href="http://"SS_automation_results_dir"">params</a>.gsub(“automation_results”,“persist/automation_lib/brpm_framework.rb”)</p>
+        <dd class="description">
         
       
         <dt id="Token">Token
@@ -608,36 +594,6 @@ href="http://"SS_automation_results_dir"">params</a>.gsub(“automation_results�
       </div><!-- get_other_request_params-method -->
 
     
-      <div id="method-i-get_request_params" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">get_request_params</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Compatibility Routines</p>
-          
-
-          
-          <div class="method-source-code" id="get_request_params-source">
-            <pre><span class="ruby-comment"># File framework/brpm_framework.rb, line 14</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_request_params</span>
-   <span class="ruby-identifier">none</span> = <span class="ruby-string">&quot;&quot;</span> <span class="ruby-comment"># just so it doesn't  fail</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- get_request_params-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- get_request_params-method -->
-
-    
       <div id="method-i-get_rpd_next_environment" class="method-detail ">
         
         <div class="method-heading">
@@ -787,15 +743,9 @@ href="http://"SS_automation_results_dir"">params</a>.gsub(“automation_results�
 
           
           <div class="method-source-code" id="initialize_framework-source">
-            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header_additions.rb, line 23</span>
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header_additions.rb, line 19</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize_framework</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_script_target&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;resource_automation&quot;</span>
-    <span class="ruby-comment"># do something else</span>
-    <span class="ruby-identifier">conts</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">FRAMEWORK_DIR</span>,<span class="ruby-string">&quot;lib&quot;</span>,<span class="ruby-string">&quot;resource_framework.rb&quot;</span>)).<span class="ruby-identifier">read</span>
-    <span class="ruby-identifier">eval</span> <span class="ruby-identifier">conts</span>
-  <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">load</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">FRAMEWORK_DIR</span>, <span class="ruby-string">&quot;brpm_framework.rb&quot;</span>)
-  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">require</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">FRAMEWORK_DIR</span>, <span class="ruby-string">&quot;brpm_framework.rb&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- initialize_framework-source -->
           
@@ -1081,7 +1031,7 @@ href="http://"SS_automation_results_dir"">params</a>.gsub(“automation_results�
 
           
           <div class="method-source-code" id="load_helpers-source">
-            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header_additions.rb, line 8</span>
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header_additions.rb, line 4</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load_helpers</span>(<span class="ruby-identifier">lib_path</span>)
   <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;#{lib_path}/script_helper.rb&quot;</span>
   <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;#{lib_path}/file_in_utf.rb&quot;</span>
@@ -1113,7 +1063,7 @@ execution</p>
 
           
           <div class="method-source-code" id="load_input_params-source">
-            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header_additions.rb, line 14</span>
+            <pre><span class="ruby-comment"># File framework/lib/ssh_script_header_additions.rb, line 10</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load_input_params</span>(<span class="ruby-identifier">in_file</span>)
   <span class="ruby-identifier">params</span> = <span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">load</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">in_file</span>))
   <span class="ruby-identifier">load_helpers</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&quot;SS_script_support_path&quot;</span>])
@@ -1654,7 +1604,7 @@ execution</p>
 
           
           <div class="method-source-code" id="rpm_load_module-source">
-            <pre><span class="ruby-comment"># File framework/brpm_framework.rb, line 22</span>
+            <pre><span class="ruby-comment"># File framework/brpm_framework.rb, line 18</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">rpm_load_module</span>(*<span class="ruby-identifier">module_names</span>)
   <span class="ruby-identifier">result</span> = <span class="ruby-string">&quot;&quot;</span>
   <span class="ruby-identifier">module_names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">mod_name</span><span class="ruby-operator">|</span>
@@ -1681,36 +1631,6 @@ execution</p>
 
         
       </div><!-- rpm_load_module-method -->
-
-    
-      <div id="method-i-save_request_params" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">save_request_params</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="save_request_params-source">
-            <pre><span class="ruby-comment"># File framework/brpm_framework.rb, line 18</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">save_request_params</span>
-  <span class="ruby-ivar">@p</span>.<span class="ruby-identifier">save_local_params</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- save_request_params-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- save_request_params-method -->
 
     
       <div id="method-i-steps_with_matching_component" class="method-detail ">
