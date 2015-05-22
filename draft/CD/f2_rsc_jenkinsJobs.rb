@@ -14,7 +14,7 @@ SS_integration_password_enc = "__SS__Cj1Jek1QTjBaTkYyUQ=="
 
 #---------------------- Declarations ------------------------------#
 @script_name_handle = "choose_jenkins"
-FRAMEWORK_DIR = "C:/BMC/persist/automation_libs"
+FRAMEWORK_DIR = "/opt/bmc/persist/automation_lib"
 eval File.open("#{FRAMEWORK_DIR}/brpm_framework.rb").read
 
 #---------------------- Methods --------------------------------#

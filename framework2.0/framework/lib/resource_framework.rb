@@ -1,3 +1,4 @@
+
 module ResourceFramework
   def create_request_params_file
     request_data_file_dir = File.dirname(@params["SS_output_dir"])
@@ -100,6 +101,94 @@ module ResourceFramework
     raise "Command_Failed: no library path defined, set property: ACTION_LIBRARY_PATH" if !defined?(ACTION_LIBRARY_PATH)
     ACTION_LIBRARY_PATH
   end
+  
+  # Makes an http method call and returns data in JSON
+  #
+  # ==== Attributes
+  #
+  # * +url+ - the url for the request
+  # * +method+ - the http method [get, put, post]
+  # * +options+ - a hash of options
+  #      +verbose+: gives verbose output (yes/no)
+  #      +data+: required for put and post methods a hash of post data
+  #      +username+: username for basic http authentication
+  #      +password+: password for basic http authentication
+  #      +suppress_errors+: continues after errors if true
+  #      
+  # ==== Returns
+  #
+  # * returns a hash of the http response with these keys
+  # * +status+ - success or ERROR
+  # * +message+ - if status is ERROR this will hold an error message
+  # * +code+ - the http status code 200=ok, 404=not found, 500=error, 504=not authorized
+  # * +data+ - the body of the http response
+  def rest_call(url, method, options = {})
+    methods = %w{get post put}
+    result = {"status" => "ERROR", "response" => "", "message" => ""}
+    method = method.downcase
+    verbose = get_option(options, "verbose") == "yes" || get_option(options, "verbose")
+    headers = get_option(options, "headers", {:accept => :json, :content_type => :json})
+    return result["message"] = "ERROR - #{method} not recognized" unless methods.include?(method)
+    log "Rest URL: #{url}" if verbose
+    begin
+      data = get_option(options, "data")
+      rest_params = {}
+      rest_params[:url] = url
+      rest_params[:method] = method.to_sym
+      rest_params[:verify_ssl] = OpenSSL::SSL::VERIFY_NONE if url.start_with?("https")
+      rest_params[:payload] = data.to_json unless data == ""
+      if options.has_key?("username") && options.has_key?("password")
+        rest_params[:user] = options["username"]
+        rest_params[:password] = options["password"]
+      end
+      rest_params[:headers] = headers
+      log "RestParams: #{rest_params.inspect}" if verbose
+      if %{put post}.include?(method)
+        return result["message"] = "ERROR - no data param for post" if data == ""
+        response = RestClient::Request.new(rest_params).execute
+      else
+        response = RestClient::Request.new(rest_params).execute
+      end
+    rescue Exception => e
+      result["message"] = e.message
+      raise "RestError: #{result["message"]}" unless get_option(options, "suppress_errors") == true
+      return result
+    end
+    log "Rest Response:\n#{response.inspect}" if verbose
+    if headers[:accept] == :json
+      parsed_response = JSON.parse(response) rescue nil
+    else
+      parsed_response = response
+    end
+    parsed_response = {"info" => "no data returned"} if parsed_response.nil?
+    result["code"] = response.code
+    if response.code < 300
+      result["status"] = "success"
+      result["data"] = parsed_response
+    elsif response.code == 422
+      result["message"] = "REST call returned code 422 usually a bad token"
+    else
+      result["message"] = "REST call returned HTTP code #{response.code}"
+    end
+    if result["status"] == "ERROR"
+      raise "RestError: #{result["message"]}" unless get_option(options, "suppress_errors") == true
+    end
+    result
+  end
+  
+  # Provides a simple failsafe for working with hash options
+  # returns "" if the option doesn't exist or is blank
+  # ==== Attributes
+  #
+  # * +options+ - the hash
+  # * +key+ - key to find in options
+  # * +default_value+ - if entered will be returned if the option doesn't exist or is blank
+  def get_option(options, key, default_value = "")
+    result = options.has_key?(key) ? options[key] : nil
+    result = default_value if result.nil? || result == ""
+    result 
+  end
+  
 end
 
 extend ResourceFramework

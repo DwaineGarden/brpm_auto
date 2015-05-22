@@ -3,7 +3,7 @@
 
 #---------------------- Declarations ------------------------------#
 @script_name_handle = "library_tree"
-FRAMEWORK_DIR = "C:/BMC/persist/automation_libs"
+FRAMEWORK_DIR = "/opt/bmc/persist/automation_libs"
 conts = File.open("#{FRAMEWORK_DIR}/brpm_framework.rb").read
 eval conts
 
