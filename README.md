@@ -62,35 +62,21 @@ There are lots of other automations in there, read and experiment!
 
 `===================== RESULTS =====================================================`
 
-`08:49:48|INFO> Loading customer include file: /opt/bmc/persist/automation_lib/customer_include.rb`
-
-`08:49:48|INFO> Request Run Data: http://clm-aus-006997.bmc.com:8080/brpm/automation_results/request/BRPM/1002/request_data.json`
-
-`08:49:48|INFO> request_data_file => Created 05/21/2015 14:41:14`
-
-`08:49:48|INFO> ss_transport => nsh`
-
-`08:49:48|INFO> ##------ End of Local Params --------##`
-
-`08:49:48|INFO> Loading transport modules for: nsh`
-
-`08:49:48|INFO> Initializing nsh transport`
-
-`08:49:48|INFO> Path to nsh: /opt/bmc/bladelogic/NSH`
-
-`08:49:48|INFO> Success - found term: PATH`
-
-`New Run - Shell Cmd: echo "RPM using: ${SS_application} in ${SS_environment}"  & env`
-
-`========================`
-
-` Running: echo "RPM using: BRPM in CI"  & env `
-
-`========================`
-
-`WKHTMLTOPDF_HOME=/opt/bmc/RLM/lib/wkhtmltopdf`
-
-`HOSTNAME=clm-aus-006997`
+`08:49:48|INFO> Loading customer include file: /opt/bmc/persist/automation_lib/customer_include.rb`<br>
+`08:49:48|INFO> Request Run Data: http://clm-aus-006997.bmc.com:8080/brpm/automation_results/request/BRPM/1002/request_data.json`<br>
+`08:49:48|INFO> request_data_file => Created 05/21/2015 14:41:14`<br>
+`08:49:48|INFO> ss_transport => nsh`<br>
+`08:49:48|INFO> ##------ End of Local Params --------##`<br>
+`08:49:48|INFO> Loading transport modules for: nsh`<br>
+`08:49:48|INFO> Initializing nsh transport`<br>
+`08:49:48|INFO> Path to nsh: /opt/bmc/bladelogic/NSH`<br>
+`08:49:48|INFO> Success - found term: PATH`<br>
+`New Run - Shell Cmd: echo "RPM using: ${SS_application} in ${SS_environment}"  & env`<br>
+`========================`<br>
+` Running: echo "RPM using: BRPM in CI"  & env `<br>
+`========================`<br>
+`WKHTMLTOPDF_HOME=/opt/bmc/RLM/lib/wkhtmltopdf`<br>
+`HOSTNAME=clm-aus-006997`<br>
 
 7. Note what the framework has added:
 	All output is now timestamped in log format (when you use @rpm.log)
