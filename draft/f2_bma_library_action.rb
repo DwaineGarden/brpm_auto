@@ -74,7 +74,7 @@ SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
 
 #---------------------- Variables --------------------------#
 script_name = "bma_library_action.sh"
-script_path = "#{ACTION_LIBRARY_PATH}/WebSphere/#{script_name}"
+script_path = "#{ACTION_LIBRARY_PATH}/BMA/#{script_name}"
 integration_details = @rpm.get_integration_details
 transfer_prefix = @p.get("Transfer Property Prefix",nil)
 bma_action = @p.required("BMA Action")

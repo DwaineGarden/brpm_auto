@@ -17,7 +17,7 @@
 # Jenkins Project:
 #   name: Jenkins Project
 #   type: in-external-single-select
-#   external_resource: f2_rsc_jenkinsProjects
+#   external_resource: f2_rsc_jenkinsJobs
 #   position: A2:D2
 #   required: no
 # Jenkins Build No:
@@ -27,8 +27,9 @@
 #   required: no
 ###
 
-#=== General Integration Server: RLMJenkins ===#
-# [integration_id=10020]
+
+#=== General Integration Server: DevOps_Jenkins ===#
+# [integration_id=2]
 SS_integration_dns = "http://vw-aus-rem-dv11.bmc.com:8080"
 SS_integration_username = "bbyrd"
 SS_integration_password = "-private-"
@@ -36,9 +37,11 @@ SS_integration_details = ""
 SS_integration_password_enc = "__SS__Cj1Jek1QTjBaTkYyUQ=="
 #=== End ===#
 
+
 #---------------------- Declarations -----------------------#
 params["direct_execute"] = true #Set for local execution
-require 'C:/BMC/persist/automation_libs/brpm_framework.rb'
+#require 'C:/BMC/persist/automation_libs/brpm_framework.rb'
+require '/opt/bmc/persist/automation_lib/brpm_framework.rb'
 rpm_load_module "jenkins"
 
 #---------------------- Methods ----------------------------#
@@ -52,6 +55,7 @@ jenkins_build_no = @p.get("Jenkins Build No", @p.jenkins_build_no) #if passed fr
 jenkins_artifact = @p.required("Jenkins Artifact")
 package_name = "jenkins_#{jenkins_build_no}"
 staging_dir = @rpm.get_staging_dir(package_name, true)
+download_file = ""
 
 #---------------------- Main Body --------------------------#
 # Set a property in General for each component to deploy 
@@ -63,15 +67,32 @@ rest_result = @jenkins.job_build_data(jenkins_build_no)
 found = false
 rest_result["data"]["artifacts"].each do |item| 
   @rpm.log("\t#{item["fileName"]} => #{item["relativePath"]}")
-  found = true if item["fileName"] == jenkins_artifact
+  if item["fileName"] =~ /#{jenkins_artifact}.*/
+    found = true 
+    download_file = item["fileName"]
+  end
 end
 raise "ERROR artifact not in list: #{jenkins_artifact}" unless found
 @rpm.log "Full Build Results:"
 @rpm.log rest_result["data"].inspect
 
-@rpm.log "Downloading file: #{jenkins_artifact} to #{staging_dir}"
-@jenkins.get_build_artifact(jenkins_build_no, jenkins_artifact, staging_dir)
-package_info = @nsh.package_staged_artifacts(staging_dir, "#{package_name}.zip")
+# New Method out of mem errors trying to download
+if false #<100mb files only
+  @rpm.log "Downloading file: #{download_file} to #{staging_dir}"
+  @jenkins.get_build_artifact(jenkins_build_no, download_file, staging_dir)
+  package_info = @nsh.package_staged_artifacts(staging_dir, "#{package_name}.zip")
+else
+  @rpm.log "Downloading #{download_file} from Jenkins on target"
+  # http://vw-aus-rem-dv11.bmc.com:8080/job/Trunk_BRPM_INSTALLERS/356/artifact/BRPM_Windows_201505220925.zip
+  url_part = "#{jenkins_build_no}/artifact/#{download_file}"
+  url = File.join(SS_integration_dns,"job",jenkins_project, url_part)
+  target_os = @rpm.get_server_list.first[1]["os_platform"]
+  cmd = "C:\\bmc\\curl.exe -X GET #{url} > C:\\bmc\\temp\\#{download_file}"
+  @rpm.log "Command: #{cmd}"
+  script_file = @transport.make_temp_file(cmd)
+  result = @transport.execute_script(script_file, {"transfer_properties" => transfer_properties})
+  
+end
 
 @p.assign_local_param("instance_#{@p.SS_component}", package_info)
 @p.save_local_params # Cleanup and save

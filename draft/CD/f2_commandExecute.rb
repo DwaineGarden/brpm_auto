@@ -24,7 +24,8 @@
 
 #---------------------- Declarations -----------------------#
 params["direct_execute"] = "yes"
-require 'C:/BMC/persist/automation_libs/brpm_framework.rb'
+#require 'C:/BMC/persist/automation_libs/brpm_framework.rb'
+require '/opt/bmc/persist/automation_lib/brpm_framework.rb'
 
 #---------------------- Methods ----------------------------#
 
