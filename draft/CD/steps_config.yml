@@ -1,0 +1,12 @@
+steps:
+  "step 1":
+    script_name: "script for step 1"
+    input_params:
+      jenkins_build: "12345"
+      committer: "Niek"
+  "step 2":
+    script_name: "script for step 2"
+    input_params:
+      jenkins_build: "12345"
+      committer: "Niek"
+

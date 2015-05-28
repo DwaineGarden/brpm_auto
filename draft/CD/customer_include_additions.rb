@@ -6,17 +6,26 @@
 def execute_library_action
   # Execute an action from the library
   step_name = @p.step_name
-  msg = "Executing library action for step: #{step_name}\n"
-  action_name = @p.get("Select Library Action")
-  action_name = @p.get("f2_LibraryScript") if action_name == ""
-  if action_name == ""
-    action_name = "test/env_command.rb"
-    library_action = File.join(ACTION_LIBRARY_PATH, action_name)
-  else
-    library_action = File.join(action_name.split("|")[1], action_name.split("|")[0])
+
+  steps_config = YAML.load_file("#{File.dirname(__FILE__)}/steps_config.yml")
+
+  raise "Step #{step_name} not configured" unless steps_config["steps"].has_key?(step_name)
+
+  step_config = steps_config["steps"][step_name]
+
+  script_name = step_config["script_name"]
+  script_location = "#{File.dirname(__FILE__)}/#{script_name}.rb"
+
+  if step_config.has_key?("input_params")
+    step_config["input_params"].each do |key, value|
+      @p.add(key, value)
+    end
   end
-  msg += "Action: #{library_action}"
+
+  msg = "Executing library action for step: #{step_name}\n"
+  msg += "Action: #{script_name}"
   @rpm.log msg
-  conts = File.open(library_action).read
-  eval conts
+
+  script_content = File.open(script_location).read
+  eval script_content
 end
