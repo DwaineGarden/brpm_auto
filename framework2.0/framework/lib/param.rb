@@ -291,6 +291,7 @@ class Param < BrpmAutomation
     found.each do |item|
       prop_name = item.gsub("\${","").gsub("}","")
       value = get(prop_name)
+      value = get_server_property(@server_list.keys.first, prop_name) if value == ""
       result.gsub!("\${#{prop_name}}",value) unless value == ""
     end
     result

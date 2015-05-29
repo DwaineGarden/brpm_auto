@@ -6,9 +6,12 @@
 def execute_library_action
   # Execute an action from the library
   step_name = @p.step_name
+  #config=read_yaml_config
+  #action_name = config[step_name]["scenario"]["automation"]
   msg = "Executing library action for step: #{step_name}\n"
   action_name = @p.get("Select Library Action")
   action_name = @p.get("f2_LibraryScript") if action_name == ""
+  #@p.asssign("newarg",value)
   if action_name == ""
     action_name = "test/env_command.rb"
     library_action = File.join(ACTION_LIBRARY_PATH, action_name)

@@ -66,7 +66,7 @@ else
 end
 @p.assign_local_param("components_to_deploy", components_to_deploy)
 jenkins_project = @p.required("Jenkins Project")
-jenkins_build_no = @p.get("Jenkins Build No", "jenkins_build_no") #if passed from rest
+jenkins_build_no = @p.get("Jenkins Build No", @p.jenkins_build_no) #if passed from rest
 @p.assign_local_param("jenkins_project", jenkins_project)
 @p.assign_local_param("jenkins_build_no", jenkins_build_no)
 

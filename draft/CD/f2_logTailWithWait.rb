@@ -28,7 +28,8 @@
 
 #---------------------- Declarations -----------------------#
 params["direct_execute"] = "yes"
-require 'C:/BMC/persist/automation_libs/brpm_framework.rb'
+#require 'C:/BMC/persist/automation_libs/brpm_framework.rb'
+require '/opt/bmc/persist/automation_lib/brpm_framework.rb'
 
 #---------------------- Methods ----------------------------#
 
@@ -44,17 +45,25 @@ find_text = @p.get("Find Text")
 @rpm.message_box "Tailing Log: #{File.basename(log_location)}", "title"
 @rpm.log "LogFile: #{log_location}"
 @rpm.log "Sleeping for: #{wait_time} seconds"
-sleep wait_time.to_i
 servers = @rpm.get_server_list
 if log_location.start_with?("//")
   nsh_path = log_location
 else
-  nsh_path = "//#{servers.keys.first}/#{log_location}"
+  nsh_path = File.join("//#{servers.keys.first}",log_location)
 end
 cmd = "tail -#{tail_size} #{nsh_path}"
 @rpm.message_box "Running: #{cmd}"
-result = @nsh.nsh_command(cmd)
-@rpm.log result
+interval = (wait_time.to_i / 4).to_i
+result = ""
+4.times do
+  result += @nsh.nsh_command(cmd)
+  if find_text != "" && result.include?(find_text)
+    @rpm.log result
+    break
+  end
+  sleep interval
+end
+
 unless find_text == ""
   if result.include?(find_text)
     @rpm.log "Success - found: #{find_text}"

@@ -60,9 +60,9 @@ tokenset_name = @p.get("HHSC_BMA_TOKEN_SET")
 bma_working_dir = clearcase_view_path
 
 bma_server_profile_path = server_profile_path(@p.get("Server Profile Path"))
-bma_server_profile = File.dirname(bma_server_profile_path)
-bma_config_package_path = config_package_path(@p.get("Config Package_path"))
-bma_config_package = File.dirname(bma_config_package_path)
+bma_server_profile = File.basename(bma_server_profile_path)
+bma_config_package_path = config_package_path(@p.get("Config Package Path"))
+bma_config_package = File.basename(bma_config_package_path)
 _d_mod = bma_config_package.include?("_d.xml") ? "_d" : ""
 
 if bma_mod_type == "serverclone"
@@ -84,13 +84,13 @@ end
 
 #------------------------------- MAIN -------------------------------------#
 @rpm.message_box "BMA Topology Modifications - #{bma_mod_type}", "title"
-@rpm.log "Server Profile: #{bma_server_profile}\nConfig Package: #{config_file}\nOutput to: #{temp_config_file_path}\nTokenSet Name: #{tokenset_name}\n"
+@rpm.log "Server Profile: #{bma_server_profile}\nConfig Package: #{bma_config_package}\nOutput to: #{temp_config_file_path}\nTokenSet Name: #{tokenset_name}\n"
 @rpm.log "Tokenset: #{tokenset_name} | Scaling Token: #{token_name}"
 @rpm.log "Output file: #{output_file}"
 
 #Check if -server.xml exists in the staging location
-unless File.exist?(bma_server_profile) && File.exist?(config_file)
-	@rpm.log "Command_Failed: Server profile or configuration file not found"
+unless File.exist?(bma_server_profile_path) && File.exist?(bma_config_package_path)
+	@rpm.log "Command_Failed: Server profile or configuration file not found\n#{bma_server_profile_path}\n#{bma_config_package_path}"
 	exit(1)
 end	
 
@@ -116,7 +116,7 @@ if bma_mod_type == "serverclone" # Server Clones
   		clone_names << clone_name unless clone_name.length < 2
   		find_replace_hash = {clones_const => clone_name, classification_const => node_name}
   		@rpm.log "#{find_replace_hash.inspect}" if @debug
-  		find_and_replace(config_file, temp_config_file_path, find_replace_hash, clone_name)
+  		find_and_replace(bma_config_package_path, temp_config_file_path, find_replace_hash, clone_name)
   	end
   end
   @doc_master = Nokogiri::XML(File.open("#{temp_config_file_path}/#{clone_names.first}.xml").read)

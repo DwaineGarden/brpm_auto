@@ -8,4 +8,15 @@ base_path = "/opt/bmc/RLM"
 input_file = "/opt/bmc/persist/automation_results/request/BRPM/1003/step_17/scriptinput_31_1432315743.txt"
 @params = YAML.load(File.open(input_file).read)
 require "#{FRAMEWORK_DIR}/brpm_framework"
-nsh_cmd = "ls //clm-aus-003365.bmc.com/c/program\\ files/bmc\\ software/rlm/server/jboss/standalone/log/server.log"
+#nsh_cmd = "ls //clm-aus-003365.bmc.com/c/program\\ files/bmc\\ software/rlm/server/jboss/standalone/log/server.log"
+def nsh_cmd(cmd)
+  script_file = @transport.make_temp_file(cmd)
+  result = @transport.execute_script(script_file, {"transfer_properties" => {}})
+end
+@postgres_path = "C:\\Program Files\\PostgreSQL\\9.4"
+postgres_admin_username = "postgres"
+postgres_admin_password ="bmcAdm1n"
+postgres_username = "rlm_user"
+postgres_password = "bmcAdm1n"
+install_database = "rpm_install_db"
+customer_database = "rpm_customer_db"

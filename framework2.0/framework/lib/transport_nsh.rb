@@ -99,7 +99,7 @@ class TransportNSH < BrpmAutomation
   #
   # * results of command
   def nsh_command(command, raw_result = false)
-    path = create_temp_script("echo Running #{command}\n#{command}\n")
+    path = create_temp_script("echo Running #{command.gsub("\n"," - ")}\n#{command}\n")
     result = nsh(path, raw_result)
     File.delete path unless @test_mode
     result
@@ -181,7 +181,7 @@ class TransportNSH < BrpmAutomation
     script_dir = File.dirname(script_path)
     err_file = touch_file("#{script_dir}/nsh_errors_#{Time.now.strftime("%Y%m%d%H%M%S%L")}.txt")
     script_path = "\"#{script_path}\"" if script_path.include?(" ")
-    cmd = "#{nsh_cmd("scriptutil")} -d \"#{target_path}\" -h #{target_hosts.join(" ")} -s #{script_path}"
+    cmd = "#{nsh_cmd("scriptutil")} -d \"#{nsh_path(target_path)}\" -h #{target_hosts.join(" ")} -s #{script_path}"
     cmd = cmd + " 2>#{err_file}" unless Windows
     result = execute_shell(cmd)
     result["stderr"] = "#{result["stderr"]}\n#{File.open(err_file).read}"
@@ -262,9 +262,10 @@ class TransportNSH < BrpmAutomation
       path = "/#{path_array[0].gsub(":","/")}"
       path += path_array[1..-1].join("/")
     else
-      path = source_path
+      path = source_path.gsub(":","")
+      path = "/#{path}" unless path.start_with?("/")
     end
-    path = "//server#{path}" unless server.nil?
+    path = "//#{server}#{path}" unless server.nil?
     path.chomp("/")
   end
     
