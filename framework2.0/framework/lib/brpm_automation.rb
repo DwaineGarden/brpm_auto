@@ -22,7 +22,9 @@ class BrpmAutomation
     @output_file = @params["SS_output_file"]
     load_helper(@params["SS_script_support_path"])
   end
-  
+
+  # TODO: why is it called option? why not param?
+
   # Provides a simple failsafe for working with hash options
   # returns "" if the option doesn't exist or is blank
   # ==== Attributes
@@ -49,6 +51,7 @@ class BrpmAutomation
     result
   end
 
+  #TODO: OK - added as get in params.rb
   # Gets a params
   #
   # ==== Attributes
@@ -59,6 +62,7 @@ class BrpmAutomation
     result
   end
 
+  #TODO: should this method be part of the Action class?
   # Takes the command result from run command and build a pretty display
   #
   # ==== Attributes
@@ -73,7 +77,8 @@ class BrpmAutomation
     result += "#{EXIT_CODE_FAILURE} Command returned: #{cmd_result["status"]}" if cmd_result["status"] != 0
     result
   end
-  
+
+  #TODO: this method already exists in the REST class
   # Makes an http method call and returns data in JSON
   #
   # ==== Attributes
@@ -148,6 +153,7 @@ class BrpmAutomation
     result
   end
 
+  #TODO: OK
   # Returns the dos path from a standard path
   #
   # ==== Attributes
@@ -173,6 +179,7 @@ class BrpmAutomation
     path
   end
 
+  #TODO: OK
   # Executes a command via shell
   #
   # ==== Attributes
@@ -206,6 +213,7 @@ class BrpmAutomation
     cmd_result
   end
 
+  #TODO: already implemented - see logger.rb
   # Provides a logging style output
   #
   # ==== Attributes
@@ -224,6 +232,7 @@ class BrpmAutomation
     end
   end
 
+  #TODO: OK - see logger.rb
   # Provides a pretty box for titles
   #
   # ==== Attributes
@@ -246,6 +255,7 @@ class BrpmAutomation
     log(res)
   end
 
+  #TODO: already implemented - see logger.rb
   # Generates a log formatted mesage
   #
   # ==== Attributes
@@ -281,6 +291,7 @@ class BrpmAutomation
     txt
   end
 
+  #TODO: OK except for the private_value argument (no idea what its used for) -  see params.rb method initialize()
   # Returns an array with property values that are marked private
   #  initializes array if it doesn't exist
   # ==== Returns

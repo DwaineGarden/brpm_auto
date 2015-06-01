@@ -1,5 +1,6 @@
 
 module ResourceFramework
+  #TODO: this functionality already exists, see modules/framework/lib/request_params.rb
   def create_request_params_file
     request_data_file_dir = File.dirname(@params["SS_output_dir"])
     request_data_file = "#{request_data_file_dir}/request_data.json"
@@ -12,6 +13,7 @@ module ResourceFramework
     request_data_file
   end
 
+  #TODO: this functionality already exists, see modules/framework/lib/request_params.rb
   def init_request_params
     request_data_file_dir = File.dirname(@params["SS_output_dir"])
     request_data_file = "#{request_data_file_dir}/request_data.json"
@@ -25,6 +27,7 @@ module ResourceFramework
     request_data_file
   end
 
+  #TODO: this functionality already exists, see modules/framework/lib/request_params.rb
   def get_request_params
     # Uses a json document in automation_results to store free-form information
     cur = init_request_params
@@ -35,6 +38,7 @@ module ResourceFramework
     @request_params
   end
 
+  #TODO: this functionality already exists, see modules/framework/lib/request_params.rb
   def save_request_params
     # Uses a json document in automation_results to store free-form information
     cur = init_request_params
@@ -47,6 +51,7 @@ module ResourceFramework
     end
   end
 
+  #TODO: is this specific to a particular use case?
   def default_table(other_rows = nil)
     totalItems = 1
     table_entries = [["#","Status","Information"]]
@@ -56,12 +61,14 @@ module ResourceFramework
     {:totalItems => totalItems, :perPage => per_page, :data => table_entries }
   end  
 
+  #TODO: what does this method do?
   def default_list(msg)
     result = [{msg => 0}]
     select_hash = {}
     result.unshift(select_hash)
   end  
 
+  #TODO: this functionality already exists, see modules/framework/lib/logger.rb
   def log_it(it)
     log_path = File.join(@params["SS_automation_results_dir"], "resource_logs")
     txt = it.is_a?(String) ? it : it.inspect
@@ -73,7 +80,8 @@ module ResourceFramework
     fil.flush
     fil.close
   end
-  
+
+  #TODO: where is this used? should the include file be located in the framework's directory? it may contain environment specific info
   def load_customer_include(framework_dir)
     customer_include_file = File.join(framework_dir, "customer_include.rb")
     begin
@@ -88,7 +96,8 @@ module ResourceFramework
       log_it "Error loading customer include: #{e.message}\n#{e.backtrace}"
     end 
   end
-    
+
+  #TODO: what does this method do?
   def hashify_list(list)
     response = {}
     list.each do |item,val| 
@@ -96,12 +105,16 @@ module ResourceFramework
     end
     return [response]
   end
-  
+
+  #TODO: already implemented differently
   def action_library_path
     raise "Command_Failed: no library path defined, set property: ACTION_LIBRARY_PATH" if !defined?(ACTION_LIBRARY_PATH)
     ACTION_LIBRARY_PATH
   end
-  
+
+
+  #TODO: what's the difference with the method with the same name from brpm_automation?
+
   # Makes an http method call and returns data in JSON
   #
   # ==== Attributes
@@ -175,7 +188,10 @@ module ResourceFramework
     end
     result
   end
-  
+
+
+  #TODO: what's the difference with the method with the same name from brpm_automation?
+
   # Provides a simple failsafe for working with hash options
   # returns "" if the option doesn't exist or is blank
   # ==== Attributes
