@@ -105,12 +105,16 @@ class DispatchBase < BrpmAutomation
   # ==== Attributes
   #
   # * +content+ - content for file
+  # * +options+ - hash of options, includes ext to force the file extension e.g. {"ext" => ".sql"}
   # ==== Returns
   #
   # path to file
   #
-  def make_temp_file(content, platform = "linux")
-    ext = platform.downcase == "linux" ? ".sh" : ".bat"
+  def make_temp_file(content, platform = "linux", options = {})
+    ext = get_option(options, "ext")
+    if ext == ""
+      ext = platform.downcase == "linux" ? ".sh" : ".bat"
+    end
     file_path = File.join(@params["SS_output_dir"],"shell_#{precision_timestamp}#{ext}")
     fil = File.open(file_path, "w+")
     fil.puts content
@@ -153,7 +157,7 @@ class DispatchBase < BrpmAutomation
       script += "cd %RPM_CHANNEL_ROOT%\r\n"
       script += "#{cmd}\r\n"
       script += "echo EXIT_CODE: %errorlevel%\r\n"
-      script +=  "timeout /T 5\r\necho y | del #{target}\r\n"
+      script +=  "timeout /T 5 /nobreak > NUL\r\necho y | del #{target}\r\n"
     else
       wrapper = "#{wrapper}.sh"
       script = "echo \"============== HOSTNAME: `hostname` ==============\"\n"
@@ -199,7 +203,7 @@ class DispatchBase < BrpmAutomation
       script += "cd %RPM_CHANNEL_ROOT%\r\n"
       script += "#{command} #{target}\r\n"
       script += "echo EXIT_CODE: %errorlevel%\r\n"
-      script += "timeout /T 5\r\necho y | del #{target}\r\n"
+      script += "timeout /T 5 /nobreak > NUL\r\necho y | del #{target}\r\n"
     else
       wrapper = "#{wrapper}.sh"
       script = "echo \"============== HOSTNAME: `hostname` ==============\"\n"

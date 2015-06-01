@@ -27,7 +27,6 @@
 #   required: no
 ###
 
-
 #=== General Integration Server: DevOps_Jenkins ===#
 # [integration_id=2]
 SS_integration_dns = "http://vw-aus-rem-dv11.bmc.com:8080"
@@ -52,16 +51,25 @@ rpm_load_module "jenkins"
 ARG_PREFIX = "ARG_"
 jenkins_project = @p.get("Jenkins Project", @p.jenkins_project)
 jenkins_build_no = @p.get("Jenkins Build No", @p.jenkins_build_no) #if passed from rest
+jenkins_build_no = "lastSuccessfulBuild" if jenkins_build_no == ""
 jenkins_artifact = @p.required("Jenkins Artifact")
 package_name = "jenkins_#{jenkins_build_no}"
 staging_dir = @rpm.get_staging_dir(package_name, true)
+win_curl = @p.win_curl #"C:\\bmc\\curl.exe"
 download_file = ""
+transfer_properties = {}
 
 #---------------------- Main Body --------------------------#
 # Set a property in General for each component to deploy 
 @rpm.message_box "Artifacts from Jenkins Build", "title"
 @rpm.log "Jenkins:\n\tServer: #{SS_integration_dns}\n\tJob: #{jenkins_project}\n\tBuildNo: #{jenkins_build_no}\n\tArtifact: #{jenkins_artifact}"
 @jenkins = Jenkins.new(SS_integration_dns, script_params, {"username" => SS_integration_username, "password" => decrypt_string_with_prefix(SS_integration_password_enc), "job_name" => jenkins_project})
+cur_server = @p.get_server_list.keys.first
+raise "No server selected" if cur_server.length < 3
+channel_root = @p.get_server_property(cur_server, "CHANNEL_ROOT")
+channel_root = "C:\\temp" if channel_root == ""
+
+
 rest_result = @jenkins.job_build_data(jenkins_build_no)
 @rpm.log "Artifacts:"
 found = false
@@ -87,14 +95,16 @@ else
   url_part = "#{jenkins_build_no}/artifact/#{download_file}"
   url = File.join(SS_integration_dns,"job",jenkins_project, url_part)
   target_os = @rpm.get_server_list.first[1]["os_platform"]
-  cmd = "C:\\bmc\\curl.exe -X GET #{url} > C:\\bmc\\temp\\#{download_file}"
+  cmd = "#{win_curl} -X GET #{url} > #{channel_root}\\#{download_file}"
   @rpm.log "Command: #{cmd}"
-  script_file = @transport.make_temp_file(cmd)
+  script_file = @transport.make_temp_file(cmd, "windows")
   result = @transport.execute_script(script_file, {"transfer_properties" => transfer_properties})
-  
+  @rpm.log "cURL Output: #{result}"
+  package_info = {"instance_path" => File.join(channel_root, download_file)}
 end
 
 @p.assign_local_param("instance_#{@p.SS_component}", package_info)
+@p.assign_local_param("jenkins_download_package", download_file)
 @p.save_local_params # Cleanup and save
 
 
