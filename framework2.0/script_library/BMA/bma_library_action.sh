@@ -30,9 +30,9 @@ BMA_SERVER_PROFILE=<%=File.basename(bma_server_profile_path) %>
 BMA_SERVER_PROFILES_DIR=<%=File.dirname(bma_server_profile_path) %>
 BMA_CONFIG_PACKAGES_DIR=<%=File.dirname(bma_config_package_path) %>
 BMA_TOKEN_SET=<%=bma_tokenset_name %>
-BMA_SNAPSHOTS_DIR=<%=@bma["snapshots_path"] %>
-BMA_ARCHIVE_DIR=<%=@bma["archive_path"] %>
-BMA_REPORTS_DIR=<%=@bma["reports_path"] %>
+BMA_SNAPSHOTS_DIR=<%=@bma["snapshots_dir"] %>
+BMA_ARCHIVE_DIR=<%=@bma["archive_dir"] %>
+BMA_REPORTS_DIR=<%=@bma["reports_dir"] %>
 
 BMA_OS_ID=bmaadmin
 CLEANUP_DAYS=40 #The number of days to keep working directory log files
@@ -206,7 +206,7 @@ install)
 	fi
 	;;
 drift)
-	bmaDriftReport <%=bma_compare_snapshot1 %> <%=bma_compare_snapshot2 %>
+	#bmaDriftReport <%=bma_compare_snapshot1 %> <%=bma_compare_snapshot2 %>
 	if [ `echo $?` -gt 0 ]
 	then
 		echo "Failed BMA Drift, exiting Job."

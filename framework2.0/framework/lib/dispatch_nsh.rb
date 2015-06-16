@@ -213,9 +213,10 @@ class DispatchNSH < DispatchBase
       log "# Unzipping package on target:"
       wrapper_path = create_command_wrapper("unzip -o", os, instance_path, final_path)
       result = @nsh.script_exec(server_dns_names(servers), wrapper_path, final_path)
+      return_result["result"] = result
       log result
     end
-    result
+    return_result
   end
   
   # Copies remote files to a local staging repository

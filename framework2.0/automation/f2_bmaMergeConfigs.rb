@@ -64,9 +64,9 @@ bma_tokenset_name = @p.get("Token Set")
 additional_properties = @p.get("Action Properties")
 servers = {SS_integration_dns => {"os_platform" => integration_details["BMA_PLATFORM"], "CHANNEL_ROOT" => "/tmp", "dns" => "" }}
 bma_server_profile_path = server_profile_path(@p.get("Server Profile Path"))
-bma_server_profile = File.dirname(bma_server_profile_path)
+bma_server_profile = File.basename(bma_server_profile_path)
 bma_config_package_path = config_package_path(@p.get("Config Package_path"))
-bma_config_package = File.dirname(bma_config_package_path)
+bma_config_package = File.basename(bma_config_package_path)
 bma_app_name_prefix = app_name # Leave option to abstract from app name
 bma_staging_dir = File.dirname(bma_config_package_path)
 

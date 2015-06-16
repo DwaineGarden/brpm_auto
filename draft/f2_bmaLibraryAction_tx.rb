@@ -85,15 +85,20 @@ integration_details = @rpm.get_integration_details
 environment_name = @p.get("HHSC_ENV", @p.SS_environment)
 app_name = @p.get("HHSC_APP", @p.SS_application)
 bma_action = @p.required("BMA Action")
-bma_details(bma_action) #creates the @bma hash referred to in the shell automation erb
 script_name = "bma_library_action.sh"
 script_path = "#{ACTION_LIBRARY_PATH}/BMA/#{script_name}"
 transfer_prefix = @p.get("Transfer Property Prefix",nil)
+staging_dir = @p.get("staging_dir")
 bma_server_profile_path = server_profile_path(@p.get("Server Profile Path"))
-bma_server_profile = File.dirname(bma_server_profile_path)
-bma_config_package_path = config_package_path(@p.get("Config Package_path"))
-bma_config_package = File.dirname(bma_config_package_path)
+bma_server_profile = File.basename(bma_server_profile_path)
+bma_config_package_path = @p.get("Config Package Path") #config_package_path(@p.get("Config Package Path"))
+bma_config_package = File.basename(bma_config_package_path)
+if File.dirname(bma_config_package_path).length < 2
+  @rpm.log "building config package: #{bma_config_package}"
+  bma_config_package_path = File.join(staging_dir, "mwconfig", bma_config_package)
+end
 bma_tokenset_name = @p.get("HHSC_BMA_TOKEN_SET", "tokens")
+bma_details(bma_action) #creates the @bma hash referred to in the shell automation erb
 additional_properties = @p.get("Action Properties")
 servers = {SS_integration_dns => {"os_platform" => integration_details["BMA_PLATFORM"], "CHANNEL_ROOT" => "/tmp", "dns" => "" }}
 
@@ -114,6 +119,8 @@ end
 action_txt = ERB.new(script).result(binding)
 @rpm.message_box "Executing BMA - #{File.basename(script_path)}"
 @rpm.log "BMA Server: #{SS_integration_dns}"
+@rpm.log "ServerProfile: #{bma_server_profile_path}"
+@rpm.log "ConfigPackage: #{bma_config_package_path}"
 script_file = @transport.make_temp_file(action_txt)
 result = @transport.execute_script_per_server(script_file, {"servers" => servers, "transfer_properties" => transfer_properties, "transfer_prefix" => transfer_prefix, "strip_prefix" => false })
 #@rpm.log "SRUN Result: #{result.inspect}"
@@ -128,11 +135,11 @@ unless bma_action == "testconnection"
   # Now Move any output back to brpm
   case bma_action
     when "snapshot"
-      file_path = "#{bma_snapshots_path}/snapshot_#{File.basename(bma_server_profile_path)}_#{@timestamp}.xml"
+      file_path = "#{@bma["snapshots_dir"]}/snapshot_#{bma_server_profile}_#{@timestamp}.xml"
     when "install", "preview"
-      file_path = "#{bma_reports_path}/#{environment_name}_#{app_name}_#{bma_action}Report_#{@timestamp}.report"
+      file_path = "#{@bma["reports_dir"]}/#{environment_name}_#{app_name}_#{bma_action}Report_#{@timestamp}.report"
     when "drift"
-      file_path = "#{bma_reports_path}/drift-#{File.basename(bma_compare_snapshot1).gsub(".xml","")}.report"
+      file_path = "#{@bma["reports_dir"]}/drift-#{File.basename(bma_compare_snapshot1).gsub(".xml","")}.report"
   end
   report_file = File.join(@p.SS_output_dir, File.basename(file_path))
   @rpm.log "Moving #{bma_action} output to #{report_file}"

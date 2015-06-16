@@ -48,9 +48,10 @@ options = {"allow_md5_mismatch" => true, "transfer_properties" => transfer_prope
 options["servers"] = alt_servers unless alt_servers == ""
 #=> Call the framework routine to deploy the package instance
 result = @transport.deploy_package_instance(staging_info, options)
+@p.assign_local_param("payload_path_#{@p.SS_component}", result["payload_path"])
 #@rpm.log "Dispatch Result: #{result.inspect}"
 #@p.save_local_params
 
 pack_response("output_status", "Successfully deployed - #{File.basename(staging_path)}")
-
+@p.save_local_params
 params["direct_execute"] = true #Set for local execution

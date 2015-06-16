@@ -250,7 +250,8 @@ class DispatchBase < BrpmAutomation
       entered_paths.split(',').each do |path|
         ans = p_obj.split_nsh_path(path)
         staging_server = ans[0] if ans[0].length > 2
-        files_to_deploy << "//#{staging_server}#{ans[1].strip}" if ans[1].length > 2
+        files_to_deploy << "//#{staging_server}#{ans[1].strip}" if ans[0].length > 2
+        files_to_deploy << path if staging_server == "none"
       end
     end
     unless artifact_path.nil?
