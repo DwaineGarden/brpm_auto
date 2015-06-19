@@ -3,6 +3,7 @@
 #    BMC Software - BJB 9/16/2014
 # ===== Use this routine to override and provide global methods for all your automation
 
+#TODO: OK - refactored the consts into params for better alignment with the regular params
 # set your own automation token
 Token = "a56d64cbcffcce91d306670489fa4cf51b53316c" #"<YOUR_AUTOMATION_TOKEN>" #decrypt_string_with_prefix(@params["SS_api_token"])
 # Hostname so nsh paths can be constructed from local paths

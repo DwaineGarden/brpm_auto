@@ -23,8 +23,7 @@ class BrpmAutomation
     load_helper(@params["SS_script_support_path"])
   end
 
-  # TODO: why is it called option? why not param?
-
+  # TODO: OK - why is it called option? why not param?
   # Provides a simple failsafe for working with hash options
   # returns "" if the option doesn't exist or is blank
   # ==== Attributes
@@ -38,6 +37,7 @@ class BrpmAutomation
     result 
   end
 
+  # TODO: OK - why is it called option? why not param?
   # Throws an error if an option is missing
   #  great for checking if properties exist
   #
@@ -62,7 +62,7 @@ class BrpmAutomation
     result
   end
 
-  #TODO: should this method be part of the Action class?
+  #TODO: looks like this method is already part of the Action class so not merging it
   # Takes the command result from run command and build a pretty display
   #
   # ==== Attributes
@@ -180,6 +180,8 @@ class BrpmAutomation
   end
 
   #TODO: OK
+  #TODO: refactored: it uses BrpmAuto.log and only puts the command's results in stdout
+  #TODO: refactored: error handling not using Exit_Code_Failure anymore
   # Executes a command via shell
   #
   # ==== Attributes
@@ -275,6 +277,7 @@ class BrpmAutomation
     message.split("\n").map{|l| "#{l.length == 0 ? "" : stamp}#{l}"}.join("\n")
   end
 
+  #TODO - already implemented
   # Returns text with private values substituted
   # 
   # ==== Attributes
@@ -310,6 +313,7 @@ class BrpmAutomation
     private_value.nil? ? @private_props : true
   end
 
+  #TODO: OK - refactored, see brpm_rest_client
   # Sends an email based on step recipients
   #
   # ==== Attributes
@@ -327,6 +331,7 @@ class BrpmAutomation
     result = rest_call(url, "get", {"data" => data})
   end
 
+  #TODO: OK
   # Returns a timestamp to the thousanth of a second
   # 
   # ==== Returns
@@ -336,7 +341,8 @@ class BrpmAutomation
   def precision_timestamp
     Time.now.strftime("%Y%m%d%H%M%S%L")
   end
-  
+
+  #TODO: OK - see semaphore.rb
   # Creates a pid-file semaphore to govern global execution
   # 
   # ==== Attributes
@@ -357,7 +363,8 @@ class BrpmAutomation
     fil.close
     return true
   end
-  
+
+  #TODO: OK - see semaphore.rb
   # Clears a pid-file semaphore to govern global execution
   # 
   # ==== Attributes
@@ -374,7 +381,8 @@ class BrpmAutomation
     File.delete(File.join(semaphore_dir, semaphore_name))
     return true
   end
-  
+
+  #TODO: OK - see semaphore.rb
   # Checks if a semaphore exists
   # 
   # ==== Attributes
@@ -390,7 +398,8 @@ class BrpmAutomation
     return true if File.exist?(File.join(semaphore_dir, semaphore_name))
     return false
   end
-  
+
+  #TODO: OK - see semaphore.rb
   # Waits a specified period for a semaphore to clear
   # throws error after wait time if semaphore does not clear
   # ==== Attributes
@@ -417,6 +426,7 @@ class BrpmAutomation
     return true
   end
 
+  #TODO: not needed anymore in the new framework?
   # Checks/Creates a staging directory
   # 
   # ==== Attributes
@@ -437,18 +447,21 @@ class BrpmAutomation
     end
     pattern
   end
-  
+
+  #TODO: not needed anymore in the new framework?
   # Returns a version of the string safe for a filname or path
   def path_safe(txt)
     txt.gsub(" ", "_").gsub(/\,|\[|\]/,"")
   end
 
+  #TODO: OK - renamed to get_servers_by_os_platform
   # Servers in params need to be filtered by OS
   def get_platform_servers(os_platform, alt_servers = nil)
     servers = alt_servers.nil? ? get_server_list(@params) : alt_servers
     result = servers.select{|k,v| v["os_platform"].downcase =~ /#{os_platform}/ }
   end
 
+  #TODO: OK - see params.rb
   # Builds a hash of servers and properties from params
   # 
   # ==== Attributes
@@ -478,7 +491,8 @@ class BrpmAutomation
     end
     return slist
   end
-    
+
+  #TODO: what does this method do? Is it still needed?
   def get_keyword_items(script_content = nil)
     result = {}
     content = script_content unless script_content.nil?
@@ -492,7 +506,8 @@ class BrpmAutomation
     end
     result
   end
-   
+
+  #TODO: OK
   # Splits the server and path from an nsh path
   # returns same path if no server prepended
   # ==== Attributes
@@ -509,6 +524,7 @@ class BrpmAutomation
     result
   end
 
+  #TODO: OK - doesnt this belong in the Action class?
   def read_shebang(os_platform, action_txt)
     if os_platform.downcase =~ /win/
       result = {"ext" => ".bat", "cmd" => "cmd /c", "shebang" => ""}
@@ -533,7 +549,8 @@ class BrpmAutomation
     end
     result
   end
-  
+
+  #TODO: not needed
   def get_integration_details(key = nil, details_yml = nil)
     details_yml = SS_integration_details if details_yml.nil?
     # SS_integration_details = "Project: TST\nDefault item: lots of stuff\n"
@@ -542,7 +559,8 @@ class BrpmAutomation
   end
 
   private
-  
+
+  #TODO: OK
   def exit_code_failure
     return "" if Windows
     size_ = EXIT_CODE_FAILURE.size
@@ -552,17 +570,20 @@ class BrpmAutomation
       '' :
       "; if [ $? -ne 0 ]; then first_part=#{exit_code_failure_first_part}; echo \"${first_part}#{exit_code_failure_second_part}\"; fi;"
   end
-  
+
+  #TODO: OK
   def url_encode(name)
     name.gsub(" ","%20").gsub("/","%2F").gsub("?","%3F")
   end
-   
+
+  #TODO: OK
   def touch_file(file_path)
     fil = File.open(file_path,"w+")
     fil.close
     file_path
   end
-  
+
+  #TODO: not needed
   def load_helper(lib_path)
     require "#{lib_path}/script_helper.rb"
     require "#{lib_path}/file_in_utf.rb"

@@ -81,7 +81,7 @@ module ResourceFramework
     fil.close
   end
 
-  #TODO: where is this used? should the include file be located in the framework's directory? it may contain environment specific info
+  #TODO: OK - implemented it with a server.yml file instead (located in BRPM_HOME/config)
   def load_customer_include(framework_dir)
     customer_include_file = File.join(framework_dir, "customer_include.rb")
     begin

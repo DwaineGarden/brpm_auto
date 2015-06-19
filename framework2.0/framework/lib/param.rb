@@ -16,7 +16,8 @@ class Param < BrpmAutomation
     @request_data_file = "#{request_data_file_dir}/request_data.json"
     @server_list = server_list
   end
-  
+
+  #TODO: OK - see all_params.rb
   # Test if a param is present
   #
   # ==== Attributes
@@ -29,19 +30,22 @@ class Param < BrpmAutomation
   # * the param hash name if where=true, otherwise true/false
   def present?(key_name, where = false)
     ans = nil
-    ans = "params" if present_local?(key_name) 
+    ans = "params" if present_local?(key_name)
     ans = "json" if present_json?(key_name)
     where ? ans : !ans.nil?
   end
 
+  #TODO: OK see all_params.rb
   def present_json?(key_name)
     @json_params.has_key?(key_name)
   end
-   
+
+  #TODO: OK see all_params.rb
   def present_local?(key_name)
     @params.has_key?(key_name)
   end
- 
+
+  #TODO: OK see *params.rb - not sure what this provides more than the default method
   # Adds a key/value to the params
   #
   # ==== Attributes
@@ -55,7 +59,8 @@ class Param < BrpmAutomation
   def add(key_name, value)
     @params[key_name] = value
   end
-  
+
+  #TODO: OK see *params.rb
   # Adds a key/value to the params if not found
   #
   # ==== Attributes
@@ -71,7 +76,8 @@ class Param < BrpmAutomation
     add(key_name, value) if ans == ""
     ans == "" ? value : ans
   end
-  
+
+  #TODO: OK see *params.rb
   # Finds a key in params or json_params
   #
   # ==== Attributes
@@ -89,7 +95,9 @@ class Param < BrpmAutomation
     ans = @params[key_name] if present_local?(key_name)
     ans = default if ans.nil? || ans == ""
     complex_property_value(ans)
-  end  
+  end
+
+  #TODO: OK see params_base.rb
   # Allows you to specify a key like a method call
   #
   # ==== Attributes
@@ -111,7 +119,8 @@ class Param < BrpmAutomation
     ans = args[0] if ans == "" && args[0]
     ans
   end
-  
+
+  #TODO: OK see params_base.rb
   # Raises an error if a key is not found
   #
   # ==== Attributes
@@ -125,7 +134,8 @@ class Param < BrpmAutomation
     raise "ParamsError: param #{key_name} must be present" unless present?(key_name) 
     get(key_name) 
   end
-  
+
+  #TODO: already implemented differently
   # Creates the JSON params file if not present
   #
   # ==== Returns
@@ -141,6 +151,7 @@ class Param < BrpmAutomation
     @request_data_file
   end
 
+  #TODO: already implemented differently
   def init_local_params
     sleep(2) unless File.exist?(@request_data_file)
     unless File.exist?(@request_data_file)
@@ -152,6 +163,7 @@ class Param < BrpmAutomation
     @request_data_file
   end
 
+  #TODO: already implemented differently
   # Fetches the contents of the json_params file
   #
   # ==== Returns
@@ -167,6 +179,7 @@ class Param < BrpmAutomation
     @json_params
   end
 
+  #TODO: OK - see params.rb
   # Fetches the property value for a server
   #
   # ==== Returns
@@ -178,6 +191,7 @@ class Param < BrpmAutomation
     ans
   end
 
+  #TODO: already implemented differently - see request_params.rb new_for_request
   # Pulls the json params from a different request
   #
   # ==== Attributes
@@ -195,6 +209,7 @@ class Param < BrpmAutomation
     request_params = JSON.parse(File.open(cur).read)
   end
 
+  #TODO: already implemented differently - see request_params.rb
   # Adds a key/value to the json_params
   #
   # ==== Attributes
@@ -209,6 +224,7 @@ class Param < BrpmAutomation
     @json_params[key] = value
   end
 
+  #TODO: already implemented differently - see request_params.rb
   # Removes a key/value from the json_params
   #
   # ==== Attributes
@@ -221,7 +237,8 @@ class Param < BrpmAutomation
   def remove_local_param(key)
     @json_params.delete(key)
   end
-  
+
+  #TODO: already implemented differently - see request_params.rb
   # Saves json_params to the file system
   #  note: you must call this to save any changes
   # ==== Attributes
@@ -239,6 +256,7 @@ class Param < BrpmAutomation
     end
   end
 
+  #TODO: already implemented differently - see brpm_auto.rb
   # returns the current json_params
   #
   # ==== Returns
@@ -248,6 +266,7 @@ class Param < BrpmAutomation
     @json_params
   end
 
+  #TODO: already implemented differently - see brpm_auto.rb
   # returns the current params
   #
   # ==== Returns
@@ -257,6 +276,7 @@ class Param < BrpmAutomation
     @params
   end
 
+  #TODO: already implemented differently - see request_params.rb
   # Inserts a value in the json_params of another request
   #  note: be careful this has to be coordinated
   # ==== Attributes
@@ -277,6 +297,7 @@ class Param < BrpmAutomation
     fil.close
   end
 
+  #TODO: already implemented differently - see brpm_auto.rb
   # Resolves embedded properties in a string
   #  
   # ==== Attributes
@@ -296,7 +317,8 @@ class Param < BrpmAutomation
     end
     result
   end
-  
+
+  #TODO: already implemented differently - see params.rb
   # Returns a server hash with properties from the params
   # 
   # ==== Returns
@@ -327,7 +349,8 @@ class Param < BrpmAutomation
     end
     slist
   end
-  
+
+  #TODO: OK - see params.rb
   # Returns the request id for use in rest calls
   #
   def rest_request_id

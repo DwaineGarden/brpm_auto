@@ -28,6 +28,8 @@ params["direct_execute"] = true #Set for local execution
 #---------------------- Main Body --------------------------#
 # Check if we have been passed a package id from a promotion
 
+@p = BrpmAuto.all_params
+
 result = run_command(params, @p.get("command"),"")
 
 # Apply success or failure criteria

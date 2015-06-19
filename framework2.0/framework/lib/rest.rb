@@ -3,6 +3,7 @@
 #  optimized for rest calls to BRPM
 class BrpmRest < BrpmAutomation
 
+  #TODO: already implemented differently
   # Initialize an instance of the brpmrest class
   #
   # ==== Attributes
@@ -18,7 +19,8 @@ class BrpmRest < BrpmAutomation
     super(params)
     @token = get_option(options, "token", token)
   end
-    
+
+
   # Performs a get on the passed model
   #
   # ==== Attributes
