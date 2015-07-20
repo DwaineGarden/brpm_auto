@@ -1,12 +1,6 @@
 #  f2_rsc_LibraryScriptTree
 #  Resource automation to present a tree control for file browsing via nsh
 #  Called by f2_executeLibraryAction
-###
-# Update Action Library:
-#   name: yes/no update the script library
-#   type: in-text
-#   position: A2:B2
-###
 #---------------------- Declarations ------------------------------#
 FRAMEWORK_DIR = @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib") unless defined?(FRAMEWORK_DIR)
 @script_name_handle = "library_tree"

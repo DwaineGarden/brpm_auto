@@ -233,6 +233,7 @@ class DispatchNSH < DispatchBase
     log "\t Destination: #{destination}"
     result = @nsh.cp(source, destination)
     log "\tCopy Result: #{result}"
+    result
   end
       
 end

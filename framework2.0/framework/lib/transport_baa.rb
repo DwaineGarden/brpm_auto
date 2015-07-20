@@ -1045,7 +1045,7 @@ class TransportBAA < BrpmAutomation
     else
       args_new = [@url, @username, @password, @role] + args
     end
-    puts "#=> Invoking BaaUtility method: #{destination} - #{args_new.inspect}"
+    log "#=> Invoking BaaUtility method: #{destination} - #{args_new.inspect}"
     result = BaaUtilities.send(destination, *args_new)
   end
 

@@ -229,13 +229,20 @@ class Param < BrpmAutomation
   # * +key_name+ - key name
   # * +value+ - value to assign
   #
-  def save_local_params
+  def save_local_params(merge_existing = true)
     # Uses a json document in automation_results to store free-form information
     unless @orig_request_params == @json_params
-      sleep(2) unless File.exist?(cur)
-      fil = File.open(@request_data_file,"w+")
-      fil.write @json_params.to_json
-      fil.close
+      sleep(2) unless File.exist?(@request_data_file)
+      fil = File.open(@request_data_file) do |fil|
+        latest = JSON.parse(fil.read)
+        @orig_request_params = latest
+      end
+      merged = @orig_request_params.merge(@json_params) if merge_existing
+      merged = @json_params unless merge_existing
+      fil = File.open(@request_data_file, "w+") do |fil|
+        fil.write merged.to_json
+        fil.flush
+      end
     end
   end
 

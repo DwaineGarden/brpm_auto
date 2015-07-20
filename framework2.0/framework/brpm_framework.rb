@@ -40,6 +40,8 @@ end
 #  Customers should modify the BAA_BASE_PATH constant
 # == Note the customer_include.rb reference.  To add your own routines and override methods use this file.
 customer_include_file = File.join(FRAMEWORK_DIR, "customer_include.rb")
+customer_include_file = File.join(CUSTOMER_LIB_DIR,"customer_include.rb") if defined?(CUSTOMER_LIB_DIR)
+customer_include_file = File.join(File.dirname(FRAMEWORK_DIR.gsub("/BRPM/framework", "")), "customer_include.rb")
 customer_include_file = File.join(FRAMEWORK_DIR,"customer_include_default.rb") if !File.exist?(customer_include_file)
 conts = File.open(customer_include_file).read
 eval conts # Use eval for resource automation to be dynamic

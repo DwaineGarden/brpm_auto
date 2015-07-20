@@ -113,7 +113,8 @@ class DispatchBase < BrpmAutomation
   def make_temp_file(content, platform = "linux", options = {})
     ext = get_option(options, "ext")
     if ext == ""
-      ext = platform.downcase == "linux" ? ".sh" : ".bat"
+      shebang = read_shebang(platform, content)
+      ext = shebang["ext"]
     end
     file_path = File.join(@params["SS_output_dir"],"shell_#{precision_timestamp}#{ext}")
     fil = File.open(file_path, "w+")
@@ -149,7 +150,7 @@ class DispatchBase < BrpmAutomation
       properties["RPM_CHANNEL_ROOT"] = dos_path(properties["RPM_CHANNEL_ROOT"])
       properties["VL_CHANNEL_ROOT"] = properties["RPM_CHANNEL_ROOT"]
       wrapper = "#{wrapper}.bat"
-      script = "@echo off\r\necho |hostname > junk.txt\r\nset /p HOST=<junk.txt\r\necho y | del junk.txt\r\n"
+      script = "@echo off\r\necho |hostname > junk.txt\r\nset /p HOST=<junk.txt\r\necho y|del junk.txt\r\n"
       script += "echo ============== HOSTNAME: %HOST% ==============\r\n"
       script += "echo #{msg} \r\n"
       properties.each{|k,v| script += "set #{k}=#{v}\r\n" }
@@ -157,7 +158,8 @@ class DispatchBase < BrpmAutomation
       script += "cd %RPM_CHANNEL_ROOT%\r\n"
       script += "#{cmd}\r\n"
       script += "echo EXIT_CODE: %errorlevel%\r\n"
-      script +=  "timeout /T 5 /nobreak > NUL\r\necho y | del #{target}\r\n"
+      script += "timeout /t <5> /nobreak\r\n"
+      script += "echo y|del #{target}\r\n"
     else
       wrapper = "#{wrapper}.sh"
       script = "echo \"============== HOSTNAME: `hostname` ==============\"\n"
@@ -175,6 +177,7 @@ class DispatchBase < BrpmAutomation
     fil.close
     File.join(@output_dir, wrapper)
   end
+
 
   # Builds the wrapper script for a single command
   #
@@ -203,7 +206,8 @@ class DispatchBase < BrpmAutomation
       script += "cd %RPM_CHANNEL_ROOT%\r\n"
       script += "#{command} #{target}\r\n"
       script += "echo EXIT_CODE: %errorlevel%\r\n"
-      script += "timeout /T 5 /nobreak > NUL\r\necho y | del #{target}\r\n"
+      script += "timeout /t <5> /nobreak\r\n"
+      script += "echo y|del #{target}\r\n"
     else
       wrapper = "#{wrapper}.sh"
       script = "echo \"============== HOSTNAME: `hostname` ==============\"\n"

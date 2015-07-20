@@ -26,6 +26,20 @@ class TransportSSH < BrpmAutomation
     @maxtime = maxtime.to_i * 60
   end
     
+  # Resets the security credentials
+  #
+  # ==== Attributes
+  #
+  # * +options+ - hash of options [user,password,sudo, debug, servers]
+  # 
+  def set_credential(options = {})
+    @user = get_option(options, "user", @user)
+    @password = get_option(options, "password", @password)
+    @servers = get_option(options, "servers", @servers) 
+    @sudo = get_option(options, "sudo", @sudo)
+    @debug = get_option(options, "debug", @debug)
+  end
+
   # Execute a command on remote targets
   #
   # ==== Attributes

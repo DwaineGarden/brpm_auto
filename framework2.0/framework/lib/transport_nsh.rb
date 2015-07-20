@@ -52,11 +52,15 @@ class TransportNSH < BrpmAutomation
   end
 
   # Performs a cred -acquire
+  # ==== Attributes
+  #
+  # * +opts+ - pass the credential options to relogin [bl_profile, bl_username, bl_password]
   #
   # ==== Returns
   #
   # * cred result message
-  def get_cred
+  def get_cred(opts = {})
+    @opts = opts if opts.has_key("bl_profile")
     bl_cred_path = safe_cmd("blcred")
     cred_status = `#{bl_cred_path} cred -list`
     puts "Current Status:\n#{cred_status}" if @test_mode
@@ -319,7 +323,7 @@ class TransportNSH < BrpmAutomation
   #
   # * results of command
   def cp(src_path, target_path)
-    cmd = "#{nsh_cmd("cp")} #{src_path} \"#{target_path}\""
+    cmd = "#{nsh_cmd("cp")} -f #{src_path} \"#{target_path}\""
     cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
     log cmd if @verbose
     result = execute_shell(cmd)

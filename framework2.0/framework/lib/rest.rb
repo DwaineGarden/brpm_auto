@@ -220,11 +220,14 @@ class BrpmRest < BrpmAutomation
   # * array of the steps that match
   def monitor_request(request_id, target_state = "complete", options = {})
     states = ["created","planned","started","problem","hold","complete"]
-    max_time = get_option(options, "max_time", 15)
+    max_time = get_option(options, "max_time", 15).to_i
     max_time = max_time * 60 # seconds = 15 minutes
     monitor_step_name = get_option(options, "monitor_step_name", "none")
-    checking_interval = get_option(options, "interval", 15) #seconds
-    verbose = get_option(options, "verbose", false)
+    seed_interval = get_option(options, "interval", 15) #seconds
+    use_full_results = get_option(options, "full_results", false)
+    verbose = get_option(options, "verbose")
+    full_result = {"title" => "Monitoring Request: #{request_id}", "log" => "", "status" => "failed", "statistics" => "", "result" => ""}
+    verbose = "no" unless verbose == "yes"
     raise "Command_Failed: bad request_id" if !(request_id.to_i > 0)
     raise "Command_Failed: state not allowed, choose from [#{states.join(",")}]" if !states.include?(target_state)
     message_box("Montoring Request: #{request_id}","sep")
@@ -232,7 +235,7 @@ class BrpmRest < BrpmAutomation
     start_time = Time.now
     elapsed = 0
     until (elapsed > max_time || req_status == target_state)
-      rest_result = get("requests", request_id, {"verbose" => verbose ? "yes" : "no"})
+      rest_result = get("requests", request_id, {"verbose" => verbose})
       raise "Command_Failed: Request not found" if rest_result["status"] == "ERROR"
       if monitor_step_name == "none"
         req_status = rest_result["data"]["aasm_state"]
@@ -245,21 +248,43 @@ class BrpmRest < BrpmAutomation
       if req_status == target_state
         break
       else
-        log "\tWaiting(#{elapsed.floor.to_s}) - Current status: #{req_status}"
-        sleep(checking_interval)
+        ival = checking_interval(seed_interval, elapsed)
+        log_msg = "\tWaiting #{ival} seconds. Elapsed=(#{elapsed.floor.to_s}) - Current status: #{req_status}"
+        log log_msg
+        full_result["log"] += log_msg
+        sleep(ival)
         elapsed = Time.now - start_time
       end
     end
     if req_status == target_state
-      req_status =  "Success test, looking for #{target_state}: Success!"
+      full_result["status"] = "success"
+      full_result["statistics"] = "Elapsed Time: #{Time.now - start_time}"
+      result =  "Success test, looking for #{target_state}: Success!"
     else
       if elapsed > max_time
-        req_status =  "Command_Failed: Max time: #{max_time}(secs) reached.  Status is: #{req_status}, looking for: #{target_state}"
+        result =  "Command_Failed: Max time: #{max_time}(secs) reached.  Status is: #{req_status}, looking for: #{target_state}"
+        full_result["statistics"] = "Elapsed Time: #{Time.now - start_time}"
       else
-        req_status = "REST call generated bad data, Status is: #{req_status}, looking for: #{target_state}"
+        result = "REST call generated bad data, Status is: #{req_status}, looking for: #{target_state}"
       end
     end
-    req_status
+    full_result["result"] = result
+    use_full_results ? full_result : result
+  end
+  
+  def checking_interval(interval, total_time)
+    if (total_time/interval).to_i > 50
+      interval = interval * 13 
+    elsif (total_time/interval).to_i > 20
+      interval = interval * 10 
+    elsif (total_time/interval).to_i > 15
+      interval = interval * 6 
+    elsif (total_time/interval).to_i > 10
+      interval = interval * 4 
+    elsif (total_time/interval).to_i > 5
+      interval = interval * 2 
+    end
+    interval
   end
   
   # Sends an email based on step recipients

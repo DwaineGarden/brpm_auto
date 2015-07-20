@@ -98,7 +98,7 @@ class BrpmAutomation
     methods = %w{get post put}
     result = {"status" => "ERROR", "response" => "", "message" => ""}
     method = method.downcase
-    verbose = get_option(options, "verbose") == "yes" || get_option(options, "verbose")
+    verbose = get_option(options, "verbose") == "yes" || get_option(options, "verbose") == true
     headers = get_option(options, "headers", {:accept => :json, :content_type => :json})
     return result["message"] = "ERROR - #{method} not recognized" unless methods.include?(method)
     log "Rest URL: #{url}" if verbose
@@ -161,7 +161,7 @@ class BrpmAutomation
   #
   def dos_path(source_path, drive_letter = "C")
     path = ""
-    return source_path if source_path.include?(":\\")
+    return source_path.gsub("/", "\\") if source_path.include?(":\\")
     path_array = source_path.split("/")
     if path_array[1].length == 1 # drive letter
       path = "#{path_array[1]}:\\"
@@ -276,6 +276,8 @@ class BrpmAutomation
   #
   def privatize(txt)
     private_properties unless defined?(@private_props)
+    return txt if txt.length < 2
+    txt = txt.inspect unless txt.is_a?(String)
     @private_props.each{|v| txt.gsub!(v,"-private-") unless v.nil? || v.length < 2 }
     txt.gsub!(decrypt_string_with_prefix(SS_integration_password_enc), "-private-") if defined?(SS_integration_password)
     txt
@@ -528,6 +530,40 @@ class BrpmAutomation
     # SS_integration_details = "Project: TST\nDefault item: lots of stuff\n"
     details = YAML.load(details_yml)
     key.nil? ? details : details[key]
+  end
+
+  # Looks for terms in the results and builds an exit message
+  # returns status message with "Command_Failed if the status fails"
+  # ==== Attributes
+  # * +results+ - the text to analyze for success
+  # * +success_terms+ - the term or terms (use | or & for and and or with multiple terms)
+  # * +fail_now+ - if set to true will throw an error if a term is not found
+  # ==== Returns
+  # * +text+ - summary of success terms
+  #
+  def verify_success_terms(results, success_terms, fail_now = false, quiet = false)
+    results.split("\n").each{|line| exit_status = line if line.start_with?("EXIT_CODE:") }
+    if success_terms != ""
+      exit_status = []
+      c_type = success_terms.include?("|") ? "or" : "and"
+      success = [success_terms] if !success_terms.include?("|") || !success_terms.include?("&")
+      success = success_terms.split("|") if success_terms.include?("|")
+      success = success_terms.split("&") if success_terms.include?("&")
+      success.each do |term|
+        if results.include?(term)
+          exit_status << "Success - found term: #{term}"
+        else
+          exit_status << "Command_Failed: term not found: #{term}"
+        end
+      end
+      status = exit_status.join(", ")
+      status.gsub!("Command_Failed:", "") if status.include?("Success") if c_type == "or"
+    else
+      status = "Success (because nothing was tested)"
+    end
+    log status unless quiet
+    raise "ERROR: success term not found" if fail_now && status.include?("Command_Failed")
+    "#{status} -- #{results[0..160]}"
   end
 
   private
