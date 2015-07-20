@@ -354,7 +354,7 @@ working with params</p>
 
           
           <div class="method-source-code" id="complex_property_value-source">
-            <pre><span class="ruby-comment"># File framework/lib/param.rb, line 285</span>
+            <pre><span class="ruby-comment"># File framework/lib/param.rb, line 292</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">complex_property_value</span>(<span class="ruby-identifier">full_val</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">full_val</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">full_val</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
   <span class="ruby-identifier">reg</span> = <span class="ruby-regexp">%r\$\{.*?\}/</span>
@@ -364,6 +364,7 @@ working with params</p>
   <span class="ruby-identifier">found</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">prop_name</span> = <span class="ruby-identifier">item</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;\${&quot;</span>,<span class="ruby-string">&quot;&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;}&quot;</span>,<span class="ruby-string">&quot;&quot;</span>)
     <span class="ruby-identifier">value</span> = <span class="ruby-identifier">get</span>(<span class="ruby-identifier">prop_name</span>)
+    <span class="ruby-identifier">value</span> = <span class="ruby-identifier">get_server_property</span>(<span class="ruby-ivar">@server_list</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">first</span>, <span class="ruby-identifier">prop_name</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">value</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;&quot;</span>
     <span class="ruby-identifier">result</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-node">&quot;\${#{prop_name}}&quot;</span>,<span class="ruby-identifier">value</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">value</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;&quot;</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">result</span>
@@ -691,7 +692,7 @@ working with params</p>
 
           
           <div class="method-source-code" id="local_params-source">
-            <pre><span class="ruby-comment"># File framework/lib/param.rb, line 247</span>
+            <pre><span class="ruby-comment"># File framework/lib/param.rb, line 254</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">local_params</span>
   <span class="ruby-ivar">@json_params</span>
 <span class="ruby-keyword">end</span></pre>
@@ -778,7 +779,7 @@ spaces</p>
 
           
           <div class="method-source-code" id="params-source">
-            <pre><span class="ruby-comment"># File framework/lib/param.rb, line 256</span>
+            <pre><span class="ruby-comment"># File framework/lib/param.rb, line 263</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">params</span>
   <span class="ruby-ivar">@params</span>
 <span class="ruby-keyword">end</span></pre>
@@ -994,7 +995,7 @@ spaces</p>
 
           
           <div class="method-source-code" id="rest_request_id-source">
-            <pre><span class="ruby-comment"># File framework/lib/param.rb, line 332</span>
+            <pre><span class="ruby-comment"># File framework/lib/param.rb, line 340</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">rest_request_id</span>
   (<span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;request_id&quot;</span>].<span class="ruby-identifier">to_i</span> <span class="ruby-operator">-</span> <span class="ruby-value">1000</span>).<span class="ruby-identifier">to_s</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1012,7 +1013,7 @@ spaces</p>
         
         <div class="method-heading">
           <span class="method-name">save_local_params</span><span
-            class="method-args">()</span>
+            class="method-args">(merge_existing = true)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -1034,13 +1035,20 @@ spaces</p>
           
           <div class="method-source-code" id="save_local_params-source">
             <pre><span class="ruby-comment"># File framework/lib/param.rb, line 232</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">save_local_params</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">save_local_params</span>(<span class="ruby-identifier">merge_existing</span> = <span class="ruby-keyword">true</span>)
   <span class="ruby-comment"># Uses a json document in automation_results to store free-form information</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@orig_request_params</span> <span class="ruby-operator">==</span> <span class="ruby-ivar">@json_params</span>
-    <span class="ruby-identifier">sleep</span>(<span class="ruby-value">2</span>) <span class="ruby-keyword">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">cur</span>)
-    <span class="ruby-identifier">fil</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-ivar">@request_data_file</span>,<span class="ruby-string">&quot;w+&quot;</span>)
-    <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">write</span> <span class="ruby-ivar">@json_params</span>.<span class="ruby-identifier">to_json</span>
-    <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">close</span>
+    <span class="ruby-identifier">sleep</span>(<span class="ruby-value">2</span>) <span class="ruby-keyword">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-ivar">@request_data_file</span>)
+    <span class="ruby-identifier">fil</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-ivar">@request_data_file</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">fil</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">latest</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">fil</span>.<span class="ruby-identifier">read</span>)
+      <span class="ruby-ivar">@orig_request_params</span> = <span class="ruby-identifier">latest</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">merged</span> = <span class="ruby-ivar">@orig_request_params</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-ivar">@json_params</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">merge_existing</span>
+    <span class="ruby-identifier">merged</span> = <span class="ruby-ivar">@json_params</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">merge_existing</span>
+    <span class="ruby-identifier">fil</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-ivar">@request_data_file</span>, <span class="ruby-string">&quot;w+&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">fil</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">merged</span>.<span class="ruby-identifier">to_json</span>
+      <span class="ruby-identifier">fil</span>.<span class="ruby-identifier">flush</span>
+    <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- save_local_params-source -->
@@ -1074,7 +1082,7 @@ spaces</p>
 
           
           <div class="method-source-code" id="server_list-source">
-            <pre><span class="ruby-comment"># File framework/lib/param.rb, line 306</span>
+            <pre><span class="ruby-comment"># File framework/lib/param.rb, line 314</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">server_list</span>
   <span class="ruby-identifier">rxp</span> = <span class="ruby-regexp">%rserver\d+_/</span>
   <span class="ruby-identifier">slist</span> = {}
@@ -1133,7 +1141,7 @@ spaces</p>
 
           
           <div class="method-source-code" id="update_other_request_params-source">
-            <pre><span class="ruby-comment"># File framework/lib/param.rb, line 267</span>
+            <pre><span class="ruby-comment"># File framework/lib/param.rb, line 274</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_other_request_params</span>(<span class="ruby-identifier">request_id</span>, <span class="ruby-identifier">updates</span> = {})
   <span class="ruby-identifier">request_data_file_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_output_dir&quot;</span>])
   <span class="ruby-identifier">request_data_file_dir</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-node">&quot;/#{@params[&quot;SS_request_number&quot;]}&quot;</span>,<span class="ruby-node">&quot;/#{request_id}&quot;</span>)

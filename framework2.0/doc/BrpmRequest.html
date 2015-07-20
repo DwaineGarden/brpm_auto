@@ -214,7 +214,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 307</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 332</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">id</span>, <span class="ruby-identifier">base_url</span>, <span class="ruby-identifier">params</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-ivar">@id</span> = <span class="ruby-identifier">id</span>
   <span class="ruby-keyword">super</span>(<span class="ruby-identifier">base_url</span>, <span class="ruby-identifier">params</span>,  <span class="ruby-identifier">options</span>)
@@ -258,7 +258,7 @@
 
           
           <div class="method-source-code" id="app-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 366</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 391</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">app</span>
   <span class="ruby-ivar">@request</span>[<span class="ruby-string">&quot;apps&quot;</span>].<span class="ruby-identifier">first</span>
 <span class="ruby-keyword">end</span></pre>
@@ -293,7 +293,7 @@
 
           
           <div class="method-source-code" id="app_components-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 386</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 411</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">app_components</span>
   <span class="ruby-identifier">installed_components</span> <span class="ruby-keyword">unless</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@installed_components</span>)
   <span class="ruby-ivar">@installed_components</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>[<span class="ruby-string">&quot;application_component&quot;</span>][<span class="ruby-string">&quot;component&quot;</span>]}.<span class="ruby-identifier">uniq</span>
@@ -329,7 +329,7 @@
 
           
           <div class="method-source-code" id="app_environments-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 396</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 421</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">app_environments</span>
   <span class="ruby-identifier">installed_components</span> <span class="ruby-keyword">unless</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@installed_components</span>)
   <span class="ruby-ivar">@installed_components</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>[<span class="ruby-string">&quot;application_environment&quot;</span>][<span class="ruby-string">&quot;environment&quot;</span>]}.<span class="ruby-identifier">uniq</span>
@@ -365,7 +365,7 @@
 
           
           <div class="method-source-code" id="app_routes-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 455</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 480</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">app_routes</span>
   <span class="ruby-identifier">res</span> = <span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;apps&quot;</span>, <span class="ruby-identifier">app</span>[<span class="ruby-string">&quot;id&quot;</span>])
   <span class="ruby-identifier">res</span>[<span class="ruby-string">&quot;data&quot;</span>][<span class="ruby-string">&quot;routes&quot;</span>]
@@ -407,7 +407,7 @@ options ex: <a href="http://"planned_end_date"">filters</a>&gt;2013-04-22</p>
 
           
           <div class="method-source-code" id="get_list-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 324</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 349</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_list</span>(<span class="ruby-identifier">filter_param</span>)
   <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rest_call</span>(<span class="ruby-identifier">rest_url</span>(<span class="ruby-string">&quot;requests&quot;</span>, <span class="ruby-ivar">@id</span>, <span class="ruby-identifier">filter_param</span>), <span class="ruby-string">&quot;get&quot;</span>)
   <span class="ruby-ivar">@request</span> = <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;data&quot;</span>]
@@ -443,7 +443,7 @@ options ex: <a href="http://"planned_end_date"">filters</a>&gt;2013-04-22</p>
 
           
           <div class="method-source-code" id="groups-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 493</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 518</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">groups</span>
   <span class="ruby-identifier">result</span> = <span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;groups&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -481,7 +481,7 @@ href="BrpmRequest.html#method-i-installed_components">#installed_components</a><
 
           
           <div class="method-source-code" id="installed_components-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 375</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 400</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">installed_components</span>
   <span class="ruby-keyword">return</span> <span class="ruby-ivar">@installed_components</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@installed_components</span>)
   <span class="ruby-identifier">res</span> = <span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;installed_components&quot;</span>, <span class="ruby-keyword">nil</span>, {<span class="ruby-string">&quot;filters&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;filters[app_name]=#{url_encode(app[&quot;name&quot;])}&quot;</span>})
@@ -518,7 +518,7 @@ href="BrpmRequest.html#method-i-installed_components">#installed_components</a><
 
           
           <div class="method-source-code" id="owner-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 406</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 431</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">owner</span>
   <span class="ruby-identifier">request</span>[<span class="ruby-string">&quot;owner&quot;</span>]
 <span class="ruby-keyword">end</span></pre>
@@ -553,7 +553,7 @@ href="BrpmRequest.html#method-i-installed_components">#installed_components</a><
 
           
           <div class="method-source-code" id="plan-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 424</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 449</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">plan</span>
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">nil</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">request</span>[<span class="ruby-string">&quot;plan_member&quot;</span>].<span class="ruby-identifier">nil?</span>
   <span class="ruby-identifier">plan_id</span> = <span class="ruby-identifier">request</span>[<span class="ruby-string">&quot;plan_member&quot;</span>][<span class="ruby-string">&quot;plan&quot;</span>][<span class="ruby-string">&quot;id&quot;</span>]
@@ -590,7 +590,7 @@ href="BrpmRequest.html#method-i-installed_components">#installed_components</a><
 
           
           <div class="method-source-code" id="plan_routes-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 445</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 470</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">plan_routes</span>
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">nil</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">request</span>[<span class="ruby-string">&quot;plan_member&quot;</span>].<span class="ruby-identifier">nil?</span>
   <span class="ruby-identifier">plan</span>[<span class="ruby-string">&quot;plan_routes&quot;</span>]
@@ -626,7 +626,7 @@ href="BrpmRequest.html#method-i-installed_components">#installed_components</a><
 
           
           <div class="method-source-code" id="plan_stages-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 484</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 509</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">plan_stages</span>
   <span class="ruby-identifier">plan</span>[<span class="ruby-string">&quot;plan_stages&quot;</span>]
 <span class="ruby-keyword">end</span></pre>
@@ -661,7 +661,7 @@ href="BrpmRequest.html#method-i-installed_components">#installed_components</a><
 
           
           <div class="method-source-code" id="request-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 357</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 382</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">request</span>
   <span class="ruby-ivar">@request</span>
 <span class="ruby-keyword">end</span></pre>
@@ -696,7 +696,7 @@ href="BrpmRequest.html#method-i-installed_components">#installed_components</a><
 
           
           <div class="method-source-code" id="requestor-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 415</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 440</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">requestor</span>
   <span class="ruby-identifier">request</span>[<span class="ruby-string">&quot;requestor&quot;</span>]
 <span class="ruby-keyword">end</span></pre>
@@ -736,7 +736,7 @@ href="BrpmRequest.html#method-i-installed_components">#installed_components</a><
 
           
           <div class="method-source-code" id="route_environments-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 469</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 494</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">route_environments</span>(<span class="ruby-identifier">route_id</span>)
   <span class="ruby-comment"># Returns environment list for a particular route</span>
   <span class="ruby-identifier">envs</span> = {}
@@ -777,7 +777,7 @@ href="BrpmRequest.html#method-i-installed_components">#installed_components</a><
 
           
           <div class="method-source-code" id="stage-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 435</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 460</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">stage</span>
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">nil</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">request</span>[<span class="ruby-string">&quot;plan_member&quot;</span>].<span class="ruby-identifier">nil?</span>
   <span class="ruby-identifier">request</span>[<span class="ruby-string">&quot;plan_member&quot;</span>][<span class="ruby-string">&quot;stage&quot;</span>]
@@ -813,7 +813,7 @@ href="BrpmRequest.html#method-i-installed_components">#installed_components</a><
 
           
           <div class="method-source-code" id="steps-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 334</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 359</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">steps</span>
   <span class="ruby-identifier">steps</span> = <span class="ruby-ivar">@request</span>[<span class="ruby-string">&quot;steps&quot;</span>]
 <span class="ruby-keyword">end</span></pre>
@@ -853,7 +853,7 @@ href="BrpmRequest.html#method-i-installed_components">#installed_components</a><
 
           
           <div class="method-source-code" id="update_state-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 347</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 372</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_state</span>(<span class="ruby-identifier">aasm_event</span>) 
   <span class="ruby-identifier">request_info</span> = {<span class="ruby-string">&quot;request&quot;</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-string">&quot;aasm_event&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">aasm_event</span> }}
   <span class="ruby-identifier">result</span> = <span class="ruby-identifier">update</span>(<span class="ruby-string">&quot;requests&quot;</span>, <span class="ruby-ivar">@id</span>, <span class="ruby-identifier">request_info</span>)    

@@ -74,6 +74,8 @@
     
     <li><a href="#method-i-assign_version_to_steps">#assign_version_to_steps</a>
     
+    <li><a href="#method-i-checking_interval">#checking_interval</a>
+    
     <li><a href="#method-i-create">#create</a>
     
     <li><a href="#method-i-create_version_tags">#create_version_tags</a>
@@ -297,6 +299,47 @@ of rest responses</p>
       </div><!-- assign_version_to_steps-method -->
 
     
+      <div id="method-i-checking_interval" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">checking_interval</span><span
+            class="method-args">(interval, total_time)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="checking_interval-source">
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 275</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">checking_interval</span>(<span class="ruby-identifier">interval</span>, <span class="ruby-identifier">total_time</span>)
+  <span class="ruby-keyword">if</span> (<span class="ruby-identifier">total_time</span><span class="ruby-operator">/</span><span class="ruby-identifier">interval</span>).<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">50</span>
+    <span class="ruby-identifier">interval</span> = <span class="ruby-identifier">interval</span> * <span class="ruby-value">13</span> 
+  <span class="ruby-keyword">elsif</span> (<span class="ruby-identifier">total_time</span><span class="ruby-operator">/</span><span class="ruby-identifier">interval</span>).<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">20</span>
+    <span class="ruby-identifier">interval</span> = <span class="ruby-identifier">interval</span> * <span class="ruby-value">10</span> 
+  <span class="ruby-keyword">elsif</span> (<span class="ruby-identifier">total_time</span><span class="ruby-operator">/</span><span class="ruby-identifier">interval</span>).<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">15</span>
+    <span class="ruby-identifier">interval</span> = <span class="ruby-identifier">interval</span> * <span class="ruby-value">6</span> 
+  <span class="ruby-keyword">elsif</span> (<span class="ruby-identifier">total_time</span><span class="ruby-operator">/</span><span class="ruby-identifier">interval</span>).<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">10</span>
+    <span class="ruby-identifier">interval</span> = <span class="ruby-identifier">interval</span> * <span class="ruby-value">4</span> 
+  <span class="ruby-keyword">elsif</span> (<span class="ruby-identifier">total_time</span><span class="ruby-operator">/</span><span class="ruby-identifier">interval</span>).<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">5</span>
+    <span class="ruby-identifier">interval</span> = <span class="ruby-identifier">interval</span> * <span class="ruby-value">2</span> 
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">interval</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- checking_interval-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- checking_interval-method -->
+
+    
       <div id="method-i-create" class="method-detail ">
         
         <div class="method-heading">
@@ -505,11 +548,14 @@ complete)</p>
             <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 221</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">monitor_request</span>(<span class="ruby-identifier">request_id</span>, <span class="ruby-identifier">target_state</span> = <span class="ruby-string">&quot;complete&quot;</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-identifier">states</span> = [<span class="ruby-string">&quot;created&quot;</span>,<span class="ruby-string">&quot;planned&quot;</span>,<span class="ruby-string">&quot;started&quot;</span>,<span class="ruby-string">&quot;problem&quot;</span>,<span class="ruby-string">&quot;hold&quot;</span>,<span class="ruby-string">&quot;complete&quot;</span>]
-  <span class="ruby-identifier">max_time</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;max_time&quot;</span>, <span class="ruby-value">15</span>)
+  <span class="ruby-identifier">max_time</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;max_time&quot;</span>, <span class="ruby-value">15</span>).<span class="ruby-identifier">to_i</span>
   <span class="ruby-identifier">max_time</span> = <span class="ruby-identifier">max_time</span> * <span class="ruby-value">60</span> <span class="ruby-comment"># seconds = 15 minutes</span>
   <span class="ruby-identifier">monitor_step_name</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;monitor_step_name&quot;</span>, <span class="ruby-string">&quot;none&quot;</span>)
-  <span class="ruby-identifier">checking_interval</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;interval&quot;</span>, <span class="ruby-value">15</span>) <span class="ruby-comment">#seconds</span>
-  <span class="ruby-identifier">verbose</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;verbose&quot;</span>, <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">seed_interval</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;interval&quot;</span>, <span class="ruby-value">15</span>) <span class="ruby-comment">#seconds</span>
+  <span class="ruby-identifier">use_full_results</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;full_results&quot;</span>, <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">verbose</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;verbose&quot;</span>)
+  <span class="ruby-identifier">full_result</span> = {<span class="ruby-string">&quot;title&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;Monitoring Request: #{request_id}&quot;</span>, <span class="ruby-string">&quot;log&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-string">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;failed&quot;</span>, <span class="ruby-string">&quot;statistics&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-string">&quot;result&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>}
+  <span class="ruby-identifier">verbose</span> = <span class="ruby-string">&quot;no&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">verbose</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;yes&quot;</span>
   <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Command_Failed: bad request_id&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span>(<span class="ruby-identifier">request_id</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Command_Failed: state not allowed, choose from [#{states.join(&quot;,&quot;)}]&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">states</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">target_state</span>)
   <span class="ruby-identifier">message_box</span>(<span class="ruby-node">&quot;Montoring Request: #{request_id}&quot;</span>,<span class="ruby-string">&quot;sep&quot;</span>)
@@ -517,7 +563,7 @@ complete)</p>
   <span class="ruby-identifier">start_time</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
   <span class="ruby-identifier">elapsed</span> = <span class="ruby-value">0</span>
   <span class="ruby-keyword">until</span> (<span class="ruby-identifier">elapsed</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max_time</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">req_status</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">target_state</span>)
-    <span class="ruby-identifier">rest_result</span> = <span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;requests&quot;</span>, <span class="ruby-identifier">request_id</span>, {<span class="ruby-string">&quot;verbose&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">verbose</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;yes&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;no&quot;</span>})
+    <span class="ruby-identifier">rest_result</span> = <span class="ruby-identifier">get</span>(<span class="ruby-string">&quot;requests&quot;</span>, <span class="ruby-identifier">request_id</span>, {<span class="ruby-string">&quot;verbose&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">verbose</span>})
     <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Command_Failed: Request not found&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">rest_result</span>[<span class="ruby-string">&quot;status&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;ERROR&quot;</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">monitor_step_name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;none&quot;</span>
       <span class="ruby-identifier">req_status</span> = <span class="ruby-identifier">rest_result</span>[<span class="ruby-string">&quot;data&quot;</span>][<span class="ruby-string">&quot;aasm_state&quot;</span>]
@@ -530,21 +576,28 @@ complete)</p>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">req_status</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">target_state</span>
       <span class="ruby-keyword">break</span>
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\tWaiting(#{elapsed.floor.to_s}) - Current status: #{req_status}&quot;</span>
-      <span class="ruby-identifier">sleep</span>(<span class="ruby-identifier">checking_interval</span>)
+      <span class="ruby-identifier">ival</span> = <span class="ruby-identifier">checking_interval</span>(<span class="ruby-identifier">seed_interval</span>, <span class="ruby-identifier">elapsed</span>)
+      <span class="ruby-identifier">log_msg</span> = <span class="ruby-node">&quot;\tWaiting #{ival} seconds. Elapsed=(#{elapsed.floor.to_s}) - Current status: #{req_status}&quot;</span>
+      <span class="ruby-identifier">log</span> <span class="ruby-identifier">log_msg</span>
+      <span class="ruby-identifier">full_result</span>[<span class="ruby-string">&quot;log&quot;</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">log_msg</span>
+      <span class="ruby-identifier">sleep</span>(<span class="ruby-identifier">ival</span>)
       <span class="ruby-identifier">elapsed</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">start_time</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">req_status</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">target_state</span>
-    <span class="ruby-identifier">req_status</span> =  <span class="ruby-node">&quot;Success test, looking for #{target_state}: Success!&quot;</span>
+    <span class="ruby-identifier">full_result</span>[<span class="ruby-string">&quot;status&quot;</span>] = <span class="ruby-string">&quot;success&quot;</span>
+    <span class="ruby-identifier">full_result</span>[<span class="ruby-string">&quot;statistics&quot;</span>] = <span class="ruby-node">&quot;Elapsed Time: #{Time.now - start_time}&quot;</span>
+    <span class="ruby-identifier">result</span> =  <span class="ruby-node">&quot;Success test, looking for #{target_state}: Success!&quot;</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">elapsed</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max_time</span>
-      <span class="ruby-identifier">req_status</span> =  <span class="ruby-node">&quot;Command_Failed: Max time: #{max_time}(secs) reached.  Status is: #{req_status}, looking for: #{target_state}&quot;</span>
+      <span class="ruby-identifier">result</span> =  <span class="ruby-node">&quot;Command_Failed: Max time: #{max_time}(secs) reached.  Status is: #{req_status}, looking for: #{target_state}&quot;</span>
+      <span class="ruby-identifier">full_result</span>[<span class="ruby-string">&quot;statistics&quot;</span>] = <span class="ruby-node">&quot;Elapsed Time: #{Time.now - start_time}&quot;</span>
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">req_status</span> = <span class="ruby-node">&quot;REST call generated bad data, Status is: #{req_status}, looking for: #{target_state}&quot;</span>
+      <span class="ruby-identifier">result</span> = <span class="ruby-node">&quot;REST call generated bad data, Status is: #{req_status}, looking for: #{target_state}&quot;</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">req_status</span>
+  <span class="ruby-identifier">full_result</span>[<span class="ruby-string">&quot;result&quot;</span>] = <span class="ruby-identifier">result</span>
+  <span class="ruby-identifier">use_full_results</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">full_result</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">result</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- monitor_request-source -->
           
@@ -584,7 +637,7 @@ complete)</p>
 
           
           <div class="method-source-code" id="notify-source">
-            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 275</span>
+            <pre><span class="ruby-comment"># File framework/lib/rest.rb, line 300</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">notify</span>(<span class="ruby-identifier">step_id</span>, <span class="ruby-identifier">body</span>, <span class="ruby-identifier">subject</span> = <span class="ruby-string">&quot;Mail from automation&quot;</span>)
   <span class="ruby-identifier">url</span> = <span class="ruby-node">&quot;#{@base_url}/v1/steps/#{step_id}/notify?token=#{@token}&quot;</span>
   <span class="ruby-identifier">data</span> = {<span class="ruby-string">&quot;filters&quot;</span>=<span class="ruby-operator">&gt;</span>{<span class="ruby-string">&quot;notify&quot;</span>=<span class="ruby-operator">&gt;</span>{<span class="ruby-string">&quot;body&quot;</span>=<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">body</span>, <span class="ruby-string">&quot;subject&quot;</span>=<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">subject</span>}}}

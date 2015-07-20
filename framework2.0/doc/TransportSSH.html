@@ -80,6 +80,8 @@
     
     <li><a href="#method-i-script_exec">#script_exec</a>
     
+    <li><a href="#method-i-set_credential">#set_credential</a>
+    
     <li><a href="#method-i-set_servers">#set_servers</a>
     
   </ul>
@@ -249,7 +251,7 @@ pid =&gt; process id, status =&gt; exit_code}</p>
 
           
           <div class="method-source-code" id="copy_files-source">
-            <pre><span class="ruby-comment"># File framework/lib/transport_ssh.rb, line 55</span>
+            <pre><span class="ruby-comment"># File framework/lib/transport_ssh.rb, line 69</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">copy_files</span>(<span class="ruby-identifier">source_files</span>, <span class="ruby-identifier">target_path</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-ivar">@servers</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;servers&quot;</span>, <span class="ruby-ivar">@servers</span>)
   <span class="ruby-identifier">source_files</span> = [<span class="ruby-identifier">source_files</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">source_files</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
@@ -296,7 +298,7 @@ pid =&gt; process id, status =&gt; exit_code}</p>
 
           
           <div class="method-source-code" id="download_files-source">
-            <pre><span class="ruby-comment"># File framework/lib/transport_ssh.rb, line 72</span>
+            <pre><span class="ruby-comment"># File framework/lib/transport_ssh.rb, line 86</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_files</span>(<span class="ruby-identifier">source_files</span>, <span class="ruby-identifier">target_path</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-ivar">@servers</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;servers&quot;</span>, <span class="ruby-ivar">@servers</span>)
   <span class="ruby-identifier">source_files</span> = [<span class="ruby-identifier">source_files</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">source_files</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
@@ -341,7 +343,7 @@ pid =&gt; process id, status =&gt; exit_code}</p>
 
           
           <div class="method-source-code" id="execute_command-source">
-            <pre><span class="ruby-comment"># File framework/lib/transport_ssh.rb, line 39</span>
+            <pre><span class="ruby-comment"># File framework/lib/transport_ssh.rb, line 53</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">execute_command</span>(<span class="ruby-identifier">command</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-ivar">@servers</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;servers&quot;</span>, <span class="ruby-ivar">@servers</span>)
   <span class="ruby-identifier">execute_cap</span> <span class="ruby-string">&quot;command&quot;</span>, {<span class="ruby-string">&quot;command&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">command</span>}
@@ -387,7 +389,7 @@ pid =&gt; process id, status =&gt; exit_code}</p>
 
           
           <div class="method-source-code" id="script_exec-source">
-            <pre><span class="ruby-comment"># File framework/lib/transport_ssh.rb, line 89</span>
+            <pre><span class="ruby-comment"># File framework/lib/transport_ssh.rb, line 103</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">script_exec</span>(<span class="ruby-identifier">script_path</span>, <span class="ruby-identifier">target_path</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-ivar">@servers</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;servers&quot;</span>, <span class="ruby-ivar">@servers</span>)
   <span class="ruby-identifier">copy_files</span> [<span class="ruby-identifier">script_path</span>], <span class="ruby-identifier">target_path</span>
@@ -405,6 +407,45 @@ pid =&gt; process id, status =&gt; exit_code}</p>
 
         
       </div><!-- script_exec-method -->
+
+    
+      <div id="method-i-set_credential" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_credential</span><span
+            class="method-args">(options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Resets the security credentials</p>
+
+<h4 id="method-i-set_credential-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>options</code> - hash of options [user,password,sudo, debug, servers]</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="set_credential-source">
+            <pre><span class="ruby-comment"># File framework/lib/transport_ssh.rb, line 35</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_credential</span>(<span class="ruby-identifier">options</span> = {})
+  <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;user&quot;</span>, <span class="ruby-ivar">@user</span>)
+  <span class="ruby-ivar">@password</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;password&quot;</span>, <span class="ruby-ivar">@password</span>)
+  <span class="ruby-ivar">@servers</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;servers&quot;</span>, <span class="ruby-ivar">@servers</span>) 
+  <span class="ruby-ivar">@sudo</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;sudo&quot;</span>, <span class="ruby-ivar">@sudo</span>)
+  <span class="ruby-ivar">@debug</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;debug&quot;</span>, <span class="ruby-ivar">@debug</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_credential-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_credential-method -->
 
     
       <div id="method-i-set_servers" class="method-detail ">
@@ -428,7 +469,7 @@ pid =&gt; process id, status =&gt; exit_code}</p>
 
           
           <div class="method-source-code" id="set_servers-source">
-            <pre><span class="ruby-comment"># File framework/lib/transport_ssh.rb, line 105</span>
+            <pre><span class="ruby-comment"># File framework/lib/transport_ssh.rb, line 119</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_servers</span>(<span class="ruby-identifier">servers</span>)
   <span class="ruby-ivar">@servers</span> = <span class="ruby-identifier">servers</span>
 <span class="ruby-keyword">end</span></pre>

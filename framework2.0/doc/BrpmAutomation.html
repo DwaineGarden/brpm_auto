@@ -137,6 +137,8 @@
     
     <li><a href="#method-i-split_nsh_path">#split_nsh_path</a>
     
+    <li><a href="#method-i-verify_success_terms">#verify_success_terms</a>
+    
   </ul>
 </nav>
 
@@ -358,7 +360,7 @@ BRPM</p>
             <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 162</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">dos_path</span>(<span class="ruby-identifier">source_path</span>, <span class="ruby-identifier">drive_letter</span> = <span class="ruby-string">&quot;C&quot;</span>)
   <span class="ruby-identifier">path</span> = <span class="ruby-string">&quot;&quot;</span>
-  <span class="ruby-keyword">return</span> <span class="ruby-identifier">source_path</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">source_path</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;:\\&quot;</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">source_path</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;/&quot;</span>, <span class="ruby-string">&quot;\\&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">source_path</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;:\\&quot;</span>)
   <span class="ruby-identifier">path_array</span> = <span class="ruby-identifier">source_path</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;/&quot;</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">path_array</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-comment"># drive letter</span>
     <span class="ruby-identifier">path</span> = <span class="ruby-node">&quot;#{path_array[1]}:\\&quot;</span>
@@ -457,7 +459,7 @@ pid =&gt; process id, status =&gt; exit_code}</p>
 
           
           <div class="method-source-code" id="get_integration_details-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 526</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 528</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_integration_details</span>(<span class="ruby-identifier">key</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">details_yml</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">details_yml</span> = <span class="ruby-constant">SS_integration_details</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">details_yml</span>.<span class="ruby-identifier">nil?</span>
   <span class="ruby-comment"># SS_integration_details = &quot;Project: TST\nDefault item: lots of stuff\n&quot;</span>
@@ -490,7 +492,7 @@ pid =&gt; process id, status =&gt; exit_code}</p>
 
           
           <div class="method-source-code" id="get_keyword_items-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 471</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 473</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_keyword_items</span>(<span class="ruby-identifier">script_content</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">result</span> = {}
   <span class="ruby-identifier">content</span> = <span class="ruby-identifier">script_content</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">script_content</span>.<span class="ruby-identifier">nil?</span>
@@ -609,7 +611,7 @@ doesn’t exist or is blank</p>
 
           
           <div class="method-source-code" id="get_platform_servers-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 436</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 438</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_platform_servers</span>(<span class="ruby-identifier">os_platform</span>, <span class="ruby-identifier">alt_servers</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">servers</span> = <span class="ruby-identifier">alt_servers</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">get_server_list</span>(<span class="ruby-ivar">@params</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">alt_servers</span>
   <span class="ruby-identifier">result</span> = <span class="ruby-identifier">servers</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span>[<span class="ruby-string">&quot;os_platform&quot;</span>].<span class="ruby-identifier">downcase</span> <span class="ruby-operator">=~</span> <span class="ruby-node">%r#{os_platform}/</span> }
@@ -655,7 +657,7 @@ doesn’t exist or is blank</p>
 
           
           <div class="method-source-code" id="get_server_list-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 452</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 454</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_server_list</span>(<span class="ruby-identifier">params</span> = <span class="ruby-ivar">@params</span>)
   <span class="ruby-identifier">rxp</span> = <span class="ruby-regexp">%rserver\d+_/</span>
   <span class="ruby-identifier">slist</span> = {}
@@ -709,7 +711,7 @@ doesn’t exist or is blank</p>
 
           
           <div class="method-source-code" id="get_staging_dir-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 418</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 420</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_staging_dir</span>(<span class="ruby-identifier">version</span>, <span class="ruby-identifier">force</span> = <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">staging_path</span> = <span class="ruby-keyword">defined?</span>(<span class="ruby-constant">RPM_STAGING_PATH</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">RPM_STAGING_PATH</span> <span class="ruby-operator">:</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-ivar">@params</span>[<span class="ruby-string">&quot;SS_automation_results_dir&quot;</span>],<span class="ruby-string">&quot;staging&quot;</span>)
   <span class="ruby-identifier">pattern</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">staging_path</span>, <span class="ruby-node">&quot;#{Time.now.year.to_s}&quot;</span>, <span class="ruby-identifier">path_safe</span>(<span class="ruby-identifier">get_param</span>(<span class="ruby-string">&quot;SS_application&quot;</span>)), <span class="ruby-identifier">path_safe</span>(<span class="ruby-identifier">get_param</span>(<span class="ruby-string">&quot;SS_component&quot;</span>)), <span class="ruby-identifier">path_safe</span>(<span class="ruby-identifier">version</span>))
@@ -902,7 +904,7 @@ around the message</p>
 
           
           <div class="method-source-code" id="notify-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 312</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 314</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">notify</span>(<span class="ruby-identifier">body</span>, <span class="ruby-identifier">subject</span> = <span class="ruby-string">&quot;Mail from automation&quot;</span>, <span class="ruby-identifier">recipients</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">url</span> = <span class="ruby-node">&quot;#{@base_rpm_url}/v1/steps/#{@params[&quot;step_id&quot;]}/notify?token=#{@token}&quot;</span>
   <span class="ruby-identifier">data</span> = {<span class="ruby-string">&quot;filters&quot;</span>=<span class="ruby-operator">&gt;</span>{<span class="ruby-string">&quot;notify&quot;</span>=<span class="ruby-operator">&gt;</span>{<span class="ruby-string">&quot;body&quot;</span>=<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">body</span>, <span class="ruby-string">&quot;subject&quot;</span>=<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">subject</span>}}}
@@ -935,7 +937,7 @@ around the message</p>
 
           
           <div class="method-source-code" id="path_safe-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 431</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 433</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">path_safe</span>(<span class="ruby-identifier">txt</span>)
   <span class="ruby-identifier">txt</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot; &quot;</span>, <span class="ruby-string">&quot;_&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r\,|\[|\]/</span>,<span class="ruby-string">&quot;&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -969,7 +971,7 @@ around the message</p>
 
           
           <div class="method-source-code" id="precision_timestamp-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 325</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 327</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">precision_timestamp</span>
   <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">strftime</span>(<span class="ruby-string">&quot;%Y%m%d%H%M%S%L&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1005,7 +1007,7 @@ around the message</p>
 
           
           <div class="method-source-code" id="private_properties-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 290</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 292</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">private_properties</span>(<span class="ruby-identifier">private_value</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">private_value</span>.<span class="ruby-identifier">nil?</span>
     <span class="ruby-keyword">return</span> <span class="ruby-ivar">@private_props</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@private_props</span>)
@@ -1055,6 +1057,8 @@ around the message</p>
             <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 277</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">privatize</span>(<span class="ruby-identifier">txt</span>)
   <span class="ruby-identifier">private_properties</span> <span class="ruby-keyword">unless</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@private_props</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">txt</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">txt</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">2</span>
+  <span class="ruby-identifier">txt</span> = <span class="ruby-identifier">txt</span>.<span class="ruby-identifier">inspect</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">txt</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
   <span class="ruby-ivar">@private_props</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">txt</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-identifier">v</span>,<span class="ruby-string">&quot;-private-&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">2</span> }
   <span class="ruby-identifier">txt</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-identifier">decrypt_string_with_prefix</span>(<span class="ruby-constant">SS_integration_password_enc</span>), <span class="ruby-string">&quot;-private-&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-constant">SS_integration_password</span>)
   <span class="ruby-identifier">txt</span>
@@ -1085,7 +1089,7 @@ around the message</p>
 
           
           <div class="method-source-code" id="read_shebang-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 501</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 503</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">read_shebang</span>(<span class="ruby-identifier">os_platform</span>, <span class="ruby-identifier">action_txt</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">os_platform</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">%rwin/</span>
     <span class="ruby-identifier">result</span> = {<span class="ruby-string">&quot;ext&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;.bat&quot;</span>, <span class="ruby-string">&quot;cmd&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;cmd /c&quot;</span>, <span class="ruby-string">&quot;shebang&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>}
@@ -1211,7 +1215,7 @@ around the message</p>
   <span class="ruby-identifier">methods</span> = <span class="ruby-node">%w{get post put}</span>
   <span class="ruby-identifier">result</span> = {<span class="ruby-string">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ERROR&quot;</span>, <span class="ruby-string">&quot;response&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-string">&quot;message&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>}
   <span class="ruby-identifier">method</span> = <span class="ruby-identifier">method</span>.<span class="ruby-identifier">downcase</span>
-  <span class="ruby-identifier">verbose</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;verbose&quot;</span>) <span class="ruby-operator">==</span> <span class="ruby-string">&quot;yes&quot;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;verbose&quot;</span>)
+  <span class="ruby-identifier">verbose</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;verbose&quot;</span>) <span class="ruby-operator">==</span> <span class="ruby-string">&quot;yes&quot;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;verbose&quot;</span>) <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span>
   <span class="ruby-identifier">headers</span> = <span class="ruby-identifier">get_option</span>(<span class="ruby-identifier">options</span>, <span class="ruby-string">&quot;headers&quot;</span>, {<span class="ruby-value">:accept</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:json</span>, <span class="ruby-value">:content_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:json</span>})
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;message&quot;</span>] = <span class="ruby-node">&quot;ERROR - #{method} not recognized&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">methods</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">method</span>)
   <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Rest URL: #{url}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">verbose</span>
@@ -1295,7 +1299,7 @@ around the message</p>
 
           
           <div class="method-source-code" id="semaphore-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 338</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 340</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">semaphore</span>(<span class="ruby-identifier">semaphore_key</span>)
   <span class="ruby-identifier">semaphore_dir</span> = <span class="ruby-node">&quot;#{@params[&quot;SS_automation_results_dir&quot;]}/semaphores&quot;</span>
   <span class="ruby-identifier">semaphore_name</span> = <span class="ruby-node">&quot;#{semaphore_key}.pid&quot;</span>
@@ -1342,7 +1346,7 @@ around the message</p>
 
           
           <div class="method-source-code" id="semaphore_clear-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 359</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 361</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">semaphore_clear</span>(<span class="ruby-identifier">semaphore_key</span>)
   <span class="ruby-identifier">semaphore_dir</span> = <span class="ruby-node">&quot;#{@params[&quot;SS_automation_results_dir&quot;]}/semaphores&quot;</span>
   <span class="ruby-identifier">semaphore_name</span> = <span class="ruby-node">&quot;#{semaphore_key}.pid&quot;</span>
@@ -1385,7 +1389,7 @@ around the message</p>
 
           
           <div class="method-source-code" id="semaphore_exists-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 376</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 378</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">semaphore_exists</span>(<span class="ruby-identifier">semaphore_key</span>)
   <span class="ruby-identifier">semaphore_dir</span> = <span class="ruby-node">&quot;#{@params[&quot;SS_automation_results_dir&quot;]}/semaphores&quot;</span>
   <span class="ruby-identifier">semaphore_name</span> = <span class="ruby-node">&quot;#{semaphore_key}.pid&quot;</span>
@@ -1430,7 +1434,7 @@ time if semaphore does not clear</p>
 
           
           <div class="method-source-code" id="semaphore_wait-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 393</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 395</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">semaphore_wait</span>(<span class="ruby-identifier">semaphore_key</span>, <span class="ruby-identifier">wait_time</span> = <span class="ruby-value">15</span>)
   <span class="ruby-identifier">interval</span> = <span class="ruby-value">20</span>; <span class="ruby-identifier">elapsed</span> = <span class="ruby-value">0</span>
   <span class="ruby-identifier">semaphore_dir</span> = <span class="ruby-node">&quot;#{@params[&quot;SS_automation_results_dir&quot;]}/semaphores&quot;</span>
@@ -1482,7 +1486,7 @@ prepended</p>
 
           
           <div class="method-source-code" id="split_nsh_path-source">
-            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 494</span>
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 496</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">split_nsh_path</span>(<span class="ruby-identifier">path</span>)
   <span class="ruby-identifier">result</span> = [<span class="ruby-string">&quot;&quot;</span>,<span class="ruby-identifier">path</span>]
   <span class="ruby-identifier">result</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">path</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;/&quot;</span>)[<span class="ruby-value">2</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">path</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-string">&quot;//&quot;</span>)
@@ -1497,6 +1501,74 @@ prepended</p>
 
         
       </div><!-- split_nsh_path-method -->
+
+    
+      <div id="method-i-verify_success_terms" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">verify_success_terms</span><span
+            class="method-args">(results, success_terms, fail_now = false, quiet = false)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Looks for terms in the results and builds an exit message returns status
+message with “Command_Failed if the status fails”</p>
+
+<h4 id="method-i-verify_success_terms-label-Attributes">Attributes</h4>
+<ul><li>
+<p><code>results</code> - the text to analyze for success</p>
+</li><li>
+<p><code>success_terms</code> - the term or terms (use | or &amp; for and and
+or with multiple terms)</p>
+</li><li>
+<p><code>fail_now</code> - if set to true will throw an error if a term is not
+found</p>
+</li></ul>
+
+<h4 id="method-i-verify_success_terms-label-Returns">Returns</h4>
+<ul><li>
+<p><code>text</code> - summary of success terms</p>
+</li></ul>
+          
+
+          
+          <div class="method-source-code" id="verify_success_terms-source">
+            <pre><span class="ruby-comment"># File framework/lib/brpm_automation.rb, line 544</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">verify_success_terms</span>(<span class="ruby-identifier">results</span>, <span class="ruby-identifier">success_terms</span>, <span class="ruby-identifier">fail_now</span> = <span class="ruby-keyword">false</span>, <span class="ruby-identifier">quiet</span> = <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">results</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;\n&quot;</span>).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span> <span class="ruby-identifier">exit_status</span> = <span class="ruby-identifier">line</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-string">&quot;EXIT_CODE:&quot;</span>) }
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">success_terms</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;&quot;</span>
+    <span class="ruby-identifier">exit_status</span> = []
+    <span class="ruby-identifier">c_type</span> = <span class="ruby-identifier">success_terms</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;|&quot;</span>) <span class="ruby-operator">?</span> <span class="ruby-string">&quot;or&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;and&quot;</span>
+    <span class="ruby-identifier">success</span> = [<span class="ruby-identifier">success_terms</span>] <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">success_terms</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;|&quot;</span>) <span class="ruby-operator">||</span> <span class="ruby-operator">!</span><span class="ruby-identifier">success_terms</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;&amp;&quot;</span>)
+    <span class="ruby-identifier">success</span> = <span class="ruby-identifier">success_terms</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;|&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">success_terms</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;|&quot;</span>)
+    <span class="ruby-identifier">success</span> = <span class="ruby-identifier">success_terms</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;&amp;&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">success_terms</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;&amp;&quot;</span>)
+    <span class="ruby-identifier">success</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">term</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">results</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">term</span>)
+        <span class="ruby-identifier">exit_status</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Success - found term: #{term}&quot;</span>
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">exit_status</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Command_Failed: term not found: #{term}&quot;</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">status</span> = <span class="ruby-identifier">exit_status</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>)
+    <span class="ruby-identifier">status</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-string">&quot;Command_Failed:&quot;</span>, <span class="ruby-string">&quot;&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">status</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;Success&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">c_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;or&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">status</span> = <span class="ruby-string">&quot;Success (because nothing was tested)&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">log</span> <span class="ruby-identifier">status</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">quiet</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;ERROR: success term not found&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">fail_now</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">status</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;Command_Failed&quot;</span>)
+  <span class="ruby-node">&quot;#{status} -- #{results[0..160]}&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- verify_success_terms-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- verify_success_terms-method -->
 
     
     </section><!-- public-instance-method-details -->

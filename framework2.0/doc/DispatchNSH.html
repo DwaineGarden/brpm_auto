@@ -239,13 +239,14 @@ them</p>
 
           
           <div class="method-source-code" id="copy_file-source">
-            <pre><span class="ruby-comment"># File framework/lib/dispatch_nsh.rb, line 229</span>
+            <pre><span class="ruby-comment"># File framework/lib/dispatch_nsh.rb, line 230</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">copy_file</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">destination</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-identifier">message_box</span> <span class="ruby-string">&quot;Copying files via NSH&quot;</span>
   <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t Source: #{source}&quot;</span>
   <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\t Destination: #{destination}&quot;</span>
   <span class="ruby-identifier">result</span> = <span class="ruby-ivar">@nsh</span>.<span class="ruby-identifier">cp</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">destination</span>)
   <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;\tCopy Result: #{result}&quot;</span>
+  <span class="ruby-identifier">result</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- copy_file-source -->
           
@@ -322,9 +323,10 @@ channel_root</p>
     <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;# Unzipping package on target:&quot;</span>
     <span class="ruby-identifier">wrapper_path</span> = <span class="ruby-identifier">create_command_wrapper</span>(<span class="ruby-string">&quot;unzip -o&quot;</span>, <span class="ruby-identifier">os</span>, <span class="ruby-identifier">instance_path</span>, <span class="ruby-identifier">final_path</span>)
     <span class="ruby-identifier">result</span> = <span class="ruby-ivar">@nsh</span>.<span class="ruby-identifier">script_exec</span>(<span class="ruby-identifier">server_dns_names</span>(<span class="ruby-identifier">servers</span>), <span class="ruby-identifier">wrapper_path</span>, <span class="ruby-identifier">final_path</span>)
+    <span class="ruby-identifier">return_result</span>[<span class="ruby-string">&quot;result&quot;</span>] = <span class="ruby-identifier">result</span>
     <span class="ruby-identifier">log</span> <span class="ruby-identifier">result</span>
   <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">result</span>
+  <span class="ruby-identifier">return_result</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- deploy_package_instance-source -->
           
