@@ -144,8 +144,8 @@ class DispatchBase < BrpmAutomation
     alt_target = get_option(options,"script_target")
     cmd = shebang["cmd"]
     target = alt_target == "" ? File.basename(get_param("SS_script_file")) : alt_target
-    cmd = cmd.gsub("%%", target) if shebang["cmd"].end_with?("%%")
-    cmd = "#{cmd} #{target}" unless shebang["cmd"].end_with?("%%")
+    cmd = cmd.gsub("%%", target) if shebang["cmd"].include?("%%")
+    cmd = "#{cmd} #{target}" unless shebang["cmd"].include?("%%")
     if os_platform =~ /win/
       properties["RPM_CHANNEL_ROOT"] = dos_path(properties["RPM_CHANNEL_ROOT"])
       properties["VL_CHANNEL_ROOT"] = properties["RPM_CHANNEL_ROOT"]
