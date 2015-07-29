@@ -21,7 +21,9 @@ BMA_DIR=<%=@bma["home_dir"] %> #"/opt/bmc/bma"
 LOG_LEVEL=<%=@bma["log_level"] %>
 BMA_LIC=<%=@bma["license"] %> #"/opt/bmc/BARA_perm.lic"
 BMA_PROP=<%=@bma["properties"] %> #"/opt/bmc/bma_properties/setupDeliver."??_bmaMiddlewareServer??
-BMA_OPTIONS="-properties ${BMA_PROP} -license ${BMA_LIC} -logLevel ${LOG_LEVEL}"
+
+BMA_MW_PLATFORM=<%=@bma["mw_platform"] %>
+#BMA_OPTIONS="-properties ${BMA_PROP} -license ${BMA_LIC} -logLevel ${LOG_LEVEL}"
 BMA_WORKING=<%=@bma["working_dir"] %> #"/opt/bmc/bma_working"
 
 BMA_CONFIG_PACKAGE=<%=File.basename(bma_config_package_path) %>
@@ -42,6 +44,7 @@ DATE=<%=@timestamp %>
 
 if [[ ${BMA_MW_PLATFORM} == *portal* ]]; then
 	BMA_OPTIONS="-properties ${BMA_PROP} -license ${BMA_LIC} -logLevel ${LOG_LEVEL} -portal"
+	echo " Setting BMA_OPTIONS FOR PORTAL Deployment"
 else
 	BMA_OPTIONS="-properties ${BMA_PROP} -license ${BMA_LIC} -logLevel ${LOG_LEVEL}"
 fi
@@ -123,7 +126,7 @@ function bmaInstallPreview ()
 	then
 		debug "Portal wpss deploy"
 		debug "SENDING: ${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -mode $1 -input ${BMA_CONFIG_PACKAGES_DIR}/${BMA_CONFIG_PACKAGE} -tokens ${BMA_TOKEN_SET} -profile ${CLEARCASE_VIEW}/serverprofiles/$RPM_environment/${BMA_SERVER_PROF} -report ${BMA_REPORTS_DIR}/${RPM_environment}_${RPM_application}_${1}PortalReport_${DATE}.report "
-		${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -mode $1 -input ${BMA_CONFIG_PACKAGES_DIR}/${BMA_CONFIG_PACKAGE} -tokens ${BMA_TOKEN_SET} -profile ${BMA_SERVER_PROFILES_DIR}/${BMA_SERVER_PROFILE} -report ${BMA_REPORTS_DIR}/${RPM_environment}_${RPM_application}_${1}PortalReport_${DATE}.report 2>/dev/null
+		${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -mode $1 -input ${BMA_CONFIG_PACKAGES_DIR}/${BMA_CONFIG_PACKAGE} -tokens ${BMA_TOKEN_SET} -profile ${BMA_SERVER_PROFILES_DIR}/${BMA_SERVER_PROFILE} -report ${BMA_REPORTS_DIR}/${RPM_environment}_${RPM_application}_${1}Report_${DATE}.report 2>/dev/null
 #		/bmc/bma/cli/runDeliver.sh -properties /bmc/properties/setupDeliver_portal80.properties -license /bmc/bma/TexasHealth5997ELO_ML.lic -logLevel ERROR -portal -mode install -input /eastage/views/MW_LW_CFG_LOCAL/mwlw/MWLWRelease/configurations/STP/stp.wpss -tokens stp-LAST2 -profile /eastage/views/MW_UP_CFG_LOCAL/mwup/MWUPRelease/serverprofiles/LAST2/last2stpCell.server -report /bmc/bma_working/reports/installPortalReport_201405281543.report 
 		exitcode=$?
 		
