@@ -1,6 +1,8 @@
 # dispatch_base.rb
 #  Module for action dispatch common methods
 require 'digest/md5'
+libDir = File.expand_path(File.dirname(__FILE__))
+require "#{libDir}/brpm_automation"
 
 DEFAULT_PARAMS_FILTER = "ENV_" if !defined?(DEFAULT_PARAMS_FILTER)
 STANDARD_PROPERTIES = ["SS_application", "SS_component", "SS_environment", "SS_component_version", "SS_request_number"]
@@ -76,7 +78,29 @@ class DispatchBase < BrpmAutomation
      base_dir = s_props["CHANNEL_ROOT"] if s_props.has_key?("CHANNEL_ROOT")
      base_dir ||= s_props["base_dir"] if s_props.has_key?("base_dir")
      base_dir ||= OS_PLATFORMS[os_platform]["tmp_dir"]
+     props["RPM_SERVER_dns"] = s_props["dns"]
+     props["RPM_SERVER_os_platform"] = s_props["os_platform"]
+     props["RPM_SERVER_ip_address"] = s_props["ip_address"]
      props["RPM_CHANNEL_ROOT"] = base_dir
+  end
+  
+  # Adds server properties to transfer properties
+  # 
+  # ==== Attributes
+  #
+  # * +props+ - the existing transfer properties hash
+  # * +servers+ - hash of server properties
+  # * +transfer_prefix+ - filter for server properties
+  # ==== Returns
+  #
+  # nothing - modifies passed property hash
+  #
+  def append_server_properties(props, servers, transfer_prefix = "zzzzzzz", strip_prefix = false)
+     s_props = servers.first[1].each do |prop,val|
+       prop_name = strip_prefix ? prop.gsub(transfer_prefix,"") : prop
+       props[prop_name] = val if prop.start_with?(transfer_prefix)
+     end
+     props
   end
   
   # Removes carriage returns for unix compatibility

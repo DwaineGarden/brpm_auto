@@ -84,7 +84,7 @@ end
 action_txt = ERB.new(script).result(binding)
 @rpm.message_box "Executing LibraryAction - #{File.basename(script_path)}"
 script_file = @transport.make_temp_file(action_txt)
-result = @transport.execute_script(script_file, {"transfer_properties" => transfer_properties, "transfer_prefix" => transfer_prefix })
+result = @transport.execute_script_per_server(script_file, {"transfer_properties" => transfer_properties, "transfer_prefix" => transfer_prefix })
 #@rpm.log "SRUN Result: #{result.inspect}"
 exit_status = "Success"
 result.split("\n").each{|line| exit_status = line if line.start_with?("EXIT_CODE:") }
