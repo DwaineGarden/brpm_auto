@@ -95,7 +95,7 @@ class DispatchBase < BrpmAutomation
   #
   # nothing - modifies passed property hash
   #
-  def append_server_properties(props, servers, transfer_prefix = "zzzzzzz", strip_prefix = false)
+  def append_server_properties(props, servers, transfer_prefix = "zzzzzzz", strip_prefix = true)
      s_props = servers.first[1].each do |prop,val|
        prop_name = strip_prefix ? prop.gsub(transfer_prefix,"") : prop
        props[prop_name] = val if prop.start_with?(transfer_prefix)
@@ -188,7 +188,10 @@ class DispatchBase < BrpmAutomation
       wrapper = "#{wrapper}.sh"
       script = "echo \"============== HOSTNAME: `hostname` ==============\"\n"
       script += "echo #{msg} \n"
-      properties.each{|k,v| script += "export #{k}=\"#{v}\"\n" }
+      #properties.each{|k,v| script += "export #{k}=\"#{v}\"\n" }
+	#properties.each{|k,v| script += "#{k}=\"#{v}\"\n" }
+	#properties.each{|k,v| script += "#{k}=\"#{v}\"\nexport #{k}\n" }
+	properties.each{|k,v| script += "#{k}=\"#{v}\";export #{k}\n" }
       script += "echo Execute the file\n"
       script += "cd $RPM_CHANNEL_ROOT\n"
       script += "#{cmd}\n"
