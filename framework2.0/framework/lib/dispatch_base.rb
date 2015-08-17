@@ -129,18 +129,23 @@ class DispatchBase < BrpmAutomation
   # ==== Attributes
   #
   # * +content+ - content for file
-  # * +options+ - hash of options, includes ext to force the file extension e.g. {"ext" => ".sql"}
+  # * +options+ - hash of options, includes ext to force the file extension e.g. {"ext" => ".sql"} and file_name to force the file_name
   # ==== Returns
   #
   # path to file
   #
   def make_temp_file(content, platform = "linux", options = {})
-    ext = get_option(options, "ext")
-    if ext == ""
-      shebang = read_shebang(platform, content)
-      ext = shebang["ext"]
+    file_name = get_option(options, "file_name")
+    if file_name == ""
+      ext = get_option(options, "ext")
+      if ext == ""
+        shebang = read_shebang(platform, content)
+        ext = shebang["ext"]
+      end
+      ext = ".#{ext}" unless ext.start_with?(".")
+      file_name = "shell_#{precision_timestamp}#{ext}"
     end
-    file_path = File.join(@params["SS_output_dir"],"shell_#{precision_timestamp}#{ext}")
+    file_path = File.join(@params["SS_output_dir"],file_name)
     fil = File.open(file_path, "w+")
     fil.puts content
     fil.flush

@@ -70,7 +70,7 @@ class BrpmAutomation
   def display_result(cmd_result)
     result = "Process: #{cmd_result["pid"]}\nSTDOUT:\n#{cmd_result["stdout"]}\n"
     result = "STDERR:\n #{cmd_result["stderr"]}\n#{result}" if cmd_result["stderr"].length > 2
-    result += "#{EXIT_CODE_FAILURE} Command returned: #{cmd_result["status"]}" if cmd_result["status"] != 0
+    result += "#{cmd_result["status"] != 0 ? EXIT_CODE_FAILURE : ""} EXIT_CODE: #{cmd_result["status"]}"
     result
   end
   

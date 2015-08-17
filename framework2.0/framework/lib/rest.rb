@@ -226,7 +226,7 @@ class BrpmRest < BrpmAutomation
     seed_interval = get_option(options, "interval", 15) #seconds
     use_full_results = get_option(options, "full_results", false)
     verbose = get_option(options, "verbose")
-    full_result = {"title" => "Monitoring Request: #{request_id}", "log" => "", "status" => "failed", "statistics" => "", "result" => ""}
+    full_result = {"request_id" => request_id, "title" => "Monitoring Request: #{request_id}", "log" => "", "status" => "failed", "statistics" => "", "result" => ""}
     verbose = "no" unless verbose == "yes"
     raise "Command_Failed: bad request_id" if !(request_id.to_i > 0)
     raise "Command_Failed: state not allowed, choose from [#{states.join(",")}]" if !states.include?(target_state)
@@ -249,7 +249,7 @@ class BrpmRest < BrpmAutomation
         break
       else
         ival = checking_interval(seed_interval, elapsed)
-        log_msg = "\tWaiting #{ival} seconds. Elapsed=(#{elapsed.floor.to_s}) - Current status: #{req_status}"
+        log_msg = "\t#{request_id} - Waiting #{ival} seconds. Elapsed=(#{elapsed.floor.to_s}) - Current status: #{req_status}"
         log log_msg
         full_result["log"] += log_msg
         sleep(ival)

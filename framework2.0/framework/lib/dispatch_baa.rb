@@ -348,5 +348,6 @@ require "#{@params["SS_script_support_path"]}/baa_utilities"
 baa_path = defined?(BAA_BASE_PATH) ? BAA_BASE_PATH : "/opt/bmc/blade8.5"
 baa_url = defined?(SS_integration_dns) ? SS_integration_dns : "http://unknownBladelogicServerSetIntegration"
 @baa = TransportBAA.new(baa_url, @params)
+@baa.set_credential(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc), get_integration_details("role")) if defined?(SS_integration_dns)
 @rpm.log "Path to BAA: #{BAA_BASE_PATH}"
 @transport = DispatchBAA.new(@baa, @params)

@@ -243,5 +243,10 @@ end
 baa_path = defined?(BAA_BASE_PATH) ? BAA_BASE_PATH : "/opt/bmc/blade8.5"
 nsh_path = "#{BAA_BASE_PATH}/NSH"
 @nsh = TransportNSH.new(nsh_path, @params)
+if defined?(SS_integration_dns) && !get_integration_details("profile").nil?
+  @rpm.log "nsh => Validating Credential"
+  opts = {"bl_profile" => get_integration_details("profile"), "bl_username" => SS_integration_username, "bl_password" =>   decrypt_string_with_prefix(SS_integration_password_enc)}
+  @nsh.get_cred(opts) 
+end
 @rpm.log "Path to nsh: #{nsh_path}"
 @transport = DispatchNSH.new(@nsh, @params)

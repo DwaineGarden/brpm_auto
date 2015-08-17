@@ -152,7 +152,7 @@ class TransportNSH < BrpmAutomation
   #
   # * +target_hosts+ - blade hostnames to copy to
   # * +target_path+ - path to copy to (same for all target_hosts)
-  # * +command+ - command to runkl
+  # * +command+ - command to run
   #
   # ==== Returns
   #
@@ -271,6 +271,7 @@ class TransportNSH < BrpmAutomation
       path = source_path.gsub(":","")
       path = "/#{path}" unless path.start_with?("/")
     end
+    path.gsub!(" ","\\ ")
     path = "//#{server}#{path}" unless server.nil?
     path.chomp("/")
   end
@@ -325,7 +326,7 @@ class TransportNSH < BrpmAutomation
   #
   # * results of command
   def cp(src_path, target_path)
-    cmd = "#{nsh_cmd("cp")} -f #{src_path} \"#{target_path}\""
+    cmd = "#{nsh_cmd("cp")} -f #{src_path} #{target_path}"
     cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
     log cmd if @verbose
     result = execute_shell(cmd)
