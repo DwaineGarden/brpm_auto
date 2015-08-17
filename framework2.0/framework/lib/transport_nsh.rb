@@ -32,8 +32,8 @@ class TransportNSH < BrpmAutomation
     return true if get_option(@opts, "bl_profile") == ""
     res = get_cred
     puts res
-  end  
-  
+  end
+
   # Displays any errors from a cred status
   #
   # ==== Attributes

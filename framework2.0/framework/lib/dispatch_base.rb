@@ -210,7 +210,6 @@ class DispatchBase < BrpmAutomation
     File.join(@output_dir, wrapper)
   end
 
-
   # Builds the wrapper script for a single command
   #
   # ==== Attributes
