@@ -34,6 +34,13 @@ def rpm_load_module(*module_names)
   result
 end
 
+def nsh_get_cred(profile = "defaultProfile", debug = false)
+  raise "Command_Failed: no BladeLogic server integration" unless defined?(SS_integration_dns)
+  details = YAML.load(SS_integration_details)
+  profile = details["bl_profile"] if details.has_key("bl_profile") && profile = "defaultProfile"
+  @nsh.get_cred({"bl_profile" => profile, "bl_username" => SS_integration_username, "bl_password" => decrypt_string_with_prefix(SS_integration_password_enc), "test_mode" => debug})
+end
+
 # == Initialization on Include
 # Objects are set for most of the classes on requiring the file
 # these will be available in the BRPM automation

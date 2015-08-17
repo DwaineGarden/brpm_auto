@@ -124,7 +124,7 @@ class DispatchNSH < DispatchBase
         log "# Setting Properties:"
         add_channel_properties(transfer_properties, servers, os)
         brpd_compatibility(transfer_properties, nil, servers)
-        append_server_properties(transfer_properties, servers, params_filter)
+        append_server_properties(transfer_properties, servers, params_filter, strip_prefix)
         transfer_properties.each{|k,v| log "\t#{k} => #{v}" }
         shebang = read_shebang(os, content)
         log "Shebang: #{shebang.inspect}"

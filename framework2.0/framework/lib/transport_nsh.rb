@@ -32,8 +32,8 @@ class TransportNSH < BrpmAutomation
     return true if get_option(@opts, "bl_profile") == ""
     res = get_cred
     puts res
-  end
-
+  end  
+  
   # Displays any errors from a cred status
   #
   # ==== Attributes
@@ -60,15 +60,16 @@ class TransportNSH < BrpmAutomation
   #
   # * cred result message
   def get_cred(opts = {})
-    @opts = opts if opts.has_key("bl_profile")
-    bl_cred_path = safe_cmd("blcred")
+    @opts = opts if opts.has_key?("bl_profile")
+    @test_mode = get_option(opts, "test_mode", @test_mode)
+    bl_cred_path = nsh_cmd("blcred")
     cred_status = `#{bl_cred_path} cred -list`
-    puts "Current Status:\n#{cred_status}" if @test_mode
+    log "Current Status:\n#{cred_status}" if @test_mode
     if (cred_errors?(cred_status))
       # get cred
       cmd = "#{bl_cred_path} cred -acquire -profile #{get_option(@opts,"bl_profile")} -username #{get_option(@opts,"bl_username")} -password #{get_option(@opts,"bl_password")}"
       res = execute_shell(cmd)
-      puts display_result(res) if @test_mode
+      log display_result(res) if @test_mode
       result = "Acquiring new credential"
     else
       result = "Current credential is valid"
@@ -132,10 +133,11 @@ class TransportNSH < BrpmAutomation
     path_arg = paths.join(" ")
     cmd = "#{nsh_cmd("ncp")} -vrA #{path_arg} -h #{target_hosts.join(" ")} -d \"#{target_path}\"" unless target_hosts.nil?
     #cmd = "#{nsh_cmd("cp")} -vr #{path_arg.gsub("localhost","@")} #{target_path}" if target_hosts.nil?
-    if target_hosts.nil? # Local copy
+    if target_hosts.nil? && path_arg.start_with?("//") # Local copy
       FileUtils.cp_r path_arg.gsub("//localhost",""), target_path, :verbose => true
       res = "cp #{path_arg.gsub("//localhost","")} #{target_path}"
     else
+      staging_path = nsh_path(target_path)
       cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
       log cmd if @verbose
       result = execute_shell(cmd)
@@ -150,7 +152,7 @@ class TransportNSH < BrpmAutomation
   #
   # * +target_hosts+ - blade hostnames to copy to
   # * +target_path+ - path to copy to (same for all target_hosts)
-  # * +command+ - command to run
+  # * +command+ - command to runkl
   #
   # ==== Returns
   #

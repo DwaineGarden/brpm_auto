@@ -1,14 +1,22 @@
-require 'fileutils'
-rlm_base_path = "/opt/bmc/RLM4.6"
-#rlm_base_path = "/opt/bmc/rlm4"
-script_support = "#{rlm_base_path}/releases/current/RPM/lib/script_support"
-persist = "#{rlm_base_path}/persist/automation_lib"
-FileUtils.cd script_support, :verbose => true
-require "#{script_support}/ssh_script_header"
+require 'yaml'
+require 'json'
+#FRAMEWORK_DIR = "C:/BMC/persist/automation_libs"
+FRAMEWORK_DIR = "/opt/bmc/resources/persist/automation_lib"
+base_path = "/opt/bmc/RLM"
+input_file = "#{base_path}/automation_results/request/JFP_GBIPB_BW/1367/step_4941/scriptinput_208_1421610040.txt"
+@params = YAML.load(File.open(input_file).read)
+require "#{FRAMEWORK_DIR}/brpm_framework"
 
-input_file = "#{rlm_base_path}/automation_results/request/Utility/21675/step_34584/scriptinput_11260_1416331563.txt"
-input_file = "#{rlm_base_path}/automation_results/request/JFP_GBIPB_BW/1367/step_4941/scriptinput_208_1421610040.txt"
-
-script_params = params = load_input_params(input_file)
-
-require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
+#=== BMC Application Automation Integration Srerver: EC2 BSA Appserver ===#
+# [integration_id=5]
+SS_integration_dns = "https://ip-172-31-36-115.ec2.internal:9843/"
+SS_integration_username = "BLAdmin"
+SS_integration_password = "-private-"
+SS_integration_details = "role: BLAdmins
+authentication_mode: SRP"
+SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
+#=== End ===#
+require "#{@p.SS_script_support_path}/baa_utilities"
+require "#{FRAMEWORK_DIR}/lib/transport_baa"
+@baa = TransportBAA.new(SS_integration_dns, @params)
+@baa.set_credential(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc), "BLAdmins")
