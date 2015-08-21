@@ -8,6 +8,7 @@
 require 'popen4'
 require 'timeout'
 require 'rest-client'
+require 'erb'
 
 SleepDelay = [5,10,25,60] # Pattern for sleep pause in polling 
 RLM_BASE_PROPERTIES = ["SS_application", "SS_environment", "SS_component", "SS_component_version", "request_id", "step_name"]

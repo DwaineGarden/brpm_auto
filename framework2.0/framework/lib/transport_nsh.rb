@@ -61,6 +61,7 @@ class TransportNSH < BrpmAutomation
   # * cred result message
   def get_cred(opts = {})
     @opts = opts if opts.has_key?("bl_profile")
+    return "No profile provided - assume direct agent access" unless @opts.has_key?("bl_profile")
     @test_mode = get_option(opts, "test_mode", @test_mode)
     bl_cred_path = nsh_cmd("blcred")
     cred_status = `#{bl_cred_path} cred -list`
@@ -77,6 +78,11 @@ class TransportNSH < BrpmAutomation
     result
   end
 
+  # An alias for get_cred
+  def set_credential(opts = {})
+    get_cred(opts)
+  end
+  
   # Runs an nsh script
   #
   # ==== Attributes

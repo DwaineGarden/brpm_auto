@@ -10,6 +10,7 @@
 #=> About the f2 framework: upon loading the automation, several utility classes will be available
 #   @rpm: the BrpmAutomation class, @p: the Param class, @rest: the BrpmRest class and 
 #   @transport: the Transport class - the transport class will be loaded dependent on the SS_transport property value (ssh, nsh or baa) 
+require "#{FRAMEWORK_DIR}/brpm_framework"
 #
 #---------------------- Arguments --------------------------#
 ###
@@ -24,16 +25,19 @@
 ###
 
 #---------------------- Declarations -----------------------#
-#=== General Integration Server: SVN ===#
-# [integration_id=10220]
-SS_integration_dns = "https://svn.nam.nsroot.net:9050"
-SS_integration_username = "rlmadmin"
+#=> The integration section is only necessary for baa or nsh transport where a credential is required
+#=== BMC Application Automation Integration Server: EC2 BSA Appserver ===#
+# [integration_id=5]
+SS_integration_dns = "https://ip-172-31-36-115.ec2.internal:9843"
+SS_integration_username = "BLAdmin"
 SS_integration_password = "-private-"
-SS_integration_details = "svn_path: /opt/svn/1.7.5/opt/CollabNet_Subversion/bin/svn
-options: --no-auth-cache --non-interactive  --trust-server-cert --force
-prerun: export LD_LIBRARY_PATH=/opt/svn/1.7.5/opt/CollabNet_Subversion/lib"
-SS_integration_password_enc = "__SS__Ck54a1UwNFdhdFJXUQ=="
+SS_integration_details = "role: BLAdmins
+authentication_mode: SRP
+profile: defaultProfile"
+SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
 #=== End ===#
+@baa.set_credential(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc), @rpm.get_integration_details("role")) if @p.get("SS_transport", @p.ss_transport) == "baa"
+@nsh.set_credential(@rpm.get_integration_details("profile"), SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc)) if @p.get("SS_transport", @p.ss_transport) == "nsh"
 
 rpm_load_module("scm")
 

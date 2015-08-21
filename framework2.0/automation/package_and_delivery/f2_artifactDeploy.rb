@@ -11,6 +11,7 @@
 #=> About the f2 framework: upon loading the automation, several utility classes will be available
 #   @rpm: the BrpmAutomation class, @p: the Param class, @rest: the BrpmRest class and 
 #   @transport: the Transport class - the transport class will be loaded dependent on the SS_transport property value (ssh, nsh or baa) 
+require "#{FRAMEWORK_DIR}/brpm_framework"
 #
 #---------------------- Arguments --------------------------#
 ###
@@ -26,11 +27,13 @@
 SS_integration_dns = "https://ip-172-31-36-115.ec2.internal:9843"
 SS_integration_username = "BLAdmin"
 SS_integration_password = "-private-"
-SS_integration_details = "role : BLAdmins
-authentication_mode : SRP"
+SS_integration_details = "role: BLAdmins
+authentication_mode: SRP
+profile: defaultProfile"
 SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
 #=== End ===#
-@baa.set_credential(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc), get_integration_details("role")) if @p.get("SS_transport", @p.ss_transport) == "baa"
+@baa.set_credential(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc), @rpm.get_integration_details("role")) if @p.get("SS_transport", @p.ss_transport) == "baa"
+@nsh.set_credential(@rpm.get_integration_details("profile"), SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc)) if @p.get("SS_transport", @p.ss_transport) == "nsh"
 
 #---------------------- Methods ----------------------------#
 

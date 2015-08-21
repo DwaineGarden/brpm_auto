@@ -1,7 +1,7 @@
 # dispatch_srun.rb
 #  Module for action dispatch with nsh protocol
-libDir = File.expand_path(File.dirname(__FILE__))
-require "#{libDir}/dispatch_base"
+LibDir = File.expand_path(File.dirname(__FILE__))
+require "#{LibDir}/dispatch_base"
 
 
 class DispatchNSH < DispatchBase
@@ -77,7 +77,7 @@ class DispatchNSH < DispatchBase
     end
     result
   end
-  
+
   # Wrapper to run a shell action
   # opens passed script path, or executes passed text
   # processes the script in erb first to allow param substitution
@@ -218,7 +218,7 @@ class DispatchNSH < DispatchBase
       log result
     end
     return_result
-  end
+  end  
   
   # Copies remote files to a local staging repository
   # 
