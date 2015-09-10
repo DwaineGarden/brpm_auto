@@ -70,7 +70,7 @@ else
     #Load the transport for the step, transport follows environment property SS_transport
     transport = @p.get("SS_transport") 
     transport = @p.get("ss_transport") if transport == ""
-    if transport == ""
+    if @p.get("ss_transport") == ""
       transport = "nsh"
       @p.assign_local_param("ss_transport", transport)
       @p.find_or_add("SS_transport", transport)
