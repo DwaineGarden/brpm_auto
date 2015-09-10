@@ -82,7 +82,7 @@ script = File.open(script_path).read
 
 # Preprocess script body with ERB
 action_txt = ERB.new(script).result(binding)
-@rpm.message_box "Executing LibraryAction - #{File.basename(script_path)}"
+@rpm.message_box "Executing Library Action - #{File.basename(script_path)}"
 script_file = @transport.make_temp_file(action_txt)
 @rpm.log "#=> Load Balancer Delivery"
 @rpm.log "Initial Servers:\n#{get_server_list.keys.join(",")}"
@@ -91,7 +91,7 @@ script_file = @transport.make_temp_file(action_txt)
 lb = LoadBalancerDelivery.new(servers,balancer_method,balancer_pattern, NetScaler, "netscaler_control") 
 lb.load_balancer_grouping do |cur_targets|
   @rpm.log "Current LB Group: #{cur_targets.join(",")}"
-  result = @transport.execute_script(script_file, {"transfer_properties" => transfer_properties})
+  result = @transport.execute_script(script_file, {"transfer_properties" => transfer_properties, "servers" => cur_targets})
   exit_status = "Success"
   result.split("\n").each{|line| exit_status = line if line.start_with?("EXIT_CODE:") }
   delivery_result << [exit_status,result]
