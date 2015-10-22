@@ -129,7 +129,7 @@ module ResourceFramework
     verbose = get_option(options, "verbose") == "yes" || get_option(options, "verbose")
     headers = get_option(options, "headers", {:accept => :json, :content_type => :json})
     return result["message"] = "ERROR - #{method} not recognized" unless methods.include?(method)
-    log "Rest URL: #{url}" if verbose
+    log_it "Rest URL: #{url}" if verbose
     begin
       data = get_option(options, "data")
       rest_params = {}
@@ -142,7 +142,7 @@ module ResourceFramework
         rest_params[:password] = options["password"]
       end
       rest_params[:headers] = headers
-      log "RestParams: #{rest_params.inspect}" if verbose
+      log_it "RestParams: #{rest_params.inspect}" if verbose
       if %{put post}.include?(method)
         return result["message"] = "ERROR - no data param for post" if data == ""
         response = RestClient::Request.new(rest_params).execute
@@ -154,7 +154,7 @@ module ResourceFramework
       raise "RestError: #{result["message"]}" unless get_option(options, "suppress_errors") == true
       return result
     end
-    log "Rest Response:\n#{response.inspect}" if verbose
+    log_it "Rest Response:\n#{response.inspect}" if verbose
     if headers[:accept] == :json
       parsed_response = JSON.parse(response) rescue nil
     else
