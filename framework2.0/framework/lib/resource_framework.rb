@@ -98,6 +98,7 @@ module ResourceFramework
   end
   
   def action_library_path
+    load_customer_include(File.dirname(FRAMEWORK_DIR)) if !defined?(ACTION_LIBRARY_PATH)
     raise "Command_Failed: no library path defined, set property: ACTION_LIBRARY_PATH" if !defined?(ACTION_LIBRARY_PATH)
     ACTION_LIBRARY_PATH
   end

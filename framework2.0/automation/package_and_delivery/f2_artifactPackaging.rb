@@ -44,7 +44,7 @@ profile: defaultProfile"
 SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
 #=== End ===#
 @baa.set_credential(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc), @rpm.get_integration_details("role")) if @p.get("SS_transport", @p.ss_transport) == "baa"
-@nsh.set_credential(@rpm.get_integration_details("profile"), SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc)) if @p.get("SS_transport", @p.ss_transport) == "nsh"
+@nsh.set_credential(@rpm.get_integration_details("profile"), SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc)) if defined?(SS_integration_dns) && @p.get("SS_transport", @p.ss_transport) == "nsh"
 
 #---------------------- Methods ----------------------------#
 

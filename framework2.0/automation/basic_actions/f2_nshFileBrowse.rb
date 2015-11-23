@@ -28,6 +28,7 @@ SS_integration_details = "role : BLAdmins
 authentication_mode : SRP"
 SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
 #=== End ===#
+require "#{FRAMEWORK_DIR}/brpm_framework"
 @baa.set_credential(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc), get_integration_details("role")) if @p.get("SS_transport", "ss_transport") == "baa"
 
 #---------------------- Variables --------------------------#

@@ -133,15 +133,17 @@ class TransportNSH < BrpmAutomation
     if target_hosts.nil?
       res = split_nsh_path(src_path[0])
       target_hosts = [res[0]] unless res[0] == ""
+      target_hosts = nil if res[0].include?("localhost") || res[0].include?("127.0.0.1")
       src_path[0] = res[1] unless res[0] == ""
     end
     paths = src_path.map{|pth| pth.include?(" ") ? "\"#{pth}\"" : pth }
     path_arg = paths.join(" ")
     cmd = "#{nsh_cmd("ncp")} -vrA #{path_arg} -h #{target_hosts.join(" ")} -d \"#{target_path}\"" unless target_hosts.nil?
     #cmd = "#{nsh_cmd("cp")} -vr #{path_arg.gsub("localhost","@")} #{target_path}" if target_hosts.nil?
-    if target_hosts.nil? && path_arg.start_with?("//") # Local copy
-      FileUtils.cp_r path_arg.gsub("//localhost",""), target_path, :verbose => true
-      res = "cp #{path_arg.gsub("//localhost","")} #{target_path}"
+    if target_hosts.nil? && path_arg.start_with?("/")  # Local copy
+      path = path_arg.gsub("//localhost","").gsub("//127.0.0.1","")
+      FileUtils.cp_r path, target_path, :verbose => true
+      res = "cp #{path} #{target_path}"
     else
       staging_path = nsh_path(target_path)
       cmd = @test_mode ? "echo \"#{cmd}\"" : cmd
@@ -281,25 +283,6 @@ class TransportNSH < BrpmAutomation
     path = "//#{server}#{path}" unless server.nil?
     path.chomp("/")
   end
-    
-  # Builds an NSH compatible path for an uploaded file to BRPM
-  # 
-  # ==== Attributes
-  #
-  # * +attachment_local_path+ - path to attachment from params 
-  # * +brpm_hostname+ - name of brpm host (as accessible from NSH)
-  # ==== Returns
-  #
-  # nsh path
-  #
-  def get_attachment_nsh_path(attachment_local_path, brpm_hostname)
-    if attachment_local_path[1] == ":"
-      attachment_local_path[1] = attachment_local_path[0]
-      attachment_local_path[0] = '/'
-    end
-    attachment_local_path = attachment_local_path.gsub(/\\/, "/")
-    "//#{brpm_hostname}#{attachment_local_path}"
-  end
 
   # Zip files using NSH
   # 
@@ -315,8 +298,12 @@ class TransportNSH < BrpmAutomation
     staging_artifacts = Dir.entries(staging_path).reject{|k| [".",".."].include?(k) }
     return {"instance_path" => "ERROR - no files in staging area", "md5" => ""} if staging_artifacts.size < 1
     FileUtils.cd(staging_path, :verbose => true)
-    cmd = "#{nsh_cmd("zip")} -r #{package_name} *"
+    log "Creating zip archive"
+    zip_cmd = nsh_cmd("zip")
+    zip_cmd = "zip" if !File.exist?(zip_cmd)
+    cmd = "#{zip_cmd} -r #{package_name} *"
     result = execute_shell(cmd)
+    log display_result(result)
     md5 = Digest::MD5.file(instance_path).hexdigest
     {"instance_path" => instance_path, "md5" => md5, "manifest" => staging_artifacts }
   end

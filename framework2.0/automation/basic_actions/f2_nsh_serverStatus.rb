@@ -20,6 +20,7 @@
 
 #---------------------- Declarations -----------------------#
 params["direct_execute"] = true #Set for local execution
+require "#{FRAMEWORK_DIR}/brpm_framework"
 
 #---------------------- Main Body --------------------------#
 @rpm.message_box "Server Agent Status"

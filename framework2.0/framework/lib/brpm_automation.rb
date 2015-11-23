@@ -1,6 +1,7 @@
 require 'popen4'
 require 'timeout'
 require 'rest-client'
+require 'fileutils'
 
 # The base class for automation
 # Provides convenience routines for working in BRPM
@@ -14,12 +15,13 @@ class BrpmAutomation
   # ==== Attributes
   #
   # * +params+ - the automation params hash
-  def initialize(params)
+  def initialize(params, step_init = false)
     @fil = nil
     @params = params
     @base_rpm_url = @params["SS_base_url"]
     @token = defined?(AUTOMATION_API_TOKEN) ? AUTOMATION_API_TOKEN : @params["SS_api_token"]
     @output_file = @params["SS_output_file"]
+    live_log("INIT") if step_init
     load_helper(@params["SS_script_support_path"])
   end
   
@@ -217,11 +219,11 @@ class BrpmAutomation
     safe_txt = privatize(txt)
     @output_file = output_file unless output_file.nil?
     puts log_message(safe_txt, level)
-    if true #@output_file.nil?
-      @fil = FileInUTF.open(@output_file,"a") if @fil.nil?
-      @fil.puts(log_message(safe_txt, level))
-      @fil.flush
+    FileInUTF.open(@output_file,"a") do |fil|
+      fil.puts(log_message(safe_txt, level))
+      fil.flush
     end
+    live_log(safe_txt, level)
   end
 
   # Provides a pretty box for titles
@@ -299,6 +301,33 @@ class BrpmAutomation
     end
     @private_props << private_value unless private_value.nil?
     private_value.nil? ? @private_props : true
+  end
+
+  # Provides a common live_log for the request
+  #
+  # ==== Attributes
+  #
+  # * +txt+ - the text to output
+  # * +level+ - the log level [info, warn, ERROR]
+  # * +output_file+ - an alternate output file to log to (default is step output)
+  def live_log(txt, level = "INFO")
+    @live_log = File.join(@params["SS_automation_results_dir"],"live_log", "request_#{@params["request_id"]}.log")
+    if !File.exist?(@live_log)
+      FileUtils.mkdir_p(File.dirname(@live_log)) if !File.exist?(File.dirname(@live_log))
+      FileInUTF.open(@live_log,"w+") do |fil|
+        fil.puts(log_message("Creating Log - Request #{@params["request_id"]}", level))
+        fil.flush
+      end
+    end
+    if txt == "INIT"
+      txt = "\n#=======================================================================#\n"
+      txt += "#  STEP[#{@params["step_id"]}] - #{@params["step_name"]}\n"
+      txt += "#=======================================================================#\n"
+    end 
+    FileInUTF.open(@live_log,"a") do |fil|
+      fil.puts(log_message(txt, level))
+      fil.flush
+    end
   end
 
   # Sends an email based on step recipients
@@ -498,6 +527,25 @@ class BrpmAutomation
     result[0] = path.split("/")[2] if path.start_with?("//")
     result[1] = "/#{path.split("/")[3..-1].join("/")}" if path.start_with?("//")  
     result
+  end
+    
+  # Builds an NSH compatible path for an uploaded file to BRPM
+  # 
+  # ==== Attributes
+  #
+  # * +attachment_local_path+ - path to attachment from params 
+  # * +brpm_hostname+ - name of brpm host (as accessible from NSH)
+  # ==== Returns
+  #
+  # nsh path
+  #
+  def get_attachment_nsh_path(attachment_local_path, brpm_hostname)
+    if attachment_local_path[1] == ":"
+      attachment_local_path[1] = attachment_local_path[0]
+      attachment_local_path[0] = '/'
+    end
+    attachment_local_path = attachment_local_path.gsub(/\\/, "/")
+    "//#{brpm_hostname}#{attachment_local_path}"
   end
 
   def read_shebang(os_platform, action_txt)

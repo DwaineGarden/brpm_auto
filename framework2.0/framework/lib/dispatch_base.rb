@@ -276,9 +276,9 @@ class DispatchBase < BrpmAutomation
     version = p_obj.get("step_version")    
     staging_server = p_obj.get("staging_server", path_server)
     brpm_hostname = p_obj.get("SS_base_url").gsub(/^.*\:\/\//, "").gsub(/\:\d.*/, "")
-    files_to_deploy << p_obj.get_attachment_nsh_path(brpm_hostname, p_obj.get("Upload Action File")) unless p_obj.get("Upload Action File") == ""
-    files_to_deploy << p_obj.get_attachment_nsh_path(brpm_hostname, p_obj.uploadfile_1) unless p_obj.uploadfile_1 == ""
-    files_to_deploy << p_obj.get_attachment_nsh_path(brpm_hostname, p_obj.uploadfile_2) unless p_obj.uploadfile_2 == ""
+    files_to_deploy << p_obj.get_attachment_nsh_path(p_obj.get("Upload Action File"), brpm_hostname) unless p_obj.get("Upload Action File") == ""
+    files_to_deploy << p_obj.get_attachment_nsh_path(p_obj.uploadfile_1, brpm_hostname) unless p_obj.uploadfile_1 == ""
+    files_to_deploy << p_obj.get_attachment_nsh_path(p_obj.uploadfile_2, brpm_hostname) unless p_obj.uploadfile_2 == ""
     entered_paths = p_obj.get("nsh_paths", p_obj.get("artifact_paths"))
     if entered_paths != ""
       staging_server = "none"

@@ -32,11 +32,7 @@ SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
 
 #---------------------- Declarations -----------------------#
 params["direct_execute"] = true #Set for local execution
-
-#=> ------------- IMPORTANT ------------------- <=#
-#- This loads the BRPM Framework and sets: @p = Params, @auto = BrpmAutomation and @rest = BrpmRest
-require @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
-require "#{@p.SS_script_support_path}/baa_utilities"
+require "#{FRAMEWORK_DIR}/brpm_framework"
 
 #---------------------- Methods ----------------------------#
 # Assign local variables to properties and script arguments

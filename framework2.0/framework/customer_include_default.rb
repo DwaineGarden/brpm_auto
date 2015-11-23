@@ -4,7 +4,7 @@
 # ===== Use this routine to override and provide global methods for all your automation
 
 # set your own automation token
-Token = "a56d64cbcffcce91d306670489fa4cf51b53316c" #"<YOUR_AUTOMATION_TOKEN>" #decrypt_string_with_prefix(@params["SS_api_token"])
+Token = "95445426b039db413be9469b11a6568c55a7fb87" #"<YOUR_AUTOMATION_TOKEN>" #decrypt_string_with_prefix(@params["SS_api_token"])
 # Hostname so nsh paths can be constructed from local paths
 BAA_RPM_HOSTNAME = "localhost"
 # Change this to set BAA base path 
@@ -14,7 +14,7 @@ BAA_BASE_GROUP = "BRPM"
 # The location and name of the standard NSH script for script execution
 BAA_FRAMEWORK_NSH_SCRIPT = "/BRPM/NSHScripts/FrameworkScriptExecute"
 # This path will get any files staged by the framework
-RPM_STAGING_PATH = "/opt/bmc/staging"
+RPM_STAGING_PATH = "/Users/bbyrd/Documents/dev_rpm/brpm_auto/persist"
 # This defines a path for a library of automations (from Git or Svn for instance)
 ACTION_LIBRARY_PATH = "/opt/bmc/RLM/persist/script_library"
 # Custom Lib/Module directory (to add customer content to framework)
