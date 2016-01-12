@@ -80,7 +80,7 @@ def execute(script_params, parent_id, offset, max_records)
         xtra = "- status: must pass #{promo_env}"
       end 
       plan_options.each{|k| stage = k["stage"] if k["environments"].include?(env_name)}
-      stage_stg = stage == "none" ? stage : " - stage: #{stage}"
+      stage_stg = stage == "none" ? "" : " - stage: #{stage}"
       envs["#{gate.environment_id.to_s}|#{env_name}|#{stage}"] = "#{env_name}#{stage_stg}      #{xtra}"
       rt_info = {"environment_id" => gate.environment_id.to_s, "environment" => env_name, "environment_type" => gate.environment_type.name, "note" => xtra}
       rt_info["stage"] = stage if stage != "none"

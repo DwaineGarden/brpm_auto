@@ -3,7 +3,7 @@
 #  Called by util_f2_installModule
 
 #---------------------- Declarations ------------------------------#
-FRAMEWORK_DIR = @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib") unless defined?(FRAMEWORK_DIR)
+#FRAMEWORK_DIR = @params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib") unless defined?(FRAMEWORK_DIR)
 @script_name_handle = "library_tree"
 body = File.open(File.join(FRAMEWORK_DIR,"lib","resource_framework.rb")).read
 result = eval(body)

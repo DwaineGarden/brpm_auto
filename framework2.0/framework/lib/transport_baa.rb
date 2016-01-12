@@ -117,7 +117,9 @@ class TransportBAA < BrpmAutomation
         response = client.request(:execute_command_by_param_list) do |soap|
           soap.endpoint = "#{@url}/services/CLITunnelService"
           soap.header = {"ins1:sessionId" => @session_id}
-          soap.body = { :nameSpace => namespace, :commandName => command, :commandArguments => args }
+          body_details = { :nameSpace => namespace, :commandName => command, :command_arguments => args}
+          #body_details[:command_arguments] = args unless args.empty?
+          soap.body = body_details
         end
       end
       raw_result = response.body[:execute_command_by_param_list_response][:return]
@@ -152,7 +154,8 @@ class TransportBAA < BrpmAutomation
       response = client.request(:execute_command_using_attachments) do |soap|
         soap.endpoint = "#{@url}/services/CLITunnelService"
         soap.header = {"ins1:sessionId" => @session_id}
-        body_details = { :nameSpace => namespace, :commandName => command, :commandArguments => args }
+        body_details = { :nameSpace => namespace, :commandName => command }
+        body_details[:command_arguments] = args unless args.empty?
         body_details.merge!({:payload => payload}) if payload
         soap.body = body_details
       end
@@ -160,6 +163,45 @@ class TransportBAA < BrpmAutomation
       result = "ERROR: SoapError: #{e.message}\n#{e.backtrace}"
     end
     result = response.body[:execute_command_using_attachments_response][:return]
+  end
+  
+  # Executes a BLCLI command with string arguments
+  # Use this for simple commands like Server|listAllServers
+  #
+  # ==== Attributes
+  #
+  # * +namespace+ - namespace of command
+  # * +command+ - command to run
+  # * +args+ - array of arguments to the command
+  #
+  # ==== Returns
+  #
+  # * response_object hash which includes the attachment response["attachment"] base64 encoded
+  #
+  def execute_cli_command_by_string(namespace, command, args = [], options = {})
+    begin
+      response = nil
+      check_session
+      log "CLI: #{namespace}, #{command}, #{args.inspect}"
+      client = Savon.client("#{@url}/services/BSACLITunnelService.wsdl") do |wsdl, http|
+        http.auth.ssl.verify_mode = :none
+      end
+      client.http.read_timeout = get_option(options,"client_timeout",300)
+      redirect_stdout do
+        response = client.request(:execute_command_by_param_string) do |soap|
+          soap.endpoint = "#{@url}/services/CLITunnelService"
+          soap.header = {"ins1:sessionId" => @session_id}
+          body_details = { :nameSpace => namespace, :commandName => command}
+          body_details[:command_arguments] = args.join(",") unless args.empty?
+          soap.body = body_details
+        end
+      end
+      raw_result = response.body[:execute_command_by_param_string_response][:return]
+      result = cli_result(raw_result)
+    rescue Exception => e
+      result = "ERROR: SoapError: #{e.message}\n#{e.backtrace}"
+    end
+    result
   end
 
   # Returns the string for url and soap params
@@ -656,6 +698,43 @@ class TransportBAA < BrpmAutomation
     nil
   end
 
+  # Exports Job results for Deploy, Batch, NSH and Snapshot jobs to specified file
+  #
+  # ==== Attributes
+  # * +job_folder+ - group folder of job
+  # * +job_name+ - name of job
+  # * +job_run_id+ - if of the job run
+  # * +job_type+ - type of job (DeployJob, BatchJob, SnapshotJob, NSHScriptJob)
+  # * +output_file+ - file to export to
+  #
+  # ==== Returns
+  #
+  # * returnResult from CLI command (BLCLI Utility|exportDeployRun)
+  #
+  def export_job_results(job_folder, job_name, job_run_id, job_type = "DeployJob", output_file = "default")
+    status = []
+    export_jobs = {"deployjob" => "exportDeployRun", "snapshotjob" => "exportSnapshotRun", "batchjob" => "exportBatchRun", "nshscriptjob" => "exportNSHScriptRun"}
+    command_name = export_jobs[job_type.downcase]
+    return "ERROR: job_type: #{job_type} doesnt match" if command_name.nil?
+    export_name = "job_result_#{get_param(params, SS_request_id)}_#{get_param(params, SS_step_id)}"
+    [".txt"].each do |ext|
+      output_file = File.join(get_param(params, "SS_output_dir"), "#{export_name}.#{ext}")
+      result = execute_cli_command_using_attachments("Utility", command_name, [job_folder, job_name, job_run_id, output_file])
+      if result && (result.has_key?(:attachment))
+        attachment = result[:attachment]
+        csv_data = Base64.decode64(attachment)
+        fil = File.open(output_file,"w+") do |fil|
+          fil.write csv_data
+          fil.flush
+        end
+        status << "Success #{ext}"
+      else
+        status << "Failed to export #{ext} results"
+      end
+    end
+    status
+  end
+
   # Packages passed references in BAA using a component template
   #  * note artifacts all need to reside on the same server
   #
@@ -1030,6 +1109,33 @@ class TransportBAA < BrpmAutomation
     end
     path = "//server#{path}" unless server.nil?
     path.chomp("/")
+  end
+
+  # Executes a batch job in BAA
+  #
+  # ==== Attributes
+  #
+  # * +job_name+ - name of job
+  # * +group_path+ - path in Blade for job
+  # * +targets+ - array of server targets (blank uses existing)
+  # * +options+ - hash of options - includes target_type=server|group
+  #
+  # ==== Returns
+  #
+  # * job dbKey
+  def execute_batch_job(job_name, group_path, targets = [], options = {})
+    args = [group_path, job_name]
+    ss_job_key = execute_cli_command("BatchJob","getDBKeyByGroupAndName",args)
+    raise "Command_Failed: cannot find job: #{job_name} in #{group_path}" if ss_job_key.include?("ERROR")
+    unless targets.blank?
+      ss_job_key = execute_cli_command("Job","clearTargetServers",[ss_job_key])
+      ss_job_key = execute_cli_command("Job","clearTargetGroups",[ss_job_key])
+      ss_job_key = execute_cli_command("Job","addTargetGroups",[ss_job_key, targets]) if get_option(options,"target_type") == "group"
+      ss_job_key = execute_cli_command("Job","addTargetServers",[ss_job_key, targets]) if get_option(options,"target_type") != "group"
+    end 
+    batch_job_key = execute_cli_command("BatchJob","executeJobAndWait",[ss_job_key])
+    raise "Command_Failed: cannot create job: #{batch_job_key}" if batch_job_key.include?("ERROR")
+    batch_job_key
   end
 
   private

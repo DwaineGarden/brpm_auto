@@ -389,7 +389,7 @@ class BrpmRequest < BrpmRest
   #
   # * hash of app information
   def app
-    @request["apps"].first
+    app = @request.has_key?("app") ? @request["app"] : @request["apps"].first
   end
   
   # Gets the installed_components associated with request application

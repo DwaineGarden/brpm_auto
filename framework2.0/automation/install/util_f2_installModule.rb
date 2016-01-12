@@ -40,6 +40,13 @@ def file_content(path)
   cont
 end
 
+def automation_type(script_content)
+  a_type = @p.get("step_params") == "" ? "Automation" : "Local Ruby"
+  a_type = "ResourceAutomation" if script_content.match(/def\sexecute\(/)
+  a_type
+end
+
+
 def automation_from_file(script_path)
   new_script = true
   body = file_content(script_path)
@@ -52,7 +59,7 @@ def automation_from_file(script_path)
   if new_script
     d_match = body.match(/\#\sDescription:\s.*/)
     description = d_match.nil? ? "imported f2 module" : d_match.to_s.gsub("# Description: ", "").chomp
-    rest_params = {"name" => script_name, "description" => description, "content" => body, "automation_category" => @automation_category, "automation_type" => "Automation"}
+    rest_params = {"name" => script_name, "description" => description, "content" => body, "automation_category" => @automation_category, "automation_type" => @automation_type}
     if script_name.include?("_rsc")
       rest_params["automation_type"] = "ResourceAutomation"
       rest_params["unique_identifier"] = script_name
@@ -80,6 +87,7 @@ params["direct_execute"] = true
 # like this: Select Modules: 'f2_getRequestInputs_basic.rb|/,package_and_delivery|/,remote_execution|/'
 selected_modules = @p.get("Select Modules")
 @modules_base_path = File.join(FRAMEWORK_DIR,"..","automation")
+@automation_type = "Automation"
 @automation_category = "Framework"
 @force_update = @p.get("Force Update", "no")
 @installed_scripts = {}

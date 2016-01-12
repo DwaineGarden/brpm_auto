@@ -36,6 +36,7 @@
 
 #---------------------- Declarations -----------------------#
 params["direct_execute"] = true #Set for local execution
+require "#{FRAMEWORK_DIR}/brpm_framework.rb"
 
 #---------------------- Methods ----------------------------#
 # Assign local variables to properties and script arguments

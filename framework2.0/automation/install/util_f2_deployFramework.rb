@@ -26,7 +26,7 @@
 #---------------------- Declarations -----------------------#
 require 'fileutils'
 params["direct_execute"] = true
-initial_scripts_to_add = ["f2_directExecute.rb", "install/util_f2_rsc_moduleTree.rb", "install/util_f2_installModule.rb"]
+initial_scripts_to_add = ["basic_actions/f2_directExecute.rb", "install/util_f2_rsc_moduleTree.rb", "install/util_f2_installModule.rb"]
 
 #---------------------- Methods ----------------------------#
 def replace_line(body_array, key, val)
