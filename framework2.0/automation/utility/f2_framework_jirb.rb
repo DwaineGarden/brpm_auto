@@ -2,7 +2,7 @@ require 'yaml'
 require 'json'
 #FRAMEWORK_DIR = "C:/BMC/persist/automation_libs"
 FRAMEWORK_DIR = "/opt/bmc/resources/persist/automation_lib"
-base_path = "/opt/bmc/RLM"
+base_path = "/opt/bmc/resources"
 input_file = "#{base_path}/automation_results/request/JFP_GBIPB_BW/1367/step_4941/scriptinput_208_1421610040.txt"
 @params = YAML.load(File.open(input_file).read)
 require "#{FRAMEWORK_DIR}/brpm_framework"

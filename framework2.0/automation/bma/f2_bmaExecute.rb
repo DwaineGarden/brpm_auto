@@ -192,22 +192,22 @@ function bmaInstallPreview ()
         if [ -z ${BMA_TOKEN_SET} ]
         then
             debug "SENDING: ${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -portal -mode $mode -config $configFile -profile $serverProfile -report ${BMA_WORKING}/reports/${mode}Report_${DATE}.report -syncnodes"
-            ${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -portal -mode $mode -config $configFile -profile $serverProfile -report ${BMA_WORKING}/reports/${mode}Report_${DATE}.report -syncnodes 2>/dev/null
+            ${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -portal -mode $mode -config $configFile -profile $serverProfile -report ${BMA_WORKING}/reports/${mode}Report_${DATE}.report -syncnodes
             exitcode=$?
         else
             debug "SENDING: ${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -portal -mode $mode -config $configFile -tokens ${BMA_TOKEN_SET} -profile $serverProfile -report ${BMA_WORKING}/reports/${mode}Report_${DATE}.report -syncnodes"
-            ${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -portal -mode $mode -config $configFile -tokens ${BMA_TOKEN_SET} -profile $serverProfile -report ${BMA_WORKING}/reports/${mode}-${BMA_CONFIG_PACKAGE}-${BMA_SERVER_PROFILE}.report -syncnodes 2>/dev/null
+            ${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -portal -mode $mode -config $configFile -tokens ${BMA_TOKEN_SET} -profile $serverProfile -report ${BMA_WORKING}/reports/${mode}-${BMA_CONFIG_PACKAGE}-${BMA_SERVER_PROFILE}.report -syncnodes 
             exitcode=$?
         fi
     else
                 if [ -z ${BMA_TOKEN_SET} ]
         then
             debug "SENDING: ${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -mode $mode -config $configFile -profile $serverProfile -report ${BMA_WORKING}/reports/${mode}Report_${DATE}.report -syncnodes"
-            ${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -mode $mode -config $configFile -profile $serverProfile -report ${BMA_WORKING}/reports/${mode}Report_${DATE}.report -syncnodes 2>/dev/null
+            ${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -mode $mode -config $configFile -profile $serverProfile -report ${BMA_WORKING}/reports/${mode}Report_${DATE}.report -syncnodes
             exitcode=$?
         else
             debug "SENDING: ${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -mode $mode -config $configFile -tokens ${BMA_TOKEN_SET} -profile $serverProfile -report ${BMA_WORKING}/reports/${mode}Report_${DATE}.report -syncnodes"
-            ${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -mode $mode -config $configFile -tokens ${BMA_TOKEN_SET} -profile $serverProfile -report ${BMA_WORKING}/reports/${mode}-${BMA_CONFIG_PACKAGE}-${BMA_SERVER_PROFILE}.report -syncnodes 2>/dev/null
+            ${BMA_DIR}/cli/runDeliver.sh ${BMA_OPTIONS} -mode $mode -config $configFile -tokens ${BMA_TOKEN_SET} -profile $serverProfile -report ${BMA_WORKING}/reports/${mode}-${BMA_CONFIG_PACKAGE}-${BMA_SERVER_PROFILE}.report -syncnodes
             exitcode=$?
         fi
     fi  
