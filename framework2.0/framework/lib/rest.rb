@@ -172,7 +172,7 @@ class BrpmRest < BrpmAutomation
       else
         log "Tag exists for component"
         comp_steps.each do |step|      
-          step_data = {"version_tag_id" => version_tag_id, "component_version" => version}
+          step_data = {"version_tag_id" => version_tag_id}
           rest_result = update("steps", step["id"], step_data, options)
           if rest_result["status"] == "success"
             log "Updating step: #{step["id"]}\nResult: #{rest_result["data"].inspect}"
