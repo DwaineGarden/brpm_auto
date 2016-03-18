@@ -50,4 +50,7 @@ rest_result = @jenkins.job_data
 @rpm.log "Build Details:"
 @rpm.log rest_result["data"].inspect
 
+@p.assign_local_param("jenkins_project", jenkins_project)
+@p.save_local_params # Cleanup and save
+
 
