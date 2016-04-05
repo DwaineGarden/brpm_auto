@@ -40,14 +40,14 @@ class TransportBAA < BrpmAutomation
   #
   # * command output
   #
-  def set_credential(baa_url, baa_username, baa_password, baa_role)
+  def set_credential(baa_url, baa_username, baa_password, baa_role = nil)
     @url = baa_url
     @username = baa_username
     @password = baa_password
     @role = baa_role
     @session_time = nil
     get_session_id      
-    assume_role
+    assume_role unless baa_role.nil?
   end
 
   # Assumes the role (for SOAP only)

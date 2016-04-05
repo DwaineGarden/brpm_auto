@@ -211,6 +211,7 @@ if !target_stage.nil?
   @rpm.message_box("Launching Promotion Request","title")
   @rpm.log "\tRequest Template: #{template_name}"
   @rpm.log "\tEnvironment: #{target_env_name}"
+  target_stage = @p.get("promotion_stage") if target_stage == "none"
   if plan_member_id > 0
     @rpm.log "\tPlan: #{plan} - #{target_stage}"
     lc_info = @rest.get("plans", plan_id)
