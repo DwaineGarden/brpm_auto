@@ -1,0 +1,142 @@
+# Reporting Macro from SQL/REST
+
+#1) Plan Pipeline
+Switches:
+	completed requests by application or by env
+	option to show failed
+	components with "util_reporting=yes" property are included
+	
+
+		Development
+			Sales (DEV3)
+				AppServer
+					Version		Date		Request		State
+					4.1.4		3/19/14		11617		Planned (different color - Green)
+					4.1.3		3/12/14		11604		Complete (Blue)
+					4.1.2		3/12/14		11604		Complete
+					4.1.1		3/06/14 	11598		Complete
+				Database
+					Version		Date		Request		State
+					4.1.4		3/19/14		11617		Planned
+					4.1.3		3/12/14		11604		Complete
+					4.1.2		3/12/14		11604		Complete
+					4.1.1		3/06/14 	11598		Complete
+			StP (DEV3)
+				AppServer
+					Version		Date		Request		State
+					4.1.4		3/19/14		11617		Planned
+					4.1.3		3/12/14		11604		Complete
+					4.1.2		3/12/14		11604		Complete
+					4.1.1		3/06/14 	11598		Complete
+				Database
+					Version		Date		Request		State
+					4.1.4		3/19/14		11617		Planned
+					4.1.3		3/12/14		11604		Complete
+					4.1.2		3/12/14		11604		Complete
+					4.1.1		3/06/14 	11598		Complete
+		Integration
+			Sales (INT2)
+				AppServer
+					Version		Date		Request		State
+					4.1.3		3/19/14		11615		Planned
+					4.1.1		3/12/14		11607		Complete
+				Database
+					Version		Date		Request		State
+					4.1.3		3/12/14		11615		Planned
+					4.1.1		3/06/14 	11607		Complete
+
+Condensed Data:
+Request, Start, Finish, State, App, Env, EnvironmentType, Owner, Plan, Stage, Step, State, Component, Version, Start, Finish, Executor, Ticket
+
+Criteria:
+  Date Range, Plan, Environment Types, Applications, Request State
+  
+  Period: last 30, 60, 90 days
+  Pick Plan: dropdown
+  Multi-Select: environment-types
+  Multi-Select: applications (pre-criteria)
+  Multi-Select: Request State(s)
+  Process Data: yes, no
+  
+Run Step - generate link to raw data and html report
+
+#---- Data Generator Testing
+172.19.77.205 - Citi Data
+11111Cate - 10060
+156200_WPIT - 10380
+Plan - 10340
+
+def data_query
+  select_fields = "requests.id, requests.name, requests.aasm_state, environments.name as env, requests.started_at, requests.completed_at, apps_requests.app_id, plan_members.plan_id"
+    request_query = Request
+    clauses = []
+    if @content["applications"] != ""
+      clauses << "apps_requests.app_id IN (#{@content["applications"]})"
+      request_query = request_query.joins('INNER JOIN apps_requests ON apps_requests.request_id  = requests.id')
+    end
+    if @content["release_plans"] != ""
+      clauses << "plan_members.plan_id IN (#{@content["release_plans"]})"
+      request_query = request_query.joins('INNER JOIN plan_members ON plan_members.id  = requests.plan_member_id')
+    end
+    clauses << "started_at > '#{(Time.now - (86400 * @content["period"].to_i)).strftime("%Y-%m-%d")}'" if @content["period"].to_i > 0
+    clauses << "aasm_state IN (#{@content["states"].split(",").map{|l| "'#{l}'" }.join(",")})"
+    requests = request_query.functional.where(clauses.join(" AND "))
+end
+
+def gen_step_data(steps)
+    step_data = []
+    steps.each do |step|
+      row = []
+      row << step.request.id
+      row << step.request.name
+      row << step.request.started_at
+      row << step.request.completed_at
+      row << step.request.aasm_state
+      row << step.request.apps[0].name
+      row << step.request.environment.name
+      row << step.request.environment.environment_type.try(:name)
+      row << step.request.owner.login
+      row << step.request.plan.try(:name)
+      row << step.request.plan_member.try(:stage).try(:name)
+      row << step.name
+      row << step.aasm_state
+      row << step.component.name
+      row << step.version_tag.name
+      row << step.work_started_at
+      row << step.work_finished_at
+      row << step_owner(step)
+      row << step.tickets.present? ? step.tickets.map{|l| l.foreign_id }.join(",") : ""
+      step_data << row
+    end
+    step_data
+  end
+  
+  
+  
+  Demo Data (146)
+  
+  GCAS, CXF and Elvis
+  Plan - Utility Feeds
+  Versions:
+  Elvis:  4.5.08 - .09, .10 - ELVIS_Deployment_Request - ALM, WebServer, AppServer
+  GCAS:   3.3.00 - .01, .02, .03 - GCAS Deploy - GCAS Feeds, GCAS Web
+  CXF:    2.15.4 - .5b, .5 - CXF Deploy - Release_Logic, AppServer
+  
+  DEV, SIT, UAT, PROD
+  
+  
+  
+  
+  
+  
+  curl -i -H "accept: application/json" -H "Content-type: application/json" -X POST -d "{\"name\":\"4.5.08\",\"find_application\":\"Elvis\",\"find_component\":\"AppServer\",\"artifact_url\":\"http://vw-aus-rem-dv11.bmc.com:8080/job/Elvis_main_trunk/356/artifact/Elvis_201505220925.zip\"}" http://ec2-54-208-221-146.compute-1.amazonaws.com:4005/brpm/v1/version_tags?token=a56d64cbcffcce91d306670489fa4cf51b53316c
+  
+  
+  
+#-----------------  Request Template Report ----------------------#
+
+App
+  TemplateID, Template, Rank, Num Steps
+    Env, Completed, Problem, Cancelled, AvgTimeToComplete, Steps
+    
+      

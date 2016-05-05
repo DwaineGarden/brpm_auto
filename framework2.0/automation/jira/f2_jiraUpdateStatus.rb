@@ -1,14 +1,17 @@
-#---------------------- f2_jira_addComment -----------------------#
-# Description: Direct execute on the command line
+#---------------------- f2_jira_updateStatus -----------------------#
+# Description: Updates the status of a Jira issue
 #=> About the f2 framework: upon loading the automation, several utility classes will be available
 #   @rpm: the BrpmAutomation class, @p: the Param class, @rest: the BrpmRest class and 
-require params["SS_automation_results_dir"].gsub("automation_results","persist/automation_lib/brpm_framework.rb")
 
 #---------------------- Arguments --------------------------#
 ###
 # issue_id:
-#   name: id of deployment tracker issue
+#   name: id of jira issue
 #   position: A1:F1
+#   type: in-text
+# comment:
+#   name: Additional comment for issue
+#   position: A2:F2
 #   type: in-text
 ###
 
@@ -23,6 +26,7 @@ SS_integration_password_enc = "__SS__Cj09UU1MRjBWVGxrVg=="
 
 #---------------------- Declarations -----------------------#
 params["direct_execute"] = true #Set for local execution
+require "#{FRAMEWORK_DIR}/brpm_framework"
 rpm_load_module("ticket")
 
 #---------------------- Methods ----------------------------#
@@ -44,14 +48,13 @@ def map_stage_to_issue_status(stage)
       return nil
   end
 end
+
 #---------------------- Variables --------------------------#
 issue_ids = @p.get("issue_id").split(",")
-issue_ids = @p.get("jira_issue_ids") if issue_ids == ""
-if @p.get("jira_issue") != "" && @p.get("jira_issue").has_key?("key")
-  key = @p.get("jira_issue")["key"]
-  issue_ids << key unless issue_ids.include?(key)
-end
-comment = "Successfully deployed to #{@p.SS_environment}"
+issue_ids = [@p.get("jira_issue_id")] if issue_ids[0] == ""
+issue_ids = @p.tickets_foreign_ids.split(",").map{|l| l.strip } if issue_ids[0] == ""
+comment = "RLM Request #{@p.request_id} - Step: #{@p.step.name} \nDeployed #{@p.SS_application} => #{@p.SS_environment} on #{@rpm.precision_timestamp}"
+comment += "\n#{@p.comment}" unless @p.comment == ""
 target_transition = map_stage_to_issue_status(@p.request_plan_stage)
 
 #---------------------- Main Body --------------------------#

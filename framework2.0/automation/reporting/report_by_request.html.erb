@@ -1,0 +1,107 @@
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <title>BRPM Deploy Pipeline Report</title>
+  <style type="text/css">
+      body { background-color: #e4e4e4; color: #333; text-align: center; font-family: arial, sans-serif; font-size: 12px}
+      div.main_frame{ border: 0.5px solid #ccc; text-align: left; background-color: #FFF;}
+      table{
+          font-size:11px;
+          margin-left: 25px;
+          
+      }
+      td{
+              border-right:0.5px solid #ccc;
+              border-bottom: 0.5px solid #ccc;
+              padding: 3px;
+          }
+      td.desc{
+       font-size: 9px;
+          }
+	td.emphasis{
+		  color: #454545;
+  }
+      td.titlecell{
+              background-color: #e4e4e4;
+          }
+      th{
+          border-top: 2px solid #ccc;
+          border-bottom: 1px solid #ccc;
+          /* border-right: 0.5px solid #ccc;*/
+          font-weight: bold;
+		      color: #454545;
+		      background-color: #e4e4e4;
+          padding: 3px;
+          }
+          
+	.filename{ font-weight: bold; color: #004376; }
+  .indent_title{ margin-right: 20px; margin-left: 20px; font-size: 9px; font-weight: bold; color: #666; width: 60px;}
+  a {
+      color: #00a79d;
+  }
+  a:hover {
+      color: #008d85;
+  }
+  .plan_header{
+    font-size: 14px;
+    color: #454545;
+  }
+  .request_header{
+    font-size: 13px;
+    color: #666;
+  }
+  </style>
+</head>
+
+<body>
+<div class='main_frame'>
+  <div style='text-align: center'><h2><%= @content["title"] %></h2></div>
+<table>
+	<thead>
+<% 
+last_request = 0
+last_plan = "zzzz"
+
+@content["data"].sort_by{|k| [k[9], k[6]] }.each do |record|
+  if record[0] != last_request
+    last_request = record[0]
+%>
+<tr>
+  <td colspan='8'>
+  <% 
+  if last_plan != record[9]
+    last_plan = record[9]
+  %>
+    <hr>
+    <span class='plan_header'><%="Plan/Stage: #{record[9]} / #{record[10]}"%></span><br>
+    
+  <% end %> 
+<span class='request_header'>
+<span class='indent_title'>Env/App</span><%="#{record[6]} => #{record[5]}" %><br>
+<span class='indent_title'>Request</span><%="#{record[0]}-#{record[1]}" %>
+- <a href="<%="#{@content["base_url"]}/requests/#{record[0]}" %>"><%= "#{@content["base_url"]}/requests/#{record[0]}" %></a><br> 
+<span class='indent_title'>Details</span><%="Start: #{record[2]} Finish: #{record[3]} - Final State: #{record[4]} - Owner: #{record[8]}" %><br>
+
+  </span>
+  </td>
+  </tr>
+    <tr>
+      <% @content["columns"][11..18].each do |col| %>
+      <%= "<th>#{col}</th>"%>
+      <% end %>
+    </tr>
+	</thead>
+	<tbody>
+  <% end %><!-- Block for request header -->
+		 <tr>
+			<% record[11..18].each do |col| %>
+        <td><%= col %></td>
+		  <% end %>
+    </tr>
+<% end %>
+	</tbody>
+</table>
+</div>
+</body>
+</html>
+

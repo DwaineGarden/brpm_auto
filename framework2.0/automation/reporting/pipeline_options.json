@@ -1,0 +1,32 @@
+{
+  "title": "My Report",
+  "period": "none",
+  "release_plans": "147,2034",
+  "applications": "25,22,70",
+  "states": "complete,cancelled",
+  "columns":
+    [
+    "Request", 
+    "Start", 
+    "Finish", 
+    "State", 
+    "App", 
+    "Env", 
+    "EnvironmentType", 
+    "Owner", 
+    "Plan", 
+    "Stage", 
+    "Component", 
+    "Version", 
+    "Step", 
+    "State", 
+    "Start", 
+    "Finish", 
+    "Executor", 
+    "Ticket"
+    ],
+  "data": [
+    [],
+    [],
+  ]
+}

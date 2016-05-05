@@ -79,14 +79,17 @@ module ResourceFramework
     begin
       if File.exist?(customer_include_file)
         log_it "Loading customer include file: #{customer_include_file}"
-        eval(File.open(customer_include_file).read) 
-      elsif File.exist customer_include_file = File.join(framework_dir,"customer_include_default.rb")
+        eval(File.open(customer_include_file).read)
+      elsif File.exist? customer_include_file = File.join(File.dirname(framework_dir),"customer_include.rb")
+        log_it "Loading customer include file: #{customer_include_file}"
+        eval(File.open(customer_include_file).read)
+      elsif File.exist? customer_include_file = File.join(framework_dir,"customer_include_default.rb")
         log_it "Loading default customer include file: #{customer_include_file}"
         eval(File.open(customer_include_file).read)
       end
     rescue Exception => e
       log_it "Error loading customer include: #{e.message}\n#{e.backtrace}"
-    end 
+    end
   end
     
   def hashify_list(list)

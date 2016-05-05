@@ -154,7 +154,7 @@ class TransportSSH < BrpmAutomation
             command = options["command"]
             cmd_result["stdout"] += "Command: #{command}"
             use_sudo = @sudo.nil? ? "no" : @sudo
-            @cap.run "#{use_sudo == 'yes' ? sudo : '' } #{command}", :pty => (use_sudo == 'yes') do |ch, str, data|
+            @cap.run "#{use_sudo == 'yes' ? "sudo " : '' } #{command}", :pty => (use_sudo == 'yes') do |ch, str, data|
               if str == :out
                 fil.puts data
                 fil.flush
