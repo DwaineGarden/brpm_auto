@@ -447,7 +447,8 @@ class BrpmAutomation
   # staging path or ERROR_ if force is false and path does not exist
   #  
   def get_staging_dir(version, force = false)
-    staging_path = defined?(RPM_STAGING_PATH) ? RPM_STAGING_PATH : File.join(@params["SS_automation_results_dir"],"staging")
+    staging_path = defined?(RPM_STAGING_PATH) ? RPM_STAGING_PATH : @params["SS_automation_results_dir"]
+    staging_path = File.join(staging_path, "staging") unless staging_path.end_with?("staging") 
     pattern = File.join(staging_path, "#{Time.now.year.to_s}", path_safe(get_param("SS_application")), path_safe(get_param("SS_component")), path_safe(version))
     if force
       FileUtils.mkdir_p(pattern)

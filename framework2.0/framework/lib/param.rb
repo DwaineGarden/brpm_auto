@@ -233,10 +233,12 @@ class Param < BrpmAutomation
     # Uses a json document in automation_results to store free-form information
     unless @orig_request_params == @json_params
       sleep(2) unless File.exist?(@request_data_file)
-      fil = File.open(@request_data_file) do |fil|
-        latest = JSON.parse(fil.read)
-        @orig_request_params = latest
+      content = File.read(@request_data_file)
+      if content == ""
+        sleep(2)
+        content = File.read(@request_data_file)
       end
+      @orig_request_params = JSON.parse(content)
       merged = @orig_request_params.merge(@json_params) if merge_existing
       merged = @json_params unless merge_existing
       fil = File.open(@request_data_file, "w+") do |fil|

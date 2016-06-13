@@ -6,7 +6,7 @@
 #---------------------- Arguments --------------------------#
 ###
 # issue_id:
-#   name: id of deployment tracker issue
+#   name: id of jira issue (leave blank to use attached tickets)
 #   position: A1:F1
 #   type: in-text
 # comment:

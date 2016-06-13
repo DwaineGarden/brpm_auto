@@ -132,12 +132,17 @@ class BrpmRest < BrpmAutomation
   #
   # * an array of matching version objects or "ERROR" if not found
   #
-  def version_tag_query(name)
+  def version_tag_query(name, env = nil)
     result = "ERROR"
     result = get("version_tags",nil,{"filters" => "filters[name]=#{url_encode(name)}", "suppress_errors" => true})
     if result["status"] == "success"
       log "Tag Exists?: #{@base_url}\nResult: #{result["data"].inspect}"
-      result = result["data"]
+      if env.nil?
+        result = result["data"]
+      else
+        result = result["data"].select{|k| k["environment_name"] = env }
+        result = "ERROR" if result["data"].empty?
+      end
     else
       log "No version tags found"
       result = []

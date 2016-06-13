@@ -21,6 +21,16 @@
 #   name: Base path to bladelogic dir
 #   type: in-text
 #   position: A3:D3
+# Zip Path:
+#   name: optional path to unzip
+#   type: in-text
+#   position: A4:D4
+# Configure-only:
+#   name: I already downloaded and unzipped the files
+#   type: in-list-single
+#   list_pairs: all,all|config,config
+#   position: A5:B5
+
 ###
 
 #---------------------- Declarations -----------------------#
@@ -79,6 +89,7 @@ else
 end
 framework_zip = @params["Upload Framework Zip"]
 token = params["SS_api_token"]
+unzip = @params["Zip Path"].length < 1 ? "unzip -o" : @params["Zip Path"]
 
 #---------------------- Main Body --------------------------#
 # Check that framework directory exists
@@ -96,7 +107,7 @@ if Dir.entries(persist_dir).include?("customer_include.rb")
 end
  
 FileUtils.cd(persist_dir, :verbose => true)
-result = run_command(params,"unzip -o #{framework_zip}", "")
+result = run_command(params,"#{unzip} #{framework_zip}", "")
 if !File.exist?(File.join(persist_dir,"customer_include.rb"))
   write_to "Creating a new customer_include.rb file in #{persist_dir}"
   write_to "You must edit the file and change the defaults to match your environment"

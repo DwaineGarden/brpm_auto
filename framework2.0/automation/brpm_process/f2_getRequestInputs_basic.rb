@@ -74,9 +74,10 @@ end
 
 change_ticket_id = @p.get("Change Ticket ID")
 if change_ticket_id == "" && params.has_key?("tickets_foreign_ids")
-foreign_ids = @p.get('tickets_foreign_ids').split(',')
-change_ticket_id = foreign_ids.first if foreign_ids.is_a?(Array)
-@p.assign_local_param("change_ticket_id", change_ticket_id)
+  foreign_ids = @p.get('tickets_foreign_ids').split(',')
+  change_ticket_id = foreign_ids.first if foreign_ids.is_a?(Array)
+  @p.assign_local_param("change_ticket_id", change_ticket_id)
+end
 
 #---------------------- Main Body --------------------------#
 # Set a property in General for each component to deploy 

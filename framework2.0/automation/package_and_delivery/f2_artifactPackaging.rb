@@ -43,8 +43,10 @@ authentication_mode: SRP
 profile: defaultProfile"
 SS_integration_password_enc = "__SS__Cj09d1lwZDJic1ZHWmh4bVk="
 #=== End ===#
-@baa.set_credential(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc), @rpm.get_integration_details("role")) if @p.get("SS_transport", @p.ss_transport) == "baa"
-@nsh.set_credential(@rpm.get_integration_details("profile"), SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc)) if defined?(SS_integration_dns) && @p.get("SS_transport", @p.ss_transport) == "nsh"
+if defined?(SS_integration_dns)
+  @baa.set_credential(SS_integration_dns, SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc), @rpm.get_integration_details("role")) if @p.get("SS_transport", @p.ss_transport) == "baa"
+  @nsh.set_credential(@rpm.get_integration_details("profile"), SS_integration_username, decrypt_string_with_prefix(SS_integration_password_enc)) if  @p.get("SS_transport", @p.ss_transport) == "nsh"
+end
 
 #---------------------- Methods ----------------------------#
 
@@ -63,6 +65,9 @@ raise "Command_Failed: No artifacts in staging area" if result["instance_path"].
 @rpm.log "Saved in JSON Params: #{"instance_#{@p.SS_component}"}"
 @p.save_local_params
 pack_response("output_status", "Successfully packaged - #{File.basename(result["instance_path"])}")
+props = "name, value, component\n" 
+props += "tmp_package_name,#{result["instance_path"]},#{@p.SS_component}\n" 
+set_property_flag(props)
 
 params["direct_execute"] = true #Set for local execution
 
